@@ -1,0 +1,19 @@
+# Eclipse specific settings #
+.classpath
+.settings
+.project
+
+# Java Files #
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Binaries
+bin/
+target
+
+# Others
+.DS_Store
