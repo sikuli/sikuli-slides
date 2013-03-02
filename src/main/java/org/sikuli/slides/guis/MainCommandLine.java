@@ -82,7 +82,7 @@ public class MainCommandLine {
 	}
 	
 	private static void showTextHeader(final OutputStream out){
-		String textHeader="sikuli-slides -- GUI automation using presentation slides";
+		String textHeader="sikuli-slides -- accessible visual automation";
 		try{
 			out.write(textHeader.getBytes());
 		}
