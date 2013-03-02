@@ -88,9 +88,16 @@ public class SikuliPowerPoint {
 		// get the screenshot info
 		Screenshot screenshot=mySlideParser.getScreenshot();
 		Shape shape=mySlideParser.getShape();
+		
+		// if the slide doesn't contain a shape
+		if(shape==null){
+			System.err.println("Failed to process slide "+slideNumber+". The slide must contain a predefined shape.");
+			return;
+		}
+		
 		// if the result contains only shape without screenshot, execute just the shape action.
 		// for example, the cloud shape means open the default browser and doesn't have screenshot
-		if(screenshot==null&&shape!=null){
+		else if(screenshot==null&&shape!=null){
 			tasks.add(new SikuliAction(shape,null));
 			return;
 		}
