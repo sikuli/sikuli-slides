@@ -17,7 +17,6 @@ import org.sikuli.slides.processing.SlideProcessing;
 import org.sikuli.slides.screenshots.Screenshot;
 import org.sikuli.slides.shapes.Shape;
 import org.sikuli.slides.utils.Constants;
-import org.sikuli.slides.utils.MyScreen;
 import org.sikuli.slides.utils.UnitConverter;
 import org.sikuli.slides.utils.Utils;
 
@@ -81,7 +80,7 @@ public class SikuliPowerPoint {
 		// 2) Parse the slide.xml file
 		String slideName=File.separator+"slide"+Integer.toString(slideNumber)+".xml";
 		String slidePath=slidesDirectory+slideName;
-		System.out.println("Trying to parse slide: "+slideNumber);
+		System.out.println("Processing slide: "+slideNumber);
 		SlideParser mySlideParser=new SlideParser(slidePath);
 		mySlideParser.parseDocument();
 		
@@ -132,8 +131,8 @@ public class SikuliPowerPoint {
 		// TODO: remove this
 		// work on the first slide
 		// print the screen resolutions
-		System.out.println("Screen width: "+MyScreen.getScreenDimensions().width);
-		System.out.println("Screen height: "+MyScreen.getScreenDimensions().height);
+		//System.out.println("Screen width: "+MyScreen.getScreenDimensions().width);
+		//System.out.println("Screen height: "+MyScreen.getScreenDimensions().height);
 		// print the original screenshot info that is stored in the first slide
 		String slide1MediaLocation=projectDirectory+Constants.mediaDirectoryPath+File.separator+screenshot.getFileName();
 		//System.out.println("slide 1 screenshot location: "+slide1MediaLocation);
