@@ -45,8 +45,13 @@ public class MainCommandLine {
 	        	catch(Exception exception){
 	    			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
 	    			displayBlankLine();
-	        	} 
+	        	}
 	        }
+	        else if (cmd.hasOption("h")){
+	        		printHelp(getPOSIXCommandLineOptions(), 80, 
+	    					"sikuli-slides -- help", "sikuli-slides -- (END)", 5, 3, false, System.out);
+	        }
+	        
 	        final String[] remainingArguments = cmd.getArgs();
 	        if(remainingArguments==null){
 	        	printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
@@ -140,8 +145,7 @@ public class MainCommandLine {
 		showTextHeader(System.out);
 		displayBlankLine();
 		if (args.length < 1){
-			printHelp(getPOSIXCommandLineOptions(), 80, 
-					"sikuli-slides -- help", "sikuli-slides -- (END)", 5, 3, false, System.out);
+			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
 			return null;
 		}
 		else{
