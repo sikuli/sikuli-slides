@@ -36,22 +36,18 @@ public class MainCommandLine {
 	    final Options posixOptions = getPOSIXCommandLineOptions();  
 	    CommandLine cmd;  
 	    try{
-	    	cmd = parser.parse(posixOptions, args);  
-	        if (cmd.hasOption("w")){
-	        	try{
-	        		int wait=Integer.parseInt(cmd.getOptionValue("w"));
-	        		Constants.MaxWaitTime=wait;
-	        	}
-	        	catch(Exception exception){
-	    			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
-	    			displayBlankLine();
-	        	}
+	    	cmd = parser.parse(posixOptions, args);
+	        if (cmd.hasOption("h")){
+        		printHelp(getPOSIXCommandLineOptions(), 80, 
+    					"sikuli-slides -- help", "sikuli-slides -- (END)", 5, 3, false, System.out);
+        		return null;
 	        }
-	        else if (cmd.hasOption("h")){
-	        		printHelp(getPOSIXCommandLineOptions(), 80, 
-	    					"sikuli-slides -- help", "sikuli-slides -- (END)", 5, 3, false, System.out);
-	        }
+	    	else if (cmd.hasOption("w")){
+	    		int wait=Integer.parseInt(cmd.getOptionValue("w"));
+	        	Constants.MaxWaitTime=wait;
+	    	}
 	        
+	        // check arguments
 	        final String[] remainingArguments = cmd.getArgs();
 	        if(remainingArguments==null){
 	        	printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
@@ -70,8 +66,13 @@ public class MainCommandLine {
 	        }
 	    }
 	    catch (ParseException e){  
-	    	e.printStackTrace();  
+			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+			displayBlankLine();  
 	    }
+    	catch(Exception exception){
+			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+			displayBlankLine();
+    	}
 		return null;
 	}
 	
@@ -83,6 +84,7 @@ public class MainCommandLine {
 		final Options posixOptions=new Options();
 		posixOptions.addOption("w",true,
 				"the maximum time to wait in milliseconds to find a target on the screen.");
+		posixOptions.addOption("h",false,"help");
 		return posixOptions;
 	}
 	
@@ -125,7 +127,7 @@ public class MainCommandLine {
 			final int leftPad, final int descPad,
 			final boolean autoUsage,final OutputStream out){
 		
-		final String commandLineSyntax = "java -jar sikuli-slides-1.0.0.jar [-w max_wait_time] powerpoint_file.pptx";
+		final String commandLineSyntax = "java -jar sikuli-slides-1.0.0.jar [-h | [-w max_wait_time]] presentation_file.pptx";
 		final PrintWriter printWriter = new PrintWriter(out);
 		final HelpFormatter helpFormatter = new HelpFormatter();
 		helpFormatter.printHelp(printWriter, printedRowWidth, 
