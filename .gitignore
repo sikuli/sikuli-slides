@@ -15,5 +15,8 @@
 bin/
 target
 
+# Maven Files
+dependency-reduced-pom.xml
+
 # Others
 .DS_Store
