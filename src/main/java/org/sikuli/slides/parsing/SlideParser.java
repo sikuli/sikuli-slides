@@ -67,6 +67,9 @@ public class SlideParser extends DefaultHandler {
 		catch (IOException e) {
 			e.printStackTrace();
 			}
+		catch (Exception e) {
+			e.printStackTrace();
+			}
 	}
 	
 	@Override
@@ -235,7 +238,8 @@ public class SlideParser extends DefaultHandler {
 		}
 		else if(inTextBody && qName.equalsIgnoreCase("p:txBody")){
 			inTextBody=false;
-			shape.setText(textBody);
+			if(shape!=null)
+				shape.setText(textBody);
 		}
 	}
 	
