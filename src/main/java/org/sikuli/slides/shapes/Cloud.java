@@ -47,10 +47,17 @@ public class Cloud extends Shape {
 	@Override
 	public void doSikuliAction(File targetFile) {
 		try {
-			browse(new URL(getText()));
+			String userURL=getText();
+			URL url=null;
+			if(userURL.startsWith("http://")){
+				url=new URL(userURL);
+			}
+			else{
+				url=new URL("http://"+userURL);
+			}
+			browse(url);
 		} catch (MalformedURLException e) {
 			System.err.println("The text body of the Cloud shape doesn't contain a valid URL.");
-			e.printStackTrace();
 		}
 	}
 
