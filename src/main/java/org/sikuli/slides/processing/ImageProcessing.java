@@ -7,6 +7,7 @@ import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.RasterFormatException;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -75,6 +76,10 @@ public class ImageProcessing {
 			return croppedImage=imageTocrop.getSubimage(x, y, width, height);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		catch(RasterFormatException e){
+			System.err.println("Error: The shape is not contained within the boundaries of the screenshot.");
+			System.exit(1);
 		}
 		return croppedImage;
 	}
