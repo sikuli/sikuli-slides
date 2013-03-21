@@ -4,6 +4,7 @@ Khalid
 package org.sikuli.slides.shapes;
 
 import java.io.File;
+
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
@@ -11,6 +12,7 @@ import org.sikuli.api.robot.Keyboard;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopKeyboard;
 import org.sikuli.api.robot.desktop.DesktopMouse;
+import org.sikuli.slides.screenshots.ContextRegion;
 import org.sikuli.slides.sikuli.SikuliController;
 import org.sikuli.slides.utils.Constants;
 
@@ -48,7 +50,7 @@ public class TextBox extends Shape {
 	}
 	// click and type text
 	@Override
-	public void doSikuliAction(File targetFile) {
+	public void doSikuliAction(File targetFile, ContextRegion contextRegion) {
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
 		if(imageTarget!=null){
 			ScreenRegion fullScreenRegion=new DesktopScreenRegion();

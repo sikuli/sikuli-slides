@@ -10,6 +10,7 @@ import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopMouse;
+import org.sikuli.slides.screenshots.ContextRegion;
 import org.sikuli.slides.sikuli.SikuliController;
 import org.sikuli.slides.utils.Constants;
 
@@ -49,7 +50,7 @@ public class Oval extends Shape {
 	 * @imageName the target image full path name.
 	 */
 	@Override
-	public void doSikuliAction(File targetFile) {
+	public void doSikuliAction(File targetFile, ContextRegion contextRegion) {
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
 		if(imageTarget!=null){
 			ScreenRegion fullScreenRegion=new DesktopScreenRegion();
