@@ -3,7 +3,7 @@ Khalid
 */
 package org.sikuli.slides.screenshots;
 
-public class ContextualScreenshot{
+public class ContextRegion{
 	
 	private String name;
 	private String fileName;
