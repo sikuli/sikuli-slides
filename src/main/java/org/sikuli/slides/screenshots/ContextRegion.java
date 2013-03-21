@@ -57,6 +57,7 @@ public class ContextRegion{
 		this.height = height;
 	}
 	public String toString(){
-		return "Context Region: "+"name= "+name+"slide number= "+slideNumber+"\nx= "+x+"y= "+y+"width= "+width+"height= "+height;
+		return "Context Region: "+"name= "+name+"; slide number= "
+				+slideNumber+"\nx= "+x+"; y= "+y+"; width= "+width+"; height= "+height;
 	}
 }
