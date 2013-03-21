@@ -6,49 +6,43 @@ package org.sikuli.slides.screenshots;
 public class ContextRegion{
 	
 	private String name;
-	private String fileName;
-	private int cx;
-	private int cy;
-	private int offX;
-	private int offY;
+	private int slideNumber;
+	private int x;
+	private int y;
 	private int width;
 	private int height;
 	
+	public ContextRegion(String name, int slideNumber, int x, int y, int width, int height){
+		this.name=name;
+		this.slideNumber=slideNumber;
+		this.x=x;
+		this.y=y;
+		this.width=width;
+		this.height=height;
+	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getFileName() {
-		return fileName;
+	public int getslideNumber() {
+		return slideNumber;
 	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setFileName(int slideNumber) {
+		this.slideNumber = slideNumber;
 	}
-	public int getCx() {
-		return cx;
+	public int getX() {
+		return x;
 	}
-	public void setCx(int cx) {
-		this.cx = cx;
+	public void setX(int x) {
+		this.x = x;
 	}
-	public int getOffX() {
-		return offX;
+	public int getY() {
+		return y;
 	}
-	public void setOffX(int offX) {
-		this.offX = offX;
-	}
-	public int getCy() {
-		return cy;
-	}
-	public void setCy(int cy) {
-		this.cy = cy;
-	}
-	public int getOffY() {
-		return offY;
-	}
-	public void setOffY(int offY) {
-		this.offY = offY;
+	public void setY(int y) {
+		this.y = y;
 	}
 	public int getWidth() {
 		return width;
@@ -62,5 +56,7 @@ public class ContextRegion{
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	
+	public String toString(){
+		return "Context Region: "+"name= "+name+"slide number= "+slideNumber+"\nx= "+x+"y= "+y+"width= "+width+"height= "+height;
+	}
 }
