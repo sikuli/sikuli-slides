@@ -113,8 +113,13 @@ public class SlideParser extends DefaultHandler {
 		
 		// if the current child element is the extents in x and y, get the values
 		else if(inScreenshot && inShapeProperties && qName.equalsIgnoreCase("a:ext")){
-			originalScreenshot.setCx(Integer.parseInt(attributes.getValue("cx")));
-			originalScreenshot.setCy(Integer.parseInt(attributes.getValue("cy")));
+			// Bug#39: check if the cx and cy attributes exist in case of copying and pasting the slide
+			String cx_val=attributes.getValue("cx");
+			String cy_val=attributes.getValue("cy");
+			if(cx_val!=null&&cy_val!=null){
+				originalScreenshot.setCx(Integer.parseInt(attributes.getValue("cx")));
+				originalScreenshot.setCy(Integer.parseInt(attributes.getValue("cy")));
+			}
 		}
 		
 		// Part2: Parsing the shape information.
