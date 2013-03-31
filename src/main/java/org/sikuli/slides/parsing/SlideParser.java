@@ -14,6 +14,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import org.sikuli.slides.screenshots.Screenshot;
 import org.sikuli.slides.shapes.Cloud;
+import org.sikuli.slides.shapes.Frame;
 import org.sikuli.slides.shapes.Oval;
 import org.sikuli.slides.shapes.Rectangle;
 import org.sikuli.slides.shapes.RoundedRectangle;
@@ -173,6 +174,14 @@ public class SlideParser extends DefaultHandler {
 				// the shape is a rectangle
 				else if(shapeType.equals("rect") && _shapeName.contains("Rectangle")){
 					shape=new Rectangle(_shapeId,_shapeName,order);
+					shape.setOffx(_offx);
+					shape.setOffy(_offy);
+					shape.setCx(_cx);
+					shape.setCy(_cy);
+				}
+				// the shape is a rectangle
+				else if(shapeType.equals("frame") && _shapeName.contains("Frame")){
+					shape=new Frame(_shapeId,_shapeName,order);
 					shape.setOffx(_offx);
 					shape.setOffy(_offy);
 					shape.setCx(_cx);
