@@ -10,7 +10,8 @@ import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopMouse;
-import org.sikuli.slides.screenshots.ContextRegion;
+import org.sikuli.slides.screenshots.SlideTargetRegion;
+import org.sikuli.slides.sikuli.SearchMultipleTarget;
 import org.sikuli.slides.sikuli.SikuliController;
 import org.sikuli.slides.utils.Constants;
 
@@ -47,21 +48,40 @@ public class Oval extends Shape {
 	}
 	/**
 	 * perform right click on the target image.
-	 * @imageName the target image full path name.
+	 * @targetFile the target image file.
+	 * @slideTargetRegion the region of the target image in the slide
 	 */
 	@Override
-	public void doSikuliAction(File targetFile, ContextRegion contextRegion) {
+	public void doSikuliAction(File targetFile, SlideTargetRegion slideTargetRegion) {
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
 		if(imageTarget!=null){
 			ScreenRegion fullScreenRegion=new DesktopScreenRegion();
-			ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget,Constants.MaxWaitTime);
-			if(targetRegion!=null){
-				Mouse mouse = new DesktopMouse();
-				mouse.rightClick(targetRegion.getCenter());
-				SikuliController.displayBox(targetRegion);
-			}
+	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, Constants.MaxWaitTime);
+	    	if(targetRegion!=null){
+	    		// check if there are more than one occurrence of the target image.
+	    		SearchMultipleTarget searchMultipleTarget=new SearchMultipleTarget();
+	    		if(searchMultipleTarget.hasMultipleOccurance(imageTarget)){
+	    			ScreenRegion newScreenRegion=searchMultipleTarget.findNewScreenRegion(slideTargetRegion, imageTarget);
+	    			if(newScreenRegion!=null){
+	    				ScreenRegion newtargetRegion=newScreenRegion.find(imageTarget);
+	    				performRightClick(newtargetRegion);
+	    			}
+	    			else{
+	    				System.out.println("Couldn't uniquely determine the target image among multiple similar targets on the screen.");
+	    			}
+	    		}
+	    		else{
+	    			performRightClick(targetRegion);
+	    		}
+	    	}
 			else
-				System.err.println("Couldn't find target on the screen.");
+				System.err.println("Couldn't find target on the screen."+getId());
 		}
+	}
+	
+	private void performRightClick(ScreenRegion targetRegion){
+		Mouse mouse = new DesktopMouse();
+		SikuliController.displayBox(targetRegion);
+		mouse.rightClick(targetRegion.getCenter());
 	}
 }

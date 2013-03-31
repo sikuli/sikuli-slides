@@ -5,7 +5,7 @@ package org.sikuli.slides.shapes;
 
 import java.io.File;
 
-import org.sikuli.slides.screenshots.ContextRegion;
+import org.sikuli.slides.screenshots.SlideTargetRegion;
 
 public abstract class Shape {
 	private String id;
@@ -80,7 +80,7 @@ public abstract class Shape {
 		this.order = order;
 	}
 	
-	public abstract void doSikuliAction(File targetFile, ContextRegion contextRegion);
+	public abstract void doSikuliAction(File targetFile, SlideTargetRegion contextRegion);
 	
 	@Override
 	public String toString(){

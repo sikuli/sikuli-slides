@@ -4,14 +4,13 @@ Khalid
 package org.sikuli.slides.shapes;
 
 import java.io.File;
-import java.util.List;
-
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopMouse;
-import org.sikuli.slides.screenshots.ContextRegion;
+import org.sikuli.slides.screenshots.SlideTargetRegion;
+import org.sikuli.slides.sikuli.SearchMultipleTarget;
 import org.sikuli.slides.sikuli.SikuliController;
 import org.sikuli.slides.utils.Constants;
 
@@ -48,32 +47,41 @@ public class Rectangle extends Shape {
 	}
 	/**
 	 * perform left click on the target image.
-	 * targetFile the target image file.
+	 * @targetFile the target image file.
+	 * @slideTargetRegion the region of the target image in the slide
 	 */
 	@Override
-	public void doSikuliAction(File targetFile, ContextRegion contextRegion) {
+	public void doSikuliAction(File targetFile, SlideTargetRegion slideTargetRegion) {
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
 		if(imageTarget!=null){
 			ScreenRegion fullScreenRegion=new DesktopScreenRegion();
 	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, Constants.MaxWaitTime);
 	    	if(targetRegion!=null){
-	    		// check for multiple targets:
 	    		// check if there are more than one occurrence of the target image.
-	    		
-	    		//imageTarget.setMinScore(1);	
-	    		List<ScreenRegion> targetList=fullScreenRegion.findAll(imageTarget);
-	    		if(targetList.size()>1){
-	    			System.out.println("multiple targets on the screen.");
+	    		SearchMultipleTarget searchMultipleTarget=new SearchMultipleTarget();
+	    		if(searchMultipleTarget.hasMultipleOccurance(imageTarget)){
+	    			ScreenRegion newScreenRegion=searchMultipleTarget.findNewScreenRegion(slideTargetRegion, imageTarget);
+	    			if(newScreenRegion!=null){
+	    				ScreenRegion newtargetRegion=newScreenRegion.find(imageTarget);
+	    				performLeftClick(newtargetRegion);
+	    			}
+	    			else{
+	    				System.out.println("Couldn't uniquely determine the target image among multiple similar targets on the screen.");
+	    			}
 	    		}
 	    		else{
-	    			Mouse mouse = new DesktopMouse();
-	    			mouse.click(targetRegion.getCenter());
-	    			SikuliController.displayBox(targetRegion);
+	    			performLeftClick(targetRegion);
 	    		}
 	    	}
 			else
 				System.err.println("Couldn't find target on the screen."+getId());
 		}
+	}
+	
+	private void performLeftClick(ScreenRegion targetRegion){
+		Mouse mouse = new DesktopMouse();
+		SikuliController.displayBox(targetRegion);
+		mouse.click(targetRegion.getCenter());
 	}
 	
 }

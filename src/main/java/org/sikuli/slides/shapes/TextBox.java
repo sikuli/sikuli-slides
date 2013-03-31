@@ -12,7 +12,8 @@ import org.sikuli.api.robot.Keyboard;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopKeyboard;
 import org.sikuli.api.robot.desktop.DesktopMouse;
-import org.sikuli.slides.screenshots.ContextRegion;
+import org.sikuli.slides.screenshots.SlideTargetRegion;
+import org.sikuli.slides.sikuli.SearchMultipleTarget;
 import org.sikuli.slides.sikuli.SikuliController;
 import org.sikuli.slides.utils.Constants;
 
@@ -48,23 +49,41 @@ public class TextBox extends Shape {
 				"\n width:"+width+"\n height:"+height+
 				"\n ******************************************";
 	}
-	// click and type text
+	// perform typing (click and type text)
 	@Override
-	public void doSikuliAction(File targetFile, ContextRegion contextRegion) {
+	public void doSikuliAction(File targetFile, SlideTargetRegion slideTargetRegion) {
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
 		if(imageTarget!=null){
 			ScreenRegion fullScreenRegion=new DesktopScreenRegion();
 	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, Constants.MaxWaitTime);
 	    	if(targetRegion!=null){
-	    		Mouse mouse = new DesktopMouse();
-	    		Keyboard keyboard=new DesktopKeyboard();
-	    		SikuliController.displayBox(targetRegion);
-	    		mouse.click(targetRegion.getCenter());
-	    		keyboard.type(getText());
+	    		// check if there are more than one occurrence of the target image.
+	    		SearchMultipleTarget searchMultipleTarget=new SearchMultipleTarget();
+	    		if(searchMultipleTarget.hasMultipleOccurance(imageTarget)){
+	    			ScreenRegion newScreenRegion=searchMultipleTarget.findNewScreenRegion(slideTargetRegion, imageTarget);
+	    			if(newScreenRegion!=null){
+	    				ScreenRegion newtargetRegion=newScreenRegion.find(imageTarget);
+	    				performTyping(newtargetRegion);
+	    			}
+	    			else{
+	    				System.out.println("Couldn't uniquely determine the target image among multiple similar targets on the screen.");
+	    			}
+	    		}
+	    		else{
+	    			performTyping(targetRegion);
+	    		}
 	    	}
 			else
-				System.err.println("Couldn't find target on the screen.");
+				System.err.println("Couldn't find target on the screen."+getId());
 		}
+	}
+	
+	private void performTyping(ScreenRegion targetRegion){
+		Mouse mouse = new DesktopMouse();
+		Keyboard keyboard=new DesktopKeyboard();
+		SikuliController.displayBox(targetRegion);
+		mouse.click(targetRegion.getCenter());
+		keyboard.type(getText());
 	}
 
 }

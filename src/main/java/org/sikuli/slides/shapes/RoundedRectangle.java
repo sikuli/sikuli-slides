@@ -10,7 +10,8 @@ import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopMouse;
-import org.sikuli.slides.screenshots.ContextRegion;
+import org.sikuli.slides.screenshots.SlideTargetRegion;
+import org.sikuli.slides.sikuli.SearchMultipleTarget;
 import org.sikuli.slides.sikuli.SikuliController;
 import org.sikuli.slides.utils.Constants;
 /**
@@ -56,31 +57,53 @@ public class RoundedRectangle extends Shape {
 	}
 	/**
 	 * perform drop or drop action on the target image.
-	 * @param targetFile the target image file.
+	 * @targetFile the target image file.
+	 * @slideTargetRegion the region of the target image in the slide
 	 */
 	@Override
-	public void doSikuliAction(File targetFile, ContextRegion contextRegion) {
+	public void doSikuliAction(File targetFile, SlideTargetRegion slideTargetRegion) {
+		
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
 		if(imageTarget!=null){
 			ScreenRegion fullScreenRegion=new DesktopScreenRegion();
 	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, Constants.MaxWaitTime);
 	    	if(targetRegion!=null){
-	    		Mouse mouse = new DesktopMouse();
-	    		if(getOrder()==0){
-	    			SikuliController.displayBox(targetRegion);
-	    			mouse.drag(targetRegion.getCenter());
+	    		// check if there are more than one occurrence of the target image.
+	    		SearchMultipleTarget searchMultipleTarget=new SearchMultipleTarget();
+	    		if(searchMultipleTarget.hasMultipleOccurance(imageTarget)){
+	    			ScreenRegion newScreenRegion=searchMultipleTarget.findNewScreenRegion(slideTargetRegion, imageTarget);
+	    			if(newScreenRegion!=null){
+	    				ScreenRegion newtargetRegion=newScreenRegion.find(imageTarget);
+	    				performDragDrop(newtargetRegion);
+	    			}
+	    			else{
+	    				System.out.println("Couldn't uniquely determine the target image among multiple similar targets on the screen.");
+	    			}
 	    		}
-	    		else if(getOrder()==1){
-	    			SikuliController.displayBox(targetRegion);
-	    			mouse.drop(targetRegion.getCenter());
-	    		}
-	    		else{
-	    			System.err.println("Couldn't find the start and end of the straight arrow connector " +
-	    					"that is used to connect the rounded rectangles. Make sure the arrow is connected to the two rounded rectangles.");
+	    		else{ // only one occurrence of the target on the screen
+	    			performDragDrop(targetRegion);
 	    		}
 	    	}
-			else
-				System.err.println("Couldn't find target on the screen.");
+			else{ 
+				System.err.println("Couldn't find target on the screen."+getId());
+			}
+		}
+	}
+	
+	private void performDragDrop(ScreenRegion targetRegion){
+		Mouse mouse = new DesktopMouse();
+		if(getOrder()==0){
+			SikuliController.displayBox(targetRegion);
+			mouse.drag(targetRegion.getCenter());
+		}
+		else if(getOrder()==1){
+			SikuliController.displayBox(targetRegion);
+			mouse.drop(targetRegion.getCenter());
+		}
+		else{
+
+			System.err.println("Couldn't find the start and end of the straight arrow connector " +
+					"that is used to connect the rounded rectangles. Make sure the arrow is connected to the two rounded rectangles.");
 		}
 	}
 	

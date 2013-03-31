@@ -9,7 +9,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.sikuli.slides.screenshots.ContextRegion;
+import org.sikuli.slides.screenshots.SlideTargetRegion;
 /**
  * Cloud shape to open the browser
  * @author Khalid
@@ -48,7 +48,7 @@ public class Cloud extends Shape {
 				"\n ******************************************";
 	}
 	@Override
-	public void doSikuliAction(File targetFile, ContextRegion contextRegion) {
+	public void doSikuliAction(File targetFile, SlideTargetRegion contextRegion) {
 		try {
 			String userURL=getText();
 			URL url=null;
