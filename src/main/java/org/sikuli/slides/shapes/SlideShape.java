@@ -7,7 +7,7 @@ import java.io.File;
 
 import org.sikuli.slides.screenshots.SlideTargetRegion;
 
-public abstract class Shape {
+public abstract class SlideShape {
 	private String id;
 	private String name;
 	private int offx;
@@ -16,12 +16,12 @@ public abstract class Shape {
 	private int cy;
 	private String text;
 	private int order;
-	public Shape(String id, String name, int order){
+	public SlideShape(String id, String name, int order){
 		this.id=id;
 		this.name=name;
 		this.setOrder(order);
 	}
-	public Shape(String id, String name,int offx, int offy, int cx, int cy, String text, int order){
+	public SlideShape(String id, String name,int offx, int offy, int cx, int cy, String text, int order){
 		this.id=id;
 		this.name=name;
 		this.offx=offx;

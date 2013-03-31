@@ -4,7 +4,6 @@ Khalid
 package org.sikuli.slides.shapes;
 
 import java.io.File;
-
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
@@ -15,16 +14,16 @@ import org.sikuli.slides.sikuli.SearchMultipleTarget;
 import org.sikuli.slides.sikuli.SikuliController;
 import org.sikuli.slides.utils.Constants;
 
-public class Frame extends Shape {
+public class RectangleShape extends SlideShape {
 	private int width;
 	private int height;
 	
-	public Frame(String name,String id, int offx, int offy, int cx,  int cy, int width, int height, String text,int order){
+	public RectangleShape(String name,String id, int offx, int offy, int cx,  int cy, int width, int height, String text,int order){
 		super(id,name,offx,offy,cx,cy,text, order);
 		this.width=width;
 		this.height=height;
 	}
-	public Frame(String id, String name,int order) {
+	public RectangleShape(String id, String name,int order) {
 		super(id,name,0,0,0,0,"",order);
 		this.width=0;
 		this.height=0;
@@ -42,11 +41,10 @@ public class Frame extends Shape {
 		this.height = height;
 	}
 	public String toString(){
-		return "Frame info:\n" +super.toString()+
+		return "Rectangle info:\n" +super.toString()+
 				"\n width:"+width+"\n height:"+height+
 				"\n ******************************************";
 	}
-	
 	/**
 	 * perform left click on the target image.
 	 * @targetFile the target image file.
@@ -65,14 +63,14 @@ public class Frame extends Shape {
 	    			ScreenRegion newScreenRegion=searchMultipleTarget.findNewScreenRegion(slideTargetRegion, imageTarget);
 	    			if(newScreenRegion!=null){
 	    				ScreenRegion newtargetRegion=newScreenRegion.find(imageTarget);
-	    				performDoubleClick(newtargetRegion);
+	    				performLeftClick(newtargetRegion);
 	    			}
 	    			else{
 	    				System.out.println("Couldn't uniquely determine the target image among multiple similar targets on the screen.");
 	    			}
 	    		}
 	    		else{
-	    			performDoubleClick(targetRegion);
+	    			performLeftClick(targetRegion);
 	    		}
 	    	}
 			else
@@ -80,10 +78,10 @@ public class Frame extends Shape {
 		}
 	}
 	
-	private void performDoubleClick(ScreenRegion targetRegion){
+	private void performLeftClick(ScreenRegion targetRegion){
 		Mouse mouse = new DesktopMouse();
 		SikuliController.displayBox(targetRegion);
-		mouse.doubleClick(targetRegion.getCenter());
+		mouse.click(targetRegion.getCenter());
 	}
 	
 }

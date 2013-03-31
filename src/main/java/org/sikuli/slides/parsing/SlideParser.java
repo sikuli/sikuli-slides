@@ -13,13 +13,13 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import org.sikuli.slides.screenshots.Screenshot;
-import org.sikuli.slides.shapes.Cloud;
-import org.sikuli.slides.shapes.Frame;
-import org.sikuli.slides.shapes.Oval;
-import org.sikuli.slides.shapes.Rectangle;
-import org.sikuli.slides.shapes.RoundedRectangle;
-import org.sikuli.slides.shapes.Shape;
-import org.sikuli.slides.shapes.TextBox;
+import org.sikuli.slides.shapes.CloudShape;
+import org.sikuli.slides.shapes.FrameShape;
+import org.sikuli.slides.shapes.OvalShape;
+import org.sikuli.slides.shapes.RectangleShape;
+import org.sikuli.slides.shapes.RoundedRectangleShape;
+import org.sikuli.slides.shapes.SlideShape;
+import org.sikuli.slides.shapes.TextBoxShape;
 
 public class SlideParser extends DefaultHandler {
 	private Screenshot originalScreenshot;
@@ -30,14 +30,14 @@ public class SlideParser extends DefaultHandler {
 	private boolean inShape=false;
 	private boolean inArrowShape=false;
 	private boolean isMultipleShapes=false;
-	private Shape shape;
+	private SlideShape shape;
 
 	private boolean inTextBody=false;
 	private String textBody="";
 	
 	private String arrowHeadId="";
 	private String arrowEndId="";
-	private List<Shape> shapesList;
+	private List<SlideShape> shapesList;
 	private int order;
 	
 	private String _shapeName, _shapeId; 
@@ -158,14 +158,14 @@ public class SlideParser extends DefaultHandler {
 				
 				// the shape is a rounded rectangle
 				if(shapeType.equals("roundRect") && _shapeName.contains("Rounded Rectangle")){
-					shape=new RoundedRectangle(_shapeId,_shapeName,order);
+					shape=new RoundedRectangleShape(_shapeId,_shapeName,order);
 					shape.setOffx(_offx);
 					shape.setOffy(_offy);
 					shape.setCx(_cx);
 					shape.setCy(_cy);
 					
 					if(shapesList==null){
-						shapesList=new ArrayList<Shape>();
+						shapesList=new ArrayList<SlideShape>();
 					}
 					if(shapesList!=null){
 						shapesList.add(shape);
@@ -173,7 +173,7 @@ public class SlideParser extends DefaultHandler {
 				}
 				// the shape is a rectangle
 				else if(shapeType.equals("rect") && _shapeName.contains("Rectangle")){
-					shape=new Rectangle(_shapeId,_shapeName,order);
+					shape=new RectangleShape(_shapeId,_shapeName,order);
 					shape.setOffx(_offx);
 					shape.setOffy(_offy);
 					shape.setCx(_cx);
@@ -181,7 +181,7 @@ public class SlideParser extends DefaultHandler {
 				}
 				// the shape is a rectangle
 				else if(shapeType.equals("frame") && _shapeName.contains("Frame")){
-					shape=new Frame(_shapeId,_shapeName,order);
+					shape=new FrameShape(_shapeId,_shapeName,order);
 					shape.setOffx(_offx);
 					shape.setOffy(_offy);
 					shape.setCx(_cx);
@@ -189,7 +189,7 @@ public class SlideParser extends DefaultHandler {
 				}
 				// the shape is an ellipse/oval
 				else if(shapeType.equals("ellipse") && _shapeName.contains("Oval")){
-					shape=new Oval(_shapeId,_shapeName,order);
+					shape=new OvalShape(_shapeId,_shapeName,order);
 					shape.setOffx(_offx);
 					shape.setOffy(_offy);
 					shape.setCx(_cx);
@@ -198,7 +198,7 @@ public class SlideParser extends DefaultHandler {
 				
 				// the shape is a cloud
 				else if(shapeType.equals("cloud") && _shapeName.contains("Cloud")){
-					shape=new Cloud(_shapeId,_shapeName,order);
+					shape=new CloudShape(_shapeId,_shapeName,order);
 					shape.setOffx(_offx);
 					shape.setOffy(_offy);
 					shape.setCx(_cx);
@@ -206,7 +206,7 @@ public class SlideParser extends DefaultHandler {
 				}
 				// the shape is a TextBox
 				else if(shapeType.equals("rect") && _shapeName.contains("TextBox")){
-					shape=new TextBox(_shapeId,_shapeName,order);
+					shape=new TextBoxShape(_shapeId,_shapeName,order);
 					shape.setOffx(_offx);
 					shape.setOffy(_offy);
 					shape.setCx(_cx);
@@ -259,7 +259,7 @@ public class SlideParser extends DefaultHandler {
 	
 	private void setRoundedRectangleDragAndDropOrder() {
 		if(shapesList!=null){
-			for(Shape mShape:shapesList){
+			for(SlideShape mShape:shapesList){
 				if(mShape.getId().equals(arrowHeadId)){
 					mShape.setOrder(0);
 					System.out.println(mShape.getName()+" is the drag shape");
@@ -293,12 +293,12 @@ public class SlideParser extends DefaultHandler {
 	}
 	
 	// return the shape
-	public Shape getShape(){
+	public SlideShape getShape(){
 		return shape;
 	}
 	
 	// return list of shapes
-	public List<Shape> getShapes(){
+	public List<SlideShape> getShapes(){
 		return  shapesList;
 	}
 	

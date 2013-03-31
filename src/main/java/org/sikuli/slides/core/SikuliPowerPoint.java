@@ -16,7 +16,7 @@ import org.sikuli.slides.processing.Relationship;
 import org.sikuli.slides.processing.SlideProcessing;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
 import org.sikuli.slides.screenshots.Screenshot;
-import org.sikuli.slides.shapes.Shape;
+import org.sikuli.slides.shapes.SlideShape;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.UnitConverter;
 import org.sikuli.slides.utils.Utils;
@@ -88,7 +88,7 @@ public class SikuliPowerPoint {
 		// Get the results
 		// get the screenshot info
 		Screenshot screenshot=mySlideParser.getScreenshot();
-		Shape shape=mySlideParser.getShape();
+		SlideShape shape=mySlideParser.getShape();
 		
 		// if the slide doesn't contain a shape
 		if(shape==null){
@@ -108,9 +108,9 @@ public class SikuliPowerPoint {
 		// if the slide contains an arrow, get two targets
 		if(mySlideParser.isMultipleShapes()){
 			//System.out.println("################################");
-			List<Shape> roundedRectnagleShapes=mySlideParser.getShapes();
+			List<SlideShape> roundedRectnagleShapes=mySlideParser.getShapes();
 			//System.out.println("number of shapes: "+roundedRectnagleShapes.size());
-			for(Shape roundedRectnagleShape:roundedRectnagleShapes){
+			for(SlideShape roundedRectnagleShape:roundedRectnagleShapes){
 				// print the results
 				
 				//System.out.println(screenshot.toString());
@@ -135,7 +135,7 @@ public class SikuliPowerPoint {
 	}
 	
 	
-	private void startProcessing(String projectDirectory, Screenshot screenshot, Shape shape, int slideNumber) {
+	private void startProcessing(String projectDirectory, Screenshot screenshot, SlideShape shape, int slideNumber) {
 		// TODO: remove this
 		// work on the first slide
 		// print the screen resolutions
@@ -208,11 +208,11 @@ public class SikuliPowerPoint {
 	}
 	
 	class SikuliAction{
-		private Shape shape;
+		private SlideShape shape;
 		private File imageTarget;
 		private SlideTargetRegion contextRegion;
 		
-		public SikuliAction(Shape shape, File imageTarget, SlideTargetRegion contextRegion){
+		public SikuliAction(SlideShape shape, File imageTarget, SlideTargetRegion contextRegion){
 			this.shape=shape;
 			this.imageTarget=imageTarget;
 			this.contextRegion=contextRegion;

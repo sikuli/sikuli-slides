@@ -15,16 +15,16 @@ import org.sikuli.slides.screenshots.SlideTargetRegion;
  * @author Khalid
  *
  */
-public class Cloud extends Shape {
+public class CloudShape extends SlideShape {
 	private int width;
 	private int height;
 	
-	public Cloud(String name,String id, int offx, int offy, int cx,  int cy, int width, int height, String text, int order){
+	public CloudShape(String name,String id, int offx, int offy, int cx,  int cy, int width, int height, String text, int order){
 		super(id,name,offx,offy,cx,cy,text,order);
 		this.width=width;
 		this.height=height;
 	}
-	public Cloud(String id, String name, int order) {
+	public CloudShape(String id, String name, int order) {
 		super(id,name,0,0,0,0,"",order);
 		this.width=0;
 		this.height=0;
