@@ -131,7 +131,6 @@ public class RegionSelector {
 		ScreenRegion fullScreenRegion=new DesktopScreenRegion();
 		List<ScreenRegion> xDirectionScreenRegions=getXScreenRegionList();
 		for(ScreenRegion screenRegion:xDirectionScreenRegions){
-			System.out.println("**********************!!!!!!!!!!!!!!!!!!******************");
 			BufferedImage croppedImage=ImageProcessing.cropImage(slideTargetRegion.getScreenshotPath(), screenRegion.getBounds().x, 
 			screenRegion.getBounds().y, screenRegion.getBounds().width, 
 			screenRegion.getBounds().height);
