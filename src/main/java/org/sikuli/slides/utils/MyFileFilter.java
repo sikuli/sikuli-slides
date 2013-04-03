@@ -19,7 +19,7 @@ public class MyFileFilter  extends FileFilter {
 
         String extension = Utils.getExtension(f);
         if (extension != null) {
-            if (extension.equals(Utils.pptx)) {
+            if (extension.equals("pptx")) {
                     return true;
             } else {
                 return false;
