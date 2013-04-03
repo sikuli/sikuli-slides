@@ -13,8 +13,7 @@ import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
 
 public class Utils {
-	public final static String pptx = "pptx";
-	public static File workingDirectory;
+	
     /*
      * Get the extension of a file.
      */
@@ -30,7 +29,7 @@ public class Utils {
     }
     
     public static boolean createWorkingDirectory(){
-    	File tmpDirectory;
+    	File tmpDirectory, workingDirectory;
     	try{
     		tmpDirectory=FileUtils.getTempDirectory();
     	}
