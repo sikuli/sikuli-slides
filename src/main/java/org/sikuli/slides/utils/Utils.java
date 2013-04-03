@@ -38,7 +38,7 @@ public class Utils {
     		return false;
     	}
     	if (tmpDirectory.exists()) {
-    		workingDirectory=new File(tmpDirectory.getAbsoluteFile()+File.separator+Constants.SikuliSlidesRootDirectoryName);
+    		workingDirectory=new File(tmpDirectory.getAbsoluteFile()+File.separator+Constants.SIKULI_SLIDES_ROOT_DIRECTORY);
     		Constants.workingDirectoryPath=workingDirectory.getAbsolutePath();
     		if(workingDirectory.exists()){
     			return true;
@@ -144,9 +144,9 @@ public class Utils {
     
     public static void createSikuliImagesDirectory(String projectAbsolutePath){
     	//create sikuli directory
-    	File folder = new File(projectAbsolutePath+File.separator+Constants.sikuliDirectory);
+    	File folder = new File(projectAbsolutePath+File.separator+Constants.SIKULI_DIRECTORY);
     	//create sikuli images directory
-    	File imagesFolder = new File(projectAbsolutePath+File.separator+Constants.sikuliDirectory+File.separator+Constants.imagesDirectory);
+    	File imagesFolder = new File(projectAbsolutePath+File.separator+Constants.SIKULI_DIRECTORY+File.separator+Constants.IMAGES_DIRECTORY);
     	// if the directory doesn't exist, create it
     	if(!folder.exists()){
     		folder.mkdir();

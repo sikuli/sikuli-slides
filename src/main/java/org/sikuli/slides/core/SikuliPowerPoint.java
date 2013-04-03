@@ -8,6 +8,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.commons.io.FilenameUtils;
 import org.sikuli.slides.parsing.PresentationParser;
 import org.sikuli.slides.parsing.SlideParser;
 import org.sikuli.slides.presentation.Presentation;
@@ -37,8 +39,7 @@ public class SikuliPowerPoint {
 	}
 	public void runSikuliPowerPoint(){
 		// set the project directory name
-		String fileName=file.getName();
-		projectDirectory= Constants.workingDirectoryPath+File.separator+fileName.substring(0, fileName.indexOf('.'));
+		projectDirectory= Constants.workingDirectoryPath+File.separator+FilenameUtils.removeExtension(file.getName());
 
 		// load the .pptx file
 		loadPresentationFile(file);
@@ -76,7 +77,7 @@ public class SikuliPowerPoint {
 	}
 	
 	private void parseSlideFile(int slideNumber) {
-		String slidesDirectory=projectDirectory+Constants.slidesDirectoryPath;
+		String slidesDirectory=projectDirectory+Constants.SLIDES_DIRECTORY;
 		
 		// 2) Parse the slide.xml file
 		String slideName=File.separator+"slide"+Integer.toString(slideNumber)+".xml";
@@ -142,7 +143,7 @@ public class SikuliPowerPoint {
 		//System.out.println("Screen width: "+MyScreen.getScreenDimensions().width);
 		//System.out.println("Screen height: "+MyScreen.getScreenDimensions().height);
 		// print the original screenshot info that is stored in the first slide
-		String slideMediaLocation=projectDirectory+Constants.mediaDirectoryPath+File.separator+screenshot.getFileName();
+		String slideMediaLocation=projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+screenshot.getFileName();
 		//System.out.println("slide 1 screenshot location: "+slide1MediaLocation);
 		
 		SlideProcessing slideProcessing=new SlideProcessing(slideMediaLocation);
@@ -184,8 +185,8 @@ public class SikuliPowerPoint {
 				, (int)Math.round(relativeRectangleWidth), 
 				(int)Math.round(relativeRectangleHeight));
 		
-		String croppedImageName=projectDirectory+Constants.sikuliDirectory+
-				Constants.imagesDirectory+File.separator+"target"+Integer.toString(counter.incrementAndGet())+".png";
+		String croppedImageName=projectDirectory+Constants.SIKULI_DIRECTORY+
+				Constants.IMAGES_DIRECTORY+File.separator+"target"+Integer.toString(counter.incrementAndGet())+".png";
 		
 		// set the target region (the shape area)
 		SlideTargetRegion slideTargetRegion=new SlideTargetRegion("",slideNumber,slideMediaLocation,

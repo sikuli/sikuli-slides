@@ -22,31 +22,31 @@ public class Constants {
 	/**
 	 * The name of the directory that sikuli-slides creates in the operating system's tmp directory.
 	 */
-	public static final String SikuliSlidesRootDirectoryName="org.sikuli.SikuliSlides";
+	public static final String SIKULI_SLIDES_ROOT_DIRECTORY="org.sikuli.SikuliSlides";
 	/**
 	 * The name of the directory that contains all sikuli related files in the .pptx file.
 	 */
-	public static final String sikuliDirectory=File.separator+"sikuli";
+	public static final String SIKULI_DIRECTORY=File.separator+"sikuli";
 	/**
 	 * The name of the images directory that contains the cropped target images.
 	 */
-	public static final String imagesDirectory=File.separator+"images";
+	public static final String IMAGES_DIRECTORY=File.separator+"images";
 	/**
 	 * The slides directory that contains the XML files for each slide in the .pptx file.
 	 */
-	public static final String slidesDirectoryPath=File.separator+"ppt"+File.separator+"slides";
+	public static final String SLIDES_DIRECTORY=File.separator+"ppt"+File.separator+"slides";
 	/**
 	 * The slides directory that contains the media files for each slide in the .pptx file.
 	 */
-	public static final String mediaDirectoryPath=File.separator+"ppt"+File.separator+"media";
+	public static final String MEDIA_DIRECTORY=File.separator+"ppt"+File.separator+"media";
 	/**
 	 * The presentaion.xml absolute path name. 
 	 */
-	public static final String presentationPath=File.separator+"ppt"+File.separator+"presentation.xml";
+	public static final String PRESENTATION_DIRECTORY=File.separator+"ppt"+File.separator+"presentation.xml";
 	/**
 	 * The relationship directory that contains info about the duplicated media files in the presentation slides.
 	 */
-	public static final String relationshipDirectoryPath=File.separator+"ppt"+File.separator+"slides"+File.separator+"_rels";
+	public static final String RELATIONSHIP_DIRECTORY=File.separator+"ppt"+File.separator+"slides"+File.separator+"_rels";
 	/**
 	 * The maximum time to wait in milliseconds
 	 */
