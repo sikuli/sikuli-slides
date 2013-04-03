@@ -10,12 +10,11 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-
 import org.apache.commons.io.FileUtils;
 
 public class Utils {
 	public final static String pptx = "pptx";
-	public static final File zipDirectory = new File(Constants.zipDirectoryPath);
+	public static File workingDirectory;
     /*
      * Get the extension of a file.
      */
@@ -31,23 +30,36 @@ public class Utils {
     }
     
     public static boolean createWorkingDirectory(){
-    	
-    	if (!zipDirectory.exists()) {
-    		if (zipDirectory.mkdir()) {
+    	File tmpDirectory;
+    	try{
+    		tmpDirectory=FileUtils.getTempDirectory();
+    	}
+    	catch(IllegalStateException e){
+    		return false;
+    	}
+    	if (tmpDirectory.exists()) {
+    		workingDirectory=new File(tmpDirectory.getAbsoluteFile()+File.separator+Constants.SikuliSlidesRootDirectoryName);
+    		Constants.workingDirectoryPath=workingDirectory.getAbsolutePath();
+    		if(workingDirectory.exists()){
     			return true;
     		}
-			else 
-				return false;
+    		else if(workingDirectory.mkdir()){
+    			return true;
+    		}
+    		else{
+    			return false;
+    		}
     	}
-    	else
-    		return true;
+    	else{
+    		return false;
+    	}
     }
     
     public static void doZipFile(File file){
        	byte[] buffer = new byte[1024];
     	try{
  
-    		FileOutputStream fos = new FileOutputStream(zipDirectory.getAbsolutePath()+File.separator+file.getName()+".zip");
+    		FileOutputStream fos = new FileOutputStream(Constants.workingDirectoryPath+File.separator+file.getName()+".zip");
     		ZipOutputStream zos = new ZipOutputStream(fos);
     		ZipEntry ze= new ZipEntry(file.getName());
     		zos.putNextEntry(ze);
@@ -77,7 +89,7 @@ public class Utils {
      try{
  
     	//create output directory
-    	File folder = new File(zipDirectory.getAbsolutePath()+File.separator+file.getName().substring(0, file.getName().indexOf('.')));
+    	File folder = new File(Constants.workingDirectoryPath+File.separator+file.getName().substring(0, file.getName().indexOf('.')));
     	// if the directory doesn't exist, create it
     	if(!folder.exists()){
     		folder.mkdir();
@@ -119,11 +131,11 @@ public class Utils {
     	zis.close();
     	
     	//delete the zip file since we no longer need it.
-    	File zipFile = new File(zipDirectory.getAbsolutePath()+File.separator+file.getName()+".zip");
+    	File zipFile = new File(Constants.workingDirectoryPath+File.separator+file.getName()+".zip");
     	if(zipFile.delete())
     		return;
     	else
-    		System.err.println("Couldn't delete zip: "+zipDirectory.getAbsolutePath()+File.separator+file.getName()+".zip");
+    		System.err.println("Couldn't delete zip: "+Constants.workingDirectoryPath+File.separator+file.getName()+".zip");
      }
      catch(IOException ex){
        ex.printStackTrace(); 

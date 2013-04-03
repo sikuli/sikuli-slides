@@ -38,7 +38,7 @@ public class SikuliPowerPoint {
 	public void runSikuliPowerPoint(){
 		// set the project directory name
 		String fileName=file.getName();
-		projectDirectory= Constants.zipDirectoryPath+File.separator+fileName.substring(0, fileName.indexOf('.'));
+		projectDirectory= Constants.workingDirectoryPath+File.separator+fileName.substring(0, fileName.indexOf('.'));
 
 		// load the .pptx file
 		loadPresentationFile(file);

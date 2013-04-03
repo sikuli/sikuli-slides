@@ -4,21 +4,55 @@ Khalid
 package org.sikuli.slides.utils;
 
 import java.io.File;
-
+/**
+ * This class contains constants.
+ * @author Khalid Alharbi
+ *
+ */
 public class Constants {
-
-	public static final String zipDirectoryPath= System.getProperty("user.home")+File.separator+
-			"Documents"+File.separator+"sikuli-slides";
+	/**
+	 * The working directory absolute path. 
+	 * This is the sikuli slides working directory in the operating system's temp directory. 
+	 */
+	public static String workingDirectoryPath;
+	/**
+	 * The current project directory name that contains the imported and extracted .pptx file. 
+	 */
+	public static String projectDirectory;
+	/**
+	 * The name of the directory that sikuli-slides creates in the operating system's tmp directory.
+	 */
+	public static final String SikuliSlidesRootDirectoryName="org.sikuli.SikuliSlides";
+	/**
+	 * The name of the directory that contains all sikuli related files in the .pptx file.
+	 */
 	public static final String sikuliDirectory=File.separator+"sikuli";
+	/**
+	 * The name of the images directory that contains the cropped target images.
+	 */
 	public static final String imagesDirectory=File.separator+"images";
-	public static final String screenRegionImagesDirectory=imagesDirectory+File.separator+"regions";
+	/**
+	 * The slides directory that contains the XML files for each slide in the .pptx file.
+	 */
 	public static final String slidesDirectoryPath=File.separator+"ppt"+File.separator+"slides";
+	/**
+	 * The slides directory that contains the media files for each slide in the .pptx file.
+	 */
 	public static final String mediaDirectoryPath=File.separator+"ppt"+File.separator+"media";
+	/**
+	 * The presentaion.xml absolute path name. 
+	 */
 	public static final String presentationPath=File.separator+"ppt"+File.separator+"presentation.xml";
+	/**
+	 * The relationship directory that contains info about the duplicated media files in the presentation slides.
+	 */
 	public static final String relationshipDirectoryPath=File.separator+"ppt"+File.separator+"slides"+File.separator+"_rels";
-	
-	// the maximum time to wait in milliseconds
+	/**
+	 * The maximum time to wait in milliseconds
+	 */
 	public static int MaxWaitTime=15000;
-	// annotation (canvas) display duration time in seconds
+	/**
+	 *  The duration time in seconds to display annotation (canvas) around the target on the screen. 
+	 */
 	public static final int CANVAS_DURATION=1;
 }
