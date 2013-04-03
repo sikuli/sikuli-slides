@@ -12,7 +12,7 @@ import java.io.File;
 public class Constants {
 	/**
 	 * The working directory absolute path. 
-	 * This is the sikuli slides working directory in the operating system's temp directory. 
+	 * This holds the sikuli slides working directory in the operating system's temp directory. 
 	 */
 	public static String workingDirectoryPath;
 	/**
