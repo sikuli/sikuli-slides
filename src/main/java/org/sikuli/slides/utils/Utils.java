@@ -141,11 +141,11 @@ public class Utils {
      }
     }
     
-    public static void createSikuliImagesDirectory(String projectAbsolutePath){
+    public static void createSikuliImagesDirectory(){
     	//create sikuli directory
-    	File folder = new File(projectAbsolutePath+File.separator+Constants.SIKULI_DIRECTORY);
+    	File folder = new File(Constants.projectDirectory+File.separator+Constants.SIKULI_DIRECTORY);
     	//create sikuli images directory
-    	File imagesFolder = new File(projectAbsolutePath+File.separator+Constants.SIKULI_DIRECTORY+File.separator+Constants.IMAGES_DIRECTORY);
+    	File imagesFolder = new File(Constants.projectDirectory+File.separator+Constants.SIKULI_DIRECTORY+File.separator+Constants.IMAGES_DIRECTORY);
     	// if the directory doesn't exist, create it
     	if(!folder.exists()){
     		folder.mkdir();

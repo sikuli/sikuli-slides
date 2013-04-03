@@ -27,8 +27,8 @@ public class Relationship extends DefaultHandler  {
 	private String imageFileName;
 	private String relationshipID;
 	
-	public Relationship(String projectDirectory,String fileName){
-		this.relationshipXMLFile=projectDirectory + Constants.RELATIONSHIP_DIRECTORY + fileName+".rels";
+	public Relationship(String fileName){
+		this.relationshipXMLFile=Constants.projectDirectory + Constants.RELATIONSHIP_DIRECTORY + fileName+".rels";
 	}
 	public String getImageFileName(String relationshipID){
 		this.relationshipID=relationshipID;

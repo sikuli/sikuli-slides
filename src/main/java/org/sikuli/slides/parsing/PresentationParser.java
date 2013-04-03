@@ -22,8 +22,8 @@ public class PresentationParser extends DefaultHandler {
 	private Presentation presentation;
 	private int slidesCount=0;
 	private boolean inSlideIdList=false;
-	public PresentationParser(String projectDirectory){
-		xmlFile=projectDirectory+Constants.PRESENTATION_DIRECTORY;
+	public PresentationParser(){
+		xmlFile=Constants.projectDirectory+Constants.PRESENTATION_DIRECTORY;
 		presentation=new Presentation();
 	}
 	

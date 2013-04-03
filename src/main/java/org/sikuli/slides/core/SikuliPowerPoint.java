@@ -27,7 +27,7 @@ import org.sikuli.slides.utils.Utils;
 public class SikuliPowerPoint {
 	
 	private File file;
-	private String projectDirectory;
+	//private String projectDirectory;
 	private Presentation presentation;
 	private AtomicInteger counter;
 	private List<SikuliAction> tasks;
@@ -39,7 +39,7 @@ public class SikuliPowerPoint {
 	}
 	public void runSikuliPowerPoint(){
 		// set the project directory name
-		projectDirectory= Constants.workingDirectoryPath+File.separator+FilenameUtils.removeExtension(file.getName());
+		Constants.projectDirectory=Constants.workingDirectoryPath+File.separator+FilenameUtils.removeExtension(file.getName());
 
 		// load the .pptx file
 		loadPresentationFile(file);
@@ -53,8 +53,6 @@ public class SikuliPowerPoint {
 		    public void run() {
 		    	executeSikuliActions();
 		    }}).start();
-		// finally, run the queued tasks
-		
 	}
 	
 
@@ -64,12 +62,12 @@ public class SikuliPowerPoint {
 		// decompress the file.
 		Utils.doUnZipFile(file);
 		// create images directory
-		Utils.createSikuliImagesDirectory(projectDirectory);
+		Utils.createSikuliImagesDirectory();
 	}
 	
 	private void parsePresentationFile(){
 		// 1) Parse the presentation.xml file
-		PresentationParser presentationParser=new PresentationParser(projectDirectory);
+		PresentationParser presentationParser=new PresentationParser();
 		presentationParser.parseDocument();
 		presentation=presentationParser.getPresentation();
 		//System.out.println("**************************************************");
@@ -77,7 +75,7 @@ public class SikuliPowerPoint {
 	}
 	
 	private void parseSlideFile(int slideNumber) {
-		String slidesDirectory=projectDirectory+Constants.SLIDES_DIRECTORY;
+		String slidesDirectory=Constants.projectDirectory+Constants.SLIDES_DIRECTORY;
 		
 		// 2) Parse the slide.xml file
 		String slideName=File.separator+"slide"+Integer.toString(slideNumber)+".xml";
@@ -104,7 +102,7 @@ public class SikuliPowerPoint {
 			return;
 		}
 		// set the screenshot image file name
-		setScreenshotFileName(screenshot,projectDirectory,slideName);
+		setScreenshotFileName(screenshot,slideName);
 		
 		// if the slide contains an arrow, get two targets
 		if(mySlideParser.isMultipleShapes()){
@@ -116,7 +114,7 @@ public class SikuliPowerPoint {
 				
 				//System.out.println(screenshot.toString());
 				//System.out.println(roundedRectnagleShape.toString());
-				startProcessing(projectDirectory,screenshot,roundedRectnagleShape, slideNumber);
+				startProcessing(screenshot,roundedRectnagleShape, slideNumber);
 			}
 			return;
 		}
@@ -125,25 +123,25 @@ public class SikuliPowerPoint {
 		//System.out.println(screenshot.toString());
 		//System.out.println(shape.toString());
 		// process the screenshot
-		startProcessing(projectDirectory,screenshot,shape, slideNumber);
+		startProcessing(screenshot,shape, slideNumber);
 		
 	}
 
-	private void setScreenshotFileName(Screenshot screenshot, String projectDirectory, String slideName) {
+	private void setScreenshotFileName(Screenshot screenshot, String slideName) {
 		// parse the relationship file and get the image file name
-		Relationship relationship=new Relationship(projectDirectory,slideName);
+		Relationship relationship=new Relationship(slideName);
 		screenshot.setFileName(relationship.getImageFileName(screenshot.getRelationshipID()));
 	}
 	
 	
-	private void startProcessing(String projectDirectory, Screenshot screenshot, SlideShape shape, int slideNumber) {
+	private void startProcessing(Screenshot screenshot, SlideShape shape, int slideNumber) {
 		// TODO: remove this
 		// work on the first slide
 		// print the screen resolutions
 		//System.out.println("Screen width: "+MyScreen.getScreenDimensions().width);
 		//System.out.println("Screen height: "+MyScreen.getScreenDimensions().height);
 		// print the original screenshot info that is stored in the first slide
-		String slideMediaLocation=projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+screenshot.getFileName();
+		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+screenshot.getFileName();
 		//System.out.println("slide 1 screenshot location: "+slide1MediaLocation);
 		
 		SlideProcessing slideProcessing=new SlideProcessing(slideMediaLocation);
@@ -185,7 +183,7 @@ public class SikuliPowerPoint {
 				, (int)Math.round(relativeRectangleWidth), 
 				(int)Math.round(relativeRectangleHeight));
 		
-		String croppedImageName=projectDirectory+Constants.SIKULI_DIRECTORY+
+		String croppedImageName=Constants.projectDirectory+Constants.SIKULI_DIRECTORY+
 				Constants.IMAGES_DIRECTORY+File.separator+"target"+Integer.toString(counter.incrementAndGet())+".png";
 		
 		// set the target region (the shape area)
