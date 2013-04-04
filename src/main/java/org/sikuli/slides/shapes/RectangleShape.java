@@ -3,11 +3,9 @@ Khalid
 */
 package org.sikuli.slides.shapes;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
-import org.sikuli.api.Screen;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopMouse;
