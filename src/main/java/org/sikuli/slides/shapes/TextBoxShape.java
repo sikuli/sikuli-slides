@@ -67,7 +67,7 @@ public class TextBoxShape extends SlideShape {
 	    			}
 	    			else{
 	    				System.err.println("Failed to determine the target image among multiple similar targets on the screen."
-	    						+"Try to resize the shape in slide "+slideTargetRegion.getslideNumber()+".");
+	    						+"\nTry to resize the shape in slide "+slideTargetRegion.getslideNumber()+".");
 	    				System.exit(1);
 	    			}
 	    		}
