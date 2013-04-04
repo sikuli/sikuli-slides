@@ -61,6 +61,7 @@ public class CloudShape extends SlideShape {
 			browse(url);
 		} catch (MalformedURLException e) {
 			System.err.println("The text body of the Cloud shape doesn't contain a valid URL.");
+			System.exit(1);
 		}
 	}
 

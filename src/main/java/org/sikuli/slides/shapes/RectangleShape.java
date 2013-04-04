@@ -3,9 +3,11 @@ Khalid
 */
 package org.sikuli.slides.shapes;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
+import org.sikuli.api.Screen;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopMouse;
@@ -66,15 +68,20 @@ public class RectangleShape extends SlideShape {
 	    				performLeftClick(newtargetRegion);
 	    			}
 	    			else{
-	    				System.out.println("Couldn't uniquely determine the target image among multiple similar targets on the screen.");
+	    				System.err.println("Failed to determine the target image among multiple similar targets on the screen."
+	    						+"Slide no. "+slideTargetRegion.getslideNumber());
+	    				System.exit(1);
 	    			}
 	    		}
 	    		else{
 	    			performLeftClick(targetRegion);
 	    		}
 	    	}
-			else
-				System.err.println("Couldn't find target on the screen."+getId());
+			else{
+				System.err.println("Failed to find target on the screen. Slide no. "+slideTargetRegion.getslideNumber());
+				System.exit(1);
+			}
+	    	
 		}
 	}
 	

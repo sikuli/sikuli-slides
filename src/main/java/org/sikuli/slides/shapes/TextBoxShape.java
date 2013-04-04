@@ -66,15 +66,19 @@ public class TextBoxShape extends SlideShape {
 	    				performTyping(newtargetRegion);
 	    			}
 	    			else{
-	    				System.out.println("Couldn't uniquely determine the target image among multiple similar targets on the screen.");
+	    				System.err.println("Failed to determine the target image among multiple similar targets on the screen."
+	    						+"Slide no. "+slideTargetRegion.getslideNumber());
+	    				System.exit(1);
 	    			}
 	    		}
 	    		else{
 	    			performTyping(targetRegion);
 	    		}
 	    	}
-			else
-				System.err.println("Couldn't find target on the screen."+getId());
+			else{
+				System.err.println("Failed to find target on the screen. Slide no. "+slideTargetRegion.getslideNumber());
+				System.exit(1);
+			}
 		}
 	}
 	

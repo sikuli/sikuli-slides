@@ -77,15 +77,18 @@ public class RoundedRectangleShape extends SlideShape {
 	    				performDragDrop(newtargetRegion);
 	    			}
 	    			else{
-	    				System.out.println("Couldn't uniquely determine the target image among multiple similar targets on the screen.");
+	    				System.err.println("Failed to determine the target image among multiple similar targets on the screen."
+	    						+"Slide no. "+slideTargetRegion.getslideNumber());
+	    				System.exit(1);
 	    			}
 	    		}
 	    		else{ // only one occurrence of the target on the screen
 	    			performDragDrop(targetRegion);
 	    		}
 	    	}
-			else{ 
-				System.err.println("Couldn't find target on the screen."+getId());
+			else{
+				System.err.println("Failed to find target on the screen. Slide no. "+slideTargetRegion.getslideNumber());
+				System.exit(1);
 			}
 		}
 	}
