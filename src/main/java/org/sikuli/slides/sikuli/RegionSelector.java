@@ -4,14 +4,17 @@ Khalid
 package org.sikuli.slides.sikuli;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.processing.ImageProcessing;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
+import org.sikuli.slides.utils.Constants;
 
 /**
  * A region selector that finds the screen region of a target when similar targets exist on the screen.
@@ -76,18 +79,19 @@ public class RegionSelector {
 	private List<ScreenRegion> getLeftScreenRegionList(){
 		List<ScreenRegion> screenRegions=new ArrayList<ScreenRegion>();
 		int regionWidth=slideTargetRegion.getWidth();
-		int leftEdge;
+		int leftEdge, newWidth;
 		for(int i=0;i<5;i++){
 			// set the new region width
 			regionWidth+=widthFactor;
 			// check if the boundaries of the region are not outside of the original screenshot
 			leftEdge=slideTargetRegion.getX()-regionWidth;
+			newWidth=regionWidth+slideTargetRegion.getWidth();
 			if(leftEdge<0){
 				break;
 			}
 			else{
 				ScreenRegion screenRegion=new DesktopScreenRegion(leftEdge, 
-				slideTargetRegion.getY(), regionWidth, slideTargetRegion.getHeight());
+				slideTargetRegion.getY(), newWidth, slideTargetRegion.getHeight());
 				screenRegions.add(screenRegion);
 			}
 		}
@@ -128,21 +132,20 @@ public class RegionSelector {
 	private List<ScreenRegion> getTopScreenRegionList(){
 		List<ScreenRegion> screenRegions=new ArrayList<ScreenRegion>();
 		int regionHeight=slideTargetRegion.getHeight();
-		int upperEdge;
+		int upperEdge, newHeight;
 		for(int i=0;i<5;i++){
 			// set the new region height
 			regionHeight+=heightFactor;
 			// check if the boundaries of the region are not outside of the original screenshot
 			upperEdge=slideTargetRegion.getY()-regionHeight;
-			//System.out.println("upperEdge="+upperEdge);
+			newHeight=regionHeight+slideTargetRegion.getHeight();
 			if(upperEdge<0){
 				break;
 			}
 			else{
 				ScreenRegion screenRegion=new DesktopScreenRegion(slideTargetRegion.getX(), 
-						upperEdge, slideTargetRegion.getWidth(),regionHeight);
+						upperEdge, slideTargetRegion.getWidth(),newHeight);
 				screenRegions.add(screenRegion);
-				//System.out.println("Upper Edge: "+upperEdge+". Screenshot Height: "+slideTargetRegion.getMaxHeight());
 			}
 		}
 		return screenRegions;
@@ -211,19 +214,17 @@ public class RegionSelector {
 			screenRegion.getBounds().height);
 			
 			System.out.println("Attempt no. "+counter.incrementAndGet());
-			//TODO: Remove this
-			/* save the cropped region image
+			//TODO: Write region images for debugging purposes. Remove this later.
+			// save the cropped region image on the disk
 			String croppedImageName=Constants.projectDirectory+Constants.SIKULI_DIRECTORY+
 					Constants.IMAGES_DIRECTORY+File.separator+"region"+Integer.toString(counter.get())+".png";
 			ImageProcessing.writeImageToDisk(croppedRegionImage, croppedImageName);
-			*/
 			
 			// check if there are more than one occurrence of the region itself
 			List<ScreenRegion>lookupRegion=fullScreenRegion.findAll(new ImageTarget(croppedRegionImage));
 			if(lookupRegion.size()>1){
 				continue;
 			}
-
 			else if(lookupRegion.size()==1){
 				// search for the target image within the screen region
 				List<ScreenRegion> targetList=lookupRegion.get(0).findAll(imageTarget);
@@ -231,6 +232,7 @@ public class RegionSelector {
 					continue;
 				}
 				else if(targetList.size()==1){
+					System.out.println("Target found.");
 					return lookupRegion.get(0);
 				}
 			}
