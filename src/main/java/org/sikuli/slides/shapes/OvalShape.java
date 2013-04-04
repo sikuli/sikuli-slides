@@ -68,7 +68,7 @@ public class OvalShape extends SlideShape {
 	    			}
 	    			else{
 	    				System.err.println("Failed to determine the target image among multiple similar targets on the screen."
-	    						+"Slide no. "+slideTargetRegion.getslideNumber());
+	    						+"Try to resize the shape in slide "+slideTargetRegion.getslideNumber()+".");
 	    				System.exit(1);
 	    			}
 	    		}
