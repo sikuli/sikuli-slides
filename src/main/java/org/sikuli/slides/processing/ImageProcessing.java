@@ -72,7 +72,6 @@ public class ImageProcessing {
 		BufferedImage imageTocrop,croppedImage=null;
 		try {
 			imageTocrop= ImageIO.read(new File (imageLocation));
-			//System.out.println("Trying to crop "+imageLocation+"\nX="+x+"; Y="+y+"; Width"+width+"; Height="+height);
 			return croppedImage=imageTocrop.getSubimage(x, y, width, height);
 		} catch (IOException e) {
 			e.printStackTrace();
