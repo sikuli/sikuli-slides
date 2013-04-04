@@ -27,6 +27,7 @@ public class SearchMultipleTarget {
 		ScreenRegion fullScreenRegion=new DesktopScreenRegion();
 		List<ScreenRegion> targetList=fullScreenRegion.findAll(imageTarget);
 		if(targetList!=null && targetList.size()>1){
+			System.out.println("Found "+targetList.size()+" similar targets on the screen.");
 			return true;
 		}
 		else{
@@ -40,6 +41,11 @@ public class SearchMultipleTarget {
 	public ScreenRegion findNewScreenRegion(SlideTargetRegion slideTargetRegion,ImageTarget imageTarget){
 		RegionSelector regionSelector=new RegionSelector(slideTargetRegion);
 		ScreenRegion newScreenRegion=regionSelector.findScreenRegion(imageTarget,slideTargetRegion);
-		return newScreenRegion.find(imageTarget);
+		if(newScreenRegion!=null){
+			return newScreenRegion.find(imageTarget);
+		}
+		else{
+			return null;
+		}
 	}
 }
