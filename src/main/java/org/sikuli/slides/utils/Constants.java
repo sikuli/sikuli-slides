@@ -55,4 +55,10 @@ public class Constants {
 	 *  The duration time in seconds to display annotation (canvas) around the target on the screen. 
 	 */
 	public static final int CANVAS_DURATION=1;
+	
+	/**
+	 * Screen id. Use this constant to run the test on a secondary monitor, 
+	 * 0 means the default monitor and 1 means the secondary monitor.
+	 */
+	public static int ScreenId=0;
 }
