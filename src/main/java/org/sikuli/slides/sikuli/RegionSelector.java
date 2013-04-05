@@ -186,7 +186,7 @@ public class RegionSelector {
 	private ScreenRegion doDirectionalSearch(ImageTarget imageTarget,
 			SlideTargetRegion slideTargetRegion, int direction) {
 		
-		ScreenRegion fullScreenRegion=new DesktopScreenRegion();
+		ScreenRegion fullScreenRegion=SikuliController.getFullScreenRegion();
 		List<ScreenRegion> directionScreenRegions;
 		if(direction==TOP){
 			directionScreenRegions=getTopScreenRegionList();
