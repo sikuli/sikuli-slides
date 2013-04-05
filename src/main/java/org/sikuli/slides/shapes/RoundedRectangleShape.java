@@ -4,8 +4,6 @@ Khalid
 package org.sikuli.slides.shapes;
 
 import java.io.File;
-
-import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.Mouse;
@@ -65,7 +63,7 @@ public class RoundedRectangleShape extends SlideShape {
 		
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
 		if(imageTarget!=null){
-			ScreenRegion fullScreenRegion=new DesktopScreenRegion();
+			ScreenRegion fullScreenRegion=SikuliController.getFullScreenRegion();
 	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, Constants.MaxWaitTime);
 	    	if(targetRegion!=null){
 	    		// check if there are more than one occurrence of the target image.
