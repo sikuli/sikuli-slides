@@ -44,7 +44,7 @@ public class MainCommandLine {
 	    try{
 	    	cmd = parser.parse(posixOptions, args);
 	        if (cmd.hasOption("h")){
-        		printHelp(getPOSIXCommandLineOptions(), 80, 
+        		printHelp(getPOSIXCommandLineOptions(), 120, 
     					"sikuli-slides -- help", "sikuli-slides -- (END)", 5, 3, true, System.out);
         		return null;
 	        }
@@ -132,7 +132,7 @@ public class MainCommandLine {
 	{
 		final PrintWriter writer = new PrintWriter(out);  
 	    final HelpFormatter usageFormatter = new HelpFormatter();  
-	    usageFormatter.printUsage(writer, 80, commandLineSyntax, options);
+	    usageFormatter.printUsage(writer, 120, commandLineSyntax, options);
 	    writer.flush();
 	}
 	/**
