@@ -55,6 +55,7 @@ public class RectangleShape extends SlideShape {
 		if(imageTarget!=null){
 			ScreenRegion fullScreenRegion=SikuliController.getFullScreenRegion();
 	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, Constants.MaxWaitTime);
+	    	
 	    	if(targetRegion!=null){
 	    		// check if there are more than one occurrence of the target image.
 	    		SearchMultipleTarget searchMultipleTarget=new SearchMultipleTarget();
