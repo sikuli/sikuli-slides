@@ -1,8 +1,6 @@
 package org.sikuli.slides.guis;
 
 import java.io.File;
-
-import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Utils;
 import org.sikuli.slides.core.SikuliPowerPoint;
 
@@ -25,7 +23,7 @@ public class MainUI{
 		}
 		//TODO: remove this
 		else{
-			System.out.println("created working directory in: "+Constants.workingDirectoryPath);
+			//System.out.println("created working directory in: "+Constants.workingDirectoryPath);
 		}
 	}
 
