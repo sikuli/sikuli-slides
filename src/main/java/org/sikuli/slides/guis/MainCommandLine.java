@@ -9,6 +9,8 @@ import java.io.PrintWriter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
@@ -24,7 +26,11 @@ import org.sikuli.slides.utils.MyFileFilter;
  */
 public class MainCommandLine {
 	private static final String applicationName = "sikuli-slides";
-	
+	private static final String versionNumber="1.1.0";
+	private static final String commandLineSyntax = "java -jar "+
+			applicationName+"-"+versionNumber+".jar "+
+			"presentation_file.pptx";
+	private static final String fileNotFoundError="No such file.";
 	/**
 	* Parse the command-line arguments as POSIX like options (one character long option).
 	* @param args Command-line arguments
@@ -39,7 +45,7 @@ public class MainCommandLine {
 	    	cmd = parser.parse(posixOptions, args);
 	        if (cmd.hasOption("h")){
         		printHelp(getPOSIXCommandLineOptions(), 80, 
-    					"sikuli-slides -- help", "sikuli-slides -- (END)", 5, 3, false, System.out);
+    					"sikuli-slides -- help", "sikuli-slides -- (END)", 5, 3, true, System.out);
         		return null;
 	        }
 	    	else if (cmd.hasOption("w")){
@@ -49,7 +55,7 @@ public class MainCommandLine {
 	        
 	        // check arguments
 	        final String[] remainingArguments = cmd.getArgs();
-	        if(remainingArguments==null){
+	        if(remainingArguments==null||remainingArguments.length==0){
 	        	printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
 	        	return null;
 	        }
@@ -58,7 +64,16 @@ public class MainCommandLine {
 	        	String FileName=remainingArguments[0];
 	        	File source_file=new File(FileName);
 	        	if(myFileFilter.accept(source_file)){
-	        		return source_file.getAbsolutePath();
+	        		if(source_file.exists()){
+	        			showTextHeader(System.out);
+	        			displayBlankLine();
+	        			return source_file.getAbsolutePath();
+	        		}
+	        		else{
+	        			System.out.write(fileNotFoundError.getBytes()); 
+	        			displayBlankLine();
+	        			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+	        		}
 	        	}
 	        	else{
 	        		printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
@@ -80,11 +95,20 @@ public class MainCommandLine {
 	 * Return all valid POSIX command-line options
 	 * @return valid POSIX command-line options
 	 */
+	@SuppressWarnings("static-access")
 	private static Options getPOSIXCommandLineOptions() {
 		final Options posixOptions=new Options();
-		posixOptions.addOption("w",true,
-				"the maximum time to wait in milliseconds to find a target on the screen.");
-		posixOptions.addOption("h",false,"help");
+		
+		Option waitOption=OptionBuilder.withArgName( "max_wait_time" )
+                .hasArg()
+                .withDescription("the maximum time to wait in milliseconds to find a target on the screen (default 15000 ms)." )
+                .create( "w" );
+		
+		Option helpOption=new Option("h", "help");
+		
+		posixOptions.addOption(helpOption);
+		posixOptions.addOption(waitOption);
+		
 		return posixOptions;
 	}
 	
@@ -108,7 +132,7 @@ public class MainCommandLine {
 	{
 		final PrintWriter writer = new PrintWriter(out);  
 	    final HelpFormatter usageFormatter = new HelpFormatter();  
-	    usageFormatter.printUsage(writer, 80, applicationName, options);  
+	    usageFormatter.printUsage(writer, 80, commandLineSyntax, options);
 	    writer.flush();
 	}
 	/**
@@ -126,8 +150,8 @@ public class MainCommandLine {
 			final String header, final String footer,
 			final int leftPad, final int descPad,
 			final boolean autoUsage,final OutputStream out){
-		
-		final String commandLineSyntax = "java -jar sikuli-slides-1.0.0.jar [-h | [-w max_wait_time]] presentation_file.pptx";
+		showTextHeader(System.out);
+		displayBlankLine();
 		final PrintWriter printWriter = new PrintWriter(out);
 		final HelpFormatter helpFormatter = new HelpFormatter();
 		helpFormatter.printHelp(printWriter, printedRowWidth, 
@@ -143,9 +167,6 @@ public class MainCommandLine {
 		}
 	}
 	public static String runCommandLineTool(final String[] args){
-		
-		showTextHeader(System.out);
-		displayBlankLine();
 		if (args.length < 1){
 			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
 			return null;
