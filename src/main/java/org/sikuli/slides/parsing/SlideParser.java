@@ -12,6 +12,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import org.sikuli.slides.media.Sound;
 import org.sikuli.slides.screenshots.Screenshot;
 import org.sikuli.slides.shapes.CloudShape;
 import org.sikuli.slides.shapes.FrameShape;
@@ -23,8 +24,11 @@ import org.sikuli.slides.shapes.TextBoxShape;
 
 public class SlideParser extends DefaultHandler {
 	private Screenshot originalScreenshot;
+	private Sound mSound;
 	private String xmlFile;
 	private boolean inScreenshot=false;
+	private boolean inPictureElement=false;
+	private boolean inSound=false;
 	private boolean inShapeProperties=false;
 	
 	private boolean inShape=false;
@@ -80,10 +84,9 @@ public class SlideParser extends DefaultHandler {
 
 		
 		// Part 1: Parsing the original screen shoot info
-		// if current element is the original screenshot, create a new screenshot
+		// if current element is picture element
 		if (qName.equalsIgnoreCase("p:pic")) {
-			originalScreenshot=new Screenshot();
-			inScreenshot=true;
+			inPictureElement=true;
 		}
 		/*
 		 * if the current child element is the "a:blip", get the qualified name or the relationship id.
@@ -93,11 +96,27 @@ public class SlideParser extends DefaultHandler {
 			// get the relationship id
 			originalScreenshot.setRelationshipID(attributes.getValue("r:embed"));
 		}
+		/*
+		 * if the current element is the audio file, get the relationship id number.
+		 */
+		else if(inSound && qName.equalsIgnoreCase("a:audioFile")){
+			mSound.setRelationshipId(attributes.getValue("r:link"));
+		}
 		/* if the current child element is the non-visual propeties of the shape (p:cNvPr), 
 		then get the screenshot name and filename
 		*/
-		else if(inScreenshot && qName.equalsIgnoreCase("p:cNvPr")){
-				originalScreenshot.setName(attributes.getValue("name"));
+		else if(inPictureElement && qName.equalsIgnoreCase("p:cNvPr")){
+				String name=attributes.getValue("name");
+				if(name.contains("Picture")){
+					originalScreenshot=new Screenshot();
+					inScreenshot=true;
+					originalScreenshot.setName(name);
+				}
+				else if(name.contains("Sound")){
+					mSound=new Sound();
+					inSound=true;
+					mSound.setName(name);
+				}
 		}
 		
 		// if the current child element is the shape properties (p:spPr), then get the screenshot dimensions
@@ -238,7 +257,13 @@ public class SlideParser extends DefaultHandler {
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if(inScreenshot && qName.equalsIgnoreCase("p:pic")){
-			inScreenshot=false;
+			if(inScreenshot){
+				inScreenshot=false;
+			}
+			else if(inSound){
+				inSound=false;
+			}
+			inPictureElement=false;
 		}
 		else if(inScreenshot && inShapeProperties && qName.equalsIgnoreCase("p:spPr")){
 			inShapeProperties=false;
@@ -290,6 +315,11 @@ public class SlideParser extends DefaultHandler {
 	// return the original screenshot
 	public Screenshot getScreenshot(){
 		return originalScreenshot;
+	}
+	
+	// return the sound
+	public Sound getSound(){
+		return mSound;
 	}
 	
 	// return the shape
