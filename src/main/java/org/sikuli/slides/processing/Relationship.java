@@ -19,7 +19,7 @@ import org.sikuli.slides.utils.Constants;
 /* 
  *  
  * @author Khalid
- * This class handles the slide relationship XML file to get the image name in the /media directory.
+ * This class handles the slide relationship XML file to get media path name in the /media directory.
  */
 public class Relationship extends DefaultHandler  {
 	
@@ -30,7 +30,7 @@ public class Relationship extends DefaultHandler  {
 	public Relationship(String fileName){
 		this.relationshipXMLFile=Constants.projectDirectory + Constants.RELATIONSHIP_DIRECTORY + fileName+".rels";
 	}
-	public String getImageFileName(String relationshipID){
+	public String getMediaFileName(String relationshipID){
 		this.relationshipID=relationshipID;
 		parseDocument();
 		return mediaFileName;
@@ -59,7 +59,7 @@ public class Relationship extends DefaultHandler  {
 		// Part 1: Parsing the original screen shoot info
 		// if current element is Relationship, get the target
 		if (qName.equalsIgnoreCase("Relationship")) {
-			// get the image location
+			// get the media location
 			if(relationshipID.equals(attributes.getValue("Id"))){
 				mediaFileName=new File(attributes.getValue("Target")).getName();
 			}
