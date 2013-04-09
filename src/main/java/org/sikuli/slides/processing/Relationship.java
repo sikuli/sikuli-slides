@@ -24,7 +24,7 @@ import org.sikuli.slides.utils.Constants;
 public class Relationship extends DefaultHandler  {
 	
 	private String relationshipXMLFile;
-	private String imageFileName;
+	private String mediaFileName;
 	private String relationshipID;
 	
 	public Relationship(String fileName){
@@ -33,7 +33,7 @@ public class Relationship extends DefaultHandler  {
 	public String getImageFileName(String relationshipID){
 		this.relationshipID=relationshipID;
 		parseDocument();
-		return imageFileName;
+		return mediaFileName;
 	}
 	
 	private void parseDocument(){
@@ -61,7 +61,7 @@ public class Relationship extends DefaultHandler  {
 		if (qName.equalsIgnoreCase("Relationship")) {
 			// get the image location
 			if(relationshipID.equals(attributes.getValue("Id"))){
-					imageFileName=new File(attributes.getValue("Target")).getName();
+				mediaFileName=new File(attributes.getValue("Target")).getName();
 			}
 		}
 	}
