@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.FilenameUtils;
+import org.sikuli.slides.media.Sound;
 import org.sikuli.slides.parsing.PresentationParser;
 import org.sikuli.slides.parsing.SlideParser;
 import org.sikuli.slides.presentation.Presentation;
@@ -87,8 +88,14 @@ public class SikuliPowerPoint {
 		// Get the results
 		// get the screenshot info
 		Screenshot screenshot=mySlideParser.getScreenshot();
+		// get the shape info
 		SlideShape shape=mySlideParser.getShape();
-		
+		// get the sound info
+		Sound sound=mySlideParser.getSound();
+		if(sound!=null){
+			setSoundFileName(sound, slideName);
+			sound.playSound();
+		}
 		// if the slide doesn't contain a shape
 		if(shape==null){
 			System.err.println("Failed to process slide "+slideNumber+". The slide must contain a predefined shape.");
@@ -119,18 +126,21 @@ public class SikuliPowerPoint {
 			return;
 		}
 		
-		// print the results
-		//System.out.println(screenshot.toString());
-		//System.out.println(shape.toString());
 		// process the screenshot
 		startProcessing(screenshot,shape, slideNumber);
 		
 	}
-
+	// set the file path of the image screenshot
 	private void setScreenshotFileName(Screenshot screenshot, String slideName) {
 		// parse the relationship file and get the image file name
 		Relationship relationship=new Relationship(slideName);
-		screenshot.setFileName(relationship.getImageFileName(screenshot.getRelationshipID()));
+		screenshot.setFileName(relationship.getMediaFileName(screenshot.getRelationshipID()));
+	}
+	// set the file path of the sound file
+	private void setSoundFileName(Sound sound, String slideName) {
+		// parse the relationship file and get the image file name
+		Relationship relationship=new Relationship(slideName);
+		sound.setFileName(relationship.getMediaFileName(sound.getRelationshipId()));
 	}
 	
 	
