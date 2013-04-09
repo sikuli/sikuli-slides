@@ -3,6 +3,13 @@ Khalid
 */
 package org.sikuli.slides.media;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import org.sikuli.api.audio.DesktopSpeaker;
+import org.sikuli.api.audio.Speaker;
+import org.sikuli.slides.utils.Constants;
+
 public class Sound {
 	private String name;
 	private String fileName;
@@ -35,6 +42,16 @@ public class Sound {
 		this.relationshipId = relationshipId;
 	}
 	
+	public void playSound(){
+		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+getFileName();
+			Speaker speaker = new DesktopSpeaker();
+			try {
+				speaker.play(new URL("file://"+slideMediaLocation));
+			} catch (MalformedURLException e) {
+				System.err.println("Unknown audio location..");
+				e.printStackTrace();
+			}
+	}
 	public String toString(){
 		return "Sound info:\n" +"name:"+name+"\n file name:"+fileName+
 				"\n relationshipID="+relationshipId;
