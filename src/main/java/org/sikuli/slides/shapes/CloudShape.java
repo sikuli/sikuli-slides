@@ -3,13 +3,9 @@ Khalid
 */
 package org.sikuli.slides.shapes;
 
-import static org.sikuli.api.API.browse;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.sikuli.slides.screenshots.SlideTargetRegion;
+import org.sikuli.slides.core.SlideComponent;
+import org.sikuli.slides.sikuli.SlideAction;
+import org.sikuli.slides.utils.Constants;
 /**
  * Cloud shape to open the browser
  * @author Khalid
@@ -47,22 +43,14 @@ public class CloudShape extends SlideShape {
 				"\n width:"+width+"\n height:"+height+
 				"\n ******************************************";
 	}
+	/**
+	 * perform launching the default browser action.
+	 * @slideComponent the components of the slide.
+	 */
 	@Override
-	public void doSikuliAction(File targetFile, SlideTargetRegion contextRegion) {
-		try {
-			String userURL=getText();
-			URL url=null;
-			if(userURL.startsWith("http://")){
-				url=new URL(userURL);
-			}
-			else{
-				url=new URL("http://"+userURL);
-			}
-			browse(url);
-		} catch (MalformedURLException e) {
-			System.err.println("The text body of the Cloud shape doesn't contain a valid URL.");
-			System.exit(1);
-		}
+	public void doSikuliAction(SlideComponent slideComponent) {
+		SlideAction slideAction=new SlideAction(slideComponent);
+		slideAction.doSikuliAction(Constants.DesktopEvent.LAUNCH_BROWSER);
 	}
 
 }

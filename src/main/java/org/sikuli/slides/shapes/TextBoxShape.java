@@ -3,16 +3,8 @@ Khalid
 */
 package org.sikuli.slides.shapes;
 
-import java.io.File;
-import org.sikuli.api.ImageTarget;
-import org.sikuli.api.ScreenRegion;
-import org.sikuli.api.robot.Keyboard;
-import org.sikuli.api.robot.Mouse;
-import org.sikuli.api.robot.desktop.DesktopKeyboard;
-import org.sikuli.api.robot.desktop.DesktopMouse;
-import org.sikuli.slides.screenshots.SlideTargetRegion;
-import org.sikuli.slides.sikuli.SearchMultipleTarget;
-import org.sikuli.slides.sikuli.SikuliController;
+import org.sikuli.slides.core.SlideComponent;
+import org.sikuli.slides.sikuli.SlideAction;
 import org.sikuli.slides.utils.Constants;
 
 public class TextBoxShape extends SlideShape {
@@ -47,45 +39,14 @@ public class TextBoxShape extends SlideShape {
 				"\n width:"+width+"\n height:"+height+
 				"\n ******************************************";
 	}
-	// perform typing (click and type text)
+	/**
+	 * perform typing (click and type text) on the target image.
+	 * @slideComponent the components of the slide.
+	 */
 	@Override
-	public void doSikuliAction(File targetFile, SlideTargetRegion slideTargetRegion) {
-		final ImageTarget imageTarget=new ImageTarget(targetFile);
-		if(imageTarget!=null){
-			ScreenRegion fullScreenRegion=SikuliController.getFullScreenRegion();
-	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, Constants.MaxWaitTime);
-	    	if(targetRegion!=null){
-	    		// check if there are more than one occurrence of the target image.
-	    		SearchMultipleTarget searchMultipleTarget=new SearchMultipleTarget();
-	    		if(searchMultipleTarget.hasMultipleOccurance(imageTarget)){
-	    			ScreenRegion newScreenRegion=searchMultipleTarget.findNewScreenRegion(slideTargetRegion, imageTarget);
-	    			if(newScreenRegion!=null){
-	    				ScreenRegion newtargetRegion=newScreenRegion.find(imageTarget);
-	    				performTyping(newtargetRegion);
-	    			}
-	    			else{
-	    				System.err.println("Failed to determine the target image among multiple similar targets on the screen."
-	    						+"\nTry to resize the shape in slide "+slideTargetRegion.getslideNumber()+".");
-	    				System.exit(1);
-	    			}
-	    		}
-	    		else{
-	    			performTyping(targetRegion);
-	    		}
-	    	}
-			else{
-				System.err.println("Failed to find target on the screen. Slide no. "+slideTargetRegion.getslideNumber());
-				System.exit(1);
-			}
-		}
-	}
-	
-	private void performTyping(ScreenRegion targetRegion){
-		Mouse mouse = new DesktopMouse();
-		Keyboard keyboard=new DesktopKeyboard();
-		SikuliController.displayBox(targetRegion);
-		mouse.click(targetRegion.getCenter());
-		keyboard.type(getText());
+	public void doSikuliAction(SlideComponent slideComponent) {
+		SlideAction slideAction=new SlideAction(slideComponent);
+		slideAction.doSikuliAction(Constants.DesktopEvent.KEYBOARD_TYPING);
 	}
 
 }

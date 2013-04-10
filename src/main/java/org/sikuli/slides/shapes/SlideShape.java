@@ -3,9 +3,7 @@ Khalid
 */
 package org.sikuli.slides.shapes;
 
-import java.io.File;
-
-import org.sikuli.slides.screenshots.SlideTargetRegion;
+import org.sikuli.slides.core.SlideComponent;
 
 public abstract class SlideShape {
 	private String id;
@@ -80,7 +78,7 @@ public abstract class SlideShape {
 		this.order = order;
 	}
 	
-	public abstract void doSikuliAction(File targetFile, SlideTargetRegion contextRegion);
+	public abstract void doSikuliAction(SlideComponent slideComponent);
 	
 	@Override
 	public String toString(){
