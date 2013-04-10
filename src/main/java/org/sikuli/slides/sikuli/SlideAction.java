@@ -38,10 +38,7 @@ public class SlideAction {
 	}
 	
 	public void doSikuliAction(Constants.DesktopEvent desktopEvent){
-		// if the slide contains a sound, play it first
-		if(sound!=null){
-			sound.playSound();
-		}
+
 		// if the required action is to open the browser, no need to search for target on the screen
 		if(desktopEvent==Constants.DesktopEvent.LAUNCH_BROWSER){
 			performSikuliAction(null, desktopEvent);
@@ -88,6 +85,11 @@ public class SlideAction {
 	
 
 	private void performSikuliAction(ScreenRegion targetRegion,Constants.DesktopEvent desktopEvent){
+		// if the slide contains a sound, play it first
+		if(sound!=null){
+			sound.playSound();
+		}
+		
 		if(desktopEvent==Constants.DesktopEvent.LEFT_CLICK){
 			performLeftClick(targetRegion);
 		}
