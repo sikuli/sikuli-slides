@@ -61,4 +61,11 @@ public class Constants {
 	 * 0 means the default monitor and 1 means the secondary monitor.
 	 */
 	public static int ScreenId=0;
+	
+	/**
+	 * Desktop input events
+	 */
+	public enum DesktopEvent {
+		LEFT_CLICK, RIGHT_CLICK, DOUBLE_CLICK, DRAG_N_DROP, KEYBOARD_TYPING, LAUNCH_BROWSER
+	}
 }
