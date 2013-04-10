@@ -71,8 +71,6 @@ public class SikuliPowerPoint {
 		PresentationParser presentationParser=new PresentationParser();
 		presentationParser.parseDocument();
 		presentation=presentationParser.getPresentation();
-		//System.out.println("**************************************************");
-		//System.out.println(presentation);
 	}
 	
 	private void parseSlideFile(int slideNumber) {
@@ -89,23 +87,22 @@ public class SikuliPowerPoint {
 		// get the screenshot info
 		Screenshot screenshot=mySlideParser.getScreenshot();
 		// get the shape info
-		SlideShape shape=mySlideParser.getShape();
+		SlideShape slideShape=mySlideParser.getShape();
 		// get the sound info
 		Sound sound=mySlideParser.getSound();
 		if(sound!=null){
 			setSoundFileName(sound, slideName);
-			sound.playSound();
 		}
-		// if the slide doesn't contain a shape
-		if(shape==null){
+		// if the slide doesn't contain a shape.
+		if(slideShape==null){
 			System.err.println("Failed to process slide "+slideNumber+". The slide must contain a predefined shape.");
 			return;
 		}
 		
 		// if the result contains only shape without screenshot, execute just the shape action.
 		// for example, the cloud shape means open the default browser and doesn't have screenshot
-		else if(screenshot==null&&shape!=null){
-			tasks.add(new SikuliAction(shape,null,null));
+		else if(screenshot==null&&slideShape!=null){
+			tasks.add(new SikuliAction(null,slideShape,screenshot,null,sound));
 			return;
 		}
 		// set the screenshot image file name
@@ -113,21 +110,15 @@ public class SikuliPowerPoint {
 		
 		// if the slide contains an arrow, get two targets
 		if(mySlideParser.isMultipleShapes()){
-			//System.out.println("################################");
 			List<SlideShape> roundedRectnagleShapes=mySlideParser.getShapes();
-			//System.out.println("number of shapes: "+roundedRectnagleShapes.size());
 			for(SlideShape roundedRectnagleShape:roundedRectnagleShapes){
-				// print the results
-				
-				//System.out.println(screenshot.toString());
-				//System.out.println(roundedRectnagleShape.toString());
-				startProcessing(screenshot,roundedRectnagleShape, slideNumber);
+				startProcessing(screenshot,roundedRectnagleShape, slideNumber, sound);
 			}
 			return;
 		}
 		
-		// process the screenshot
-		startProcessing(screenshot,shape, slideNumber);
+		// calculate the target position and process the screenshot
+		startProcessing(screenshot,slideShape, slideNumber, sound);
 		
 	}
 	// set the file path of the image screenshot
@@ -144,50 +135,47 @@ public class SikuliPowerPoint {
 	}
 	
 	
-	private void startProcessing(Screenshot screenshot, SlideShape shape, int slideNumber) {
-		// TODO: remove this
-		// work on the first slide
-		// print the screen resolutions
-		//System.out.println("Screen width: "+MyScreen.getScreenDimensions().width);
-		//System.out.println("Screen height: "+MyScreen.getScreenDimensions().height);
-		// print the original screenshot info that is stored in the first slide
-		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+screenshot.getFileName();
-		//System.out.println("slide 1 screenshot location: "+slide1MediaLocation);
-		
+	private void startProcessing(Screenshot screenshot, SlideShape slideShape, int slideNumber, Sound sound) {
+		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+screenshot.getFileName();		
 		SlideProcessing slideProcessing=new SlideProcessing(slideMediaLocation);
-		//System.out.println("Screenshot height: "+slideProcessing.getScreenshotHeight());
-		//System.out.println("Screenshot width: "+slideProcessing.getScreenshotWidth());
-		//System.out.println("***********************************************************");
+		
 		int resizedScreenshotWidth=UnitConverter.emuToPixels(screenshot.getCx());
 		int resizedScreenshotHeight=UnitConverter.emuToPixels(screenshot.getCy());
-		//System.out.println("The width of the resized screenshot in the slide (pixels): " + resizedScreenshotWidth);
-		//System.out.println("the height of the resized screenshot in the slide (pixels): " + resizedScreenshotHeight);
-		
-		//System.out.println("***********************************************************");
-		// crop the image
 		// get the relative location and dimensions of the rectangle
 
-		double relativeRectangleWidth=ImageProcessing.scaleRectangleWidth(UnitConverter.emuToPixels(shape.getCx()), 
+		int relativeRectangleWidth=(int)Math.round(ImageProcessing.scaleRectangleWidth(UnitConverter.emuToPixels(slideShape.getCx()), 
 				resizedScreenshotWidth, 
-				slideProcessing.getScreenshotWidth());
-		double relativeRectangleHeight=ImageProcessing.scaleRectangleHeight(UnitConverter.emuToPixels(shape.getCy()), 
+				slideProcessing.getScreenshotWidth()));
+		int relativeRectangleHeight=(int)Math.round(ImageProcessing.scaleRectangleHeight(UnitConverter.emuToPixels(slideShape.getCy()), 
 				resizedScreenshotHeight, 
-				slideProcessing.getScreenshotHeight());
-		//System.out.println("Relative rectangle dimensions: RelativeWidth:"+relativeRectangleWidth+
-			//	". RelativeHeight: "+relativeRectangleHeight);
-		int diffX=shape.getOffx()-screenshot.getOffX();
-		int diffY=shape.getOffy()-screenshot.getOffY();
+				slideProcessing.getScreenshotHeight()));
+		
+		int diffX=slideShape.getOffx()-screenshot.getOffX();
+		int diffY=slideShape.getOffy()-screenshot.getOffY();
 
-		
-		double relativeRectangleX=ImageProcessing.getRelativeX(UnitConverter.emuToPixels(diffX), 
+		int relativeRectangleX=(int)Math.round(ImageProcessing.getRelativeX(UnitConverter.emuToPixels(diffX), 
 				resizedScreenshotWidth, 
-				slideProcessing.getScreenshotWidth());
+				slideProcessing.getScreenshotWidth()));
 		
-		double relativeRectangleY=ImageProcessing.getRelativeY(UnitConverter.emuToPixels(diffY), 
+		int relativeRectangleY=(int)Math.round(ImageProcessing.getRelativeY(UnitConverter.emuToPixels(diffY), 
 				resizedScreenshotHeight, 
-				slideProcessing.getScreenshotHeight());
+				slideProcessing.getScreenshotHeight()));
 		
-		// crop the image
+		// get the target region (the shape area)
+		SlideTargetRegion slideTargetRegion=new SlideTargetRegion("",slideNumber,slideMediaLocation,
+				relativeRectangleX, relativeRectangleY
+				, relativeRectangleWidth, 
+				relativeRectangleHeight,
+				slideProcessing.getScreenshotWidth(),slideProcessing.getScreenshotHeight());
+		// crop and save the target image
+		File targetFile=saveTargetImage(slideMediaLocation, relativeRectangleX, relativeRectangleY,
+				relativeRectangleWidth, relativeRectangleHeight);
+		// queue the tasks
+		tasks.add(new SikuliAction(targetFile, slideShape, screenshot,slideTargetRegion, sound));
+	}
+	
+	private File saveTargetImage(String slideMediaLocation,int relativeRectangleX, int relativeRectangleY 
+			, int relativeRectangleWidth, int relativeRectangleHeight){
 		BufferedImage croppedImage=ImageProcessing.cropImage(slideMediaLocation, 
 				(int)Math.round(relativeRectangleX), (int)Math.round(relativeRectangleY)
 				, (int)Math.round(relativeRectangleWidth), 
@@ -195,19 +183,11 @@ public class SikuliPowerPoint {
 		
 		String croppedImageName=Constants.projectDirectory+Constants.SIKULI_DIRECTORY+
 				Constants.IMAGES_DIRECTORY+File.separator+"target"+Integer.toString(counter.incrementAndGet())+".png";
-		
-		// set the target region (the shape area)
-		SlideTargetRegion slideTargetRegion=new SlideTargetRegion("",slideNumber,slideMediaLocation,
-				(int)Math.round(relativeRectangleX), (int)Math.round(relativeRectangleY)
-				, (int)Math.round(relativeRectangleWidth), 
-				(int)Math.round(relativeRectangleHeight),
-				slideProcessing.getScreenshotWidth(),slideProcessing.getScreenshotHeight());
-
+		// save the target image to the disk
 		ImageProcessing.writeImageToDisk(croppedImage, croppedImageName);
-		
-		// queue the tasks
-		tasks.add(new SikuliAction(shape, new File(croppedImageName),slideTargetRegion));
+		return new File(croppedImageName);	
 	}
+	
 	
 	private void executeSikuliActions(){
 		for(SikuliAction shapeAction:tasks){
@@ -217,17 +197,15 @@ public class SikuliPowerPoint {
 	}
 	
 	class SikuliAction{
-		private SlideShape shape;
-		private File imageTarget;
-		private SlideTargetRegion contextRegion;
-		
-		public SikuliAction(SlideShape shape, File imageTarget, SlideTargetRegion contextRegion){
-			this.shape=shape;
-			this.imageTarget=imageTarget;
-			this.contextRegion=contextRegion;
+		private SlideComponent slideComponent;
+		private SlideShape slideShape;
+		public SikuliAction(File imageTargetFile, SlideShape slideShape, Screenshot screenshot, 
+				SlideTargetRegion slideTargetRegion, Sound sound){
+			this.slideShape=slideShape;
+			slideComponent=new SlideComponent(imageTargetFile, slideShape, screenshot, slideTargetRegion, sound);
 		}
 		public void doSikuliAction(){
-			shape.doSikuliAction(imageTarget,contextRegion);
+			slideShape.doSikuliAction(slideComponent);
 		}
 	}
 	
