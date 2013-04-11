@@ -7,12 +7,16 @@ import static org.sikuli.api.API.browse;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.Keyboard;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopKeyboard;
 import org.sikuli.api.robot.desktop.DesktopMouse;
+import org.sikuli.api.visual.Canvas;
+import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.slides.core.SlideComponent;
 import org.sikuli.slides.media.Sound;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
@@ -29,12 +33,14 @@ public class SlideAction {
 	private SlideShape slideShape;
 	private SlideTargetRegion slideTargetRegion;
 	private Sound sound;
+	private String note;
 	
 	public SlideAction(SlideComponent slideComponent){
 		this.targetFile=slideComponent.getTargetFile();
 		this.slideShape=slideComponent.getSlideShape();
-		this.sound=slideComponent.getSound();
 		this.slideTargetRegion=slideComponent.getSlideTargetRegion();
+		this.sound=slideComponent.getSound();
+		this.note=slideComponent.getSlideNote();
 	}
 	
 	public void doSikuliAction(Constants.DesktopEvent desktopEvent){
@@ -90,6 +96,10 @@ public class SlideAction {
 			sound.playSound();
 		}
 		
+		if(note!=null){
+			displayToolTip(targetRegion);
+		}
+		
 		if(desktopEvent==Constants.DesktopEvent.LEFT_CLICK){
 			performLeftClick(targetRegion);
 		}
@@ -109,6 +119,23 @@ public class SlideAction {
 			performLaunchWebBrowser();
 		}
 	}
+	/**
+	 * display tool tip around the target region
+	 * @param targetRegion the target region to display tool tip around
+	 */
+	private void displayToolTip(ScreenRegion targetRegion) {
+		/* if the target region is null, use the default desktop region.
+		   this is important in case of opening the default browser
+		*/
+		if(targetRegion==null){
+			targetRegion=new DesktopScreenRegion();
+		}
+		Canvas canvas = new DesktopCanvas();
+		canvas.addLabel(targetRegion, note);
+		canvas.display(Constants.CANVAS_DURATION);
+
+	}
+
 	/**
 	 * perform left click
 	 * @param targetRegion the region to perform left click input event on.
