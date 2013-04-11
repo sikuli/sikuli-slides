@@ -12,37 +12,20 @@ import org.sikuli.slides.utils.Constants;
  *
  */
 public class CloudShape extends SlideShape {
-	private int width;
-	private int height;
 	
 	public CloudShape(String name,String id, int offx, int offy, int cx,  int cy, int width, int height, String text, int order){
-		super(id,name,offx,offy,cx,cy,text,order);
-		this.width=width;
-		this.height=height;
+		super(id,name,offx,offy,cx,cy,width,height,text,order);
 	}
+	
 	public CloudShape(String id, String name, int order) {
-		super(id,name,0,0,0,0,"",order);
-		this.width=0;
-		this.height=0;
+		super(id,name,0,0,0,0,0,0,"",order);
 	}
-	public int getWidth() {
-		return width;
-	}
-	public void setWidth(int width) {
-		this.width = width;
-	}
-	public int getHeight() {
-		return height;
-	}
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
+	
 	public String toString(){
 		return "Cloud info:\n" +super.toString()+
-				"\n width:"+width+"\n height:"+height+
 				"\n ******************************************";
 	}
+	
 	/**
 	 * perform launching the default browser action.
 	 * @slideComponent the components of the slide.

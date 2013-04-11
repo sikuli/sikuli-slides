@@ -12,6 +12,8 @@ public abstract class SlideShape {
 	private int offy;
 	private int cx;
 	private int cy;
+	private int width;
+	private int height;
 	private String text;
 	private int order;
 	public SlideShape(String id, String name, int order){
@@ -19,13 +21,16 @@ public abstract class SlideShape {
 		this.name=name;
 		this.setOrder(order);
 	}
-	public SlideShape(String id, String name,int offx, int offy, int cx, int cy, String text, int order){
+	public SlideShape(String id, String name,int offx, int offy, int cx, int cy, 
+			int width, int height, String text, int order){
 		this.id=id;
 		this.name=name;
 		this.offx=offx;
 		this.offy=offy;
 		this.cx=cx;
 		this.cy=cy;
+		this.width=width;
+		this.height=height;
 		this.text=text;
 		this.setOrder(order);
 	}
@@ -65,6 +70,18 @@ public abstract class SlideShape {
 	public void setCy(int cy) {
 		this.cy = cy;
 	}
+	public int getWidth() {
+		return width;
+	}
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	public int getHeight() {
+		return height;
+	}
+	public void setHeight(int height) {
+		this.height = height;
+	}
 	public String getText() {
 		return text;
 	}
@@ -84,6 +101,7 @@ public abstract class SlideShape {
 	public String toString(){
 		return "id="+id+" name="+name+
 				"\n offx="+offx+"\n offy="+offy+"\n cx="+cx+"\n cy="+cy
+				+"\n"+"width="+width+"\n"+"height="+height
 				+"\n"+"text: "+text+"\n order="+order;
 	}
 

@@ -12,39 +12,17 @@ import org.sikuli.slides.utils.Constants;
  *
  */
 public class RoundedRectangleShape extends SlideShape {
-	
-	private int width;
-	private int height;
 
 	public RoundedRectangleShape(String name,String id, int offx, int offy, int cx,  int cy, int width, int height, String text, int order){
-		super(id,name,offx,offy,cx,cy,text,order);
-		this.width=width;
-		this.height=height;
+		super(id,name,offx,offy,cx,cy,width,height,text,order);
 	}
 	
 	public RoundedRectangleShape(String id, String name, int order) {
-		super(id,name,0,0,0,0,"", order);
-		this.width=0;
-		this.height=0;
+		super(id,name,0,0,0,0,0,0,"", order);
 	}
-	
-	public int getWidth() {
-		return width;
-	}
-	public void setWidth(int width) {
-		this.width = width;
-	}
-	public int getHeight() {
-		return height;
-	}
-	public void setHeight(int height) {
-		this.height = height;
-	}
-	
 	
 	public String toString(){
 		return "RoundedRectangle info:\n" +super.toString()+
-				"\n width:"+width+"\n height:"+height+
 				"\n ******************************************";
 	}
 	/**
