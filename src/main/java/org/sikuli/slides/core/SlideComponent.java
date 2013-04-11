@@ -21,18 +21,20 @@ public class SlideComponent {
 	private Screenshot screenshot;
 	private SlideTargetRegion slideTargetRegion;
 	private Sound sound;
+	private String slideNote;
 	
 	public SlideComponent(){
 		
 	}
 	
 	public SlideComponent(File imageTargetFile, SlideShape slideShape, Screenshot screenshot, 
-			SlideTargetRegion slideTargetRegion, Sound sound){
+			SlideTargetRegion slideTargetRegion, Sound sound,String slideNote){
 		this.setTargetFile(imageTargetFile);
 		this.setSlideShape(slideShape);
 		this.setScreenshot(screenshot);
 		this.setSlideTargetRegion(slideTargetRegion);
 		this.setSound(sound);
+		this.setSlideNote(slideNote);
 	}
 	
 	public File getTargetFile() {
@@ -73,6 +75,14 @@ public class SlideComponent {
 
 	public void setSound(Sound sound) {
 		this.sound = sound;
+	}
+	
+	public String getSlideNote() {
+		return slideNote;
+	}
+
+	public void setSlideNote(String slideNote) {
+		this.slideNote = slideNote;
 	}
 	
 	@Override
