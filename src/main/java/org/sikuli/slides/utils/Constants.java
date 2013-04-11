@@ -40,6 +40,10 @@ public class Constants {
 	 */
 	public static final String MEDIA_DIRECTORY=File.separator+"ppt"+File.separator+"media";
 	/**
+	 * The slides directory that contains the slide notes.
+	 */
+	public static final String SLIDE_NOTES_DIRECTORY=File.separator+"ppt"+File.separator+"notesSlides";
+	/**
 	 * The presentaion.xml absolute path name. 
 	 */
 	public static final String PRESENTATION_DIRECTORY=File.separator+"ppt"+File.separator+"presentation.xml";
