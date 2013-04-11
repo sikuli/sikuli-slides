@@ -8,6 +8,7 @@ import org.sikuli.slides.core.SlideComponent;
 public abstract class SlideShape {
 	private String id;
 	private String name;
+	private String shapeType; 
 	private int offx;
 	private int offy;
 	private int cx;
@@ -34,6 +35,10 @@ public abstract class SlideShape {
 		this.text=text;
 		this.setOrder(order);
 	}
+	/**
+	 * 
+	 * @return shape id
+	 */
 	public String getId() {
 		return id;
 	}
@@ -45,6 +50,22 @@ public abstract class SlideShape {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	/**
+	 * returns the shape type or the geometry of the shape. In Office Open XML
+	 * , the pre-defined shape type is specified with an attribute "prst" 
+	 * on the <a:prstGeom> element in each slide file.
+	 * @return the geometry or form of a shape 
+	 */
+	public String getShapeType() {
+		return shapeType;
+	}
+	/**
+	 * sets the geometry or form of a shape.
+	 * @param shapeType the pre-defined shape type
+	 */
+	public void setShapeType(String shapeType) {
+		this.shapeType = shapeType;
 	}
 	public int getOffx() {
 		return offx;
@@ -103,8 +124,5 @@ public abstract class SlideShape {
 				"\n offx="+offx+"\n offy="+offy+"\n cx="+cx+"\n cy="+cy
 				+"\n"+"width="+width+"\n"+"height="+height
 				+"\n"+"text: "+text+"\n order="+order;
-	}
-
-
-	
+	}	
 }
