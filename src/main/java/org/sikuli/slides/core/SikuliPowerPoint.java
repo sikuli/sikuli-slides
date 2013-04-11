@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.FilenameUtils;
 import org.sikuli.slides.media.Sound;
+import org.sikuli.slides.parsing.NoteParser;
 import org.sikuli.slides.parsing.PresentationParser;
 import org.sikuli.slides.parsing.SlideParser;
 import org.sikuli.slides.presentation.Presentation;
@@ -32,6 +33,7 @@ public class SikuliPowerPoint {
 	private Presentation presentation;
 	private AtomicInteger counter;
 	private List<SikuliAction> tasks;
+	private boolean hasNotes=false;
 	
 	public SikuliPowerPoint(File file){
 		this.file=file;
@@ -46,6 +48,8 @@ public class SikuliPowerPoint {
 		loadPresentationFile(file);
 		// parse the general presentation.xml file
 		parsePresentationFile();
+		// check if slide notes exist
+		checkSlideNotes();
 		// parse each slide file in the presentation document
 		for(int i=1;i<=presentation.getSlidesCount();i++)
 			parseSlideFile(i);
@@ -73,10 +77,23 @@ public class SikuliPowerPoint {
 		presentation=presentationParser.getPresentation();
 	}
 	
+	private void checkSlideNotes(){
+		if(new File(Constants.projectDirectory+Constants.SLIDE_NOTES_DIRECTORY).exists()){
+			hasNotes=true;
+			System.out.println("We did find notes.");
+		}
+		else{
+			hasNotes=false;
+			System.out.println("Sorry no notes.");
+		}
+	}
+	
 	private void parseSlideFile(int slideNumber) {
 		String slidesDirectory=Constants.projectDirectory+Constants.SLIDES_DIRECTORY;
-		
-		// 2) Parse the slide.xml file
+		// 2) parse the slide notes
+		String note=getSlideNote(slideNumber);
+		System.out.println("Slide "+slideNumber+"\n Note: "+note);
+		// 3) Parse the slide.xml file
 		String slideName=File.separator+"slide"+Integer.toString(slideNumber)+".xml";
 		String slidePath=slidesDirectory+slideName;
 		System.out.println("Processing slide: "+slideNumber);
@@ -102,7 +119,7 @@ public class SikuliPowerPoint {
 		// if the result contains only shape without screenshot, execute just the shape action.
 		// for example, the cloud shape means open the default browser and doesn't have screenshot
 		else if(screenshot==null&&slideShape!=null){
-			tasks.add(new SikuliAction(null,slideShape,screenshot,null,sound));
+			tasks.add(new SikuliAction(null,slideShape,screenshot,null,sound, note));
 			return;
 		}
 		// set the screenshot image file name
@@ -112,15 +129,31 @@ public class SikuliPowerPoint {
 		if(mySlideParser.isMultipleShapes()){
 			List<SlideShape> roundedRectnagleShapes=mySlideParser.getShapes();
 			for(SlideShape roundedRectnagleShape:roundedRectnagleShapes){
-				startProcessing(screenshot,roundedRectnagleShape, slideNumber, sound);
+				startProcessing(screenshot,roundedRectnagleShape, slideNumber, sound, note);
 			}
 			return;
 		}
 		
 		// calculate the target position and process the screenshot
-		startProcessing(screenshot,slideShape, slideNumber, sound);
+		startProcessing(screenshot,slideShape, slideNumber, sound, note);
 		
 	}
+	// returns the text of the slide note
+	private String getSlideNote(int slideNumber) {
+		// check if the document contains notes
+		if(hasNotes){
+			// check if the slide contains note
+			File slideNote=new File(Constants.projectDirectory+Constants.SLIDE_NOTES_DIRECTORY+
+					File.separator+"notesSlide"+Integer.toString(slideNumber)+".xml");
+			if(slideNote.exists()){
+				NoteParser noteParser=new NoteParser(slideNumber);
+				noteParser.parseDocument();
+				return noteParser.getNote();
+			}
+		}
+			return null;
+	}
+	
 	// set the file path of the image screenshot
 	private void setScreenshotFileName(Screenshot screenshot, String slideName) {
 		// parse the relationship file and get the image file name
@@ -135,7 +168,7 @@ public class SikuliPowerPoint {
 	}
 	
 	
-	private void startProcessing(Screenshot screenshot, SlideShape slideShape, int slideNumber, Sound sound) {
+	private void startProcessing(Screenshot screenshot, SlideShape slideShape, int slideNumber, Sound sound, String note) {
 		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+screenshot.getFileName();		
 		SlideProcessing slideProcessing=new SlideProcessing(slideMediaLocation);
 		
@@ -171,7 +204,7 @@ public class SikuliPowerPoint {
 		File targetFile=saveTargetImage(slideMediaLocation, relativeRectangleX, relativeRectangleY,
 				relativeRectangleWidth, relativeRectangleHeight);
 		// queue the tasks
-		tasks.add(new SikuliAction(targetFile, slideShape, screenshot,slideTargetRegion, sound));
+		tasks.add(new SikuliAction(targetFile, slideShape, screenshot,slideTargetRegion, sound, note));
 	}
 	
 	private File saveTargetImage(String slideMediaLocation,int relativeRectangleX, int relativeRectangleY 
@@ -200,9 +233,10 @@ public class SikuliPowerPoint {
 		private SlideComponent slideComponent;
 		private SlideShape slideShape;
 		public SikuliAction(File imageTargetFile, SlideShape slideShape, Screenshot screenshot, 
-				SlideTargetRegion slideTargetRegion, Sound sound){
+				SlideTargetRegion slideTargetRegion, Sound sound, String note){
 			this.slideShape=slideShape;
-			slideComponent=new SlideComponent(imageTargetFile, slideShape, screenshot, slideTargetRegion, sound);
+			slideComponent=new SlideComponent(imageTargetFile, 
+					slideShape, screenshot, slideTargetRegion, sound, note);
 		}
 		public void doSikuliAction(){
 			slideShape.doSikuliAction(slideComponent);
