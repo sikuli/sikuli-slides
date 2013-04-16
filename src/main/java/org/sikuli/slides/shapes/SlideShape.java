@@ -4,11 +4,13 @@ Khalid
 package org.sikuli.slides.shapes;
 
 import org.sikuli.slides.core.SlideComponent;
+import org.sikuli.slides.sikuli.SlideAction;
+import org.sikuli.slides.utils.Constants.DesktopEvent;
 
-public abstract class SlideShape {
+public class SlideShape {
 	private String id;
 	private String name;
-	private String shapeType; 
+	private String type; 
 	private int offx;
 	private int offy;
 	private int cx;
@@ -17,23 +19,18 @@ public abstract class SlideShape {
 	private int height;
 	private String text;
 	private int order;
-	public SlideShape(String id, String name, int order){
+	private int textSize;
+	private String backgroundColor;
+	public SlideShape(String id, String name, int order, String type, 
+			int offx, int offy, int cx, int cy){
 		this.id=id;
 		this.name=name;
-		this.setOrder(order);
-	}
-	public SlideShape(String id, String name,int offx, int offy, int cx, int cy, 
-			int width, int height, String text, int order){
-		this.id=id;
-		this.name=name;
+		this.order=order;
+		this.type=type;
 		this.offx=offx;
 		this.offy=offy;
 		this.cx=cx;
 		this.cy=cy;
-		this.width=width;
-		this.height=height;
-		this.text=text;
-		this.setOrder(order);
 	}
 	/**
 	 * 
@@ -57,15 +54,15 @@ public abstract class SlideShape {
 	 * on the <a:prstGeom> element in each slide file.
 	 * @return the geometry or form of a shape 
 	 */
-	public String getShapeType() {
-		return shapeType;
+	public String getType() {
+		return type;
 	}
 	/**
 	 * sets the geometry or form of a shape.
-	 * @param shapeType the pre-defined shape type
+	 * @param type the pre-defined shape type
 	 */
-	public void setShapeType(String shapeType) {
-		this.shapeType = shapeType;
+	public void setType(String type) {
+		this.type = type;
 	}
 	public int getOffx() {
 		return offx;
@@ -115,14 +112,32 @@ public abstract class SlideShape {
 	public void setOrder(int order) {
 		this.order = order;
 	}
+	public String getBackgroundColor() {
+		return backgroundColor;
+	}
+	public void setBackgroundColor(String backgroundColor) {
+		this.backgroundColor = backgroundColor;
+	}
+	public int getTextSize() {
+		return textSize;
+	}
+	public void setTextSize(int textSize) {
+		this.textSize = textSize;
+	}
 	
-	public abstract void doSikuliAction(SlideComponent slideComponent);
+	public void doSikuliAction(SlideComponent slideComponent,DesktopEvent desktopEvent){
+		SlideAction slideAction=new SlideAction(slideComponent);
+		slideAction.doSikuliAction(desktopEvent);
+	}
 	
 	@Override
 	public String toString(){
 		return "id="+id+" name="+name+
 				"\n offx="+offx+"\n offy="+offy+"\n cx="+cx+"\n cy="+cy
 				+"\n"+"width="+width+"\n"+"height="+height
-				+"\n"+"text: "+text+"\n order="+order;
-	}	
+				+"\n"+"text: "+text+"\n order="+order+"\n"+
+				"background color= "+backgroundColor+
+				"font size="+textSize;
+	}
+
 }
