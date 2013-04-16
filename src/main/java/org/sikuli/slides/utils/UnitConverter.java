@@ -28,4 +28,13 @@ public class UnitConverter {
             return 0;
         }
     }
+    /**
+     * converts from whole points to points. In drawing ML, Whole points are specified in increments of 100.
+     * Use this to convert font size from whole points to regular points.
+     * @param wholePoint
+     * @return
+     */
+    public static double WholePointsToPoints(int wholePoint){
+    	return wholePoint/100;
+    }
 }
