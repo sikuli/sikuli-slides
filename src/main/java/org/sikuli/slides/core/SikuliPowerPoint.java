@@ -8,10 +8,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.apache.commons.io.FilenameUtils;
 import org.sikuli.slides.media.Sound;
-import org.sikuli.slides.parsing.NoteParser;
 import org.sikuli.slides.parsing.PresentationParser;
 import org.sikuli.slides.parsing.SlideParser;
 import org.sikuli.slides.presentation.Presentation;
@@ -22,6 +20,7 @@ import org.sikuli.slides.screenshots.SlideTargetRegion;
 import org.sikuli.slides.screenshots.Screenshot;
 import org.sikuli.slides.shapes.SlideShape;
 import org.sikuli.slides.utils.Constants;
+import org.sikuli.slides.utils.Constants.DesktopEvent;
 import org.sikuli.slides.utils.UnitConverter;
 import org.sikuli.slides.utils.Utils;
 
@@ -29,11 +28,9 @@ import org.sikuli.slides.utils.Utils;
 public class SikuliPowerPoint {
 	
 	private File file;
-	//private String projectDirectory;
 	private Presentation presentation;
 	private AtomicInteger counter;
 	private List<SikuliAction> tasks;
-	private boolean hasNotes=false;
 	
 	public SikuliPowerPoint(File file){
 		this.file=file;
@@ -48,8 +45,6 @@ public class SikuliPowerPoint {
 		loadPresentationFile(file);
 		// parse the general presentation.xml file
 		parsePresentationFile();
-		// check if slide notes exist
-		checkSlideNotes();
 		// parse each slide file in the presentation document
 		for(int i=1;i<=presentation.getSlidesCount();i++)
 			parseSlideFile(i);
@@ -77,23 +72,9 @@ public class SikuliPowerPoint {
 		presentation=presentationParser.getPresentation();
 	}
 	
-	private void checkSlideNotes(){
-		if(new File(Constants.projectDirectory+Constants.SLIDE_NOTES_DIRECTORY).exists()){
-			hasNotes=true;
-			System.out.println("We did find notes.");
-		}
-		else{
-			hasNotes=false;
-			System.out.println("Sorry no notes.");
-		}
-	}
-	
 	private void parseSlideFile(int slideNumber) {
 		String slidesDirectory=Constants.projectDirectory+Constants.SLIDES_DIRECTORY;
-		// 2) parse the slide notes
-		String note=getSlideNote(slideNumber);
-		System.out.println("Slide "+slideNumber+"\n Note: "+note);
-		// 3) Parse the slide.xml file
+		// 2) Parse the slide.xml file
 		String slideName=File.separator+"slide"+Integer.toString(slideNumber)+".xml";
 		String slidePath=slidesDirectory+slideName;
 		System.out.println("Processing slide: "+slideNumber);
@@ -104,54 +85,98 @@ public class SikuliPowerPoint {
 		// get the screenshot info
 		Screenshot screenshot=mySlideParser.getScreenshot();
 		// get the shape info
-		SlideShape slideShape=mySlideParser.getShape();
+		List<SlideShape> slideShapes=mySlideParser.getShapes();
 		// get the sound info
 		Sound sound=mySlideParser.getSound();
 		if(sound!=null){
 			setSoundFileName(sound, slideName);
 		}
+		
 		// if the slide doesn't contain a shape.
-		if(slideShape==null){
-			System.err.println("Failed to process slide "+slideNumber+". The slide must contain a predefined shape.");
+		if(slideShapes==null||slideShapes.size()<2){
+				System.err.println("Failed to process slide "+slideNumber+". The slide must contain a shape and textbox that contains the action to be executed.");
+				return;
+		}
+		SlideShape label=getSlideLabel(slideShapes);
+		// get the desktop action
+		DesktopEvent desktopEvent=getDesktopEvent(slideShapes);
+		// get the target(s)
+		List<SlideShape> targetShapes=getTargterShapes(slideShapes);
+		if(desktopEvent==null){
+			System.err.println("No action in the slide. The slide must contain a textbox that specifies what GUI input action to perform.");
 			return;
 		}
 		
 		// if the result contains only shape without screenshot, execute just the shape action.
 		// for example, the cloud shape means open the default browser and doesn't have screenshot
-		else if(screenshot==null&&slideShape!=null){
-			tasks.add(new SikuliAction(null,slideShape,screenshot,null,sound, note));
+		if(desktopEvent==DesktopEvent.LAUNCH_BROWSER){
+			tasks.add(new SikuliAction(null,targetShapes.get(0),screenshot,null,desktopEvent,sound, label));
 			return;
 		}
+
 		// set the screenshot image file name
 		setScreenshotFileName(screenshot,slideName);
 		
-		// if the slide contains an arrow, get two targets
-		if(mySlideParser.isMultipleShapes()){
-			List<SlideShape> roundedRectnagleShapes=mySlideParser.getShapes();
-			for(SlideShape roundedRectnagleShape:roundedRectnagleShapes){
-				startProcessing(screenshot,roundedRectnagleShape, slideNumber, sound, note);
-			}
-			return;
-		}
-		
 		// calculate the target position and process the screenshot
-		startProcessing(screenshot,slideShape, slideNumber, sound, note);
+		
+		for(SlideShape slideShape:targetShapes)
+			startProcessing(screenshot,slideShape, desktopEvent, slideNumber, sound, label);
 		
 	}
-	// returns the text of the slide note
-	private String getSlideNote(int slideNumber) {
-		// check if the document contains notes
-		if(hasNotes){
-			// check if the slide contains note
-			File slideNote=new File(Constants.projectDirectory+Constants.SLIDE_NOTES_DIRECTORY+
-					File.separator+"notesSlide"+Integer.toString(slideNumber)+".xml");
-			if(slideNote.exists()){
-				NoteParser noteParser=new NoteParser(slideNumber);
-				noteParser.parseDocument();
-				return noteParser.getNote();
+	
+	// return only the target shapes excluding the text box that represents the action.
+	private List<SlideShape> getTargterShapes(List<SlideShape> slideShapes) {
+		List<SlideShape> targetShapes=new ArrayList<SlideShape>();
+		for(SlideShape slideShape:slideShapes){
+			// if the shape is the textBox that represents the GUI input action
+			if(slideShape.getType().equals("rect") && slideShape.getName().contains("TextBox")){
+				continue;
+			}
+			else{
+				targetShapes.add(slideShape); 
 			}
 		}
-			return null;
+		return targetShapes;
+	}
+	// return the GUI desktop event or action to be executed in the slide
+	private DesktopEvent getDesktopEvent(List<SlideShape> slideShapes){
+		for(SlideShape slideShape:slideShapes){
+			// if the shape is the textBox that represents the GUI input action
+			if(slideShape.getType().equals("rect") && slideShape.getName().contains("TextBox")){
+				String action=slideShape.getText();
+				if(action.equalsIgnoreCase("Click"))
+					return DesktopEvent.LEFT_CLICK;
+				else if(action.equalsIgnoreCase("Right Click"))
+					return DesktopEvent.RIGHT_CLICK;
+				else if(action.equalsIgnoreCase("Double Click"))
+					return DesktopEvent.DOUBLE_CLICK;
+				else if(action.equalsIgnoreCase("Type"))
+					return DesktopEvent.KEYBOARD_TYPING;
+				else if(action.equalsIgnoreCase("Drag"))
+					return DesktopEvent.DRAG_N_DROP;
+				else if(action.toLowerCase().contains("browser"))
+					return DesktopEvent.LAUNCH_BROWSER;
+				else if(action.toLowerCase().contains("find"))
+					return DesktopEvent.FIND;
+				else
+					continue;
+			}
+		}
+		return null;
+	}
+	/**
+	 * returns the shape that represents the label to be displayed on the screen
+	 * @param shapes the list of shapes that are contained in the slide
+	 * @return the the slide label shape
+	 */
+	private SlideShape getSlideLabel(List<SlideShape> shapes){
+		for(SlideShape shape:shapes){
+			String bgColor=shape.getBackgroundColor();
+			if(bgColor!=null&& bgColor.equals("FFFF00")){
+				return shape;
+			}
+		}
+		return null;
 	}
 	
 	// set the file path of the image screenshot
@@ -168,7 +193,7 @@ public class SikuliPowerPoint {
 	}
 	
 	
-	private void startProcessing(Screenshot screenshot, SlideShape slideShape, int slideNumber, Sound sound, String note) {
+	private void startProcessing(Screenshot screenshot, SlideShape slideShape,DesktopEvent desktopEvent, int slideNumber, Sound sound, SlideShape slideLabel) {
 		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+screenshot.getFileName();		
 		SlideProcessing slideProcessing=new SlideProcessing(slideMediaLocation);
 		
@@ -204,7 +229,7 @@ public class SikuliPowerPoint {
 		File targetFile=saveTargetImage(slideMediaLocation, relativeRectangleX, relativeRectangleY,
 				relativeRectangleWidth, relativeRectangleHeight);
 		// queue the tasks
-		tasks.add(new SikuliAction(targetFile, slideShape, screenshot,slideTargetRegion, sound, note));
+		tasks.add(new SikuliAction(targetFile, slideShape, screenshot,slideTargetRegion, desktopEvent,sound, slideLabel));
 	}
 	
 	private File saveTargetImage(String slideMediaLocation,int relativeRectangleX, int relativeRectangleY 
@@ -226,20 +251,21 @@ public class SikuliPowerPoint {
 		for(SikuliAction shapeAction:tasks){
 			shapeAction.doSikuliAction();
 		}
-		
 	}
 	
 	class SikuliAction{
 		private SlideComponent slideComponent;
 		private SlideShape slideShape;
+		private DesktopEvent desktopEvent;
 		public SikuliAction(File imageTargetFile, SlideShape slideShape, Screenshot screenshot, 
-				SlideTargetRegion slideTargetRegion, Sound sound, String note){
+				SlideTargetRegion slideTargetRegion,DesktopEvent desktopEvent, Sound sound, SlideShape label){
 			this.slideShape=slideShape;
+			this.desktopEvent=desktopEvent;
 			slideComponent=new SlideComponent(imageTargetFile, 
-					slideShape, screenshot, slideTargetRegion, sound, note);
+					slideShape, screenshot, slideTargetRegion, sound, label);
 		}
 		public void doSikuliAction(){
-			slideShape.doSikuliAction(slideComponent);
+			slideShape.doSikuliAction(slideComponent,desktopEvent);
 		}
 	}
 	
