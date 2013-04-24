@@ -34,14 +34,15 @@ public class SlideParser extends DefaultHandler {
 	private String arrowHeadId="";
 	private String arrowEndId="";
 	private List<SlideShape> shapesList;
+	private List<SlideShape> labelsList;
 	private int order;
-	
 	private String _shapeName, _shapeId; 
 	private int _offx, _offy, _cx, _cy;
 	
 	public SlideParser(String xmlFile){
 		this.xmlFile=xmlFile;
 		shapesList=new ArrayList<SlideShape>();
+		labelsList=new ArrayList<SlideShape>();
 	}
 	
 	public void parseDocument(){
@@ -72,9 +73,6 @@ public class SlideParser extends DefaultHandler {
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes)
 			throws SAXException{
-		
-
-		
 		// Part 1: Parsing the original screen shoot info
 		// if current element is picture element
 		if (qName.equalsIgnoreCase("p:pic")) {
@@ -166,7 +164,7 @@ public class SlideParser extends DefaultHandler {
 		// if the current child element is the shape persistent geometry, create the shape based on its type
 		else if(inShape && qName.equalsIgnoreCase("a:prstGeom")){
 			String shapeType=attributes.getValue("prst");
-			slideShape=new SlideShape(_shapeId,_shapeName,order,shapeType,_offx,_offy,_cx,_cy);
+			slideShape=new SlideShape(_shapeId,_shapeName,order,shapeType,_offx,_offy,_cx,_cy,"");
 		}
 		// if the current element is the solid background color
 		else if(inShape && qName.equalsIgnoreCase("a:solidFill")){
@@ -219,8 +217,14 @@ public class SlideParser extends DefaultHandler {
 			inShapeProperties=false;
 		}
 		else if(inShape && qName.equalsIgnoreCase("p:sp")){
-			addShapeToList();
 			inShape=false;
+			// if the shape is a label, add it to the label list
+			if(slideShape!=null&&slideShape.getBackgroundColor().equals("FFFF00")){
+				labelsList.add(slideShape);
+			}
+			else{
+				addShapeToList();
+			}
 		}
 		else if(inArrowShape && qName.equalsIgnoreCase("p:cxnSp")){
 			inArrowShape=false;
@@ -279,6 +283,11 @@ public class SlideParser extends DefaultHandler {
 	// return list of shapes
 	public List<SlideShape> getShapes(){
 		return  shapesList;
+	}
+	
+	// return a list of labels
+	public List<SlideShape> getLabels(){
+		return labelsList;
 	}
 	
 }
