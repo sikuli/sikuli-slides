@@ -97,7 +97,12 @@ public class SikuliPowerPoint {
 				System.err.println("Failed to process slide "+slideNumber+". The slide must contain a shape and textbox that contains the action to be executed.");
 				return;
 		}
-		SlideShape label=getSlideLabel(slideShapes);
+		// get the label to be displayed on the screen
+		List<SlideShape> labels=mySlideParser.getLabels();
+		SlideShape label=null;
+		if(labels!=null&&labels.size()>0){
+			label=labels.get(0);
+		}
 		// get the desktop action
 		DesktopEvent desktopEvent=getDesktopEvent(slideShapes);
 		// get the target(s)
@@ -160,20 +165,6 @@ public class SikuliPowerPoint {
 					return DesktopEvent.FIND;
 				else
 					continue;
-			}
-		}
-		return null;
-	}
-	/**
-	 * returns the shape that represents the label to be displayed on the screen
-	 * @param shapes the list of shapes that are contained in the slide
-	 * @return the the slide label shape
-	 */
-	private SlideShape getSlideLabel(List<SlideShape> shapes){
-		for(SlideShape shape:shapes){
-			String bgColor=shape.getBackgroundColor();
-			if(bgColor!=null&& bgColor.equals("FFFF00")){
-				return shape;
 			}
 		}
 		return null;
