@@ -14,13 +14,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import org.sikuli.slides.media.Sound;
 import org.sikuli.slides.screenshots.Screenshot;
-import org.sikuli.slides.shapes.CloudShape;
-import org.sikuli.slides.shapes.FrameShape;
-import org.sikuli.slides.shapes.OvalShape;
-import org.sikuli.slides.shapes.RectangleShape;
-import org.sikuli.slides.shapes.RoundedRectangleShape;
 import org.sikuli.slides.shapes.SlideShape;
-import org.sikuli.slides.shapes.TextBoxShape;
 
 public class SlideParser extends DefaultHandler {
 	private Screenshot originalScreenshot;
@@ -30,15 +24,13 @@ public class SlideParser extends DefaultHandler {
 	private boolean inPictureElement=false;
 	private boolean inSound=false;
 	private boolean inShapeProperties=false;
-	
+	private boolean inShapeBackgroundColor=false;
 	private boolean inShape=false;
 	private boolean inArrowShape=false;
-	private boolean isMultipleShapes=false;
-	private SlideShape shape;
+	private SlideShape slideShape;
 
 	private boolean inTextBody=false;
 	private String textBody="";
-	
 	private String arrowHeadId="";
 	private String arrowEndId="";
 	private List<SlideShape> shapesList;
@@ -48,7 +40,8 @@ public class SlideParser extends DefaultHandler {
 	private int _offx, _offy, _cx, _cy;
 	
 	public SlideParser(String xmlFile){
-		this.xmlFile=xmlFile; 
+		this.xmlFile=xmlFile;
+		shapesList=new ArrayList<SlideShape>();
 	}
 	
 	public void parseDocument(){
@@ -56,7 +49,6 @@ public class SlideParser extends DefaultHandler {
 		textBody="";
 		arrowHeadId="";
 		arrowEndId="";
-		shapesList=null;
 		order=-1;
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		try{
@@ -174,74 +166,32 @@ public class SlideParser extends DefaultHandler {
 		// if the current child element is the shape persistent geometry, create the shape based on its type
 		else if(inShape && qName.equalsIgnoreCase("a:prstGeom")){
 			String shapeType=attributes.getValue("prst");
-				
-				// the shape is a rounded rectangle
-				if(shapeType.equals("roundRect") && _shapeName.contains("Rounded Rectangle")){
-					shape=new RoundedRectangleShape(_shapeId,_shapeName,order);
-					shape.setOffx(_offx);
-					shape.setOffy(_offy);
-					shape.setCx(_cx);
-					shape.setCy(_cy);
-					
-					if(shapesList==null){
-						shapesList=new ArrayList<SlideShape>();
-					}
-					if(shapesList!=null){
-						shapesList.add(shape);
-					}
-				}
-				// the shape is a rectangle
-				else if(shapeType.equals("rect") && _shapeName.contains("Rectangle")){
-					shape=new RectangleShape(_shapeId,_shapeName,order);
-					shape.setOffx(_offx);
-					shape.setOffy(_offy);
-					shape.setCx(_cx);
-					shape.setCy(_cy);
-				}
-				// the shape is a rectangle
-				else if(shapeType.equals("frame") && _shapeName.contains("Frame")){
-					shape=new FrameShape(_shapeId,_shapeName,order);
-					shape.setOffx(_offx);
-					shape.setOffy(_offy);
-					shape.setCx(_cx);
-					shape.setCy(_cy);
-				}
-				// the shape is an ellipse/oval
-				else if(shapeType.equals("ellipse") && _shapeName.contains("Oval")){
-					shape=new OvalShape(_shapeId,_shapeName,order);
-					shape.setOffx(_offx);
-					shape.setOffy(_offy);
-					shape.setCx(_cx);
-					shape.setCy(_cy);
-				}
-				
-				// the shape is a cloud
-				else if(shapeType.equals("cloud") && _shapeName.contains("Cloud")){
-					shape=new CloudShape(_shapeId,_shapeName,order);
-					shape.setOffx(_offx);
-					shape.setOffy(_offy);
-					shape.setCx(_cx);
-					shape.setCy(_cy);
-				}
-				// the shape is a TextBox
-				else if(shapeType.equals("rect") && _shapeName.contains("TextBox")){
-					shape=new TextBoxShape(_shapeId,_shapeName,order);
-					shape.setOffx(_offx);
-					shape.setOffy(_offy);
-					shape.setCx(_cx);
-					shape.setCy(_cy);
-				}	
+			slideShape=new SlideShape(_shapeId,_shapeName,order,shapeType,_offx,_offy,_cx,_cy);
 		}
-
+		// if the current element is the solid background color
+		else if(inShape && qName.equalsIgnoreCase("a:solidFill")){
+			inShapeBackgroundColor=true;
+		}
+		else if(inShape && inShapeBackgroundColor && qName.equalsIgnoreCase("a:srgbClr")){
+			if(slideShape!=null){
+				slideShape.setBackgroundColor(attributes.getValue("val"));
+			}
+		}
 		// if the current element is the shape text body
 		else if(inShape && qName.equalsIgnoreCase("p:txBody")){
 			inTextBody=true;
+		}
+		// get font size
+		else if(inTextBody && qName.equals("a:rPr")){
+			String size= attributes.getValue("sz");
+			if(size!=null&&slideShape!=null){
+				slideShape.setTextSize(Integer.parseInt(size));
+			}
 		}
 		
 		// Parsing connected shapes like arrows
 		else if(qName.equalsIgnoreCase("p:cxnSp")){
 			inArrowShape=true;
-			isMultipleShapes=true;
 		}
 		// get the start connected shape id
 		else if(inArrowShape&&qName.equalsIgnoreCase("a:stCxn")){
@@ -269,16 +219,22 @@ public class SlideParser extends DefaultHandler {
 			inShapeProperties=false;
 		}
 		else if(inShape && qName.equalsIgnoreCase("p:sp")){
+			addShapeToList();
 			inShape=false;
 		}
 		else if(inArrowShape && qName.equalsIgnoreCase("p:cxnSp")){
 			inArrowShape=false;
 			setRoundedRectangleDragAndDropOrder();
 		}
+		else if(inShape && qName.equalsIgnoreCase("a:solidFill")){
+			inShapeBackgroundColor=false;
+		}
 		else if(inTextBody && qName.equalsIgnoreCase("p:txBody")){
 			inTextBody=false;
-			if(shape!=null)
-				shape.setText(textBody);
+			if(slideShape!=null){
+				slideShape.setText(textBody);
+			}
+			textBody="";
 		}
 	}
 	
@@ -295,14 +251,6 @@ public class SlideParser extends DefaultHandler {
 				}
 			}
 		}
-	}
-	
-	public boolean isMultipleShapes(){
-		if(isMultipleShapes){
-			isMultipleShapes=false;
-			return true;
-		}
-		return false;
 	}
 
 	@Override
@@ -322,9 +270,10 @@ public class SlideParser extends DefaultHandler {
 		return mSound;
 	}
 	
-	// return the shape
-	public SlideShape getShape(){
-		return shape;
+	// add the shape to the list
+	private void addShapeToList(){
+		if(slideShape!=null)
+			shapesList.add(slideShape);
 	}
 	
 	// return list of shapes
