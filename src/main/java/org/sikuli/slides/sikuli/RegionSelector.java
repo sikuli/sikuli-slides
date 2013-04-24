@@ -4,17 +4,14 @@ Khalid
 package org.sikuli.slides.sikuli;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.processing.ImageProcessing;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
-import org.sikuli.slides.utils.Constants;
 
 /**
  * A region selector that finds the screen region of a target when similar targets exist on the screen.
