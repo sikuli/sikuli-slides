@@ -22,7 +22,7 @@ public class SlideShape {
 	private int textSize;
 	private String backgroundColor;
 	public SlideShape(String id, String name, int order, String type, 
-			int offx, int offy, int cx, int cy){
+			int offx, int offy, int cx, int cy, String backgroundColor){
 		this.id=id;
 		this.name=name;
 		this.order=order;
@@ -31,6 +31,7 @@ public class SlideShape {
 		this.offy=offy;
 		this.cx=cx;
 		this.cy=cy;
+		this.backgroundColor=backgroundColor;
 	}
 	/**
 	 * 
