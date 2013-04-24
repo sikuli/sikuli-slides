@@ -21,20 +21,20 @@ public class SlideComponent {
 	private Screenshot screenshot;
 	private SlideTargetRegion slideTargetRegion;
 	private Sound sound;
-	private String slideNote;
+	private SlideShape slideLabel;
 	
 	public SlideComponent(){
 		
 	}
 	
 	public SlideComponent(File imageTargetFile, SlideShape slideShape, Screenshot screenshot, 
-			SlideTargetRegion slideTargetRegion, Sound sound,String slideNote){
+			SlideTargetRegion slideTargetRegion, Sound sound,SlideShape slideLabel){
 		this.setTargetFile(imageTargetFile);
 		this.setSlideShape(slideShape);
 		this.setScreenshot(screenshot);
 		this.setSlideTargetRegion(slideTargetRegion);
 		this.setSound(sound);
-		this.setSlideNote(slideNote);
+		this.setSlideLabel(slideLabel);
 	}
 	
 	public File getTargetFile() {
@@ -77,17 +77,17 @@ public class SlideComponent {
 		this.sound = sound;
 	}
 	
-	public String getSlideNote() {
-		return slideNote;
+	public SlideShape getSlideLabel() {
+		return slideLabel;
 	}
 
-	public void setSlideNote(String slideNote) {
-		this.slideNote = slideNote;
+	public void setSlideLabel(SlideShape slideLabel) {
+		this.slideLabel = slideLabel;
 	}
 	
 	@Override
 	public String toString(){
 		return "Slide Component: "+slideShape+"\n"+screenshot+"\n"+
-				slideTargetRegion+"\n"+sound;
+				slideTargetRegion+"\n"+sound+"\n"+"label: "+slideLabel;
 	}
 }
