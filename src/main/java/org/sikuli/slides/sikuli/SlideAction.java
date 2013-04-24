@@ -4,10 +4,11 @@ Khalid
 package org.sikuli.slides.sikuli;
 
 import static org.sikuli.api.API.browse;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
@@ -22,6 +23,9 @@ import org.sikuli.slides.media.Sound;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
 import org.sikuli.slides.shapes.SlideShape;
 import org.sikuli.slides.utils.Constants;
+import org.sikuli.slides.utils.UnitConverter;
+import org.sikuli.slides.utils.Constants.DesktopEvent;
+import org.sikuli.slides.utils.MyScreen;
 
 /**
  * Slide action that performs input events operation specified in each slide.
@@ -33,26 +37,41 @@ public class SlideAction {
 	private SlideShape slideShape;
 	private SlideTargetRegion slideTargetRegion;
 	private Sound sound;
-	private String note;
+	private SlideShape slideLabel;
 	
 	public SlideAction(SlideComponent slideComponent){
 		this.targetFile=slideComponent.getTargetFile();
 		this.slideShape=slideComponent.getSlideShape();
 		this.slideTargetRegion=slideComponent.getSlideTargetRegion();
 		this.sound=slideComponent.getSound();
-		this.note=slideComponent.getSlideNote();
+		this.slideLabel=slideComponent.getSlideLabel();
 	}
 	
-	public void doSikuliAction(Constants.DesktopEvent desktopEvent){
-
+	public void doSikuliAction(DesktopEvent desktopEvent){
 		// if the required action is to open the browser, no need to search for target on the screen
-		if(desktopEvent==Constants.DesktopEvent.LAUNCH_BROWSER){
+		if(desktopEvent==DesktopEvent.LAUNCH_BROWSER){
 			performSikuliAction(null, desktopEvent);
 		}
+		// if the action is to find a target on the screen
 		// if the action is to interact with a target, find the target and perform the action
 		else{
 			ScreenRegion targetRegion=findTargetRegion();
-			performSikuliAction(targetRegion, desktopEvent);
+			if(desktopEvent==DesktopEvent.FIND){
+				if(targetRegion==null){
+					System.err.println("Failed. Couldn't find target on the screen");
+					System.exit(1);
+				}
+				else{
+					System.out.println("Pass. Target image was found on the screen");
+					return;
+				}
+			}
+			else{
+				if(targetRegion==null){
+					System.exit(1);
+				}
+				performSikuliAction(targetRegion, desktopEvent);
+			}
 		}
 	}
 	
@@ -74,7 +93,6 @@ public class SlideAction {
 	    			else{
 	    				System.err.println("Failed to determine the target image among multiple similar targets on the screen."
 	    						+"\nTry to resize the shape in slide "+slideTargetRegion.getslideNumber()+".");
-	    				System.exit(1);
 	    			}
 	    		}
 	    		else{
@@ -83,7 +101,6 @@ public class SlideAction {
 	    	}
 			else{
 				System.err.println("Failed to find target on the screen. Slide no. "+slideTargetRegion.getslideNumber());
-				System.exit(1);
 			}
 		}
 		return null;
@@ -96,7 +113,7 @@ public class SlideAction {
 			sound.playSound();
 		}
 		
-		if(note!=null){
+		if(slideLabel!=null){
 			displayToolTip(targetRegion);
 		}
 		
@@ -124,16 +141,25 @@ public class SlideAction {
 	 * @param targetRegion the target region to display tool tip around
 	 */
 	private void displayToolTip(ScreenRegion targetRegion) {
-		/* if the target region is null, use the default desktop region.
+		/* if the target region is null or ther's no target to work on, 
+		 * use the default desktop region.
 		   this is important in case of opening the default browser
 		*/
 		if(targetRegion==null){
 			targetRegion=new DesktopScreenRegion();
 		}
 		Canvas canvas = new DesktopCanvas();
-		canvas.addLabel(targetRegion, note);
+		Dimension dimension=MyScreen.getScreenDimensions();
+		// TODO: Fix this
+		int width=UnitConverter.emuToPixels(slideLabel.getCx());
+		int height=UnitConverter.emuToPixels(slideLabel.getCy());
+		double fontSize=UnitConverter.WholePointsToPoints(slideLabel.getTextSize());
+		int x=(dimension.width-width)/2;
+		int y=(dimension.height-height)/2;
+		ScreenRegion canvasRegion=new DesktopScreenRegion(x, y, width, height);
+		canvas.addLabel(canvasRegion, slideLabel.getText()).
+			withColor(Color.black).withFontSize((int)fontSize);
 		canvas.display(Constants.CANVAS_DURATION);
-
 	}
 
 	/**
