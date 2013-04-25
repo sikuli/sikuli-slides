@@ -47,7 +47,7 @@ public class SlideAction {
 		this.slideLabel=slideComponent.getSlideLabel();
 	}
 	
-	public void doSikuliAction(DesktopEvent desktopEvent){
+	public void doSlideAction(DesktopEvent desktopEvent){
 		// if the required action is to open the browser, no need to search for target on the screen
 		if(desktopEvent==DesktopEvent.LAUNCH_BROWSER){
 			performSikuliAction(null, desktopEvent);
@@ -77,6 +77,7 @@ public class SlideAction {
 	
 	private ScreenRegion findTargetRegion(){
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
+		imageTarget.setMinScore(Constants.MinScore);
 		if(imageTarget!=null){
 			ScreenRegion fullScreenRegion=SikuliController.getFullScreenRegion();
 	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, Constants.MaxWaitTime);
