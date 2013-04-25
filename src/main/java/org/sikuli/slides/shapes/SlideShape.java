@@ -128,7 +128,7 @@ public class SlideShape {
 	
 	public void doSikuliAction(SlideComponent slideComponent,DesktopEvent desktopEvent){
 		SlideAction slideAction=new SlideAction(slideComponent);
-		slideAction.doSikuliAction(desktopEvent);
+		slideAction.doSlideAction(desktopEvent);
 	}
 	
 	@Override
