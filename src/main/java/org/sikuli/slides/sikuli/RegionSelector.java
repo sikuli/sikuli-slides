@@ -12,6 +12,7 @@ import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.processing.ImageProcessing;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
+import org.sikuli.slides.utils.Constants;
 
 /**
  * A region selector that finds the screen region of a target when similar targets exist on the screen.
@@ -218,7 +219,9 @@ public class RegionSelector {
 			ImageProcessing.writeImageToDisk(croppedRegionImage, croppedImageName);
 			*/
 			// check if there are more than one occurrence of the region itself
-			List<ScreenRegion>lookupRegion=fullScreenRegion.findAll(new ImageTarget(croppedRegionImage));
+			ImageTarget newImageTarget=new ImageTarget(croppedRegionImage);
+			newImageTarget.setMinScore(Constants.MinScore);
+			List<ScreenRegion>lookupRegion=fullScreenRegion.findAll(newImageTarget);
 			if(lookupRegion.size()>1){
 				continue;
 			}
