@@ -12,9 +12,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyFileFilter;
 
@@ -26,7 +24,7 @@ import org.sikuli.slides.utils.MyFileFilter;
  */
 public class MainCommandLine {
 	private static final String applicationName = "sikuli-slides";
-	private static final String versionNumber="1.1.0";
+	private static final String versionNumber="1.2.0";
 	private static final String commandLineSyntax = "java -jar "+
 			applicationName+"-"+versionNumber+".jar "+
 			"presentation_file.pptx";
@@ -36,12 +34,11 @@ public class MainCommandLine {
 	* @param args Command-line arguments
 	* @return the .pptx file name
 	*/
-	private static String usePosixParser(final String[] args)  
+	private static String usePosixParser(final String[] args) throws Exception 
 	{
 		final CommandLineParser parser = new PosixParser();  
 	    final Options posixOptions = getPOSIXCommandLineOptions();  
 	    CommandLine cmd;  
-	    try{
 	    	cmd = parser.parse(posixOptions, args);
 	        if (cmd.hasOption("h")){
         		printHelp(getPOSIXCommandLineOptions(), 120, 
@@ -51,6 +48,17 @@ public class MainCommandLine {
 	    	else if (cmd.hasOption("w")){
 	    		int wait=Integer.parseInt(cmd.getOptionValue("w"));
 	        	Constants.MaxWaitTime=wait;
+	    	}
+	    	else if(cmd.hasOption("p")){
+	    		int precision=Integer.parseInt(cmd.getOptionValue("p"));
+	    		if(precision>0&&precision<11){
+	    			Constants.MinScore=(double)precision/10;
+	    		}
+	    		else{
+	    			String errorMessage="Invalid precision scale value.\n";
+	    			System.out.write(errorMessage.getBytes());
+	    			throw new Exception();
+	    		}
 	    	}
 	        
 	        // check arguments
@@ -79,15 +87,7 @@ public class MainCommandLine {
 	        		printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
 	        	}
 	        }
-	    }
-	    catch (ParseException e){  
-			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
-			displayBlankLine();  
-	    }
-    	catch(Exception exception){
-			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
-			displayBlankLine();
-    	}
+
 		return null;
 	}
 	
@@ -104,10 +104,16 @@ public class MainCommandLine {
                 .withDescription("the maximum time to wait in milliseconds to find a target on the screen (default 15000 ms)." )
                 .create( "w" );
 		
+		Option precisionOption=OptionBuilder.withArgName( "precision" )
+                .hasArg()
+                .withDescription("The precision value to control the degree of fuzziness of the image recognition search. It's a 10-point scale where 1 is the least precise search and 10 is the most precise search. (default is 7)." )
+                .create( "p" );
+		
 		Option helpOption=new Option("h", "help");
 		
 		posixOptions.addOption(helpOption);
 		posixOptions.addOption(waitOption);
+		posixOptions.addOption(precisionOption);
 		
 		return posixOptions;
 	}
@@ -169,11 +175,17 @@ public class MainCommandLine {
 	public static String runCommandLineTool(final String[] args){
 		if (args.length < 1){
 			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
-			return null;
 		}
 		else{
-			return usePosixParser(args);
+			try{
+				return usePosixParser(args);
+			}
+	    	catch(Exception exception){
+				printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+				displayBlankLine();
+	    	}
 		}
+		return null;
 	}
 	
 }
