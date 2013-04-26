@@ -93,7 +93,7 @@ public class SikuliPowerPoint {
 		}
 		
 		// if the slide doesn't contain a shape.
-		if(slideShapes==null||slideShapes.size()<2){
+		if(slideShapes==null||(slideShapes.size()<2 && !Constants.UseOldSyntax)){
 				System.err.println("Failed to process slide "+slideNumber+". The slide must contain a shape and textbox that contains the action to be executed.");
 				return;
 		}
@@ -108,8 +108,17 @@ public class SikuliPowerPoint {
 		// get the target(s)
 		List<SlideShape> targetShapes=getTargterShapes(slideShapes);
 		if(desktopEvent==null){
-			System.err.println("No action in the slide. The slide must contain a textbox that specifies what GUI input action to perform.");
-			return;
+			if(!Constants.UseOldSyntax){
+				System.err.println("No action in the slide. The slide must contain a textbox that specifies what GUI input action to perform.");
+				return;
+			}
+			else {// run the old syntax mode
+				desktopEvent=getOldDesktopEvent(targetShapes.get(0));
+				if(desktopEvent==null){
+                    System.err.println("Failed to process slide "+slideNumber+". The slide must contain a predefined shape.");
+                    return;
+				}
+			}
 		}
 		
 		// if the result contains only shape without screenshot, execute just the shape action.
@@ -168,6 +177,33 @@ public class SikuliPowerPoint {
 			}
 		}
 		return null;
+	}
+	
+	// return the GUI desktop event or action to be executed in the slide based on the old syntax
+	private DesktopEvent getOldDesktopEvent(SlideShape slideShape){
+		String shapeType=slideShape.getType();
+		String shapeName=slideShape.getName();
+		
+		if(shapeType.equals("roundRect") && shapeName.contains("Rounded Rectangle")){
+			return DesktopEvent.DRAG_N_DROP;
+		}
+		else if(shapeType.equals("rect") && shapeName.contains("Rectangle")){
+			return DesktopEvent.LEFT_CLICK;
+		}
+		else if(shapeType.equals("frame") && shapeName.contains("Frame")){
+			return DesktopEvent.DOUBLE_CLICK;
+		}
+		else if(shapeType.equals("ellipse") && shapeName.contains("Oval")){
+			return DesktopEvent.RIGHT_CLICK;
+		}
+		else if(shapeType.equals("cloud") && shapeName.contains("Cloud")){
+			return DesktopEvent.LAUNCH_BROWSER;
+		}
+		else if(shapeType.equals("rect") && shapeName.contains("TextBox")){
+			return DesktopEvent.KEYBOARD_TYPING;
+		}
+		return null;
+		
 	}
 	
 	// set the file path of the image screenshot

@@ -49,6 +49,9 @@ public class MainCommandLine {
 	    		int wait=Integer.parseInt(cmd.getOptionValue("w"));
 	        	Constants.MaxWaitTime=wait;
 	    	}
+	    	else if (cmd.hasOption("oldsyntax")){
+	        	Constants.UseOldSyntax=true;
+	    	}
 	    	else if(cmd.hasOption("p")){
 	    		int precision=Integer.parseInt(cmd.getOptionValue("p"));
 	    		if(precision>0&&precision<11){
@@ -99,21 +102,27 @@ public class MainCommandLine {
 	private static Options getPOSIXCommandLineOptions() {
 		final Options posixOptions=new Options();
 		
-		Option waitOption=OptionBuilder.withArgName( "max_wait_time" )
+		Option waitOption=OptionBuilder.withArgName("max_wait_time")
                 .hasArg()
-                .withDescription("the maximum time to wait in milliseconds to find a target on the screen (default 15000 ms)." )
-                .create( "w" );
+                .withDescription("The maximum time to wait in milliseconds to find a target on the screen (default 15000 ms)." )
+                .create("w");
 		
-		Option precisionOption=OptionBuilder.withArgName( "precision" )
+		Option precisionOption=OptionBuilder.withArgName("precision")
                 .hasArg()
                 .withDescription("The precision value to control the degree of fuzziness of the image recognition search. It's a 10-point scale where 1 is the least precise search and 10 is the most precise search. (default is 7)." )
-                .create( "p" );
+                .create("p");
+		
+		Option oldSyntaxOption=OptionBuilder.withArgName("oldsyntax")
+                .withDescription("Forces the system to use the old syntax the uses special shapes to represent actions. The syntax is based on the following annotations: Rectangle shape: left click. " +
+                		"Rounded rectangle: drag and drop. Frame: double click. Oval: right click. Text Box: Keyboard typing. Cloud: open an URL in default browser.")
+                .create("oldsyntax");
 		
 		Option helpOption=new Option("h", "help");
 		
 		posixOptions.addOption(helpOption);
 		posixOptions.addOption(waitOption);
 		posixOptions.addOption(precisionOption);
+		posixOptions.addOption(oldSyntaxOption);
 		
 		return posixOptions;
 	}

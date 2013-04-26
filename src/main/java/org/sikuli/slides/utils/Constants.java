@@ -70,6 +70,10 @@ public class Constants {
 	 */
 	public static double MinScore=0.7;
 	/**
+	 * 
+	 */
+	public static boolean UseOldSyntax=false;
+	/**
 	 * Desktop input events
 	 */
 	public enum DesktopEvent {
