@@ -168,6 +168,7 @@ public class SlideAction {
 	 * @param targetRegion the region to perform left click input event on.
 	 */
 	private void performLeftClick(ScreenRegion targetRegion){
+		System.out.println("performing left click event on target...");
 		Mouse mouse = new DesktopMouse();
 		SikuliController.displayBox(targetRegion);
 		mouse.click(targetRegion.getCenter());
@@ -178,6 +179,7 @@ public class SlideAction {
 	 * @param targetRegion the region to perform right click input event on.
 	 */
 	private void performRightClick(ScreenRegion targetRegion){
+		System.out.println("performing right click event on target...");
 		Mouse mouse = new DesktopMouse();
 		SikuliController.displayBox(targetRegion);
 		mouse.rightClick(targetRegion.getCenter());
@@ -187,6 +189,7 @@ public class SlideAction {
 	 * @param targetRegion the region to perform double click input event on.
 	 */
 	private void performDoubleClick(ScreenRegion targetRegion){
+		System.out.println("performing double click event on target...");
 		Mouse mouse = new DesktopMouse();
 		SikuliController.displayBox(targetRegion);
 		mouse.doubleClick(targetRegion.getCenter());
@@ -197,6 +200,7 @@ public class SlideAction {
 	 * @param targetRegion the region to perform drag or drop input event on.
 	 */
 	private void performDragDrop(ScreenRegion targetRegion){
+		System.out.println("performing drag and drop event on targets...");
 		Mouse mouse = new DesktopMouse();
 		if(slideShape.getOrder()==0){
 			SikuliController.displayBox(targetRegion);
@@ -217,6 +221,7 @@ public class SlideAction {
 	 * @param targetRegion the region to perform keyboard typing input event on.
 	 */
 	private void performKeyboardTyping(ScreenRegion targetRegion){
+		System.out.println("performing keyboard typing event on target...");
 		Mouse mouse = new DesktopMouse();
 		Keyboard keyboard=new DesktopKeyboard();
 		SikuliController.displayBox(targetRegion);
@@ -228,6 +233,7 @@ public class SlideAction {
 	 * launch the default browser
 	 */
 	private void performLaunchWebBrowser(){
+		System.out.println("launching the default browser...");
 		try {
 			String userURL=slideShape.getText();
 			URL url=null;
