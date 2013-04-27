@@ -103,7 +103,7 @@ public class SikuliPowerPoint {
 		
 		// running old syntax
 		if(Constants.UseOldSyntax){
-			if(slideShapes==null){
+			if(slideShapes==null||slideShapes.size()==0){
 				System.err.println("Failed to process slide "+slideNumber+
 						". The slide must contain a predefined shape.");
 				System.exit(1);
@@ -129,7 +129,12 @@ public class SikuliPowerPoint {
 					targetShapes=new ArrayList<SlideShape>();
 					targetShapes.add(slideShapes.get(0));
 					targetShapes.add(slideShapes.get(1));
-					
+				}
+				else{
+					System.err.println("Error. Slide "+slideNumber+" contains multiple shapes.\n" +
+							"The slide must contain only one input action using the predefined shapes.\n" +
+							"You may use the new syntax to enable multiple targets per slide.");
+					System.exit(1);
 				}
 			}
 		}
