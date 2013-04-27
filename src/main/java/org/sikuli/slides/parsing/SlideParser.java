@@ -247,11 +247,9 @@ public class SlideParser extends DefaultHandler {
 			for(SlideShape mShape:shapesList){
 				if(mShape.getId().equals(arrowHeadId)){
 					mShape.setOrder(0);
-					System.out.println(mShape.getName()+" is the drag shape");
 				}
 				else if(mShape.getId().equals(arrowEndId)){
 					mShape.setOrder(1);
-					System.out.println(mShape.getName()+" is the drop shape");
 				}
 			}
 		}
