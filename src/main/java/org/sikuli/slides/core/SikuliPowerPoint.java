@@ -91,33 +91,59 @@ public class SikuliPowerPoint {
 		if(sound!=null){
 			setSoundFileName(sound, slideName);
 		}
-		
-		// if the slide doesn't contain a shape.
-		if(slideShapes==null||(slideShapes.size()<2 && !Constants.UseOldSyntax)){
-				System.err.println("Failed to process slide "+slideNumber+". The slide must contain a shape and textbox that contains the action to be executed.");
-				return;
-		}
 		// get the label to be displayed on the screen
 		List<SlideShape> labels=mySlideParser.getLabels();
 		SlideShape label=null;
 		if(labels!=null&&labels.size()>0){
 			label=labels.get(0);
 		}
-		// get the desktop action
-		DesktopEvent desktopEvent=getDesktopEvent(slideShapes);
-		// get the target(s)
-		List<SlideShape> targetShapes=getTargterShapes(slideShapes);
-		if(desktopEvent==null){
-			if(!Constants.UseOldSyntax){
-				System.err.println("No action in the slide. The slide must contain a textbox that specifies what GUI input action to perform.");
-				return;
+		// get targets and desktop events
+		DesktopEvent desktopEvent=null;
+		List<SlideShape> targetShapes=null;
+		
+		// running old syntax
+		if(Constants.UseOldSyntax){
+			if(slideShapes==null){
+				System.err.println("Failed to process slide "+slideNumber+
+						". The slide must contain a predefined shape.");
+				System.exit(1);
 			}
-			else {// run the old syntax mode
-				desktopEvent=getOldDesktopEvent(targetShapes.get(0));
+			else{
+				desktopEvent=getOldDesktopEvent(slideShapes);
 				if(desktopEvent==null){
-                    System.err.println("Failed to process slide "+slideNumber+". The slide must contain a predefined shape.");
-                    return;
+					if(slideShapes.size()==1){
+						System.err.println("Failed to process slide "+slideNumber+
+								". The slide must contain a predefined shape.");
+					}
+					else{
+						System.err.println("Error: Slide "+slideNumber+
+								". Multiple targets are not supported in the old syntax. Use the default new syntax option to enable multiple targets per slide.");
+					}
+                    System.exit(1);
 				}
+				if(slideShapes.size()==1){
+					targetShapes=new ArrayList<SlideShape>();
+					targetShapes.add(slideShapes.get(0));
+				}
+				else if(slideShapes.size()==2 && desktopEvent==DesktopEvent.DRAG_N_DROP){
+					targetShapes=new ArrayList<SlideShape>();
+					targetShapes.add(slideShapes.get(0));
+					targetShapes.add(slideShapes.get(1));
+					
+				}
+			}
+		}
+		
+		// running new syntax
+		else if(!Constants.UseOldSyntax){
+			targetShapes=getTargterShapes(slideShapes);
+			// get the desktop action
+			desktopEvent=getDesktopEvent(slideShapes);
+			// if the slide doesn't contain a shape.
+			if(desktopEvent==null || slideShapes==null || (slideShapes.size()<2)){
+					System.err.println("Failed to process slide "+slideNumber+
+							". The slide must contain a shape and textbox that contains the action to be executed.");
+					return;
 			}
 		}
 		
@@ -180,13 +206,17 @@ public class SikuliPowerPoint {
 	}
 	
 	// return the GUI desktop event or action to be executed in the slide based on the old syntax
-	private DesktopEvent getOldDesktopEvent(SlideShape slideShape){
-		String shapeType=slideShape.getType();
-		String shapeName=slideShape.getName();
+	private DesktopEvent getOldDesktopEvent(List<SlideShape> slideShapes){
 		
-		if(shapeType.equals("roundRect") && shapeName.contains("Rounded Rectangle")){
-			return DesktopEvent.DRAG_N_DROP;
+		String shapeType=slideShapes.get(0).getType();
+		String shapeName=slideShapes.get(0).getName();
+		
+		if(slideShapes.size()==2){
+			if(shapeType.equals("roundRect") && shapeName.contains("Rounded Rectangle")){
+				return DesktopEvent.DRAG_N_DROP;
+			}
 		}
+		
 		else if(shapeType.equals("rect") && shapeName.contains("Rectangle")){
 			return DesktopEvent.LEFT_CLICK;
 		}
@@ -278,6 +308,7 @@ public class SikuliPowerPoint {
 		for(SikuliAction shapeAction:tasks){
 			shapeAction.doSikuliAction();
 		}
+		System.out.println("Done.");
 	}
 	
 	class SikuliAction{
