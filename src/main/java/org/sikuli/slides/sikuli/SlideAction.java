@@ -56,14 +56,26 @@ public class SlideAction {
 		// if the action is to interact with a target, find the target and perform the action
 		else{
 			ScreenRegion targetRegion=findTargetRegion();
-			if(desktopEvent==DesktopEvent.FIND){
+			if(desktopEvent==DesktopEvent.EXIST){
+				System.out.println("Checking whether the target image is visible on the screen.");
 				if(targetRegion==null){
-					System.err.println("Failed. Couldn't find target on the screen");
+					System.err.println("Test failed. Target image was not found on the screen.");
 					System.exit(1);
 				}
 				else{
-					System.out.println("Pass. Target image was found on the screen");
+					System.out.println("Test passed. Target image was found on the screen.");
 					return;
+				}
+			}
+			else if(desktopEvent==DesktopEvent.NOT_EXIST){
+				System.out.println("Checking whether the target image is invisible on the screen.");
+				if(targetRegion==null){
+					System.out.println("Test passed. Target image was invisible on the screen.");
+					return;
+				}
+				else{
+					System.err.println("Test failed. Target image was visible on the screen.");
+					System.exit(1);
 				}
 			}
 			else{
