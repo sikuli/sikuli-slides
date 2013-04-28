@@ -1,6 +1,8 @@
 package org.sikuli.slides.guis;
 
 import java.io.File;
+
+import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Utils;
 import org.sikuli.slides.core.SikuliPowerPoint;
 
@@ -39,12 +41,15 @@ public class MainUI{
 	}
 	
 	public static void main(String[]args){
+		Constants.Execution_Start_Time=System.nanoTime();
 		MainUI mainUi=new MainUI();
 		mainUi.intiProject();
 		// run the command line tool and get the file name
 		String FileName=MainCommandLine.runCommandLineTool(args);
-		if(FileName!=null)
+		if(FileName!=null){
 			mainUi.doSikuliPowerPoint(new File(FileName));
+		}
+		
 	}
 	
 }
