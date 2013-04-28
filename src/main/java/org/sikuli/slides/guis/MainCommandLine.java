@@ -113,8 +113,8 @@ public class MainCommandLine {
                 .create("p");
 		
 		Option oldSyntaxOption=OptionBuilder.withArgName("oldsyntax")
-                .withDescription("Forces the system to use the old syntax the uses special shapes to represent actions. The syntax is based on the following annotations: Rectangle shape: left click. " +
-                		"Rounded rectangle: drag and drop. Frame: double click. Oval: right click. Text Box: Keyboard typing. Cloud: open an URL in default browser.")
+                .withDescription("Forces the system to use the old syntax that uses special shapes to represent actions. The syntax is based on the following annotations: Rectangle shape: left click. " +
+                		"Rounded rectangle: drag and drop. Frame: double click. Oval: right click. Text Box: Keyboard typing. Cloud: open URL in default browser.")
                 .create("oldsyntax");
 		
 		Option helpOption=new Option("h", "help");
