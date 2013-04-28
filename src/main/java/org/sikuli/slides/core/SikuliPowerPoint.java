@@ -201,8 +201,10 @@ public class SikuliPowerPoint {
 					return DesktopEvent.DRAG_N_DROP;
 				else if(action.toLowerCase().contains("browser"))
 					return DesktopEvent.LAUNCH_BROWSER;
-				else if(action.toLowerCase().contains("find"))
-					return DesktopEvent.FIND;
+				else if(action.toLowerCase().contains("not exist"))
+					return DesktopEvent.NOT_EXIST;
+				else if(action.toLowerCase().contains("exist"))
+					return DesktopEvent.EXIST;
 				else
 					continue;
 			}
@@ -313,9 +315,16 @@ public class SikuliPowerPoint {
 		for(SikuliAction shapeAction:tasks){
 			shapeAction.doSikuliAction();
 		}
-		System.out.println("Done.");
+		printExecutionTime();
 	}
 	
+	private void printExecutionTime() {
+		long endTime = System.nanoTime();	
+		long elapsedTime = endTime - Constants.Execution_Start_Time;
+		double seconds=(double)elapsedTime/1000000000.0;
+		System.out.println("Finished after "+seconds+ " seconds.");
+	}
+
 	class SikuliAction{
 		private SlideComponent slideComponent;
 		private SlideShape slideShape;
