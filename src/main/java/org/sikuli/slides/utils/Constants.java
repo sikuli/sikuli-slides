@@ -77,7 +77,11 @@ public class Constants {
 	 * Desktop input events
 	 */
 	public enum DesktopEvent {
-		LEFT_CLICK, RIGHT_CLICK, DOUBLE_CLICK, DRAG_N_DROP, KEYBOARD_TYPING, LAUNCH_BROWSER, FIND
+		LEFT_CLICK, RIGHT_CLICK, DOUBLE_CLICK, DRAG_N_DROP, KEYBOARD_TYPING, LAUNCH_BROWSER, 
+		EXIST, NOT_EXIST
 	}
-	
+	/**
+	 * Execution start time.
+	 */
+	public static long Execution_Start_Time;
 }
