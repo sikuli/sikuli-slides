@@ -5,6 +5,7 @@ package org.sikuli.slides.parsing;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -28,7 +29,8 @@ public class SlideParser extends DefaultHandler {
 	private boolean inShape=false;
 	private boolean inArrowShape=false;
 	private SlideShape slideShape;
-
+	private boolean isSortedTargets=false;
+	
 	private boolean inTextBody=false;
 	private String textBody="";
 	private String arrowHeadId="";
@@ -236,12 +238,25 @@ public class SlideParser extends DefaultHandler {
 		else if(inTextBody && qName.equalsIgnoreCase("p:txBody")){
 			inTextBody=false;
 			if(slideShape!=null){
+				// check text value to sort the targets
+				checkNumeric(textBody);
 				slideShape.setText(textBody);
 			}
 			textBody="";
 		}
 	}
 	
+	private void checkNumeric(String text) {
+		try{
+			int target_order=Integer.parseInt(text.trim());
+			isSortedTargets=true;
+			slideShape.setTargetOrder(target_order);
+		}
+		catch(NumberFormatException e){
+			return;
+		}
+	}
+
 	private void setRoundedRectangleDragAndDropOrder() {
 		if(shapesList!=null){
 			for(SlideShape mShape:shapesList){
@@ -280,9 +295,17 @@ public class SlideParser extends DefaultHandler {
 	
 	// return list of shapes
 	public List<SlideShape> getShapes(){
+		// check if sorting shapes is required
+		if(isSortedTargets){
+			sortShapes();
+		}
 		return  shapesList;
 	}
 	
+	private void sortShapes() {
+		Collections.sort(shapesList);
+	}
+
 	// return a list of labels
 	public List<SlideShape> getLabels(){
 		return labelsList;

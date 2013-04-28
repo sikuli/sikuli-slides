@@ -7,7 +7,7 @@ import org.sikuli.slides.core.SlideComponent;
 import org.sikuli.slides.sikuli.SlideAction;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
 
-public class SlideShape {
+public class SlideShape implements Comparable<SlideShape>{
 	private String id;
 	private String name;
 	private String type; 
@@ -19,6 +19,7 @@ public class SlideShape {
 	private int height;
 	private String text;
 	private int order;
+	private Integer targetOrder; /* the order in which the target is sorted*/
 	private int textSize;
 	private String backgroundColor;
 	public SlideShape(String id, String name, int order, String type, 
@@ -32,6 +33,7 @@ public class SlideShape {
 		this.cx=cx;
 		this.cy=cy;
 		this.backgroundColor=backgroundColor;
+		this.setTargetOrder(0);
 	}
 	/**
 	 * 
@@ -125,6 +127,12 @@ public class SlideShape {
 	public void setTextSize(int textSize) {
 		this.textSize = textSize;
 	}
+	public int getTargetOrder() {
+		return targetOrder;
+	}
+	public void setTargetOrder(int targetOrder) {
+		this.targetOrder =new Integer(targetOrder);
+	}
 	
 	public void doSikuliAction(SlideComponent slideComponent,DesktopEvent desktopEvent){
 		SlideAction slideAction=new SlideAction(slideComponent);
@@ -140,5 +148,10 @@ public class SlideShape {
 				"background color= "+backgroundColor+
 				"font size="+textSize;
 	}
+	@Override
+	public int compareTo(SlideShape slideShape) {
+		return targetOrder.compareTo(slideShape.targetOrder);
+	}
+
 
 }
