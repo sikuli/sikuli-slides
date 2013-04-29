@@ -105,7 +105,7 @@ public class SlideAction {
 	    			}
 	    			else{
 	    				System.err.println("Failed to determine the target image among multiple similar targets on the screen."
-	    						+"\nTry to resize the shape in slide number "+slideTargetRegion.getslideNumber() + "or use the precision option to make the search more accurate.");
+	    						+"\nTry to resize the shape in slide number "+slideTargetRegion.getslideNumber() + " or use the precision option to make the search more accurate.");
 	    			}
 	    		}
 	    		else{
