@@ -147,7 +147,9 @@ public class SikuliPowerPoint {
 			// if the slide doesn't contain a shape.
 			if(desktopEvent==null || slideShapes==null || (slideShapes.size()<2)){
 					System.err.println("Failed to process slide "+slideNumber+
-							". The slide must contain a shape and textbox that contains the action to be executed.");
+							". The slide must contain a shape and textbox that contains the action to be executed.\n" +
+							"The text box that descripes the action must contain one of the following actions:\n"+
+							"Click, Right Click, Double Click, Type, Drag, Browser, exist, not exist");
 					return;
 			}
 		}
@@ -197,7 +199,7 @@ public class SikuliPowerPoint {
 					return DesktopEvent.DOUBLE_CLICK;
 				else if(action.equalsIgnoreCase("Type"))
 					return DesktopEvent.KEYBOARD_TYPING;
-				else if(action.equalsIgnoreCase("Drag"))
+				else if(action.toLowerCase().contains("Drag") || action.toLowerCase().contains("Drop"))
 					return DesktopEvent.DRAG_N_DROP;
 				else if(action.toLowerCase().contains("browser"))
 					return DesktopEvent.LAUNCH_BROWSER;
