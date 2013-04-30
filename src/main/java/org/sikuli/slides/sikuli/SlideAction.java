@@ -167,6 +167,9 @@ public class SlideAction {
 		int width=UnitConverter.emuToPixels(slideLabel.getCx());
 		int height=UnitConverter.emuToPixels(slideLabel.getCy());
 		double fontSize=UnitConverter.WholePointsToPoints(slideLabel.getTextSize());
+		if(fontSize==0){
+			fontSize=18;
+		}
 		int x=(dimension.width-width)/2;
 		int y=(dimension.height-height)/2;
 		ScreenRegion canvasRegion=new DesktopScreenRegion(x, y, width, height);
