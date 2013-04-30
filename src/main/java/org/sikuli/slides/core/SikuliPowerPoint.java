@@ -199,7 +199,7 @@ public class SikuliPowerPoint {
 					return DesktopEvent.DOUBLE_CLICK;
 				else if(action.equalsIgnoreCase("Type"))
 					return DesktopEvent.KEYBOARD_TYPING;
-				else if(action.toLowerCase().contains("Drag") || action.toLowerCase().contains("Drop"))
+				else if(action.toLowerCase().contains("drag") || action.toLowerCase().contains("drop"))
 					return DesktopEvent.DRAG_N_DROP;
 				else if(action.toLowerCase().contains("browser"))
 					return DesktopEvent.LAUNCH_BROWSER;
