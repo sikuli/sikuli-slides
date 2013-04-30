@@ -190,8 +190,8 @@ public class SikuliPowerPoint {
 		for(SlideShape slideShape:slideShapes){
 			// if the shape is the textBox that represents the GUI input action
 			if(slideShape.getType().equals("rect") && slideShape.getName().contains("TextBox")){
-				String action=slideShape.getText();
-				if(action.equalsIgnoreCase("Click"))
+				String action=slideShape.getText().trim();
+				if(action.equalsIgnoreCase("Click") || action.equalsIgnoreCase("Left Click"))
 					return DesktopEvent.LEFT_CLICK;
 				else if(action.equalsIgnoreCase("Right Click"))
 					return DesktopEvent.RIGHT_CLICK;
