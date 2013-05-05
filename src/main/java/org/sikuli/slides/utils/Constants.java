@@ -81,6 +81,13 @@ public class Constants {
 		EXIST, NOT_EXIST
 	}
 	/**
+	 * Running modes
+	 */
+	public static boolean ACTION_MODE=false;
+	public static boolean TUTORIAL_MODE=false;
+	public static boolean DEVELOPMENT_MODE=false;
+	
+	/**
 	 * Execution start time.
 	 */
 	public static long Execution_Start_Time;
