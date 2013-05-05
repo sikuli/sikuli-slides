@@ -82,11 +82,17 @@ public class SlideAction {
 				if(targetRegion==null){
 					System.exit(1);
 				}
-				performSikuliAction(targetRegion, desktopEvent);
+				if(Constants.TUTORIAL_MODE){
+					new SlideTutorial(targetRegion, desktopEvent).performTutorialSlideAction();
+				}
+				else{
+					performSikuliAction(targetRegion, desktopEvent);
+				}
 			}
 		}
 	}
 	
+
 	private ScreenRegion findTargetRegion(){
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
 		imageTarget.setMinScore(Constants.MinScore);
@@ -119,7 +125,6 @@ public class SlideAction {
 		return null;
 	}
 	
-
 	private void performSikuliAction(ScreenRegion targetRegion,Constants.DesktopEvent desktopEvent){
 		// if the slide contains a sound, play it first
 		if(sound!=null){
