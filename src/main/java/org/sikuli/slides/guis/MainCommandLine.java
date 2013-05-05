@@ -52,6 +52,23 @@ public class MainCommandLine {
 	    	else if (cmd.hasOption("oldsyntax")){
 	        	Constants.UseOldSyntax=true;
 	    	}
+	    	else if (cmd.hasOption("m")){
+	    		String mode=cmd.getOptionValue("m");
+	    		if(mode.equalsIgnoreCase("action")){
+	    			Constants.ACTION_MODE=true;
+	    		}
+	    		else if(mode.equalsIgnoreCase("tutorial")){
+	    			Constants.TUTORIAL_MODE=true;
+	    		}
+	    		else if(mode.equalsIgnoreCase("development")){
+	    			Constants.DEVELOPMENT_MODE=true;
+	    		}
+	    		else{
+	    			String errorMessage="Invalid running mode value.\nPlease enter one of the following running modes:\naction\ntutorial\ndevelopment\n";
+	    			System.out.write(errorMessage.getBytes());
+	    			throw new Exception();
+	    		}
+	    	}
 	    	else if(cmd.hasOption("p")){
 	    		int precision=Integer.parseInt(cmd.getOptionValue("p"));
 	    		if(precision>0&&precision<11){
@@ -117,12 +134,18 @@ public class MainCommandLine {
                 		"Rounded rectangle: drag and drop. Frame: double click. Oval: right click. Text Box: Keyboard typing. Cloud: open URL in default browser.")
                 .create("oldsyntax");
 		
+		Option modeOption=OptionBuilder.withArgName("mode")
+                .hasArg()
+                .withDescription("The mode in which sikuli-slides is running. It can be one of the following: action, tutorial, and development (default is action)." )
+                .create("m");
+		
 		Option helpOption=new Option("h", "help");
 		
 		posixOptions.addOption(helpOption);
 		posixOptions.addOption(waitOption);
 		posixOptions.addOption(precisionOption);
 		posixOptions.addOption(oldSyntaxOption);
+		posixOptions.addOption(modeOption);
 		
 		return posixOptions;
 	}
