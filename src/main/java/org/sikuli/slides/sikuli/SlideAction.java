@@ -83,7 +83,7 @@ public class SlideAction {
 					System.exit(1);
 				}
 				if(Constants.TUTORIAL_MODE){
-					new SlideTutorial(targetRegion, desktopEvent).performTutorialSlideAction();
+					new SlideTutorial(targetRegion, slideShape, desktopEvent).performTutorialSlideAction();
 				}
 				else{
 					performSikuliAction(targetRegion, desktopEvent);
