@@ -2,39 +2,49 @@
 Khalid
 */
 package org.sikuli.slides.listeners;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseInputListener;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
 
-public class GlobalMouseListeners implements NativeMouseInputListener, Callable<Boolean>{
-	private AtomicBoolean result;
+public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
+	private AtomicBoolean isPerformed;
 	private ScreenRegion region;
 	private DesktopEvent desktopEvent;
+	private static AtomicBoolean isDragged=new AtomicBoolean();
+	//private static AtomicBoolean isDropped=new AtomicBoolean();
 	
 	public GlobalMouseListeners(ScreenRegion region, DesktopEvent desktopEvent){
 		this.region=region;
 		this.desktopEvent=desktopEvent;
-		result=new AtomicBoolean();
+		isPerformed=new AtomicBoolean();
 	}
 	@Override
 	public void nativeMouseClicked(NativeMouseEvent e) {
-		
-    	if(inRange(e)){
-        	if(e.getClickCount()>1){
-        		if(desktopEvent==DesktopEvent.DOUBLE_CLICK){
-        			System.out.println("Double click");
-        			result.set(true);
-        		}
-        	}
-        	else{
-        		if(desktopEvent==DesktopEvent.LEFT_CLICK){
-        			System.out.println("Click");
-        			result.set(true);
-        		}
-        	}
+		// Double click
+    	if(desktopEvent==DesktopEvent.DOUBLE_CLICK && e.getClickCount()==2){
+    		if(inRange(e)){
+    			System.out.println("Double click action was successfully performed.");
+    			System.out.println("========================================");
+    			isPerformed.set(true);
+    		}
+    	}
+    	// Left click
+    	else if(desktopEvent==DesktopEvent.LEFT_CLICK){
+    		if(inRange(e)){
+        		System.out.println("Click action was successfully performed.");
+        		System.out.println("========================================");
+        		isPerformed.set(true);
+    		}
+    	}
+    	// Right click
+    	else if(desktopEvent==DesktopEvent.RIGHT_CLICK && e.getButton()==NativeMouseEvent.BUTTON2){
+    		if(inRange(e)){
+    			System.out.println("Right click action was successfully performed.");
+    			System.out.println("========================================");
+    			isPerformed.set(true);
+    		}
     	}
 	}
 	/**
@@ -51,26 +61,38 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Callable<
 		int clicked_x=e.getX();
 		int clicked_y=e.getY();
 		
-		//System.out.println("Clicked on ("+clicked_x+","+clicked_y+")");
-		//System.out.println("x_val= "+x_val+", max_x="+max_x);
-		//System.out.println("y_val= "+y_val+", max_y="+max_y);
-		
-		if(clicked_x>=x_val&&clicked_x<=max_x){
-			if(clicked_y>=y_val && clicked_y<=max_y){
-				System.out.println("Correct");
-				return true;
-			}
+		if(clicked_x>=x_val&&clicked_x<=max_x &&
+				clicked_y>=y_val && clicked_y<=max_y){
+			return true;
+		}
+		else{
+			System.out.println("Incorrect. Please perform " + 
+					this.desktopEvent.toString()+" on the highlighted area.");
 		}
 		return false;
 	}
 	@Override
 	public void nativeMousePressed(NativeMouseEvent e) {
-		
+		// Drag and drop : Dragged
+		if(desktopEvent==DesktopEvent.DRAG_N_DROP){
+			if(inRange(e)){
+				GlobalMouseListeners.isDragged.set(true);
+				System.out.println("Interacting with drag target...");
+				isPerformed.set(true);
+			}
+		}
 	}
 
 	@Override
 	public void nativeMouseReleased(NativeMouseEvent e) {
-		
+		// Drag and drop : Dropped
+		if(desktopEvent==DesktopEvent.DRAG_N_DROP && GlobalMouseListeners.isDragged.get()){
+			if(inRange(e)){
+					System.out.println("Drag and drop action was successfully performed.");
+					System.out.println("========================================");
+					isPerformed.set(true);
+			}
+		}
 	}
 
 	@Override
@@ -80,17 +102,17 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Callable<
 	@Override
 	public void nativeMouseMoved(NativeMouseEvent e) {
 	}
-
+	
 	@Override
-	public Boolean call(){
-		while(result.get()==false){
-			try {
+	public void run() {
+		while(!isPerformed.get()){
+			try{
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
+			}
+			catch(InterruptedException e){
 				e.printStackTrace();
 			}
 		}
-		return result.get();
 	}
 	
 }
