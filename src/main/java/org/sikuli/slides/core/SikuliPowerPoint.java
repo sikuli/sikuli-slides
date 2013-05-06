@@ -325,6 +325,7 @@ public class SikuliPowerPoint {
 		long elapsedTime = endTime - Constants.Execution_Start_Time;
 		double seconds=(double)elapsedTime/1000000000.0;
 		System.out.println("Finished after "+seconds+ " seconds.");
+		System.exit(0);
 	}
 
 	class SikuliAction{
