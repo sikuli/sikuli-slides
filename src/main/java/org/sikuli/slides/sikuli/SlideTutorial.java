@@ -4,6 +4,7 @@ Khalid
 package org.sikuli.slides.sikuli;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
+import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
@@ -24,9 +25,37 @@ public class SlideTutorial {
 		this.desktopEvent=desktopEvent;
 	}
 	
+	private String getActionDisplayName(){
+		if(desktopEvent==DesktopEvent.LEFT_CLICK){
+			return "Click here";
+		}
+		else if(desktopEvent==DesktopEvent.DOUBLE_CLICK){
+			return "Double click here";
+		}
+		else if(desktopEvent==DesktopEvent.RIGHT_CLICK){
+			return "Right click here";
+		}
+		else if(desktopEvent==DesktopEvent.DRAG_N_DROP){
+			if(slideShape.getOrder()==0)
+				return "Drag this";
+			else if(slideShape.getOrder()==1)
+				return "and drop it here";
+		}
+		else if(desktopEvent==DesktopEvent.KEYBOARD_TYPING){
+			return "Type: "+ slideShape.getText()+" here";
+		}
+		return "";
+	}
+	
 	public void performTutorialSlideAction() {
 		Canvas canvas=new DesktopCanvas();
 		canvas.addBox(targetRegion);
+		int x=targetRegion.getBounds().x;
+		int y=targetRegion.getBounds().y;
+		int w=targetRegion.getBounds().width;
+		int h=targetRegion.getBounds().height;
+		ScreenRegion labelRegion=new DesktopScreenRegion(x,y-h,w,h);
+		canvas.addLabel(labelRegion, getActionDisplayName());
         System.out.println("Waiting for the user to pefrom "+this.desktopEvent.toString()+" on the highlighted target.");
 		try {
         	if(!GlobalScreen.isNativeHookRegistered()){
