@@ -13,10 +13,13 @@
 
 # Binaries
 bin/
-target
+target/
 
-# Maven Files
+# Maven generated files
 dependency-reduced-pom.xml
 
 # Others
 .DS_Store
+
+# exclode repo directory
+!/repo/
