@@ -6,11 +6,6 @@
 # Java Files #
 *.class
 
-# Package Files #
-*.jar
-*.war
-*.ear
-
 # Binaries
 bin/
 target/
@@ -21,5 +16,3 @@ dependency-reduced-pom.xml
 # Others
 .DS_Store
 
-# exclode repo directory
-!/repo/
