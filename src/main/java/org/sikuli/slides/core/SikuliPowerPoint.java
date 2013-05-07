@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.io.FilenameUtils;
 import org.sikuli.slides.media.Sound;
@@ -321,10 +322,16 @@ public class SikuliPowerPoint {
 	}
 	
 	private void printExecutionTime() {
-		long endTime = System.nanoTime();	
+		long endTime = System.currentTimeMillis();	
 		long elapsedTime = endTime - Constants.Execution_Start_Time;
-		double seconds=(double)elapsedTime/1000000000.0;
-		System.out.println("Finished after "+seconds+ " seconds.");
+		long hr=TimeUnit.MILLISECONDS.toHours(elapsedTime);
+		long min=TimeUnit.MILLISECONDS.toMinutes(elapsedTime-TimeUnit.HOURS.toMillis(hr));
+		long sec=TimeUnit.MILLISECONDS.toSeconds(elapsedTime-TimeUnit.HOURS.toMillis(hr)
+				-TimeUnit.MINUTES.toMillis(min));
+		long ms=TimeUnit.MILLISECONDS.toMillis(elapsedTime-TimeUnit.HOURS.toMillis(hr)
+				-TimeUnit.MINUTES.toMillis(min)-TimeUnit.SECONDS.toMillis(sec));
+		String formattedTime=String.format("%02d:%02d:%02d.%02d", hr, min, sec,ms);
+		System.out.println("Finished after "+formattedTime);
 		System.exit(0);
 	}
 
