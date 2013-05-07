@@ -88,7 +88,7 @@ public class Constants {
 	public static boolean DEVELOPMENT_MODE=false;
 	
 	/**
-	 * Execution start time.
+	 * Execution start time in milliseconds.
 	 */
 	public static long Execution_Start_Time;
 }
