@@ -41,7 +41,7 @@ public class MainUI{
 	}
 	
 	public static void main(String[]args){
-		Constants.Execution_Start_Time=System.nanoTime();
+		Constants.Execution_Start_Time=System.currentTimeMillis();
 		MainUI mainUi=new MainUI();
 		mainUi.intiProject();
 		// run the command line tool and get the file name
