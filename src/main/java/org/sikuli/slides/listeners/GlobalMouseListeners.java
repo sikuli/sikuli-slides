@@ -65,10 +65,6 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 				clicked_y>=y_val && clicked_y<=max_y){
 			return true;
 		}
-		else{
-			System.out.println("Incorrect. Please perform " + 
-					this.desktopEvent.toString()+" on the highlighted area.");
-		}
 		return false;
 	}
 	@Override
