@@ -62,14 +62,32 @@ public class SlideTutorial {
         		GlobalScreen.registerNativeHook();
         	}
             if(this.desktopEvent==DesktopEvent.KEYBOARD_TYPING){
+            	// add native keyboard listener
             	GlobalKeyboardListeners globalKeyboardListener=new GlobalKeyboardListeners(targetRegion,slideShape.getText(),desktopEvent);
             	GlobalScreen.getInstance().addNativeKeyListener(globalKeyboardListener);
+            	// display canvas around the target until the user performs the appropriate action
             	canvas.displayWhile(globalKeyboardListener);
+            	// Remove native keyboard listener
+            	GlobalScreen.getInstance().removeNativeKeyListener(globalKeyboardListener);
+            	
             }
-            else{
+            else if(this.desktopEvent==DesktopEvent.LEFT_CLICK ||
+            		this.desktopEvent==DesktopEvent.RIGHT_CLICK ||
+            		this.desktopEvent==DesktopEvent.DOUBLE_CLICK ||
+            		this.desktopEvent==DesktopEvent.DRAG_N_DROP){
+            	// add native keyboard listener
             	GlobalMouseListeners globalMouseListener=new GlobalMouseListeners(targetRegion,desktopEvent);
             	GlobalScreen.getInstance().addNativeMouseListener(globalMouseListener);
+            	// display canvas around the target until the user performs the appropriate action
             	canvas.displayWhile(globalMouseListener);
+            	// Remove native mouse listener
+            	GlobalScreen.getInstance().removeNativeMouseListener(globalMouseListener);
+            }
+            else if(this.desktopEvent==DesktopEvent.LAUNCH_BROWSER){
+            	//TODO:
+            }
+            else if(this.desktopEvent==DesktopEvent.EXIST||this.desktopEvent==DesktopEvent.NOT_EXIST){
+            	//TODO:
             }
         }
         catch (NativeHookException ex) {
@@ -77,7 +95,5 @@ public class SlideTutorial {
             System.err.println(ex.getMessage());
             System.exit(1);
         }
-
-		
 	}
 }
