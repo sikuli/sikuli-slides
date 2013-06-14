@@ -20,6 +20,10 @@ public class Constants {
 	 */
 	public static String projectDirectory;
 	/**
+	 * The relative directory path to the embedding resources icons for the GUIs.
+	 */
+	public static final String RESOURCES_ICON_DIR="/org/sikuli/slides/gui/icons/";
+	/**
 	 * The name of the directory that sikuli-slides creates in the operating system's tmp directory.
 	 */
 	public static final String SIKULI_SLIDES_ROOT_DIRECTORY="org.sikuli.SikuliSlides";

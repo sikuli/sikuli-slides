@@ -36,7 +36,6 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
     private JSlider perciseControlSlider;
     private JLabel statusLabel;
     
-    private final String RES_ICON_DIR="/org/sikuli/slides/gui/icons/";
     
     public MainUI(){
         super("sikuli-slides");
@@ -51,7 +50,7 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
         horizontal_toolbar.setFocusable(false);
         add(horizontal_toolbar, BorderLayout.NORTH);
         
-        ImageIcon open_file_icon=new ImageIcon(MainUI.class.getResource(RES_ICON_DIR+"powerpoint-icon.png"));
+        ImageIcon open_file_icon=new ImageIcon(MainUI.class.getResource(Constants.RESOURCES_ICON_DIR+"powerpoint-icon.png"));
         btn_open= new JButton("Open",open_file_icon);
         btn_open.setToolTipText("Open PowerPoint file (*.pptx");
         btn_open.addActionListener(this);
