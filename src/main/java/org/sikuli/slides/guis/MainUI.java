@@ -47,7 +47,7 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
     	JToolBar horizontal_toolbar=new JToolBar();
         horizontal_toolbar.setFloatable(false); // to make a tool bar immovable
         horizontal_toolbar.setMargin(new Insets(2, 5, 5, 5));
-        horizontal_toolbar.setBackground(Color.white);
+        horizontal_toolbar.setBackground(Color.decode("#e5e5e5"));
         horizontal_toolbar.setFocusable(false);
         add(horizontal_toolbar, BorderLayout.NORTH);
         
@@ -96,7 +96,7 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
         setFocusable(true);
         
         setTitle("Sikuli-Slides");
-        setSize(600,200);
+        pack();
         setResizable(false);
         setLocationRelativeTo(null); //center the window on the screen
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
