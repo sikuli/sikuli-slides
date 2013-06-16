@@ -82,7 +82,10 @@ public class SlideAction {
 				if(targetRegion==null){
 					System.exit(1);
 				}
-				if(Constants.TUTORIAL_MODE){
+				if(Constants.HELP_MODE){
+					new SlideTutorial(targetRegion, slideShape, desktopEvent).performTutorialSlideAction();
+				}
+				else if(Constants.TUTORIAL_MODE){
 					new SlideTutorial(targetRegion, slideShape, desktopEvent).performTutorialSlideAction();
 				}
 				else{
