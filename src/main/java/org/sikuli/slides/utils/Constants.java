@@ -89,7 +89,7 @@ public class Constants {
 	 */
 	public static boolean ACTION_MODE=false;
 	public static boolean HELP_MODE=false;
-	public static boolean TUTORIAL_MODEx=false;
+	public static boolean TUTORIAL_MODE=false;
 	public static boolean DEVELOPMENT_MODE=false;
 	/**
 	 * Execution start time in milliseconds.
