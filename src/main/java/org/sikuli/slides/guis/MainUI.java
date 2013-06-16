@@ -62,7 +62,7 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
         JLabel runningModeLabel=new JLabel("  Running Mode:");
         horizontal_toolbar.add(runningModeLabel);
         
-        String[]validModes={"Action","Tutorial"};
+        String[]validModes={"Action","Help","Tutorial"};
         runningModeList=new JComboBox(validModes);
         
         runningModeList.addActionListener(this);
@@ -135,13 +135,18 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
         else if(e.getSource()==runningModeList){
         	if(runningModeList.getSelectedIndex()==0){
         		Constants.ACTION_MODE=true;
+        		Constants.HELP_MODE=false;
         		Constants.TUTORIAL_MODE=false;
-        		Constants.DEVELOPMENT_MODE=false;
         	}
         	else if(runningModeList.getSelectedIndex()==1){
         		Constants.ACTION_MODE=false;
+        		Constants.HELP_MODE=true;
+        		Constants.TUTORIAL_MODE=false;
+        	}
+        	else if(runningModeList.getSelectedIndex()==2){
+        		Constants.ACTION_MODE=false;
+        		Constants.HELP_MODE=false;
         		Constants.TUTORIAL_MODE=true;
-        		Constants.DEVELOPMENT_MODE=false;
         	}
         }
 	}
