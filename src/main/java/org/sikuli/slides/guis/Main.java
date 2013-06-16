@@ -24,9 +24,9 @@ public class Main{
 			System.exit(1);
 		}
 		//TODO: remove this
-		else{
-			//System.out.println("created working directory in: "+Constants.workingDirectoryPath);
-		}
+		/*else{
+			System.out.println("created working directory in: "+Constants.workingDirectoryPath);
+		}*/
 	}
 
 	/**
@@ -35,6 +35,11 @@ public class Main{
 	public void doSikuliPowerPoint(File file){	
 		Constants.Execution_Start_Time=System.currentTimeMillis();
 		if(file!=null){
+			// display Tutorial Controller UI when tutorial mode is running
+			if(Constants.TUTORIAL_MODE){
+				System.out.println("Running in tutorial mode...");
+				TutorialConrollerUI.runUI();
+			}
 			// run sikuli-slides work
 			SikuliPowerPoint sikuliPowerPoint=new SikuliPowerPoint(file);
 			sikuliPowerPoint.runSikuliPowerPoint();
