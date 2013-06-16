@@ -57,14 +57,16 @@ public class MainCommandLine {
 	    		if(mode.equalsIgnoreCase("action")){
 	    			Constants.ACTION_MODE=true;
 	    		}
+	    		else if(mode.equalsIgnoreCase("help")){
+	    			Constants.HELP_MODE=true;
+	    		}
 	    		else if(mode.equalsIgnoreCase("tutorial")){
 	    			Constants.TUTORIAL_MODE=true;
 	    		}
-	    		else if(mode.equalsIgnoreCase("development")){
-	    			Constants.DEVELOPMENT_MODE=true;
-	    		}
 	    		else{
-	    			String errorMessage="Invalid running mode value.\nPlease enter one of the following running modes:\naction\ntutorial\ndevelopment\n";
+	    			String errorMessage="Invalid running mode value.\n" +
+	    					"Please enter one of the following running modes:" +
+	    					"\naction\nhelp\ntutorial\n";
 	    			System.out.write(errorMessage.getBytes());
 	    			throw new Exception();
 	    		}
