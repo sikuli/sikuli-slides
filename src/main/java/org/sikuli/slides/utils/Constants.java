@@ -88,11 +88,20 @@ public class Constants {
 	 * Running modes
 	 */
 	public static boolean ACTION_MODE=false;
-	public static boolean TUTORIAL_MODE=false;
+	public static boolean HELP_MODE=false;
+	public static boolean TUTORIAL_MODEx=false;
 	public static boolean DEVELOPMENT_MODE=false;
-	
 	/**
 	 * Execution start time in milliseconds.
 	 */
 	public static long Execution_Start_Time;
+	/**
+	 * Tutorial mode previous step.
+	 */
+	public static boolean IsPreviousStep=false;
+	/**
+	 * Tutorial mode next step.
+	 */
+	public static boolean IsNextStep=false;
+	
 }
