@@ -48,6 +48,9 @@ public class SlideTutorial {
 	}
 	
 	public void performTutorialSlideAction() {
+		if(targetRegion==null){
+			return;
+		}
 		Canvas canvas=new DesktopCanvas();
 		canvas.addBox(targetRegion);
 		int x=targetRegion.getBounds().x;
