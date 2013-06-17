@@ -2,10 +2,12 @@
 Khalid
 */
 package org.sikuli.slides.listeners;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseInputListener;
 import org.sikuli.api.ScreenRegion;
+import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
 
 public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
@@ -13,12 +15,11 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 	private ScreenRegion region;
 	private DesktopEvent desktopEvent;
 	private static AtomicBoolean isDragged=new AtomicBoolean();
-	//private static AtomicBoolean isDropped=new AtomicBoolean();
 	
 	public GlobalMouseListeners(ScreenRegion region, DesktopEvent desktopEvent){
 		this.region=region;
 		this.desktopEvent=desktopEvent;
-		isPerformed=new AtomicBoolean();
+		this.isPerformed=new AtomicBoolean();
 	}
 	@Override
 	public void nativeMouseClicked(NativeMouseEvent e) {
@@ -29,6 +30,9 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
     			System.out.println("========================================");
     			isPerformed.set(true);
     		}
+    		else{
+    			handleClickError();
+    		}
     	}
     	// Left click
     	else if(desktopEvent==DesktopEvent.LEFT_CLICK){
@@ -37,6 +41,9 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
         		System.out.println("========================================");
         		isPerformed.set(true);
     		}
+    		else{
+    			handleClickError();
+    		}
     	}
     	// Right click
     	else if(desktopEvent==DesktopEvent.RIGHT_CLICK && e.getButton()==NativeMouseEvent.BUTTON2){
@@ -44,6 +51,9 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
     			System.out.println("Right click action was successfully performed.");
     			System.out.println("========================================");
     			isPerformed.set(true);
+    		}
+    		else{
+    			handleClickError();
     		}
     	}
 	}
@@ -76,6 +86,9 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 				System.out.println("Interacting with drag target...");
 				isPerformed.set(true);
 			}
+    		else{
+    			handleClickError();
+    		}
 		}
 	}
 
@@ -88,6 +101,9 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 					System.out.println("========================================");
 					isPerformed.set(true);
 			}
+    		else{
+    			handleClickError();
+    		}
 		}
 	}
 
@@ -99,11 +115,28 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 	public void nativeMouseMoved(NativeMouseEvent e) {
 	}
 	
+	private void handleClickError(){
+		System.out.println("Error: Please click on the heighlighted rectangle.");
+	}
+	
 	@Override
 	public void run() {
 		while(!isPerformed.get()){
 			try{
-				Thread.sleep(1000);
+				Thread.sleep(100);
+				if(Constants.IsPreviousStep){
+					Constants.IsPreviousStep=false;
+					if(Constants.tutorialController.hasPreviousStep()){
+						Constants.IsReturnToPreviousStep=true;
+						break;
+					}
+				}
+				else if(Constants.IsNextStep){
+					Constants.IsNextStep=false;
+					if(Constants.tutorialController.hasNextStep()){
+						break;
+					}
+				}
 			}
 			catch(InterruptedException e){
 				e.printStackTrace();
