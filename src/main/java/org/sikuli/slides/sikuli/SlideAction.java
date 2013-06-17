@@ -79,9 +79,11 @@ public class SlideAction {
 				}
 			}
 			else{
-				if(targetRegion==null){
-					System.exit(1);
-				}
+				/*if(targetRegion==null){
+					if(Constants.TUTORIAL_MODE){
+						System.err.println("Couldn't find target on the screen.");
+					}
+				}*/
 				if(Constants.HELP_MODE){
 					new SlideTutorial(targetRegion, slideShape, desktopEvent).performTutorialSlideAction();
 				}
