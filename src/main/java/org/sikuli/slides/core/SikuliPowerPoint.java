@@ -20,6 +20,7 @@ import org.sikuli.slides.processing.SlideProcessing;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
 import org.sikuli.slides.screenshots.Screenshot;
 import org.sikuli.slides.shapes.SlideShape;
+import org.sikuli.slides.sikuli.TutorialController;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
 import org.sikuli.slides.utils.UnitConverter;
@@ -36,7 +37,7 @@ public class SikuliPowerPoint {
 	public SikuliPowerPoint(File file){
 		this.file=file;
 		counter=new AtomicInteger();
-		tasks=new ArrayList<SikuliPowerPoint.SikuliAction>();
+		tasks=new ArrayList<SikuliAction>();
 	}
 	public void runSikuliPowerPoint(){
 		// set the project directory name
@@ -315,10 +316,21 @@ public class SikuliPowerPoint {
 	
 	
 	private void executeSikuliActions(){
-		for(SikuliAction shapeAction:tasks){
-			shapeAction.doSikuliAction();
+		if(Constants.TUTORIAL_MODE){
+			if(Constants.TUTORIAL_MODE){
+				if(Constants.tutorialController==null){
+					Constants.tutorialController=TutorialController.getInstance();
+					Constants.tutorialController.executeSikuliActions(tasks);
+				}
+			}
+		}
+		else{
+			for(SikuliAction shapeAction:tasks){
+				shapeAction.doSikuliAction();
+			}
 		}
 		printExecutionTime();
+		
 	}
 	
 	private void printExecutionTime() {
@@ -333,22 +345,6 @@ public class SikuliPowerPoint {
 		String formattedTime=String.format("%02d:%02d:%02d.%02d", hr, min, sec,ms);
 		System.out.println("Finished after "+formattedTime);
 		System.exit(0);
-	}
-
-	class SikuliAction{
-		private SlideComponent slideComponent;
-		private SlideShape slideShape;
-		private DesktopEvent desktopEvent;
-		public SikuliAction(File imageTargetFile, SlideShape slideShape, Screenshot screenshot, 
-				SlideTargetRegion slideTargetRegion,DesktopEvent desktopEvent, Sound sound, SlideShape label){
-			this.slideShape=slideShape;
-			this.desktopEvent=desktopEvent;
-			slideComponent=new SlideComponent(imageTargetFile, 
-					slideShape, screenshot, slideTargetRegion, sound, label);
-		}
-		public void doSikuliAction(){
-			slideShape.doSikuliAction(slideComponent,desktopEvent);
-		}
 	}
 	
 }
