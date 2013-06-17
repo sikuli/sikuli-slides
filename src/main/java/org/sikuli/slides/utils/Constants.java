@@ -4,6 +4,8 @@ Khalid
 package org.sikuli.slides.utils;
 
 import java.io.File;
+
+import org.sikuli.slides.sikuli.TutorialController;
 /**
  * This class contains constants.
  * @author Khalid Alharbi
@@ -103,5 +105,12 @@ public class Constants {
 	 * Tutorial mode next step.
 	 */
 	public static boolean IsNextStep=false;
-	
+	/**
+	 * Tutorial mode return back to previous step.
+	 */
+	public static boolean IsReturnToPreviousStep=false;
+	/**
+	 * Tutorial Controller
+	 */
+	public static TutorialController tutorialController=null;
 }
