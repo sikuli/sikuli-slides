@@ -21,8 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -175,23 +173,7 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
         else return null;
 	}
 
-	private static void runUI(){
-		// take the menu bar off the jframe
-        System.setProperty("apple.laf.useScreenMenuBar", "true");
-        // set the name of the application menu item
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Sikuli-Slides");
-        // set the look and feel
-        try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-        } catch (InstantiationException e) {
-                e.printStackTrace();
-        } catch (IllegalAccessException e) {
-                e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-        }
-        
+	private static void runUI(){        
         SwingUtilities.invokeLater(new Runnable() {
                 public void run(){
                         MainUI mainUI=new MainUI();
