@@ -113,4 +113,8 @@ public class Constants {
 	 * Tutorial Controller
 	 */
 	public static TutorialController tutorialController=null;
+	/**
+	 * Wait action is running.
+	 */
+	public static boolean IsWaitActionRunning=false;
 }
