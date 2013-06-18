@@ -21,6 +21,7 @@ import org.sikuli.api.robot.desktop.DesktopMouse;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.slides.core.SlideComponent;
+import org.sikuli.slides.guis.TutorialConrollerUI;
 import org.sikuli.slides.media.Sound;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
 import org.sikuli.slides.shapes.SlideShape;
@@ -305,10 +306,15 @@ public class SlideAction {
 		try {
 			int timeout=Integer.parseInt(waitTimeString);
 			System.out.println("waiting for "+timeout+" "+timeUnit.toString().toLowerCase());
-			// Set wait action flag to true to prevent tutorial mode from navigating through steps.
-			Constants.IsWaitActionRunning=true;
+			if(Constants.TUTORIAL_MODE){
+				// Disable controllers UI buttons to prevent tutorial mode from navigating through steps.
+				TutorialConrollerUI.disableControllers();
+			}
 			timeUnit.sleep(timeout);
-			Constants.IsWaitActionRunning=false;
+			if(Constants.TUTORIAL_MODE){
+					// Enable controllers UI buttons.
+					TutorialConrollerUI.enableControllers();
+			}
 			System.out.println("Waking up...");
 		} 
 		catch(NumberFormatException e){

@@ -21,8 +21,8 @@ public class TutorialConrollerUI extends JFrame implements ActionListener{
 	
 	private static final long serialVersionUID = -7849896402606865992L;
 	
-	private JButton previousButton;
-	private JButton nextButton;
+	private static JButton previousButton;
+	private static JButton nextButton;
 	public TutorialConrollerUI(){
 		super("sikuli-slides");
 		initUI();
@@ -76,7 +76,14 @@ public class TutorialConrollerUI extends JFrame implements ActionListener{
 			Constants.IsNextStep=true;
 		}
 	}
-	
+	public static void disableControllers(){
+		previousButton.setEnabled(false);
+		nextButton.setEnabled(false);
+	}
+	public static void enableControllers(){
+		previousButton.setEnabled(true);
+		nextButton.setEnabled(true);
+	}
 	public static void runUI(){
         SwingUtilities.invokeLater(new Runnable() {
                 public void run(){
