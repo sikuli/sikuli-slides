@@ -15,8 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import org.sikuli.slides.utils.Constants;
 
 public class TutorialConrollerUI extends JFrame implements ActionListener{
@@ -80,22 +78,6 @@ public class TutorialConrollerUI extends JFrame implements ActionListener{
 	}
 	
 	public static void runUI(){
-		// take the menu bar off the jframe
-        System.setProperty("apple.laf.useScreenMenuBar", "true");
-        // set the name of the application menu item
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Sikuli-Slides - Tutorial Controller");
-        // set the look and feel
-        try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-        } catch (InstantiationException e) {
-                e.printStackTrace();
-        } catch (IllegalAccessException e) {
-                e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-        }
-        
         SwingUtilities.invokeLater(new Runnable() {
                 public void run(){
                         TutorialConrollerUI tutorialConrollerUI=new TutorialConrollerUI();
