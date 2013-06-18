@@ -72,7 +72,7 @@
 						<configuration>
 							<transformers>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>org.sikuli.slides.guis.MainUI</mainClass>
+									<mainClass>org.sikuli.slides.guis.Main</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
