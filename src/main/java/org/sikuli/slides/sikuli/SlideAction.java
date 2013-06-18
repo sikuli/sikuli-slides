@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
+
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
@@ -48,9 +50,13 @@ public class SlideAction {
 	}
 	
 	public void doSlideAction(DesktopEvent desktopEvent){
-		// if the required action is to open the browser, no need to search for target on the screen
+		// if the required action is one of the following actions, no need to search for target on the screen
+		// #1 Open default browser
 		if(desktopEvent==DesktopEvent.LAUNCH_BROWSER){
 			performSikuliAction(null, desktopEvent);
+		}
+		else if(desktopEvent==DesktopEvent.WAIT){
+				performSikuliAction(null, desktopEvent);
 		}
 		// if the action is to find a target on the screen
 		// if the action is to interact with a target, find the target and perform the action
@@ -157,6 +163,9 @@ public class SlideAction {
 		}
 		else if(desktopEvent==Constants.DesktopEvent.LAUNCH_BROWSER){
 			performLaunchWebBrowser();
+		}
+		else if(desktopEvent==Constants.DesktopEvent.WAIT){
+			performWaitAction();
 		}
 	}
 	/**
@@ -275,5 +284,39 @@ public class SlideAction {
 		}
 	}
 	
-
+	/**
+	 * Perform wait action. It waits for the specified time in seconds
+	 */
+	private void performWaitAction(){
+		System.out.println("Performing wait operation...");
+		// extract the time unit
+		TimeUnit timeUnit=UnitConverter.extractTimeUnitFromString(slideShape.getText());
+		// if the time unit was not specified, default to seconds
+		if(timeUnit==null){
+			timeUnit=TimeUnit.SECONDS;
+		}
+		// extract the wait time string value, replace all non digits with blank
+		String waitTimeString=slideShape.getText().replaceAll("\\D", "");
+		if(waitTimeString==null){
+			System.err.println("Error: Please enter the wait time value in a shape."
+					+" Valid examples include: 10 seconds, 10 minutes, 10 hours, or even 2 days.");
+			return;
+		}
+		try {
+			int timeout=Integer.parseInt(waitTimeString);
+			System.out.println("waiting for "+timeout+" "+timeUnit.toString().toLowerCase());
+			// Set wait action flag to true to prevent tutorial mode from navigating through steps.
+			Constants.IsWaitActionRunning=true;
+			timeUnit.sleep(timeout);
+			Constants.IsWaitActionRunning=false;
+			System.out.println("Waking up...");
+		} 
+		catch(NumberFormatException e){
+			System.err.println("Error: Invalid wait time.");
+		}
+		catch (InterruptedException e) {
+			System.err.println("Error in wait operation");
+		}
+		
+	}
 }

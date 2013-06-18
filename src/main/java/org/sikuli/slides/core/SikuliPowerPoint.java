@@ -156,9 +156,15 @@ public class SikuliPowerPoint {
 			}
 		}
 		
-		// if the result contains only shape without screenshot, execute just the shape action.
-		// for example, the cloud shape means open the default browser and doesn't have screenshot
+		// The slide only contains shapes and no  screenshot images
+		// If the result contains only shape without screenshot, execute just the shape action.
+		// #1 open the default browser action
 		if(desktopEvent==DesktopEvent.LAUNCH_BROWSER){
+			tasks.add(new SikuliAction(null,targetShapes.get(0),screenshot,null,desktopEvent,sound, label));
+			return;
+		}
+		// #2 Wait action
+		else if(desktopEvent==DesktopEvent.WAIT){
 			tasks.add(new SikuliAction(null,targetShapes.get(0),screenshot,null,desktopEvent,sound, label));
 			return;
 		}
@@ -209,6 +215,8 @@ public class SikuliPowerPoint {
 					return DesktopEvent.NOT_EXIST;
 				else if(action.toLowerCase().contains("exist"))
 					return DesktopEvent.EXIST;
+				else if(action.toLowerCase().contains("wait"))
+					return DesktopEvent.WAIT;
 				else
 					continue;
 			}
