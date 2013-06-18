@@ -104,7 +104,7 @@ public class SlideParser extends DefaultHandler {
 					inScreenshot=true;
 					originalScreenshot.setName(name);
 				}
-				else if(name.contains("Sound")){
+				else if(name.contains("Sound") || name.contains(".wav")){
 					mSound=new Sound();
 					inSound=true;
 					mSound.setName(name);
