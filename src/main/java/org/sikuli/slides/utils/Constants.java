@@ -84,7 +84,7 @@ public class Constants {
 	 */
 	public enum DesktopEvent {
 		LEFT_CLICK, RIGHT_CLICK, DOUBLE_CLICK, DRAG_N_DROP, KEYBOARD_TYPING, LAUNCH_BROWSER, 
-		EXIST, NOT_EXIST
+		EXIST, NOT_EXIST, WAIT
 	}
 	/**
 	 * Running modes
