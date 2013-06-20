@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>{{ page.title }}</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+		<!-- Bootstrap -->
+		    <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
+		
+        <!-- Custom CSS -->
+        <!--link rel="stylesheet" href="/css/main.css"-->
+
+    </head>
+    <body>
+		<script src="http://code.jquery.com/jquery.js"></script>
+		    <script src="/js/bootstrap.min.js"></script>
+
+        <div class="container">
+			<div class="masthead">
+			        <h3 class="muted">Sikuli Slides</h3>
+			        <div class="navbar">
+			          <div class="navbar-inner">
+			            <div class="container">
+			              <ul class="nav">
+			                <li {% if page.title == 'Home' %}class="active"{% endif %}><a href="/">Home</a></li>
+							<li {% if page.title == 'Getting Started' %}class="active"{% endif %}><a href="/getting_started.html">Get Started</a></li>
+			                <li {% if page.title == 'Examples'%}class="active"{% endif %}><a href="/examples.html">Examples</a></li>
+			                <li {% if page.title == 'Downloads'%}class="active"{% endif %}><a href="/downloads.html">Downloads</a></li>
+			              </ul>
+			            </div>
+			          </div>
+			        </div><!-- /.navbar -->
+			      </div>
+	
+	
+          <div class="site">
+
+                {{ content }}
+
+            	
+				      </div>
+				
+				
+					<div class="footer">
+						<hr>
+					        <p>&copy; Sikuli Lab 2003 | Department of Computer Science | University of Colorado Boulder </p>
+					      </div>
+				
+        </div> <!-- /container -->
+
+
+    </body>
+</html>

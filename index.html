@@ -1,79 +1,55 @@
-<!DOCTYPE html>
-<html>
-
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Sikuli Slides : Execute Your Slides" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Sikuli Slides</title>
-  </head>
-
-  <body>
-
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/doubleshow/sikuli-slides">View on GitHub</a>
-
-          <h1 id="project_title">Sikuli Slides</h1>
-          <h2 id="project_tagline">Execute Your Slides</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/doubleshow/sikuli-slides/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/doubleshow/sikuli-slides/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Sikuli Slides maintained by <a href="https://github.com/doubleshow">doubleshow</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
-</html>
+--- 
+layout: default 
+title: Home 
+---
+<div id="home">
+	<!-- Jumbotron -->
+	<div class="row-fluid">
+		<div class="span4">
+			<h1>
+				Execute Your Slides
+			</h1>
+			<p class="lead">
+				Automation, Tutorial, Help
+			</p>
+		</div>
+		<div class="span8">
+			<img src="/img/concept.png">
+		</div>
+	</div>
+	<center>
+		<a class="btn btn-large btn-success" href="/getting_started.html">Get started</a>
+	</center>
+	<hr>
+	<!-- Example row of columns -->
+	<div class="row-fluid">
+		<div class="span4">
+			<h2>
+				What?
+			</h2>
+			<p>
+				Sikuli Slides turn presentation slides into executable programs for automating graphical user interfaces (GUI). A typical Sikuli Slide contains <b>a screenshot</b> and <b>a set of annotations</b>. The screenshot can be of any part of a user interface, such as a button, a group of buttons, a form, a dialog box, a window, or the entire desktop. The annotations are boxes to indicate targets and text boxes to indicate actions to be performed on the targets.
+			</p><!--p><a class="btn" href="#">View details &raquo;</a></p-->
+		</div>
+		<div class="span4">
+			<h2>
+				Who?
+			</h2>
+			<p>
+				If you are a <b>QA enginneer</b>, you may be already creating slides with a series of screenshots to describe a test plan. Now the same slides can be executed directly on a live interface. If you work as a <b>tech support</b>, you may be already creating slides with a series of screenshots as how-to tutorials for the users in your organization. Now the same slides can be executed directly on users' live interfaces' to teach them.
+			</p><!--p><a class="btn" href="#">View details &raquo;</a></p-->
+		</div>
+		<div class="span4">
+			<h2>
+				How?
+			</h2>
+			<p>
+				You can <b>create slides</b> using familiar presentation editors such as PowerPoint and Google Presentation to create slides. You can <b>execute slides</b> from a command-line program, a GUI (1.3.0), or the code of another Java program (coming soon in 1.4.0). You can <b>share slides</b> using any method you are already using for sending them around, such as email, Dropbox, or Google Drive.
+			</p><!--p><a class="btn" href="#">View details &raquo;</a></p==   >
+			</div>
+		</div>
+		</div>
+</div>-->
+		</div>
+	</div>
+</div>
