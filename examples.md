@@ -3,4 +3,5 @@ layout: default
 title: Examples
 ---
 
-## Here are some examples.
+Some long examples posted as Google Presentations
+
