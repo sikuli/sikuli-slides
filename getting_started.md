@@ -44,21 +44,12 @@ You can make your own slides locally using Microsoft Powerpoint or online using 
 
 
 <ul class="nav nav-tabs" id="myTabs">
-  <li class="active"><a href="#powerpoint" data-toggle="tab">Microsoft Powerpoint (.pptx)</a></li>
-  <li><a href="#gdrive" data-toggle="tab">Google Presentation</a></li>
+  <li class="active"><a href="#gdrive" data-toggle="tab">Google Presentation</a></li>
+  <li><a href="#powerpoint" data-toggle="tab">Microsoft Powerpoint (.pptx)</a></li>
 </ul>
 
 <div class="tab-content">
-  <div class="tab-pane active" id="powerpoint">
-
-	{% capture content_powerpoint %}
-	    {% include powerpoint.md %}
-	  {% endcapture %}
-	{{ content_powerpoint | unindent | markdownify }}
-
-
-  </div>
-  <div class="tab-pane" id="gdrive">
+  <div class="tab-pane active" id="gdrive">
 
 
 	{% capture content_gdrive %}
@@ -68,6 +59,15 @@ You can make your own slides locally using Microsoft Powerpoint or online using 
 
 
 	
+  </div>
+  <div class="tab-pane" id="powerpoint">
+
+	{% capture content_powerpoint %}
+	    {% include powerpoint.md %}
+	  {% endcapture %}
+	{{ content_powerpoint | unindent | markdownify }}
+
+
   </div>
 </div>
 
