@@ -3,9 +3,22 @@ layout: default
 title: Downloads
 ---
 
+## 1.3.0
+
+<a href="/downloads/sikuli-slides-1.3.0.jar" class="btn btn-large btn-primary"
+onClick="_gaq.push(['_trackEvent', 'Downloads', 'Download', 'sikuli-slides-1.3.0.jar'])">
+Download sikuli-slides-1.3.0.jar
+</a>
+
+### Release Notes:
+
+
 ## 1.2.0
 
-<a href="/downloads/sikuli-slides-1.2.0.jar" class="btn btn-large btn-primary">Download sikuli-slides-1.2.0.jar</a>
+<a href="/downloads/sikuli-slides-1.2.0.jar" class="btn btn-large btn-primary"
+onClick="_gaq.push(['_trackEvent', 'Downloads', 'Download', 'sikuli-slides-1.2.0.jar'])">
+Download sikuli-slides-1.2.0.jar
+</a>
 
 ### Release Notes:
 
@@ -20,7 +33,10 @@ title: Downloads
 
 ## 1.1.0
 
-<a href="/downloads/sikuli-slides-1.1.0.jar" class="btn btn-large btn-primary">Download sikuli-slides-1.1.0.jar</a>
+<a href="/downloads/sikuli-slides-1.1.0.jar" class="btn btn-large btn-primary"
+onClick="_gaq.push(['_trackEvent', 'Downloads', 'Download', 'sikuli-slides-1.1.0.jar'])">
+Download sikuli-slides-1.1.0.jar
+</a>
 
 ### Release Notes:
 
