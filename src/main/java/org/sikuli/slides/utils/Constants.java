@@ -1,15 +1,12 @@
 /**
-Khalid
-*/
+ * @author Khalid Alharbi
+ */
 package org.sikuli.slides.utils;
 
 import java.io.File;
 
-import org.sikuli.slides.sikuli.TutorialController;
 /**
  * This class contains constants.
- * @author Khalid Alharbi
- *
  */
 public class Constants {
 	/**
@@ -64,7 +61,7 @@ public class Constants {
 	/**
 	 *  The duration time in seconds to display annotation (canvas) around the target on the screen. 
 	 */
-	public static final int CANVAS_DURATION=1;
+	public static final int CANVAS_DURATION=3;
 	/**
 	 * Screen id. Use this constant to run the test on a secondary monitor, 
 	 * 0 means the default monitor and 1 means the secondary monitor.
@@ -109,8 +106,19 @@ public class Constants {
 	 * Tutorial mode return back to previous step.
 	 */
 	public static boolean IsReturnToPreviousStep=false;
+	public static boolean IsReturnToNextStep=false;
 	/**
-	 * Tutorial Controller
+	 *  Total steps in the tutorial mode
 	 */
-	public static TutorialController tutorialController=null;
+	public static int Steps_Total=0;
+	/**
+	 *  The font size of the label in the tutorial mode
+	 */
+	public static int Label_Font_Size=18;
+	/**
+	 * Tutorial mode navigation status
+	 */
+	public enum NavigationStatus {
+		NEXT, PREVIOUS
+	}
 }
