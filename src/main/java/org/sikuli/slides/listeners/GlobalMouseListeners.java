@@ -21,6 +21,7 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 		this.desktopEvent=desktopEvent;
 		this.isPerformed=new AtomicBoolean();
 	}
+	
 	@Override
 	public void nativeMouseClicked(NativeMouseEvent e) {
 		// Double click
@@ -120,22 +121,17 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 	}
 	
 	@Override
-	public void run() {
+	public void run() {		
 		while(!isPerformed.get()){
 			try{
 				Thread.sleep(100);
 				if(Constants.IsPreviousStep){
 					Constants.IsPreviousStep=false;
-					if(Constants.tutorialController.hasPreviousStep()){
-						Constants.IsReturnToPreviousStep=true;
-						break;
-					}
+					break;
 				}
 				else if(Constants.IsNextStep){
 					Constants.IsNextStep=false;
-					if(Constants.tutorialController.hasNextStep()){
-						break;
-					}
+					break;
 				}
 			}
 			catch(InterruptedException e){
