@@ -176,12 +176,11 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
 	}
 
 	
-	private void runSikuli(File file){
-		// Minimize the running JFrame window
-		setState(JFrame.ICONIFIED);
-		
+	private void runSikuli(File file){		
 		Main main=new Main();
 		if(file!=null){
+			// Minimize the running JFrame window
+			setState(JFrame.ICONIFIED);
 			main.doSikuliPowerPoint(file);
 		}
 	}
