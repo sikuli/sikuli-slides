@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.io.FilenameUtils;
+import org.sikuli.slides.guis.TutorialConrollerUI;
 import org.sikuli.slides.media.Sound;
 import org.sikuli.slides.parsing.PresentationParser;
 import org.sikuli.slides.parsing.SlideParser;
@@ -20,7 +21,6 @@ import org.sikuli.slides.processing.SlideProcessing;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
 import org.sikuli.slides.screenshots.Screenshot;
 import org.sikuli.slides.shapes.SlideShape;
-import org.sikuli.slides.sikuli.TutorialController;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
 import org.sikuli.slides.utils.UnitConverter;
@@ -48,8 +48,9 @@ public class SikuliPowerPoint {
 		// parse the general presentation.xml file
 		parsePresentationFile();
 		// parse each slide file in the presentation document
-		for(int i=1;i<=presentation.getSlidesCount();i++)
+		for(int i=1;i<=presentation.getSlidesCount();i++){
 			parseSlideFile(i);
+		}
 		new Thread(new Runnable() {
 		    @Override 
 		    public void run() {
@@ -325,20 +326,16 @@ public class SikuliPowerPoint {
 	
 	private void executeSikuliActions(){
 		if(Constants.TUTORIAL_MODE){
-			if(Constants.TUTORIAL_MODE){
-				if(Constants.tutorialController==null){
-					Constants.tutorialController=TutorialController.getInstance();
-					Constants.tutorialController.executeSikuliActions(tasks);
-				}
-			}
+			// display Tutorial Controller UI when tutorial mode is running, which will run the tasks in a new worker thread
+			System.out.println("Running in tutorial mode...");
+			TutorialConrollerUI.runTutorialUIAndTasks(tasks);
 		}
 		else{
-			for(SikuliAction shapeAction:tasks){
-				shapeAction.doSikuliAction();
+			for(SikuliAction sikuliAction:tasks){
+				sikuliAction.doSikuliAction();
 			}
 		}
 		printExecutionTime();
-		
 	}
 	
 	private void printExecutionTime() {
