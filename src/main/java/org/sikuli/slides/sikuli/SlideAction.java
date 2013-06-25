@@ -10,7 +10,6 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
-
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
@@ -21,7 +20,6 @@ import org.sikuli.api.robot.desktop.DesktopMouse;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.slides.core.SlideComponent;
-import org.sikuli.slides.guis.TutorialConrollerUI;
 import org.sikuli.slides.media.Sound;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
 import org.sikuli.slides.shapes.SlideShape;
@@ -51,18 +49,24 @@ public class SlideAction {
 	}
 	
 	public void doSlideAction(DesktopEvent desktopEvent){
+		
 		// if the required action is one of the following actions, no need to search for target on the screen
 		// #1 Open default browser
 		if(desktopEvent==DesktopEvent.LAUNCH_BROWSER){
+			performNonSikuliAction(null);
 			performSikuliAction(null, desktopEvent);
 		}
 		else if(desktopEvent==DesktopEvent.WAIT){
-				performSikuliAction(null, desktopEvent);
+			performNonSikuliAction(null);
+			performSikuliAction(null, desktopEvent);
 		}
 		// if the action is to find a target on the screen
 		// if the action is to interact with a target, find the target and perform the action
 		else{
 			ScreenRegion targetRegion=findTargetRegion();
+			
+			performNonSikuliAction(targetRegion);
+			
 			if(desktopEvent==DesktopEvent.EXIST){
 				System.out.println("Checking whether the target image is visible on the screen.");
 				if(targetRegion==null){
@@ -137,7 +141,12 @@ public class SlideAction {
 		return null;
 	}
 	
-	private void performSikuliAction(ScreenRegion targetRegion,Constants.DesktopEvent desktopEvent){
+	/**
+	 * Performs non sikuli actions such as playing background sound and displaying annotations
+	 * @param targetRegion
+	 */
+	
+	private void performNonSikuliAction(ScreenRegion targetRegion){
 		// if the slide contains a sound, play it first
 		if(sound!=null){
 			sound.playSound();
@@ -146,6 +155,9 @@ public class SlideAction {
 		if(slideLabel!=null){
 			displayToolTip(targetRegion);
 		}
+	}
+	
+	private void performSikuliAction(ScreenRegion targetRegion,Constants.DesktopEvent desktopEvent){
 		
 		if(desktopEvent==Constants.DesktopEvent.LEFT_CLICK){
 			performLeftClick(targetRegion);
@@ -308,12 +320,12 @@ public class SlideAction {
 			System.out.println("waiting for "+timeout+" "+timeUnit.toString().toLowerCase());
 			if(Constants.TUTORIAL_MODE){
 				// Disable controllers UI buttons to prevent tutorial mode from navigating through steps.
-				TutorialConrollerUI.disableControllers();
+				//TutorialConrollerUI.disableControllers();
 			}
 			timeUnit.sleep(timeout);
 			if(Constants.TUTORIAL_MODE){
 					// Enable controllers UI buttons.
-					TutorialConrollerUI.enableControllers();
+					//TutorialConrollerUI.enableControllers();
 			}
 			System.out.println("Waking up...");
 		} 
