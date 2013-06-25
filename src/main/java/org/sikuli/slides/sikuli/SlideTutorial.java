@@ -1,7 +1,9 @@
 /**
-Khalid
+@author Khalid Alharbi
 */
 package org.sikuli.slides.sikuli;
+import java.awt.Color;
+
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.sikuli.api.DesktopScreenRegion;
@@ -19,6 +21,13 @@ public class SlideTutorial {
 	private Constants.DesktopEvent desktopEvent;
 	private SlideShape slideShape;
 	
+	/**
+	 * A slide tutorial to be used in tutorial mode and help mode
+	 * @param targetRegion
+	 * @param slideShape
+	 * @param desktopEvent
+	 * @param observable UI observable used to observe tutorial mode navigation status.
+	 */
 	public SlideTutorial(ScreenRegion targetRegion, SlideShape slideShape, Constants.DesktopEvent desktopEvent){
 		this.targetRegion=targetRegion;
 		this.slideShape=slideShape;
@@ -52,13 +61,13 @@ public class SlideTutorial {
 			return;
 		}
 		Canvas canvas=new DesktopCanvas();
-		canvas.addBox(targetRegion);
+		canvas.addBox(targetRegion).withLineWidth(5);
 		int x=targetRegion.getBounds().x;
 		int y=targetRegion.getBounds().y;
 		int w=targetRegion.getBounds().width;
 		int h=targetRegion.getBounds().height;
 		ScreenRegion labelRegion=new DesktopScreenRegion(x,y-h,w,h);
-		canvas.addLabel(labelRegion, getActionDisplayName());
+		canvas.addLabel(labelRegion, getActionDisplayName()).withColor(Color.black).withFontSize(Constants.Label_Font_Size);;
         System.out.println("Waiting for the user to pefrom "+this.desktopEvent.toString()+" on the highlighted target.");
 		try {
         	if(!GlobalScreen.isNativeHookRegistered()){
@@ -78,7 +87,7 @@ public class SlideTutorial {
             		this.desktopEvent==DesktopEvent.RIGHT_CLICK ||
             		this.desktopEvent==DesktopEvent.DOUBLE_CLICK ||
             		this.desktopEvent==DesktopEvent.DRAG_N_DROP){
-            	// add native keyboard listener
+            	// add native mouse listener
             	GlobalMouseListeners globalMouseListener=new GlobalMouseListeners(targetRegion,desktopEvent);
             	GlobalScreen.getInstance().addNativeMouseListener(globalMouseListener);
             	// display canvas around the target until the user performs the appropriate action
@@ -94,7 +103,7 @@ public class SlideTutorial {
             }
         }
         catch (NativeHookException ex) {
-            System.err.println("There was a problem running the tutorial mode.");
+            System.err.println("There was a problem in running the tutorial mode.");
             System.err.println(ex.getMessage());
             System.exit(1);
         }
