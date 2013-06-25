@@ -24,6 +24,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.sikuli.slides.Main;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyFileFilter;
 
@@ -37,10 +39,9 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
     
     public MainUI(){
         super("sikuli-slides");
-        initUI();
     }
     
-    private void initUI() {
+    private void createAndShowUI() {
     	JToolBar horizontal_toolbar=new JToolBar();
         horizontal_toolbar.setFloatable(false); // to make a tool bar immovable
         horizontal_toolbar.setMargin(new Insets(2, 5, 5, 5));
@@ -97,6 +98,7 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
         setResizable(false);
         setLocationRelativeTo(null); //center the window on the screen
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
     }
     
 	@Override
@@ -173,14 +175,6 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
         else return null;
 	}
 
-	private static void runUI(){        
-        SwingUtilities.invokeLater(new Runnable() {
-                public void run(){
-                        MainUI mainUI=new MainUI();
-                        mainUI.setVisible(true);
-                }
-        });
-	}
 	
 	private void runSikuli(File file){
 		// Minimize the running JFrame window
@@ -193,7 +187,12 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
 	}
 	
 	public static void runGuiTool(){
-		runUI();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run(){
+                    MainUI mainUI=new MainUI();
+                    mainUI.createAndShowUI();
+            }
+    });
 	}
 
 }
