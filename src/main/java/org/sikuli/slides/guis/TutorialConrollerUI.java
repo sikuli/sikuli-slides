@@ -10,50 +10,78 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+import org.sikuli.slides.core.SikuliAction;
+import org.sikuli.slides.listeners.tutorials.Observable;
+import org.sikuli.slides.listeners.tutorials.Observer;
+import org.sikuli.slides.sikuli.TutorialWorker;
 import org.sikuli.slides.utils.Constants;
+import org.sikuli.slides.utils.Constants.NavigationStatus;
 
-public class TutorialConrollerUI extends JFrame implements ActionListener{
+public class TutorialConrollerUI extends JFrame implements ActionListener, Observable{
 	
 	private static final long serialVersionUID = -7849896402606865992L;
 	
-	private static JButton previousButton;
-	private static JButton nextButton;
+	private JButton previousButton;
+	private JButton nextButton;
+	private JLabel totalSlidesLabel;
+	private JLabel currentSlideLabel;
+	
+	private TutorialWorker tutorialWorker;
+	private ArrayList<Observer> observers;
+	private NavigationStatus navigationStatus; // indicates next or previous navigation direction
+	
 	public TutorialConrollerUI(){
 		super("sikuli-slides");
-		initUI();
+		observers = new ArrayList<Observer>();
 	}
 	
-	private void initUI() {
+	private void createAndShowGUI() {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBackground(Color.black);
 		
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBackground(Color.black);
 		
+		JPanel rightPanel = new JPanel();
+		rightPanel.setBackground(Color.white);
+		
 		ImageIcon previousIcon=new ImageIcon(MainUI.class.getResource(Constants.RESOURCES_ICON_DIR+"previous-icon.png"));
 		previousButton=new JButton("previous",previousIcon);
 		previousButton.setMargin(new Insets(2, 5, 5, 5));
 		previousButton.addActionListener(this);
 		
-		leftPanel.add(previousButton,BorderLayout.WEST);
-		panel.add(leftPanel,BorderLayout.WEST);
-		
-		JPanel rightPanel = new JPanel();
-		rightPanel.setBackground(Color.black);
-		
 		ImageIcon nextIcon=new ImageIcon(MainUI.class.getResource(Constants.RESOURCES_ICON_DIR+"next-icon.png"));
 		nextButton=new JButton("next    ",nextIcon);
 		nextButton.setMargin(new Insets(2, 5, 5, 5));
 		nextButton.addActionListener(this);
-
-		rightPanel.add(nextButton,BorderLayout.EAST);
-		panel.add(rightPanel,BorderLayout.EAST);
 		
+		
+		leftPanel.add(previousButton,BorderLayout.EAST);
+		leftPanel.add(nextButton,BorderLayout.WEST);
+		
+		Border paddingBorder = BorderFactory.createEmptyBorder(10,10,10,10);
+		
+		currentSlideLabel=new JLabel("1",JLabel.CENTER);
+		currentSlideLabel.setBorder(paddingBorder);
+		
+		totalSlidesLabel= new JLabel("/     "+Constants.Steps_Total,JLabel.LEFT);
+		totalSlidesLabel.setBorder(paddingBorder);
+		
+		rightPanel.add(currentSlideLabel,BorderLayout.EAST);
+		rightPanel.add(totalSlidesLabel,BorderLayout.WEST);	
+		
+		panel.add(leftPanel,BorderLayout.WEST);
+		panel.add(rightPanel,BorderLayout.EAST);
 		add(panel);
 		
         setTitle("Sikuli-Slides - Tutorial Controller");
@@ -61,36 +89,64 @@ public class TutorialConrollerUI extends JFrame implements ActionListener{
         Dimension preferedDimension=getPreferredSize();
         setSize(fullScreenDimension.width, preferedDimension.height+20);
         
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setAlwaysOnTop(true);
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+	}
+	private void runTasks(List<SikuliAction> tasks){
+		// run the tutorial tasks in the background using a worker thread and pass the observable object to the observers :)
+		tutorialWorker= new TutorialWorker(tasks, currentSlideLabel, this);
+		tutorialWorker.execute();
+		try {
+			tutorialWorker.get();
+		} catch (InterruptedException e) {
+			System.err.println("Error 1050: Unexpected error in running tutorial mode.");
+		} catch (ExecutionException e) {
+			System.err.println("Error 1051:Unexpected error in running tutorial mode.");
+		}
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==previousButton){
-			Constants.IsPreviousStep=true;
+			changeNavigationStatus(NavigationStatus.PREVIOUS);
 		}
 		else if(e.getSource()==nextButton){
-			Constants.IsNextStep=true;
+			changeNavigationStatus(NavigationStatus.NEXT);
 		}
 	}
-	public static void disableControllers(){
-		previousButton.setEnabled(false);
-		nextButton.setEnabled(false);
+
+	public static void runTutorialUIAndTasks( final List<SikuliAction> tasks){
+		Constants.Steps_Total=tasks.size();
+		TutorialConrollerUI tutorialConrollerUI=new TutorialConrollerUI();
+		tutorialConrollerUI.createAndShowGUI();
+		tutorialConrollerUI.runTasks(tasks);
 	}
-	public static void enableControllers(){
-		previousButton.setEnabled(true);
-		nextButton.setEnabled(true);
+	
+	private void changeNavigationStatus(NavigationStatus navigationStatus){
+		this.navigationStatus=navigationStatus;
+		notifyObserver();
 	}
-	public static void runUI(){
-        SwingUtilities.invokeLater(new Runnable() {
-                public void run(){
-                        TutorialConrollerUI tutorialConrollerUI=new TutorialConrollerUI();
-                        tutorialConrollerUI.setVisible(true);
-                }
-        });
+	@Override
+	public void register(Observer observer) {
+		observers.add(observer);
 	}
 
+	@Override
+	public void unregister(Observer observer) {
+		int index = observers.indexOf(observer);
+		observers.remove(index);
+	}
+
+	@Override
+	public void notifyObserver() {
+		for(final Observer observer : observers){
+			observer.update(navigationStatus);
+		}
+	}
+
+
 }
+
