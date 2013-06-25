@@ -1,4 +1,4 @@
-package org.sikuli.slides.guis;
+package org.sikuli.slides;
 
 import java.io.File;
 import javax.swing.UIManager;
@@ -6,6 +6,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Utils;
 import org.sikuli.slides.core.SikuliPowerPoint;
+import org.sikuli.slides.guis.MainCommandLine;
+import org.sikuli.slides.guis.MainUI;
 
 
 /**
@@ -36,11 +38,6 @@ public class Main{
 	public void doSikuliPowerPoint(File file){	
 		Constants.Execution_Start_Time=System.currentTimeMillis();
 		if(file!=null){
-			// display Tutorial Controller UI when tutorial mode is running
-			if(Constants.TUTORIAL_MODE){
-				System.out.println("Running in tutorial mode...");
-				TutorialConrollerUI.runUI();
-			}
 			// run sikuli-slides work
 			SikuliPowerPoint sikuliPowerPoint=new SikuliPowerPoint(file);
 			sikuliPowerPoint.runSikuliPowerPoint();
