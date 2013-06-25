@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 import org.sikuli.api.ScreenRegion;
+import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
 
 public class GlobalKeyboardListeners implements NativeKeyListener, Runnable{
@@ -45,7 +46,15 @@ public class GlobalKeyboardListeners implements NativeKeyListener, Runnable{
 	public void run() {
 		while(!isPerformed.get()){
 			try{
-				Thread.sleep(1000);
+				Thread.sleep(100);
+				if(Constants.IsPreviousStep){
+					Constants.IsPreviousStep=false;
+					break;
+				}
+				else if(Constants.IsNextStep){
+					Constants.IsNextStep=false;
+					break;
+				}
 			}
 			catch(InterruptedException e){
 				e.printStackTrace();
