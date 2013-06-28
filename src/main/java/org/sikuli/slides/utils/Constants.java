@@ -103,10 +103,9 @@ public class Constants {
 	 */
 	public static boolean IsNextStep=false;
 	/**
-	 * Tutorial mode return back to previous step.
+	 * Wait action.
 	 */
-	public static boolean IsReturnToPreviousStep=false;
-	public static boolean IsReturnToNextStep=false;
+	public static boolean IsWaitAction=false;
 	/**
 	 *  Total steps in the tutorial mode
 	 */
