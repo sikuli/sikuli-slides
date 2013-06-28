@@ -91,6 +91,12 @@ public class TutorialWorker extends SwingWorker<Boolean, Integer> implements Obs
 
 	@Override
 	public void update(NavigationStatus navigationStatus) {
+		// Don't skip steps when wait action is being running
+		//TODO: disable UI next, previous buttons instead of using this flag
+		if(Constants.IsWaitAction){
+			return;
+		}
+		
 		if(navigationStatus.equals(NavigationStatus.NEXT)){
 			if(hasNextStep()){
 				Constants.IsNextStep=true;
