@@ -4,11 +4,14 @@ Khalid
 package org.sikuli.slides.sikuli;
 
 import static org.sikuli.api.API.browse;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
@@ -24,9 +27,9 @@ import org.sikuli.slides.media.Sound;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
 import org.sikuli.slides.shapes.SlideShape;
 import org.sikuli.slides.utils.Constants;
-import org.sikuli.slides.utils.UnitConverter;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
 import org.sikuli.slides.utils.MyScreen;
+import org.sikuli.slides.utils.UnitConverter;
 
 /**
  * Slide action that performs input events operation specified in each slide.
@@ -316,17 +319,27 @@ public class SlideAction {
 			return;
 		}
 		try {
-			int timeout=Integer.parseInt(waitTimeString);
-			System.out.println("waiting for "+timeout+" "+timeUnit.toString().toLowerCase());
+			long timeout=Long.parseLong(waitTimeString);
 			if(Constants.TUTORIAL_MODE){
 				// Disable controllers UI buttons to prevent tutorial mode from navigating through steps.
-				//TutorialConrollerUI.disableControllers();
+				Constants.IsWaitAction=true;
 			}
+			// display a label
+			Dimension dimension=MyScreen.getScreenDimensions();
+			ScreenRegion canvasRegion=new DesktopScreenRegion(0, dimension.height-200,50,200);
+			Canvas canvas=new DesktopCanvas();
+			String readyTime=getReadyDate(timeUnit, timeout);
+			String waitMessage="Please wait for "+timeout+" "+timeUnit.toString().toLowerCase()+"...."+
+					"This might end at "+readyTime;
+			System.out.println(waitMessage);
+			
+			canvas.addLabel(canvasRegion, waitMessage).withFontSize(Constants.Label_Font_Size);
+			canvas.show();
+			
 			timeUnit.sleep(timeout);
-			if(Constants.TUTORIAL_MODE){
-					// Enable controllers UI buttons.
-					//TutorialConrollerUI.enableControllers();
-			}
+			Constants.IsWaitAction=false;
+			
+			canvas.hide();
 			System.out.println("Waking up...");
 		} 
 		catch(NumberFormatException e){
@@ -336,5 +349,27 @@ public class SlideAction {
 			System.err.println("Error in wait operation");
 		}
 		
+	}
+
+	private String getReadyDate(TimeUnit timeUnit,long timeout) {
+		if(timeUnit != null){
+			// set timeout format
+			String dateFormat="HH:mm:ss";
+			if(timeUnit == TimeUnit.DAYS){
+				dateFormat="yyyy-MM-dd HH:mm:ss";
+			}
+			
+			// get the end time in milli seconds
+			long waitTimeInMilliSeconds=timeUnit.toMillis(timeout);
+			System.out.println("Wait time in milli seconds: "+waitTimeInMilliSeconds);
+			
+			Calendar nowCalendar=Calendar.getInstance();
+			Calendar timeoutCalendar = Calendar.getInstance();
+			timeoutCalendar.setTimeInMillis(waitTimeInMilliSeconds+nowCalendar.getTimeInMillis());
+
+			SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+			return sdf.format(timeoutCalendar.getTime()).toString();
+		}
+		return null;
 	}
 }
