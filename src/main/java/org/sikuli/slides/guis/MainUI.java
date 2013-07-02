@@ -12,22 +12,27 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import org.sikuli.slides.Main;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyFileFilter;
+import org.sikuli.slides.utils.logging.TextAreaAppender;
+
 
 public class MainUI extends JFrame implements ActionListener, ChangeListener, KeyListener {
 	private static final long serialVersionUID = -839784598366545263L;
@@ -35,8 +40,11 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
     private JComboBox runningModeList;
     private JSlider perciseControlSlider;
     private JLabel statusLabel;
+    public JTextArea logArea;
+    private JPanel bottomPanel;
     
     
+
     public MainUI(){
         super("sikuli-slides");
     }
@@ -84,11 +92,27 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
         //perciseControlSlider.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Precision"));
         horizontal_toolbar.add(perciseControlSlider);
         
+        // output area
+        bottomPanel=new JPanel(new BorderLayout());
+        
+        logArea=new JTextArea(5,30);
+        logArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(logArea);
+        bottomPanel.add(scrollPane,BorderLayout.NORTH);
+        
+        /*logArea.append("A\n");
+        logArea.append("B\n");
+        logArea.append("C\n");
+        logArea.append("D\n");
+        */
+        
         // status label
         statusLabel = new JLabel("");
         statusLabel.setPreferredSize(new Dimension(-1, 22));
         statusLabel.setBorder(LineBorder.createGrayLineBorder());
-        add(statusLabel, BorderLayout.SOUTH);
+        bottomPanel.add(statusLabel,BorderLayout.SOUTH);
+        
+        add(bottomPanel, BorderLayout.SOUTH);
 
         addKeyListener(this);
         setFocusable(true);
@@ -179,17 +203,27 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
 	private void runSikuli(File file){		
 		Main main=new Main();
 		if(file!=null){
+			statusLabel.setText(file.getAbsolutePath());
 			// Minimize the running JFrame window
 			setState(JFrame.ICONIFIED);
 			main.doSikuliPowerPoint(file);
 		}
 	}
 	
+    private void initLogger(){
+    	LoggerContext loggerContext = new LoggerContext();
+    	Logger logger = (Logger) LoggerFactory.getLogger("org.sikuli.slides");
+    	System.out.println("Logger: "+logger.getName());
+    	TextAreaAppender appender = (TextAreaAppender) logger.getAppender("MAIN");
+    	appender.setLogArea(logArea);
+    }
+	
 	public static void runGuiTool(){
         SwingUtilities.invokeLater(new Runnable() {
             public void run(){
                     MainUI mainUI=new MainUI();
                     mainUI.createAndShowUI();
+                    mainUI.initLogger();
             }
     });
 	}
