@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,6 +31,11 @@ import org.sikuli.slides.Main;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyFileFilter;
 import org.sikuli.slides.utils.logging.TextAreaAppender;
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.PatternLayout;
+
 
 
 public class MainUI extends JFrame implements ActionListener, ChangeListener, KeyListener {
@@ -184,6 +188,10 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
 	}
 	
 	private File openFile(){
+		// clear log area content
+		if(logArea != null){
+			logArea.setText("");
+		}
         // create file chooser object
         JFileChooser fc = new JFileChooser();
         MyFileFilter myFileFilter=new MyFileFilter();
@@ -210,20 +218,33 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
 		}
 	}
 	
-    private void initLogger(){
-    	LoggerContext loggerContext = new LoggerContext();
-    	Logger logger = (Logger) LoggerFactory.getLogger("org.sikuli.slides");
-    	System.out.println("Logger: "+logger.getName());
-    	TextAreaAppender appender = (TextAreaAppender) logger.getAppender("MAIN");
-    	appender.setLogArea(logArea);
-    }
+	private void setupLogger(){
+		if(logArea != null){
+    		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+    		// Create a layout to format log messages
+    		PatternLayout patternLayout = new PatternLayout();
+    		patternLayout.setPattern("%msg%n");
+    		patternLayout.setContext(loggerContext);
+    		patternLayout.start();
+    		// Create custom appender to log into the GUI
+    		TextAreaAppender appender = new TextAreaAppender();
+    		appender.setjTextArea(logArea);
+    		appender.setPatternLayout(patternLayout);
+    		appender.setContext(loggerContext);
+    		appender.start();
+    		// Attach the appender to the logger
+    		Logger logger = (Logger) LoggerFactory.getLogger(MainUI.class);
+    		logger.addAppender(appender);
+    		logger.setAdditive(false);
+    	}
+	}
 	
 	public static void runGuiTool(){
         SwingUtilities.invokeLater(new Runnable() {
             public void run(){
                     MainUI mainUI=new MainUI();
                     mainUI.createAndShowUI();
-                    mainUI.initLogger();
+                    mainUI.setupLogger();
             }
     });
 	}
