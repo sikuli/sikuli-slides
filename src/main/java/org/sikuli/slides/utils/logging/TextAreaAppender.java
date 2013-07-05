@@ -1,36 +1,50 @@
 /**
 Khalid
-*/
+ */
 package org.sikuli.slides.utils.logging;
 
 import javax.swing.JTextArea;
+import ch.qos.logback.classic.PatternLayout;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.AppenderBase;
 
-import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.spi.LoggingEvent;
-
-
-public class TextAreaAppender extends AppenderSkeleton {
-	private JTextArea logArea;
+public class TextAreaAppender extends AppenderBase<ILoggingEvent> {
+	private JTextArea jTextArea;
 	private PatternLayout patternLayout;
-	
 
-	
-	@Override
-	public void close() {
-		// TODO Auto-generated method stub
-		
+	public JTextArea getjTextArea() {
+		return jTextArea;
+	}
+
+	public void setjTextArea(JTextArea jTextArea) {
+		this.jTextArea = jTextArea;
 	}
 
 	@Override
-	public boolean requiresLayout() {
-		// TODO Auto-generated method stub
-		return false;
+	public void start() {
+		if (this.patternLayout == null) {
+			addError("No pattern layout set for the appender named [" + name + "].");
+			return;
+		}
+		if (this.jTextArea == null) {
+			addError("No JTextArea set for the appender named [" + name + "].");
+			return;
+		}
+		super.start();
 	}
 
 	@Override
-	protected void append(LoggingEvent loggingEvent) {
-		 myTextArea.append(myPatternLayout.format(loggingEvent));
+	protected void append(ILoggingEvent event) {
+		String msg = this.patternLayout.doLayout(event);
+		this.jTextArea.append(msg);
 	}
-	
+
+	public PatternLayout getPatternLayout() {
+		return patternLayout;
+	}
+
+	public void setPatternLayout(PatternLayout patternLayout) {
+		this.patternLayout = patternLayout;
+	}
+
 }
