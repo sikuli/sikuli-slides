@@ -233,7 +233,7 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
     		appender.setContext(loggerContext);
     		appender.start();
     		// Attach the appender to the logger
-    		Logger logger = (Logger) LoggerFactory.getLogger(MainUI.class);
+    		Logger logger = (Logger) loggerContext.getLogger("org.sikuli.slides");
     		logger.addAppender(appender);
     		logger.setAdditive(false);
     	}
