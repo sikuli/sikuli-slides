@@ -27,6 +27,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.DefaultCaret;
+
 import org.sikuli.slides.Main;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyFileFilter;
@@ -100,15 +102,11 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener, Ke
         bottomPanel=new JPanel(new BorderLayout());
         
         logArea=new JTextArea(5,30);
+        DefaultCaret caret = (DefaultCaret)logArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         logArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(logArea);
         bottomPanel.add(scrollPane,BorderLayout.NORTH);
-        
-        /*logArea.append("A\n");
-        logArea.append("B\n");
-        logArea.append("C\n");
-        logArea.append("D\n");
-        */
         
         // status label
         statusLabel = new JLabel("");
