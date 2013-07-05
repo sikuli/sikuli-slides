@@ -13,6 +13,8 @@ import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.processing.ImageProcessing;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
 import org.sikuli.slides.utils.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A region selector that finds the screen region of a target when similar targets exist on the screen.
@@ -20,7 +22,7 @@ import org.sikuli.slides.utils.Constants;
  *
  */
 public class RegionSelector {
-	
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(RegionSelector.class);
 	private SlideTargetRegion slideTargetRegion;
 	private final int widthFactor=30;
 	private final int heightFactor=30;
@@ -43,24 +45,24 @@ public class RegionSelector {
 	public ScreenRegion findScreenRegion(ImageTarget imageTarget,SlideTargetRegion slideTargetRegion){
 		
 		// Search to the right of the target
-		System.out.println("Searching to the right of the target to identify the target image.");
+		logger.info("Searching to the right of the target to identify the target image.");
 		ScreenRegion s=doDirectionalSearch(imageTarget, slideTargetRegion, RIGHT);
 		if(s!=null){
 			return s;
 		}
-		System.out.println("Searching to the top of the target to identify the target image.");
+		logger.info("Searching to the top of the target to identify the target image.");
 		// search to the top of the target
 		s=doDirectionalSearch(imageTarget, slideTargetRegion, TOP);
 		if(s!=null){
 			return s;
 		}
-		System.out.println("Searching to the left of the target to identify the target image.");
+		logger.info("Searching to the left of the target to identify the target image.");
 		// search to the left of the target
 		s=doDirectionalSearch(imageTarget, slideTargetRegion, LEFT);
 		if(s!=null){
 			return s;
 		}
-		System.out.println("Searching to the bottom of the target to identify the target image.");
+		logger.info("Searching to the bottom of the target to identify the target image.");
 		// search to the bottom of the target
 		s=doDirectionalSearch(imageTarget, slideTargetRegion, BOTTOM);
 		if(s!=null){
@@ -202,7 +204,7 @@ public class RegionSelector {
 			directionScreenRegions=getLeftScreenRegionList();
 		}
 		else{
-			System.err.println("Unknown search direction.");
+			logger.error("Unknown search direction.");
 			return null;
 		}
 		
@@ -211,7 +213,7 @@ public class RegionSelector {
 			screenRegion.getBounds().y, screenRegion.getBounds().width, 
 			screenRegion.getBounds().height);
 			
-			System.out.println("Attempt no. "+counter.incrementAndGet());
+			logger.info("Attempt no. "+counter.incrementAndGet());
 			/*TODO: Write region images for debugging purposes. Remove this later.
 			// save the cropped region image on the disk
 			String croppedImageName=Constants.projectDirectory+Constants.SIKULI_DIRECTORY+
@@ -232,7 +234,7 @@ public class RegionSelector {
 					continue;
 				}
 				else if(targetList.size()==1){
-					System.out.println("Target found.");
+					logger.info("Target found.");
 					return lookupRegion.get(0);
 				}
 			}

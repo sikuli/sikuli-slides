@@ -26,10 +26,13 @@ import org.sikuli.slides.listeners.tutorials.Observer;
 import org.sikuli.slides.sikuli.TutorialWorker;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.NavigationStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TutorialConrollerUI extends JFrame implements ActionListener, Observable{
 	
 	private static final long serialVersionUID = -7849896402606865992L;
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(TutorialConrollerUI.class);
 	
 	private JButton previousButton;
 	private JButton nextButton;
@@ -102,9 +105,9 @@ public class TutorialConrollerUI extends JFrame implements ActionListener, Obser
 		try {
 			tutorialWorker.get();
 		} catch (InterruptedException e) {
-			System.err.println("Error 1050: Unexpected error in running tutorial mode.");
+			logger.error("Error 1050: Unexpected error in running tutorial mode.");
 		} catch (ExecutionException e) {
-			System.err.println("Error 1051:Unexpected error in running tutorial mode.");
+			logger.error("Error 1051:Unexpected error in running tutorial mode.");
 		}
 	}
 	

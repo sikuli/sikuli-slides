@@ -9,8 +9,11 @@ import java.net.URL;
 import org.sikuli.api.audio.DesktopSpeaker;
 import org.sikuli.api.audio.Speaker;
 import org.sikuli.slides.utils.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Sound {
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(Sound.class);
 	private String name;
 	private String fileName;
 	private String relationshipId;
@@ -48,8 +51,7 @@ public class Sound {
 			try {
 				speaker.play(new URL("file://"+slideMediaLocation));
 			} catch (MalformedURLException e) {
-				System.err.println("Unknown audio location..");
-				e.printStackTrace();
+				logger.error("Unknown audio location..");
 			}
 	}
 	public String toString(){

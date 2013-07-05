@@ -25,10 +25,12 @@ import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
 import org.sikuli.slides.utils.UnitConverter;
 import org.sikuli.slides.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //TODO: This class needs to be refactored.
 public class SikuliPowerPoint {
-	
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(SikuliPowerPoint.class);
 	private File file;
 	private Presentation presentation;
 	private AtomicInteger counter;
@@ -80,7 +82,7 @@ public class SikuliPowerPoint {
 		// 2) Parse the slide.xml file
 		String slideName=File.separator+"slide"+Integer.toString(slideNumber)+".xml";
 		String slidePath=slidesDirectory+slideName;
-		System.out.println("Processing slide: "+slideNumber);
+		logger.info("Processing slide: "+slideNumber);
 		SlideParser mySlideParser=new SlideParser(slidePath);
 		mySlideParser.parseDocument();
 		
@@ -107,7 +109,7 @@ public class SikuliPowerPoint {
 		// running old syntax
 		if(Constants.UseOldSyntax){
 			if(slideShapes==null||slideShapes.size()==0){
-				System.err.println("Failed to process slide "+slideNumber+
+				logger.error("Failed to process slide "+slideNumber+
 						". The slide must contain a predefined shape.");
 				System.exit(1);
 			}
@@ -115,11 +117,11 @@ public class SikuliPowerPoint {
 				desktopEvent=getOldDesktopEvent(slideShapes);
 				if(desktopEvent==null){
 					if(slideShapes.size()==1){
-						System.err.println("Failed to process slide "+slideNumber+
+						logger.error("Failed to process slide "+slideNumber+
 								". The slide must contain a predefined shape.");
 					}
 					else{
-						System.err.println("Error: Slide "+slideNumber+
+						logger.error("Error: Slide "+slideNumber+
 								". Multiple targets are not supported in the old syntax. Use the default new syntax option to enable multiple targets per slide.");
 					}
                     System.exit(1);
@@ -134,7 +136,7 @@ public class SikuliPowerPoint {
 					targetShapes.add(slideShapes.get(1));
 				}
 				else{
-					System.err.println("Error. Slide "+slideNumber+" contains multiple shapes.\n" +
+					logger.error("Error. Slide "+slideNumber+" contains multiple shapes.\n" +
 							"The slide must contain only one input action using the predefined shapes.\n" +
 							"You may use the new syntax to enable multiple targets per slide.");
 					System.exit(1);
@@ -149,7 +151,7 @@ public class SikuliPowerPoint {
 			desktopEvent=getDesktopEvent(slideShapes);
 			// if the slide doesn't contain a shape.
 			if(desktopEvent==null || slideShapes==null || (slideShapes.size()<2)){
-					System.err.println("Failed to process slide "+slideNumber+
+					logger.error("Failed to process slide "+slideNumber+
 							". The slide must contain a shape and textbox that contains the action to be executed.\n" +
 							"The text box that descripes the action must contain one of the following actions:\n"+
 							"Click, Right Click, Double Click, Type, Drag, Browser, exist, not exist");
@@ -327,7 +329,7 @@ public class SikuliPowerPoint {
 	private void executeSikuliActions(){
 		if(Constants.TUTORIAL_MODE){
 			// display Tutorial Controller UI when tutorial mode is running, which will run the tasks in a new worker thread
-			System.out.println("Running in tutorial mode...");
+			logger.info("Running in tutorial mode...");
 			TutorialConrollerUI.runTutorialUIAndTasks(tasks);
 		}
 		else{
@@ -348,7 +350,7 @@ public class SikuliPowerPoint {
 		long ms=TimeUnit.MILLISECONDS.toMillis(elapsedTime-TimeUnit.HOURS.toMillis(hr)
 				-TimeUnit.MINUTES.toMillis(min)-TimeUnit.SECONDS.toMillis(sec));
 		String formattedTime=String.format("%02d:%02d:%02d.%02d", hr, min, sec,ms);
-		System.out.println("Finished after "+formattedTime);
+		logger.info("Finished after "+formattedTime);
 		System.exit(0);
 	}
 	

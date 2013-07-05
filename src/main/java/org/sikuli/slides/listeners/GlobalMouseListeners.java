@@ -9,8 +9,11 @@ import org.jnativehook.mouse.NativeMouseInputListener;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(GlobalMouseListeners.class);
 	private AtomicBoolean isPerformed;
 	private ScreenRegion region;
 	private DesktopEvent desktopEvent;
@@ -27,8 +30,8 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 		// Double click
     	if(desktopEvent==DesktopEvent.DOUBLE_CLICK && e.getClickCount()==2){
     		if(inRange(e)){
-    			System.out.println("Double click action was successfully performed.");
-    			System.out.println("========================================");
+    			logger.info("Double click action was successfully performed.");
+    			logger.info("========================================");
     			isPerformed.set(true);
     		}
     		else{
@@ -38,8 +41,8 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
     	// Left click
     	else if(desktopEvent==DesktopEvent.LEFT_CLICK){
     		if(inRange(e)){
-        		System.out.println("Click action was successfully performed.");
-        		System.out.println("========================================");
+    			logger.info("Click action was successfully performed.");
+    			logger.info("========================================");
         		isPerformed.set(true);
     		}
     		else{
@@ -49,8 +52,8 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
     	// Right click
     	else if(desktopEvent==DesktopEvent.RIGHT_CLICK && e.getButton()==NativeMouseEvent.BUTTON2){
     		if(inRange(e)){
-    			System.out.println("Right click action was successfully performed.");
-    			System.out.println("========================================");
+    			logger.info("Right click action was successfully performed.");
+    			logger.info("========================================");
     			isPerformed.set(true);
     		}
     		else{
@@ -84,7 +87,7 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 		if(desktopEvent==DesktopEvent.DRAG_N_DROP){
 			if(inRange(e)){
 				GlobalMouseListeners.isDragged.set(true);
-				System.out.println("Interacting with drag target...");
+				logger.info("Interacting with drag target...");
 				isPerformed.set(true);
 			}
     		else{
@@ -98,9 +101,9 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 		// Drag and drop : Dropped
 		if(desktopEvent==DesktopEvent.DRAG_N_DROP && GlobalMouseListeners.isDragged.get()){
 			if(inRange(e)){
-					System.out.println("Drag and drop action was successfully performed.");
-					System.out.println("========================================");
-					isPerformed.set(true);
+				logger.info("Drag and drop action was successfully performed.");
+				logger.info("========================================");
+				isPerformed.set(true);
 			}
     		else{
     			handleClickError();
@@ -117,7 +120,7 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 	}
 	
 	private void handleClickError(){
-		System.out.println("Error: Please click on the heighlighted rectangle.");
+		logger.info("Error: Please click on the heighlighted rectangle.");
 	}
 	
 	@Override

@@ -8,6 +8,10 @@ import org.sikuli.slides.utils.Utils;
 import org.sikuli.slides.core.SikuliPowerPoint;
 import org.sikuli.slides.guis.MainCommandLine;
 import org.sikuli.slides.guis.MainUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 
 /**
@@ -18,12 +22,12 @@ import org.sikuli.slides.guis.MainUI;
  */
 
 public class Main{
-	
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(Main.class);
 	  
 	private void intiProject(){
 		// create the project working directory directory
 		if(!Utils.createWorkingDirectory()){
-			System.err.println("Failed to create sikuli-slides working directory in +"+System.getProperty("java.io.tmpdir"));
+			logger.error("Failed to create sikuli-slides working directory in +"+System.getProperty("java.io.tmpdir"));
 			System.exit(1);
 		}
 		//TODO: remove this

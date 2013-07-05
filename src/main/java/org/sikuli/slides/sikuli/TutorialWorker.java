@@ -10,6 +10,8 @@ import org.sikuli.slides.guis.TutorialConrollerUI;
 import org.sikuli.slides.listeners.tutorials.Observer;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.NavigationStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Tutorial worker that processes users' interaction events when running the slides in tutorial mode.
@@ -20,6 +22,7 @@ import org.sikuli.slides.utils.Constants.NavigationStatus;
  */
 
 public class TutorialWorker extends SwingWorker<Boolean, Integer> implements Observer{
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(TutorialWorker.class);
 	private static AtomicInteger currentStep=null;
 	private List<SikuliAction> tasks=null;
 	private final JLabel currentSlideLabel;
@@ -70,7 +73,7 @@ public class TutorialWorker extends SwingWorker<Boolean, Integer> implements Obs
 			return true;
 		}
 		else{
-			System.out.println("There are no next steps to move forward to.");
+			logger.info("There are no next steps to move forward to.");
 			return false;
 		}
 	}
@@ -84,7 +87,7 @@ public class TutorialWorker extends SwingWorker<Boolean, Integer> implements Obs
 			return true;
 		}
 		else{
-			System.out.println("There are no previous steps to go back to.");
+			logger.info("There are no previous steps to go back to.");
 			return false;
 		}
 	}

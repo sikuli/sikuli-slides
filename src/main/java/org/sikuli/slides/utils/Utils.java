@@ -11,8 +11,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Utils {
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(Utils.class);
 	
     /*
      * Get the extension of a file.
@@ -134,7 +137,7 @@ public class Utils {
     	if(zipFile.delete())
     		return;
     	else
-    		System.err.println("Couldn't delete zip: "+Constants.workingDirectoryPath+File.separator+file.getName()+".zip");
+    		logger.error("Couldn't delete zip: "+Constants.workingDirectoryPath+File.separator+file.getName()+".zip");
      }
      catch(IOException ex){
        ex.printStackTrace(); 

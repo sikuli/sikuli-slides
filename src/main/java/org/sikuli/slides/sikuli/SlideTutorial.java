@@ -15,8 +15,11 @@ import org.sikuli.slides.listeners.GlobalMouseListeners;
 import org.sikuli.slides.shapes.SlideShape;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SlideTutorial {
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(SlideTutorial.class);
 	private ScreenRegion targetRegion;
 	private Constants.DesktopEvent desktopEvent;
 	private SlideShape slideShape;
@@ -68,7 +71,7 @@ public class SlideTutorial {
 		int h=targetRegion.getBounds().height;
 		ScreenRegion labelRegion=new DesktopScreenRegion(x,y-h,w,h);
 		canvas.addLabel(labelRegion, getActionDisplayName()).withColor(Color.black).withFontSize(Constants.Label_Font_Size);;
-        System.out.println("Waiting for the user to pefrom "+this.desktopEvent.toString()+" on the highlighted target.");
+        logger.info("Waiting for the user to pefrom "+this.desktopEvent.toString()+" on the highlighted target.");
 		try {
         	if(!GlobalScreen.isNativeHookRegistered()){
         		GlobalScreen.registerNativeHook();
@@ -103,8 +106,7 @@ public class SlideTutorial {
             }
         }
         catch (NativeHookException ex) {
-            System.err.println("There was a problem in running the tutorial mode.");
-            System.err.println(ex.getMessage());
+            logger.error("There was a problem in running the tutorial mode.");
             System.exit(1);
         }
 	}

@@ -4,11 +4,12 @@ Khalid Alharbi
 package org.sikuli.slides.sikuli;
 
 import java.util.List;
-
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Search for multiple occurrences of a target on the screen.
@@ -16,7 +17,7 @@ import org.sikuli.slides.screenshots.SlideTargetRegion;
  * @author Khalid Alharbi
  */
 public class SearchMultipleTarget {
-
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(SearchMultipleTarget.class);
 	
 	/**
 	 * Check if the screen has multiple occurrences of the Target image.
@@ -27,7 +28,7 @@ public class SearchMultipleTarget {
 		ScreenRegion fullScreenRegion=new DesktopScreenRegion();
 		List<ScreenRegion> targetList=fullScreenRegion.findAll(imageTarget);
 		if(targetList!=null && targetList.size()>1){
-			System.out.println("Found "+targetList.size()+" similar targets on the screen.");
+			logger.info("Found "+targetList.size()+" similar targets on the screen.");
 			return true;
 		}
 		else{

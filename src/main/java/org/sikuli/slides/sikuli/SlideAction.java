@@ -30,6 +30,8 @@ import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
 import org.sikuli.slides.utils.MyScreen;
 import org.sikuli.slides.utils.UnitConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Slide action that performs input events operation specified in each slide.
@@ -37,6 +39,7 @@ import org.sikuli.slides.utils.UnitConverter;
  *
  */
 public class SlideAction {
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(SlideAction.class);
 	private File targetFile; 
 	private SlideShape slideShape;
 	private SlideTargetRegion slideTargetRegion;
@@ -71,31 +74,31 @@ public class SlideAction {
 			performNonSikuliAction(targetRegion);
 			
 			if(desktopEvent==DesktopEvent.EXIST){
-				System.out.println("Checking whether the target image is visible on the screen.");
+				logger.info("Checking whether the target image is visible on the screen.");
 				if(targetRegion==null){
-					System.err.println("Test failed. Target image was not found on the screen.");
+					logger.error("Test failed. Target image was not found on the screen.");
 					System.exit(1);
 				}
 				else{
-					System.out.println("Test passed. Target image was found on the screen.");
+					logger.info("Test passed. Target image was found on the screen.");
 					return;
 				}
 			}
 			else if(desktopEvent==DesktopEvent.NOT_EXIST){
-				System.out.println("Checking whether the target image is invisible on the screen.");
+				logger.info("Checking whether the target image is invisible on the screen.");
 				if(targetRegion==null){
-					System.out.println("Test passed. Target image was invisible on the screen.");
+					logger.info("Test passed. Target image was invisible on the screen.");
 					return;
 				}
 				else{
-					System.err.println("Test failed. Target image was visible on the screen.");
+					logger.error("Test failed. Target image was visible on the screen.");
 					System.exit(1);
 				}
 			}
 			else{
 				/*if(targetRegion==null){
 					if(Constants.TUTORIAL_MODE){
-						System.err.println("Couldn't find target on the screen.");
+						logger.error("Couldn't find target on the screen.");
 					}
 				}*/
 				if(Constants.HELP_MODE){
@@ -129,7 +132,7 @@ public class SlideAction {
 	    				return newtargetRegion;
 	    			}
 	    			else{
-	    				System.err.println("Failed to determine the target image among multiple similar targets on the screen."
+	    				logger.error("Failed to determine the target image among multiple similar targets on the screen."
 	    						+"\nTry to resize the shape in slide number "+slideTargetRegion.getslideNumber() + " or use the precision option to make the search more accurate.");
 	    			}
 	    		}
@@ -138,7 +141,7 @@ public class SlideAction {
 	    		}
 	    	}
 			else{
-				System.err.println("Failed to find target on the screen. Slide no. "+slideTargetRegion.getslideNumber());
+				logger.error("Failed to find target on the screen. Slide no. "+slideTargetRegion.getslideNumber());
 			}
 		}
 		return null;
@@ -218,7 +221,7 @@ public class SlideAction {
 	 * @param targetRegion the region to perform left click input event on.
 	 */
 	private void performLeftClick(ScreenRegion targetRegion){
-		System.out.println("performing left click event on target...");
+		logger.info("performing left click event on target...");
 		Mouse mouse = new DesktopMouse();
 		SikuliController.displayBox(targetRegion);
 		mouse.click(targetRegion.getCenter());
@@ -229,7 +232,7 @@ public class SlideAction {
 	 * @param targetRegion the region to perform right click input event on.
 	 */
 	private void performRightClick(ScreenRegion targetRegion){
-		System.out.println("performing right click event on target...");
+		logger.info("performing right click event on target...");
 		Mouse mouse = new DesktopMouse();
 		SikuliController.displayBox(targetRegion);
 		mouse.rightClick(targetRegion.getCenter());
@@ -239,7 +242,7 @@ public class SlideAction {
 	 * @param targetRegion the region to perform double click input event on.
 	 */
 	private void performDoubleClick(ScreenRegion targetRegion){
-		System.out.println("performing double click event on target...");
+		logger.info("performing double click event on target...");
 		Mouse mouse = new DesktopMouse();
 		SikuliController.displayBox(targetRegion);
 		mouse.doubleClick(targetRegion.getCenter());
@@ -250,7 +253,7 @@ public class SlideAction {
 	 * @param targetRegion the region to perform drag or drop input event on.
 	 */
 	private void performDragDrop(ScreenRegion targetRegion){
-		System.out.println("performing drag and drop event on targets...");
+		logger.info("performing drag and drop event on targets...");
 		Mouse mouse = new DesktopMouse();
 		if(slideShape.getOrder()==0){
 			SikuliController.displayBox(targetRegion);
@@ -261,7 +264,7 @@ public class SlideAction {
 			mouse.drop(targetRegion.getCenter());
 		}
 		else{
-			System.err.println("Couldn't find the start and end of the straight arrow connector " +
+			logger.error("Couldn't find the start and end of the straight arrow connector " +
 					"that is used to connect the rounded rectangles. Make sure the arrow is connected to the two rounded rectangles.");
 		}
 	}
@@ -271,7 +274,7 @@ public class SlideAction {
 	 * @param targetRegion the region to perform keyboard typing input event on.
 	 */
 	private void performKeyboardTyping(ScreenRegion targetRegion){
-		System.out.println("performing keyboard typing event on target...");
+		logger.info("performing keyboard typing event on target...");
 		Mouse mouse = new DesktopMouse();
 		Keyboard keyboard=new DesktopKeyboard();
 		SikuliController.displayBox(targetRegion);
@@ -283,7 +286,7 @@ public class SlideAction {
 	 * launch the default browser
 	 */
 	private void performLaunchWebBrowser(){
-		System.out.println("launching the default browser...");
+		logger.info("launching the default browser...");
 		try {
 			String userURL=slideShape.getText();
 			URL url=null;
@@ -295,7 +298,7 @@ public class SlideAction {
 			}
 			browse(url);
 		} catch (MalformedURLException e) {
-			System.err.println("The text body of the Cloud shape doesn't contain a valid URL.");
+			logger.error("The text body of the Cloud shape doesn't contain a valid URL.");
 			System.exit(1);
 		}
 	}
@@ -304,7 +307,7 @@ public class SlideAction {
 	 * Perform wait action. It waits for the specified time in seconds
 	 */
 	private void performWaitAction(){
-		System.out.println("Performing wait operation...");
+		logger.info("Performing wait operation...");
 		// extract the time unit
 		TimeUnit timeUnit=UnitConverter.extractTimeUnitFromString(slideShape.getText());
 		// if the time unit was not specified, default to seconds
@@ -314,7 +317,7 @@ public class SlideAction {
 		// extract the wait time string value, replace all non digits with blank
 		String waitTimeString=slideShape.getText().replaceAll("\\D", "");
 		if(waitTimeString==null){
-			System.err.println("Error: Please enter the wait time value in a shape."
+			logger.error("Error: Please enter the wait time value in a shape."
 					+" Valid examples include: 10 seconds, 10 minutes, 10 hours, or even 2 days.");
 			return;
 		}
@@ -331,7 +334,7 @@ public class SlideAction {
 			String readyTime=getReadyDate(timeUnit, timeout);
 			String waitMessage="Please wait for "+timeout+" "+timeUnit.toString().toLowerCase()+"...."+
 					"This might end at "+readyTime;
-			System.out.println(waitMessage);
+			logger.info(waitMessage);
 			
 			canvas.addLabel(canvasRegion, waitMessage).withFontSize(Constants.Label_Font_Size);
 			canvas.show();
@@ -340,13 +343,13 @@ public class SlideAction {
 			Constants.IsWaitAction=false;
 			
 			canvas.hide();
-			System.out.println("Waking up...");
+			logger.info("Waking up...");
 		} 
 		catch(NumberFormatException e){
-			System.err.println("Error: Invalid wait time.");
+			logger.error("Error: Invalid wait time.");
 		}
 		catch (InterruptedException e) {
-			System.err.println("Error in wait operation");
+			logger.error("Error in wait operation");
 		}
 		
 	}
@@ -361,7 +364,7 @@ public class SlideAction {
 			
 			// get the end time in milli seconds
 			long waitTimeInMilliSeconds=timeUnit.toMillis(timeout);
-			System.out.println("Wait time in milli seconds: "+waitTimeInMilliSeconds);
+			logger.info("Wait time in milli seconds: "+waitTimeInMilliSeconds);
 			
 			Calendar nowCalendar=Calendar.getInstance();
 			Calendar timeoutCalendar = Calendar.getInstance();
