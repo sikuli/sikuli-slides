@@ -351,7 +351,6 @@ public class SikuliPowerPoint {
 				-TimeUnit.MINUTES.toMillis(min)-TimeUnit.SECONDS.toMillis(sec));
 		String formattedTime=String.format("%02d:%02d:%02d.%02d", hr, min, sec,ms);
 		logger.info("Finished after "+formattedTime);
-		System.exit(0);
 	}
 	
 }
