@@ -92,7 +92,7 @@ public class TutorialConrollerUI extends JFrame implements ActionListener, Obser
         Dimension preferedDimension=getPreferredSize();
         setSize(fullScreenDimension.width, preferedDimension.height+20);
         
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
         setAlwaysOnTop(true);
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
