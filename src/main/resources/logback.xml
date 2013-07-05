@@ -1,27 +1,14 @@
-<configuration debug="true" scan="true">
-<contextName>sikuli-slides</contextName>
-
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <!-- encoders are assigned the type
-         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-    <encoder>
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-    </encoder>
-  </appender>
-  
-  <appender name="MAIN" class="org.sikuli.slides.utils.logging.TextAreaAppender">
-    <!-- encoders are assigned the type
-         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-         <encoder>
-         <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-         </encoder>
-  </appender>
-  
-  <logger name="org.sikuli.slides" level="INFO">
-	<appender-ref ref="MAIN"/>
-</logger>
-
-  <root level="DEBUG">
-    <appender-ref ref="STDOUT" />
-  </root>
+<configuration>
+	<contextName>sikuli-slides</contextName>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
+			by default -->
+		<encoder>
+			<pattern>%msg%n</pattern>
+		</encoder>
+	</appender>
+	<logger name="org.sikuli.slides" level="DEBUG" />
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
 </configuration>
