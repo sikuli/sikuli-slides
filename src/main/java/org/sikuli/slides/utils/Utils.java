@@ -3,10 +3,12 @@ Khalid
 */
 package org.sikuli.slides.utils;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -155,5 +157,20 @@ public class Utils {
     		imagesFolder.mkdir();
     	}
     }
-    
+    /**
+     * Open a new URL in the default web browser
+     * @param uri
+     */
+    public static void openURLInBrowser(String URLString) {
+    	try {
+    		URI uri = new URI(URLString);
+    		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+    		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+    			desktop.browse(uri);
+    		}
+    	}
+    	catch (Exception e) {
+    		logger.error("Failed to open the following URL: "+ URLString);
+    	}
+    }
 }
