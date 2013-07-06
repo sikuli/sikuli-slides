@@ -338,7 +338,7 @@ public class SlideAction {
 					"This might end at "+readyTime;
 			logger.info(waitMessage);
 			
-			canvas.addLabel(canvasRegion, waitMessage).withFontSize(Constants.Label_Font_Size);
+			canvas.addLabel(canvasRegion, waitMessage).withFontSize(prefsEditor.getLabelFontSize());
 			canvas.show();
 			
 			timeUnit.sleep(timeout);
