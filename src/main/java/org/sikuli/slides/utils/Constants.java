@@ -55,9 +55,10 @@ public class Constants {
 	 */
 	public static final String RELATIONSHIP_DIRECTORY=File.separator+"ppt"+File.separator+"slides"+File.separator+"_rels";
 	/**
-	 * The maximum time to wait in milliseconds
+	 * The maximum wait time in milliseconds for find target operations 
 	 */
-	public static int MaxWaitTime=15000;
+	public static final String MAX_WAIT_TIME_MS="max_wait_time_ms";
+	public static int MAX_WAIT_TIME_MS_DEFAULT=15000;
 	/**
 	 *  The duration time in seconds to display annotation (canvas) around the target on the screen. 
 	 */
