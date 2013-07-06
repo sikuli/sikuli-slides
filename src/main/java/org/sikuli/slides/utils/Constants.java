@@ -78,6 +78,14 @@ public class Constants {
 	 *  The default key value of the instruction hint (tooltip) font size.
 	 */
 	public static int INSTRUCTION_HINT_FONT_SIZE_DEFAULT=18;
+	/**
+	 *  The key name for the canvas width size.
+	 */
+	public static final String CANVAS_WIDTH_SIZE="canvas_width_size";
+	/**
+	 *  The default key value of the canvas width size.
+	 */
+	public static int CANVAS_WIDTH_SIZE_DEFAULT=5;
 	
 	/**
 	 * Screen id. Use this constant to run the test on a secondary monitor, 
