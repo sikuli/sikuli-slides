@@ -3,11 +3,12 @@ package org.sikuli.slides;
 import java.io.File;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import org.sikuli.slides.uis.MainCommandLine;
+import org.sikuli.slides.uis.MainUI;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Utils;
 import org.sikuli.slides.core.SikuliPowerPoint;
-import org.sikuli.slides.guis.MainCommandLine;
-import org.sikuli.slides.guis.MainUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,7 +1,7 @@
 /**
 Khalid
 */
-package org.sikuli.slides.guis;
+package org.sikuli.slides.uis;
 
 public interface UpdatableTutorial {
 	void slideChanged(int slideNumber);

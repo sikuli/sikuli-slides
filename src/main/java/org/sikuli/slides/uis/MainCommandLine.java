@@ -1,7 +1,7 @@
 /**
 Khalid
 */
-package org.sikuli.slides.guis;
+package org.sikuli.slides.uis;
 
 import java.io.File;
 import java.io.IOException;
