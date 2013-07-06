@@ -71,6 +71,15 @@ public class Constants {
 	 */
 	public static final int CANVAS_DISPLAY_TIME_SEC_DEFAULT = 3;
 	/**
+	 *  The key name for the label font size.
+	 */
+	public static final String LABEL_FONT_SIZE="label_font_size";
+	/**
+	 *  The default key value of the label font size.
+	 */
+	public static int LABEL_FONT_SIZE_DEFAULT=18;
+	
+	/**
 	 * Screen id. Use this constant to run the test on a secondary monitor, 
 	 * 0 means the default monitor and 1 means the secondary monitor.
 	 */
@@ -81,7 +90,7 @@ public class Constants {
 	 */
 	public static double MinScore=0.7;
 	/**
-	 * 
+	 * Flag for the old syntax. Prior to version 1.2.0, we use special shapes to represent each action.
 	 */
 	public static boolean UseOldSyntax=false;
 	/**
@@ -118,10 +127,6 @@ public class Constants {
 	 *  Total steps in the tutorial mode
 	 */
 	public static int Steps_Total=0;
-	/**
-	 *  The font size of the label in the tutorial mode
-	 */
-	public static int Label_Font_Size=18;
 	/**
 	 * Tutorial mode navigation status
 	 */
