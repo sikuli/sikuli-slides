@@ -24,16 +24,12 @@ import org.slf4j.LoggerFactory;
 public class Main{
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(Main.class);
 	  
-	private void intiProject(){
+	private void initProject(){
 		// create the project working directory directory
 		if(!Utils.createWorkingDirectory()){
 			logger.error("Failed to create sikuli-slides working directory in +"+System.getProperty("java.io.tmpdir"));
 			System.exit(1);
 		}
-		//TODO: remove this
-		/*else{
-			System.out.println("created working directory in: "+Constants.workingDirectoryPath);
-		}*/
 	}
 
 	/**
@@ -73,7 +69,7 @@ public class Main{
 		}
 		
 		Main main=new Main();
-		main.intiProject();
+		main.initProject();
 		
 		// if no arguments are passed, run the GUI mode
 		if(args.length==0){
