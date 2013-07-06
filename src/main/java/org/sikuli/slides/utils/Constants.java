@@ -55,14 +55,21 @@ public class Constants {
 	 */
 	public static final String RELATIONSHIP_DIRECTORY=File.separator+"ppt"+File.separator+"slides"+File.separator+"_rels";
 	/**
-	 * The maximum wait time in milliseconds for find target operations 
+	 * The key name for maximum wait time to find target on the screen.
 	 */
-	public static final String MAX_WAIT_TIME_MS="max_wait_time_ms";
-	public static int MAX_WAIT_TIME_MS_DEFAULT=15000;
+	public static final String MAX_WAIT_TIME_MS = "max_wait_time_ms";
 	/**
-	 *  The duration time in seconds to display annotation (canvas) around the target on the screen. 
+	 * The default key value for maximum wait time in milliseconds to find target on the screen. 
 	 */
-	public static final int CANVAS_DURATION=3;
+	public static int MAX_WAIT_TIME_MS_DEFAULT = 15000;
+	/**
+	 *  The key name for the time to display canvas around the target on the screen.
+	 */
+	public static final String CANVAS_DISPLAY_TIME_SEC = "canvas_display_time_sec";
+	/**
+	 *  The default key value for the time, in seconds, to display canvas around the target on the screen.
+	 */
+	public static final int CANVAS_DISPLAY_TIME_SEC_DEFAULT = 3;
 	/**
 	 * Screen id. Use this constant to run the test on a secondary monitor, 
 	 * 0 means the default monitor and 1 means the secondary monitor.
