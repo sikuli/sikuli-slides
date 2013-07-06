@@ -214,7 +214,7 @@ public class SlideAction {
 		int y=(dimension.height-height)/2;
 		ScreenRegion canvasRegion=new DesktopScreenRegion(x, y, width, height);
 		canvas.addLabel(canvasRegion, slideLabel.getText()).
-			withColor(Color.black).withFontSize((int)fontSize);
+			withColor(Color.black).withFontSize((int)fontSize).withLineWidth(prefsEditor.getCanvasWidthSize());
 		canvas.display(prefsEditor.getCanvasDisplayTime());
 	}
 

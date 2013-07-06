@@ -66,7 +66,7 @@ public class SlideTutorial {
 			return;
 		}
 		Canvas canvas=new DesktopCanvas();
-		canvas.addBox(targetRegion).withLineWidth(5);
+		canvas.addBox(targetRegion).withLineWidth(prefsEditor.getCanvasWidthSize());
 		int x=targetRegion.getBounds().x;
 		int y=targetRegion.getBounds().y;
 		int w=targetRegion.getBounds().width;
