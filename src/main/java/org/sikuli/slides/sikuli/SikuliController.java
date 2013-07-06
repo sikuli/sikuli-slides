@@ -9,8 +9,10 @@ import org.sikuli.api.robot.desktop.DesktopScreen;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.slides.utils.Constants;
+import org.sikuli.slides.utils.UserPreferencesEditor;
 
 public class SikuliController {
+	private static UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
 	
 	/**
 	 * display a box around a screen region
@@ -20,7 +22,7 @@ public class SikuliController {
 		Canvas canvas=new DesktopCanvas();
 		// Display the canvas around the target
 		canvas.addBox(screenRegion);
-		canvas.display(Constants.CANVAS_DURATION);
+		canvas.display(prefsEditor.getCanvasDisplayTime());
 	}
 	
 	public static ScreenRegion getFullScreenRegion(){
