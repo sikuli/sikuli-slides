@@ -73,7 +73,7 @@ public class SlideTutorial {
 		int h=targetRegion.getBounds().height;
 		ScreenRegion labelRegion=new DesktopScreenRegion(x,y-h,w,h);
 		canvas.addLabel(labelRegion, getActionDisplayName())
-			.withColor(Color.black).withFontSize(prefsEditor.getLabelFontSize());;
+			.withColor(Color.black).withFontSize(prefsEditor.getInstructionHintFontSize());;
         logger.info("Waiting for the user to pefrom "+this.desktopEvent.toString()+" on the highlighted target.");
 		try {
         	if(!GlobalScreen.isNativeHookRegistered()){

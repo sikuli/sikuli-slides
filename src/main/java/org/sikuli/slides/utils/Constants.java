@@ -71,13 +71,13 @@ public class Constants {
 	 */
 	public static final int CANVAS_DISPLAY_TIME_SEC_DEFAULT = 3;
 	/**
-	 *  The key name for the label font size.
+	 *  The key name for the instruction hint (tooltip) font size.
 	 */
-	public static final String LABEL_FONT_SIZE="label_font_size";
+	public static final String INSTRUCTION_HINT_FONT_SIZE="instruction_hint_font_size";
 	/**
-	 *  The default key value of the label font size.
+	 *  The default key value of the instruction hint (tooltip) font size.
 	 */
-	public static int LABEL_FONT_SIZE_DEFAULT=18;
+	public static int INSTRUCTION_HINT_FONT_SIZE_DEFAULT=18;
 	
 	/**
 	 * Screen id. Use this constant to run the test on a secondary monitor, 
