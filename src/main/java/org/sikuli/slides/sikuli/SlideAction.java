@@ -30,6 +30,7 @@ import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
 import org.sikuli.slides.utils.MyScreen;
 import org.sikuli.slides.utils.UnitConverter;
+import org.sikuli.slides.utils.UserPreferencesEditor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SlideAction {
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(SlideAction.class);
+	private UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
 	private File targetFile; 
 	private SlideShape slideShape;
 	private SlideTargetRegion slideTargetRegion;
@@ -120,7 +122,7 @@ public class SlideAction {
 		imageTarget.setMinScore(Constants.MinScore);
 		if(imageTarget!=null){
 			ScreenRegion fullScreenRegion=SikuliController.getFullScreenRegion();
-	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, Constants.MaxWaitTime);
+	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, prefsEditor.getMaxWaitTime());
 	    	
 	    	if(targetRegion!=null){
 	    		// check if there are more than one occurrence of the target image.

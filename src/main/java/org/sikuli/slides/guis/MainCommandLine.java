@@ -2,6 +2,7 @@
 Khalid
 */
 package org.sikuli.slides.guis;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,6 +16,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyFileFilter;
+import org.sikuli.slides.utils.UserPreferencesEditor;
 
 /**
  * sikuli-slides Command Line tool using POSIX like options.
@@ -23,6 +25,7 @@ import org.sikuli.slides.utils.MyFileFilter;
  *
  */
 public class MainCommandLine {
+	private static UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
 	private static final String applicationName = "sikuli-slides";
 	private static final String versionNumber="1.2.0";
 	private static final String commandLineSyntax = "java -jar "+
@@ -47,7 +50,7 @@ public class MainCommandLine {
 	        }
 	    	else if (cmd.hasOption("w")){
 	    		int wait=Integer.parseInt(cmd.getOptionValue("w"));
-	        	Constants.MaxWaitTime=wait;
+	        	prefsEditor.putMaxWaitTime(wait);
 	    	}
 	    	else if (cmd.hasOption("oldsyntax")){
 	        	Constants.UseOldSyntax=true;
@@ -123,22 +126,28 @@ public class MainCommandLine {
 		
 		Option waitOption=OptionBuilder.withArgName("max_wait_time")
                 .hasArg()
-                .withDescription("The maximum time to wait in milliseconds to find a target on the screen (default 15000 ms)." )
+                .withDescription("The maximum time to wait in milliseconds to find a target " +
+                		"on the screen (current default value is "+prefsEditor.getMaxWaitTime()+" ms)." )
                 .create("w");
 		
 		Option precisionOption=OptionBuilder.withArgName("precision")
                 .hasArg()
-                .withDescription("The precision value to control the degree of fuzziness of the image recognition search. It's a 10-point scale where 1 is the least precise search and 10 is the most precise search. (default is 7)." )
+                .withDescription("The precision value to control the degree of fuzziness of " +
+                		"the image recognition search. It's a 10-point scale where 1 is the least precise search" +
+                		" and 10 is the most precise search. (default is 7)." )
                 .create("p");
 		
 		Option oldSyntaxOption=OptionBuilder.withArgName("oldsyntax")
-                .withDescription("Forces the system to use the old syntax that uses special shapes to represent actions. The syntax is based on the following annotations: Rectangle shape: left click. " +
-                		"Rounded rectangle: drag and drop. Frame: double click. Oval: right click. Text Box: Keyboard typing. Cloud: open URL in default browser.")
+                .withDescription("Forces the system to use the old syntax that uses special shapes" +
+                		" to represent actions. The syntax is based on the following annotations: Rectangle shape: left click. " +
+                		"Rounded rectangle: drag and drop. Frame: double click. Oval: right click. " +
+                		"Text Box: Keyboard typing. Cloud: open URL in default browser.")
                 .create("oldsyntax");
 		
 		Option modeOption=OptionBuilder.withArgName("mode")
                 .hasArg()
-                .withDescription("The mode in which sikuli-slides is running. It can be one of the following: action, tutorial, and development (default is action)." )
+                .withDescription("The mode in which sikuli-slides is running. It can be one of the following:" +
+                		" action, tutorial, and development (default is action)." )
                 .create("m");
 		
 		Option helpOption=new Option("h", "help");
