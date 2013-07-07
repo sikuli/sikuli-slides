@@ -41,7 +41,7 @@ public class SlideParser extends DefaultHandler {
 	private String _shapeName, _shapeId; 
 	private int _offx, _offy, _cx, _cy;
 	
-	private static final String NEW_LINE = System.getProperty( "line.separator" ); 
+	private static final String NEW_LINE = System.getProperty("line.separator"); 
 	
 	public SlideParser(String xmlFile){
 		this.xmlFile=xmlFile;

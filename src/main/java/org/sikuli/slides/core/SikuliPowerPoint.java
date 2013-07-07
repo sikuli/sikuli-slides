@@ -35,6 +35,7 @@ public class SikuliPowerPoint {
 	private Presentation presentation;
 	private AtomicInteger counter;
 	private List<SikuliAction> tasks;
+	private static final String NEW_LINE = System.getProperty("line.separator");
 	
 	public SikuliPowerPoint(File file){
 		this.file=file;
@@ -122,7 +123,8 @@ public class SikuliPowerPoint {
 					}
 					else{
 						logger.error("Error: Slide "+slideNumber+
-								". Multiple targets are not supported in the old syntax. Use the default new syntax option to enable multiple targets per slide.");
+								". Multiple targets are not supported in the old syntax."+ NEW_LINE +
+								"Use the default new syntax option to enable multiple targets per slide.");
 					}
                     System.exit(1);
 				}
@@ -136,8 +138,8 @@ public class SikuliPowerPoint {
 					targetShapes.add(slideShapes.get(1));
 				}
 				else{
-					logger.error("Error. Slide "+slideNumber+" contains multiple shapes.\n" +
-							"The slide must contain only one input action using the predefined shapes.\n" +
+					logger.error("Error. Slide "+slideNumber+" contains multiple shapes." + NEW_LINE +
+							"The slide must contain only one input action using the predefined shapes."+ NEW_LINE +
 							"You may use the new syntax to enable multiple targets per slide.");
 					System.exit(1);
 				}
@@ -151,10 +153,10 @@ public class SikuliPowerPoint {
 			desktopEvent=getDesktopEvent(slideShapes);
 			// if the slide doesn't contain a shape.
 			if(desktopEvent==null || slideShapes==null || (slideShapes.size()<2)){
-					logger.error("Failed to process slide "+slideNumber+
-							". The slide must contain a shape and textbox that contains the action to be executed.\n" +
-							"The text box that descripes the action must contain one of the following actions:\n"+
-							"Click, Right Click, Double Click, Type, Drag, Browser, exist, not exist");
+					logger.error("Failed to process slide "+slideNumber+ NEW_LINE +
+							".The slide must contain a shape and textbox that contains the action to be executed."+ NEW_LINE +
+							"The text box that descripes the action must contain one of the following actions:\n"+ NEW_LINE +
+							"Click, Right Click, Double Click, Type, Drag, Browser, Exist, Not Exist, Wait");
 					return;
 			}
 		}
