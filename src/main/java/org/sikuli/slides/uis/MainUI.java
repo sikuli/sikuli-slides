@@ -204,6 +204,7 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener {
         }
         else if(e.getSource() == editPrefsMenuItem){
         	// open preferences editor UI
+        	PreferencesEditorUI.showPreferencesEditorUI();
         }
         else if(e.getSource() == helpMenuItem){
         	// open sikuli-slides help
