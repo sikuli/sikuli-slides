@@ -63,13 +63,13 @@ public class Constants {
 	 */
 	public static int MAX_WAIT_TIME_MS_DEFAULT = 15000;
 	/**
-	 *  The key name for the time to display canvas around the target on the screen.
+	 *  The key name for the time to display a label on the screen.
 	 */
-	public static final String CANVAS_DISPLAY_TIME_SEC = "canvas_display_time_sec";
+	public static final String LABEL_DISPLAY_TIME_SEC = "label_display_time_sec";
 	/**
-	 *  The default key value for the time, in seconds, to display canvas around the target on the screen.
+	 *  The default key value for the time, in seconds, to display a label on the screen.
 	 */
-	public static final int CANVAS_DISPLAY_TIME_SEC_DEFAULT = 3;
+	public static final int LABEL_DISPLAY_TIME_SEC_DEFAULT = 3;
 	/**
 	 *  The key name for the instruction hint (tooltip) font size.
 	 */
