@@ -46,23 +46,13 @@ public class Sound {
 	}
 	
 	public void playSound(){
-		final String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+getFileName();
-		final Speaker speaker = new DesktopSpeaker();
+		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+getFileName();
+		Speaker speaker = new DesktopSpeaker();
 		try {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try{
-						speaker.play(new URL("file://"+slideMediaLocation));
-					}
-					catch (MalformedURLException e) {
-						logger.error("Unknown audio location..");
-					}
-				}
-			}).start();
-		} 
-		catch (IllegalThreadStateException itse){
-			logger.error("Error in playing audio");
+			speaker.play(new URL("file://"+slideMediaLocation));
+		}
+		catch (MalformedURLException e) {
+			logger.error("Unknown audio location..");
 		}
 	}
 	public String toString(){

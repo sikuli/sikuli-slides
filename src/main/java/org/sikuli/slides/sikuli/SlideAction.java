@@ -156,12 +156,16 @@ public class SlideAction {
 	 * @param targetRegion
 	 */
 	
-	private void performNonSikuliAction(ScreenRegion targetRegion){
-		// if the slide contains a sound, play it first
+	private void performNonSikuliAction(final ScreenRegion targetRegion){
+		// if the slide contains a sound, play it in background
 		if(sound!=null){
-			sound.playSound();
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					sound.playSound();
+				}
+				}).start();
 		}
-		
 		if(slideLabel!=null){
 			displayLabel(targetRegion);
 		}
