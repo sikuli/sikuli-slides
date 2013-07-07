@@ -161,7 +161,7 @@ public class SlideAction {
 		}
 		
 		if(slideLabel!=null){
-			displayToolTip(targetRegion);
+			displayLabel(targetRegion);
 		}
 	}
 	
@@ -190,10 +190,10 @@ public class SlideAction {
 		}
 	}
 	/**
-	 * display tool tip around the target region
-	 * @param targetRegion the target region to display tool tip around
+	 * display a label on a target region
+	 * @param targetRegion the target region to display the label on
 	 */
-	private void displayToolTip(ScreenRegion targetRegion) {
+	private void displayLabel(ScreenRegion targetRegion) {
 		/* if the target region is null or ther's no target to work on, 
 		 * use the default desktop region.
 		   this is important in case of opening the default browser
@@ -215,7 +215,7 @@ public class SlideAction {
 		ScreenRegion canvasRegion=new DesktopScreenRegion(x, y, width, height);
 		canvas.addLabel(canvasRegion, slideLabel.getText()).
 			withColor(Color.black).withFontSize((int)fontSize).withLineWidth(prefsEditor.getCanvasWidthSize());
-		canvas.display(prefsEditor.getCanvasDisplayTime());
+		canvas.display(prefsEditor.getLabelDisplayTime());
 	}
 
 	/**
