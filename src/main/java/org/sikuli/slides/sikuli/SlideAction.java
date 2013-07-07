@@ -59,15 +59,17 @@ public class SlideAction {
 	public void doSlideAction(DesktopEvent desktopEvent){
 		
 		// if the required action is one of the following actions, no need to search for target on the screen
-		// #1 Open default browser
-		if(desktopEvent==DesktopEvent.LAUNCH_BROWSER){
+		// #1 Wait action
+		if(desktopEvent==DesktopEvent.WAIT){
 			performNonSikuliAction(null);
 			performSikuliAction(null, desktopEvent);
 		}
-		else if(desktopEvent==DesktopEvent.WAIT){
+		// #2 Open default browser
+		else if(desktopEvent==DesktopEvent.LAUNCH_BROWSER){
 			performNonSikuliAction(null);
 			performSikuliAction(null, desktopEvent);
 		}
+
 		// if the action is to find a target on the screen
 		// if the action is to interact with a target, find the target and perform the action
 		else{
