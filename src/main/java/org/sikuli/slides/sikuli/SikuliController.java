@@ -12,7 +12,6 @@ import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.UserPreferencesEditor;
 
 public class SikuliController {
-	private static UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
 	
 	/**
 	 * display a box around a screen region
@@ -22,7 +21,7 @@ public class SikuliController {
 		Canvas canvas=new DesktopCanvas();
 		// Display the canvas around the target
 		canvas.addBox(screenRegion);
-		canvas.display(prefsEditor.getCanvasDisplayTime());
+		canvas.display(2);
 	}
 	
 	public static ScreenRegion getFullScreenRegion(){
