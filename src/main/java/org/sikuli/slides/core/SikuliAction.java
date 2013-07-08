@@ -15,11 +15,13 @@ public class SikuliAction{
 	private SlideShape slideShape;
 	private DesktopEvent desktopEvent;
 	public SikuliAction(File imageTargetFile, SlideShape slideShape, Screenshot screenshot, 
-			SlideTargetRegion slideTargetRegion,DesktopEvent desktopEvent, Sound sound, SlideShape label){
+			SlideTargetRegion slideTargetRegion,DesktopEvent desktopEvent, Sound sound, SlideShape label,
+			File imageLabelFile, SlideTargetRegion slideLabelRegion){
 		this.slideShape=slideShape;
 		this.desktopEvent=desktopEvent;
 		slideComponent=new SlideComponent(imageTargetFile, 
-				slideShape, screenshot, slideTargetRegion, sound, label);
+				slideShape, screenshot, slideTargetRegion, sound, label,
+				imageLabelFile, slideLabelRegion);
 	}
 	public void doSikuliAction(){
 		slideShape.doSikuliAction(slideComponent,desktopEvent);

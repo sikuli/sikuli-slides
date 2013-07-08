@@ -42,18 +42,20 @@ import org.slf4j.LoggerFactory;
 public class SlideAction {
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(SlideAction.class);
 	private UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
-	private File targetFile; 
+	private File targetFile, labelFile; 
 	private SlideShape slideShape;
-	private SlideTargetRegion slideTargetRegion;
+	private SlideTargetRegion slideTargetRegion, slideLabelRegion;
 	private Sound sound;
 	private SlideShape slideLabel;
 	
 	public SlideAction(SlideComponent slideComponent){
-		this.targetFile=slideComponent.getTargetFile();
-		this.slideShape=slideComponent.getSlideShape();
-		this.slideTargetRegion=slideComponent.getSlideTargetRegion();
-		this.sound=slideComponent.getSound();
-		this.slideLabel=slideComponent.getSlideLabel();
+		this.targetFile = slideComponent.getTargetFile();
+		this.slideShape = slideComponent.getSlideShape();
+		this.slideTargetRegion = slideComponent.getSlideTargetRegion();
+		this.sound = slideComponent.getSound();
+		this.slideLabel = slideComponent.getSlideLabel();
+		this.labelFile = slideComponent.getLabelFile();
+		this.slideLabelRegion = slideComponent.getSlideLabelRegion();
 	}
 	
 	public void doSlideAction(DesktopEvent desktopEvent){
@@ -61,21 +63,21 @@ public class SlideAction {
 		// if the required action is one of the following actions, no need to search for target on the screen
 		// #1 Wait action
 		if(desktopEvent==DesktopEvent.WAIT){
-			performNonSikuliAction(null);
+			performNonSikuliAction();
 			performSikuliAction(null, desktopEvent);
 		}
 		// #2 Open default browser
 		else if(desktopEvent==DesktopEvent.LAUNCH_BROWSER){
-			performNonSikuliAction(null);
+			performNonSikuliAction();
 			performSikuliAction(null, desktopEvent);
 		}
 
 		// if the action is to find a target on the screen
 		// if the action is to interact with a target, find the target and perform the action
 		else{
-			ScreenRegion targetRegion=findTargetRegion();
+			ScreenRegion targetRegion=findTargetRegion(this.targetFile, this.slideTargetRegion);
+			performNonSikuliAction();
 			
-			performNonSikuliAction(targetRegion);
 			
 			if(desktopEvent==DesktopEvent.EXIST){
 				logger.info("Checking whether the target image is visible on the screen.");
@@ -119,7 +121,7 @@ public class SlideAction {
 	}
 	
 
-	private ScreenRegion findTargetRegion(){
+	private ScreenRegion findTargetRegion(File targetFile, SlideTargetRegion slideTargetRegion){
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
 		imageTarget.setMinScore(Constants.MinScore);
 		if(imageTarget!=null){
@@ -156,7 +158,7 @@ public class SlideAction {
 	 * @param targetRegion
 	 */
 	
-	private void performNonSikuliAction(final ScreenRegion targetRegion){
+	private void performNonSikuliAction(){ 
 		// if the slide contains a sound, play it in background
 		if(sound!=null){
 			new Thread(new Runnable() {
@@ -167,7 +169,11 @@ public class SlideAction {
 				}).start();
 		}
 		if(slideLabel!=null){
-			displayLabel(targetRegion);
+			ScreenRegion labelScreenRegion = null;
+			if(this.labelFile !=null && this.slideLabelRegion != null){
+				labelScreenRegion = findTargetRegion(this.labelFile, this.slideLabelRegion);
+			}
+			displayLabel(labelScreenRegion);
 		}
 	}
 	
@@ -200,26 +206,23 @@ public class SlideAction {
 	 * @param targetRegion the target region to display the label on
 	 */
 	private void displayLabel(ScreenRegion targetRegion) {
-		/* if the target region is null or ther's no target to work on, 
-		 * use the default desktop region.
-		   this is important in case of opening the default browser
+		/* if the target region is null or ther's no target to work on, use the default desktop region.
+		   This is important in case of opening the default browser or label target region could not be found.
 		*/
 		if(targetRegion==null){
-			targetRegion=new DesktopScreenRegion();
+			Dimension dimension = MyScreen.getScreenDimensions();
+			int width = UnitConverter.emuToPixels(slideLabel.getCx());
+			int height = UnitConverter.emuToPixels(slideLabel.getCy());
+			int x = (dimension.width-width)/2;
+			int y = (dimension.height-height)/2;
+			targetRegion = new DesktopScreenRegion(x, y, width, height);
 		}
-		Canvas canvas = new DesktopCanvas();
-		Dimension dimension=MyScreen.getScreenDimensions();
-		// TODO: Fix this
-		int width=UnitConverter.emuToPixels(slideLabel.getCx());
-		int height=UnitConverter.emuToPixels(slideLabel.getCy());
 		double fontSize=UnitConverter.WholePointsToPoints(slideLabel.getTextSize());
 		if(fontSize==0){
-			fontSize=18;
+			fontSize=prefsEditor.getInstructionHintFontSize();
 		}
-		int x=(dimension.width-width)/2;
-		int y=(dimension.height-height)/2;
-		ScreenRegion canvasRegion=new DesktopScreenRegion(x, y, width, height);
-		canvas.addLabel(canvasRegion, slideLabel.getText()).
+		Canvas canvas = new DesktopCanvas();
+		canvas.addLabel(targetRegion, slideLabel.getText()).
 			withColor(Color.black).withFontSize((int)fontSize).withLineWidth(prefsEditor.getCanvasWidthSize());
 		canvas.display(prefsEditor.getLabelDisplayTime());
 	}

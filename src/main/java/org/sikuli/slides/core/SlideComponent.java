@@ -22,19 +22,25 @@ public class SlideComponent {
 	private SlideTargetRegion slideTargetRegion;
 	private Sound sound;
 	private SlideShape slideLabel;
+	private File imageLabelFile;
+	private SlideTargetRegion slideLabelRegion;
 	
 	public SlideComponent(){
 		
 	}
 	
 	public SlideComponent(File imageTargetFile, SlideShape slideShape, Screenshot screenshot, 
-			SlideTargetRegion slideTargetRegion, Sound sound,SlideShape slideLabel){
+			SlideTargetRegion slideTargetRegion, Sound sound,SlideShape slideLabel,
+			File imageLabelFile, SlideTargetRegion slideLabelRegion){
 		this.setTargetFile(imageTargetFile);
 		this.setSlideShape(slideShape);
 		this.setScreenshot(screenshot);
 		this.setSlideTargetRegion(slideTargetRegion);
 		this.setSound(sound);
 		this.setSlideLabel(slideLabel);
+		this.setLabelFile(imageLabelFile);
+		this.setSlideLabelRegion(slideLabelRegion);
+		
 	}
 	
 	public File getTargetFile() {
@@ -83,6 +89,22 @@ public class SlideComponent {
 
 	public void setSlideLabel(SlideShape slideLabel) {
 		this.slideLabel = slideLabel;
+	}
+
+	public File getLabelFile() {
+		return imageLabelFile;
+	}
+
+	public void setLabelFile(File imageLabelFile) {
+		this.imageLabelFile = imageLabelFile;
+	}
+
+	public SlideTargetRegion getSlideLabelRegion() {
+		return slideLabelRegion;
+	}
+
+	public void setSlideLabelRegion(SlideTargetRegion slideLabelRegion) {
+		this.slideLabelRegion = slideLabelRegion;
 	}
 	
 	@Override

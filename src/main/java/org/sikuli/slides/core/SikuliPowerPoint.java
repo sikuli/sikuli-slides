@@ -165,12 +165,12 @@ public class SikuliPowerPoint {
 		// If the result contains only shape without screenshot, execute just the shape action.
 		// #1 open the default browser action
 		if(desktopEvent==DesktopEvent.LAUNCH_BROWSER){
-			tasks.add(new SikuliAction(null,targetShapes.get(0),screenshot,null,desktopEvent,sound, label));
+			tasks.add(new SikuliAction(null,targetShapes.get(0),screenshot,null,desktopEvent,sound, label,null, null));
 			return;
 		}
 		// #2 Wait action
 		else if(desktopEvent==DesktopEvent.WAIT){
-			tasks.add(new SikuliAction(null,targetShapes.get(0),screenshot,null,desktopEvent,sound, label));
+			tasks.add(new SikuliAction(null,targetShapes.get(0),screenshot,null,desktopEvent,sound, label,null, null ));
 			return;
 		}
 
@@ -179,8 +179,9 @@ public class SikuliPowerPoint {
 		
 		// calculate the target position and process the screenshot
 		
-		for(SlideShape slideShape:targetShapes)
+		for(SlideShape slideShape:targetShapes){
 			startProcessing(screenshot,slideShape, desktopEvent, slideNumber, sound, label);
+		}
 		
 	}
 	
@@ -275,6 +276,23 @@ public class SikuliPowerPoint {
 	
 	
 	private void startProcessing(Screenshot screenshot, SlideShape slideShape,DesktopEvent desktopEvent, int slideNumber, Sound sound, SlideShape slideLabel) {
+		SlideTargetRegionContainer slideTarget = getSlideShapeRegion(screenshot, slideShape, slideNumber);
+		File targetFile = slideTarget.getSlideTargetFile();
+		SlideTargetRegion slideTargetRegion = slideTarget.getSlideTargetRegion();
+		
+		File labelTargetFile = null;
+		SlideTargetRegion slideLabelTargetRegion = null;
+		if(slideLabel != null){
+			SlideTargetRegionContainer slideLabelTarget = getSlideShapeRegion(screenshot, slideLabel, slideNumber);
+			labelTargetFile = slideLabelTarget.getSlideTargetFile();
+			slideLabelTargetRegion = slideLabelTarget.getSlideTargetRegion();
+		}
+		// queue the tasks
+		tasks.add(new SikuliAction(targetFile, slideShape, screenshot,slideTargetRegion,
+				desktopEvent,sound, slideLabel,labelTargetFile, slideLabelTargetRegion));
+	}
+	
+	private SlideTargetRegionContainer getSlideShapeRegion(Screenshot screenshot, SlideShape slideShape, int slideNumber){
 		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+screenshot.getFileName();		
 		SlideProcessing slideProcessing=new SlideProcessing(slideMediaLocation);
 		
@@ -306,13 +324,14 @@ public class SikuliPowerPoint {
 				, relativeRectangleWidth, 
 				relativeRectangleHeight,
 				slideProcessing.getScreenshotWidth(),slideProcessing.getScreenshotHeight());
+		
 		// crop and save the target image
-		File targetFile=saveTargetImage(slideMediaLocation, relativeRectangleX, relativeRectangleY,
+		File targetRegionFile=saveTargetImage(slideMediaLocation, relativeRectangleX, relativeRectangleY,
 				relativeRectangleWidth, relativeRectangleHeight);
-		// queue the tasks
-		tasks.add(new SikuliAction(targetFile, slideShape, screenshot,slideTargetRegion, desktopEvent,sound, slideLabel));
+		
+		return new SlideTargetRegionContainer(slideTargetRegion, targetRegionFile);
+		
 	}
-	
 	private File saveTargetImage(String slideMediaLocation,int relativeRectangleX, int relativeRectangleY 
 			, int relativeRectangleWidth, int relativeRectangleHeight){
 		BufferedImage croppedImage=ImageProcessing.cropImage(slideMediaLocation, 
@@ -355,4 +374,20 @@ public class SikuliPowerPoint {
 		logger.info("Finished after "+formattedTime);
 	}
 	
+	class SlideTargetRegionContainer{
+		private SlideTargetRegion slideTargetRegion;
+		private File slideTargetFile;
+		
+		public SlideTargetRegionContainer(SlideTargetRegion slideTargetRegion, File slideTargetFile){
+			this.slideTargetRegion = slideTargetRegion;
+			this.slideTargetFile = slideTargetFile;
+		}
+		public SlideTargetRegion getSlideTargetRegion(){
+			return this.slideTargetRegion;
+		}
+		public File getSlideTargetFile(){
+			return this.slideTargetFile;
+		}
+		
+	}
 }
