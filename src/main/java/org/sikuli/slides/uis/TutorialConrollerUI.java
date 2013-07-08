@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +26,7 @@ import org.sikuli.slides.listeners.tutorials.Observable;
 import org.sikuli.slides.listeners.tutorials.Observer;
 import org.sikuli.slides.sikuli.TutorialWorker;
 import org.sikuli.slides.utils.Constants;
+import org.sikuli.slides.utils.MyScreen;
 import org.sikuli.slides.utils.Constants.NavigationStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +93,13 @@ public class TutorialConrollerUI extends JFrame implements ActionListener, Obser
         Dimension fullScreenDimension=Toolkit.getDefaultToolkit().getScreenSize();
         Dimension preferedDimension=getPreferredSize();
         setSize(fullScreenDimension.width, preferedDimension.height+20);
+        
+        Rectangle screenBounds = MyScreen.getScreenBounds();
+        int x = (int) screenBounds.getMaxX() - getWidth();
+        int y = (int) screenBounds.getMaxY() - getHeight();
+        
+        setLocationByPlatform(false);
+        setLocation(x, y);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
