@@ -110,21 +110,19 @@ public class SikuliPowerPoint {
 		// running old syntax
 		if(Constants.UseOldSyntax){
 			if(slideShapes==null||slideShapes.size()==0){
-				logger.error("Failed to process slide "+slideNumber+
-						". The slide must contain a predefined shape.");
+				logger.error("Failed to process slide {}. The slide must contain a predefined shape.",slideNumber);
 				System.exit(1);
 			}
 			else{
 				desktopEvent=getOldDesktopEvent(slideShapes);
 				if(desktopEvent==null){
 					if(slideShapes.size()==1){
-						logger.error("Failed to process slide "+slideNumber+
-								". The slide must contain a predefined shape.");
+						logger.error("Failed to process slide {}. The slide must contain a predefined shape.",slideNumber);
 					}
 					else{
-						logger.error("Error: Slide "+slideNumber+
-								". Multiple targets are not supported in the old syntax."+ NEW_LINE +
-								"Use the default new syntax option to enable multiple targets per slide.");
+						logger.error("Error: Slide {}. Multiple targets are not supported in the old syntax." +
+								"{}. Use the default new syntax option to enable multiple targets per slide.",
+								slideNumber, NEW_LINE);
 					}
                     System.exit(1);
 				}
@@ -138,9 +136,10 @@ public class SikuliPowerPoint {
 					targetShapes.add(slideShapes.get(1));
 				}
 				else{
-					logger.error("Error. Slide "+slideNumber+" contains multiple shapes." + NEW_LINE +
-							"The slide must contain only one input action using the predefined shapes."+ NEW_LINE +
-							"You may use the new syntax to enable multiple targets per slide.");
+					logger.error("Error. Slide {} contains multiple shapes.{}" +
+							"The slide must contain only one input action using the predefined shapes.{}"+
+							"You may use the new syntax to enable multiple targets per slide."
+							, slideNumber, NEW_LINE, NEW_LINE);
 					System.exit(1);
 				}
 			}
@@ -148,15 +147,16 @@ public class SikuliPowerPoint {
 		
 		// running new syntax
 		else if(!Constants.UseOldSyntax){
-			targetShapes=getTargterShapes(slideShapes);
 			// get the desktop action
 			desktopEvent=getDesktopEvent(slideShapes);
+			targetShapes=getTargterShapes(slideShapes);
+
 			// if the slide doesn't contain a shape.
-			if(desktopEvent==null || slideShapes==null || (slideShapes.size()<2)){
-					logger.error("Failed to process slide "+slideNumber+ NEW_LINE +
-							".The slide must contain a shape and textbox that contains the action to be executed."+ NEW_LINE +
-							"The text box that descripes the action must contain one of the following actions:\n"+ NEW_LINE +
-							"Click, Right Click, Double Click, Type, Drag, Browser, Exist, Not Exist, Wait");
+			if(desktopEvent == null || slideShapes == null){
+					logger.error("Failed to process slide {}." +
+					"The slide must contain a shape and textbox that contains the action to be executed.{}" +
+					"The text box that descripes the action must contain one of the following actions:{}" +
+					"Click, Right Click, Double Click, Type, Drag, Browser, Exist, Not Exist, Wait", slideNumber, NEW_LINE, NEW_LINE);
 					return;
 			}
 		}
@@ -165,12 +165,12 @@ public class SikuliPowerPoint {
 		// If the result contains only shape without screenshot, execute just the shape action.
 		// #1 open the default browser action
 		if(desktopEvent==DesktopEvent.LAUNCH_BROWSER){
-			tasks.add(new SikuliAction(null,targetShapes.get(0),screenshot,null,desktopEvent,sound, label,null, null));
+			tasks.add(new SikuliAction(null, targetShapes.get(0), screenshot, null, desktopEvent, sound, label, null, null));
 			return;
 		}
 		// #2 Wait action
 		else if(desktopEvent==DesktopEvent.WAIT){
-			tasks.add(new SikuliAction(null,targetShapes.get(0),screenshot,null,desktopEvent,sound, label,null, null ));
+			tasks.add(new SikuliAction(null, targetShapes.get(0), screenshot, null, desktopEvent, sound, label, null, null));
 			return;
 		}
 
@@ -201,33 +201,61 @@ public class SikuliPowerPoint {
 	}
 	// return the GUI desktop event or action to be executed in the slide
 	private DesktopEvent getDesktopEvent(List<SlideShape> slideShapes){
+		DesktopEvent desktopEvent=null;
 		for(SlideShape slideShape:slideShapes){
-			// if the shape is the textBox that represents the GUI input action
-			if(slideShape.getType().equals("rect") && slideShape.getName().contains("TextBox")){
+			// Get the shape that represents the desktop action and remove it from the shapes list
+			if(slideShape.getType().equals("rect")) {//&& slideShape.getName().contains("TextBox")){
 				String action=slideShape.getText().trim();
-				if(action.equalsIgnoreCase("Click") || action.equalsIgnoreCase("Left Click"))
-					return DesktopEvent.LEFT_CLICK;
-				else if(action.equalsIgnoreCase("Right Click"))
-					return DesktopEvent.RIGHT_CLICK;
-				else if(action.equalsIgnoreCase("Double Click"))
-					return DesktopEvent.DOUBLE_CLICK;
-				else if(action.equalsIgnoreCase("Type"))
-					return DesktopEvent.KEYBOARD_TYPING;
-				else if(action.toLowerCase().contains("drag") || action.toLowerCase().contains("drop"))
-					return DesktopEvent.DRAG_N_DROP;
-				else if(action.toLowerCase().contains("browser"))
-					return DesktopEvent.LAUNCH_BROWSER;
-				else if(action.toLowerCase().contains("not exist"))
-					return DesktopEvent.NOT_EXIST;
-				else if(action.toLowerCase().contains("exist"))
-					return DesktopEvent.EXIST;
-				else if(action.toLowerCase().contains("wait"))
-					return DesktopEvent.WAIT;
+				if(action.equalsIgnoreCase("Click") || action.equalsIgnoreCase("Left Click")){
+					desktopEvent = DesktopEvent.LEFT_CLICK;
+					slideShapes.remove(slideShape);
+					break;
+				}
+				else if(action.equalsIgnoreCase("Right Click")){
+					desktopEvent = DesktopEvent.RIGHT_CLICK;
+					slideShapes.remove(slideShape);
+					break;
+				}
+				else if(action.equalsIgnoreCase("Double Click")){
+					desktopEvent = DesktopEvent.DOUBLE_CLICK;
+					slideShapes.remove(slideShape);
+					break;
+				}
+				else if(action.equalsIgnoreCase("Type")){
+					desktopEvent = DesktopEvent.KEYBOARD_TYPING;
+					slideShapes.remove(slideShape);
+					break;
+				}
+				else if(action.toLowerCase().contains("drag") || action.toLowerCase().contains("drop")){
+					desktopEvent = DesktopEvent.DRAG_N_DROP;
+					slideShapes.remove(slideShape);
+					break;
+				}
+				else if(action.toLowerCase().contains("browser")){
+					desktopEvent = DesktopEvent.LAUNCH_BROWSER;
+					slideShapes.remove(slideShape);
+					break;
+				}
+				else if(action.toLowerCase().contains("not exist")){
+					desktopEvent = DesktopEvent.NOT_EXIST;
+					slideShapes.remove(slideShape);
+					break;
+				}
+				else if(action.toLowerCase().contains("exist")){
+					desktopEvent = DesktopEvent.EXIST;
+					slideShapes.remove(slideShape);
+					break;
+				}
+				else if(action.toLowerCase().contains("wait")){
+					desktopEvent = DesktopEvent.WAIT;
+					slideShapes.remove(slideShape);
+					break;
+				}
 				else
 					continue;
 			}
 		}
-		return null;
+		return desktopEvent;
 	}
 	
 	// return the GUI desktop event or action to be executed in the slide based on the old syntax

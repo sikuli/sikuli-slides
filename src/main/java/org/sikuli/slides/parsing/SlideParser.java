@@ -183,6 +183,18 @@ public class SlideParser extends DefaultHandler {
 		else if(inShape && qName.equalsIgnoreCase("p:txBody")){
 			inTextBody=true;
 		}
+		// if the shape is a screenshot; some .pptx applications use the shape tag for screenshots
+		else if(inShape && qName.equalsIgnoreCase("a:blip")){
+			inShape = false;
+			originalScreenshot = new Screenshot();
+			originalScreenshot.setName(slideShape.getName());
+			originalScreenshot.setCx(slideShape.getCx());
+			originalScreenshot.setCy(slideShape.getCy());
+			originalScreenshot.setOffX(slideShape.getOffx());
+			originalScreenshot.setOffY(slideShape.getOffy());
+			originalScreenshot.setRelationshipID(attributes.getValue("r:embed"));
+			inScreenshot = true;
+		}
 		// get font size
 		else if(inTextBody && qName.equals("a:rPr")){
 			String size= attributes.getValue("sz");
@@ -236,6 +248,9 @@ public class SlideParser extends DefaultHandler {
 		}
 		else if(inShape && qName.equalsIgnoreCase("a:solidFill")){
 			inShapeBackgroundColor=false;
+		}
+		else if(inScreenshot && qName.equalsIgnoreCase("p:sp")){
+			inScreenshot = false;
 		}
 		else if(inTextBody && qName.equalsIgnoreCase("p:txBody")){
 			inTextBody=false;
