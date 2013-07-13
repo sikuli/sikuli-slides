@@ -56,7 +56,7 @@ public class SlideTutorial {
 				return "and drop it here";
 		}
 		else if(desktopEvent==DesktopEvent.KEYBOARD_TYPING){
-			return "Type: "+ slideShape.getText()+" here";
+			return "Click and type: "+ slideShape.getText()+" here";
 		}
 		return "";
 	}
