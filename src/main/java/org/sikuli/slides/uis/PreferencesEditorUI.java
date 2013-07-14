@@ -14,11 +14,11 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.text.NumberFormatter;
-
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.UserPreferencesEditor;
 import org.slf4j.Logger;
@@ -32,6 +32,7 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 	private JSpinner maxWaitTimeSpinner, maxLabelDisplayTimeSpinner, instructionHintFontSizeSpinner, 
 	canvasWidthSizeSpinner;
 	private JButton okButton, cancelButton, restoreButton;
+    private JSlider preciseControlSlider;
 	
 	public PreferencesEditorUI(){
 		super("sikuli-slides -- Preferences");
@@ -97,6 +98,30 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 		constraints.gridx = 2;
 		gridBagLayout.setConstraints(unitLabel, constraints);
 		panel.add(unitLabel);
+		
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		
+		int currentPreciseScoreValue = (int) (prefs.getPreciseSearchScore() * 10);
+		final int maxPreciseScoreValue = 10;
+		
+		JLabel perciseControlLabel=new JLabel("Precision Value:");
+		
+		preciseControlSlider = new JSlider(JSlider.HORIZONTAL,1, maxPreciseScoreValue, currentPreciseScoreValue);
+		preciseControlSlider.setPaintLabels(true);
+		preciseControlSlider.setPaintTicks(true);
+		preciseControlSlider.setMajorTickSpacing(1);
+		preciseControlSlider.setMinorTickSpacing(1);
+		preciseControlSlider.setMaximumSize(preciseControlSlider.getPreferredSize());
+		
+		perciseControlLabel.setLabelFor(preciseControlSlider);
+		
+		gridBagLayout.setConstraints(perciseControlLabel, constraints);
+		panel.add(perciseControlLabel);
+		
+		constraints.gridx = 1;
+		gridBagLayout.setConstraints(preciseControlSlider, constraints);
+		panel.add(preciseControlSlider);
 		
 		return panel;
 		
@@ -221,6 +246,10 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 		prefs.putCanvasWidthSize(Constants.CANVAS_WIDTH_SIZE_DEFAULT);
 		canvasWidthSizeSpinner.setValue(Constants.CANVAS_WIDTH_SIZE_DEFAULT);
 		
+		prefs.putPreciseSearchScore( (int) Constants.PRECISE_SEARCH_SCORE_DEFAULT * 10);
+		preciseControlSlider.setValue((int) Constants.PRECISE_SEARCH_SCORE_DEFAULT * 10);
+		
+		
 	}
 	private void storeUserPreferences() {
 		try{
@@ -228,6 +257,7 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 			prefs.putLabelDisplayTime((Integer)maxLabelDisplayTimeSpinner.getValue());
 			prefs.putInstructionHintFontSize((Integer) instructionHintFontSizeSpinner.getValue());
 			prefs.putCanvasWidthSize((Integer) canvasWidthSizeSpinner.getValue());
+			prefs.putPreciseSearchScore(preciseControlSlider.getValue());
 			this.dispose();
 		}
 		catch (Exception e){
@@ -237,6 +267,5 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 	public static void showPreferencesEditorUI(){
 		PreferencesEditorUI preferencesEditorUI = new PreferencesEditorUI();
 		preferencesEditorUI.createAndShowUI();
-	}
-	
+	}	
 }
