@@ -175,18 +175,4 @@ public class Utils {
     		logger.error("Failed to open the following URL: "+ URLString);
     	}
     }
-    
-    /**
-     * Gets number of connected displays
-     * 
-     * @return Returns the number of connected displays
-     */
-    public static int getConnectedDisplays(){
-    	GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    	GraphicsDevice sd[] = ge.getScreenDevices();
-    	if(sd != null){
-    		return sd.length;
-    	}
-    	return 0;
-    }
 }
