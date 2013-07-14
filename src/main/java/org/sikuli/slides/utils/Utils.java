@@ -4,8 +4,6 @@ Khalid
 package org.sikuli.slides.utils;
 
 import java.awt.Desktop;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
