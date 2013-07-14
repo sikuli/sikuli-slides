@@ -10,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +22,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.text.NumberFormatter;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.UserPreferencesEditor;
+import org.sikuli.slides.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +35,7 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 	canvasWidthSizeSpinner;
 	private JButton okButton, cancelButton, restoreButton;
     private JSlider preciseControlSlider;
+    private JComboBox displaysComboBox;
 	
 	public PreferencesEditorUI(){
 		super("sikuli-slides -- Preferences");
@@ -105,7 +108,7 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 		int currentPreciseScoreValue = (int) (prefs.getPreciseSearchScore() * 10);
 		final int maxPreciseScoreValue = 10;
 		
-		JLabel perciseControlLabel=new JLabel("Precision Value:");
+		JLabel perciseControlLabel=new JLabel("Precision value score that controls how accurate the image search is:");
 		
 		preciseControlSlider = new JSlider(JSlider.HORIZONTAL,1, maxPreciseScoreValue, currentPreciseScoreValue);
 		preciseControlSlider.setPaintLabels(true);
@@ -123,9 +126,34 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 		gridBagLayout.setConstraints(preciseControlSlider, constraints);
 		panel.add(preciseControlSlider);
 		
+		JLabel displaysLabel=new JLabel("Main Display (select from connected displays):");
+		constraints.gridy = 2;
+		constraints.gridx = 0;
+		
+		int numberofDisplays = Utils.getConnectedDisplays();
+		String [] availableDisplays = new String[numberofDisplays];
+		for(int i=0; i<numberofDisplays; i++){
+			availableDisplays[i] = Integer.toString(i);
+		}
+		displaysComboBox = new JComboBox(availableDisplays);
+		displaysComboBox.setSelectedIndex(Constants.ScreenId);
+		displaysComboBox.addActionListener(this);
+		displaysComboBox.setMaximumSize(displaysComboBox.getPreferredSize());
+		displaysComboBox.addActionListener(this);
+		
+		displaysLabel.setLabelFor(displaysComboBox);
+		
+		gridBagLayout.setConstraints(displaysLabel, constraints);
+		panel.add(displaysLabel);
+		
+		constraints.gridx = 1;
+		gridBagLayout.setConstraints(displaysComboBox, constraints);
+		panel.add(displaysComboBox);
+		
 		return panel;
 		
 	}
+	
 	private JPanel makeSettingsPanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
@@ -230,6 +258,9 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 		}
 		else if(e.getSource() == cancelButton){
 			this.dispose();
+		}
+		else if(e.getSource() == displaysComboBox){
+			Constants.ScreenId = displaysComboBox.getSelectedIndex();
 		}
 	}
 	
