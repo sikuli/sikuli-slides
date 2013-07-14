@@ -20,9 +20,9 @@ import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.text.NumberFormatter;
+import org.sikuli.api.robot.desktop.DesktopScreen;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.UserPreferencesEditor;
-import org.sikuli.slides.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -130,7 +130,7 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 		constraints.gridy = 2;
 		constraints.gridx = 0;
 		
-		int numberofDisplays = Utils.getConnectedDisplays();
+		int numberofDisplays = DesktopScreen.getNumberScreens();
 		String [] availableDisplays = new String[numberofDisplays];
 		for(int i=0; i<numberofDisplays; i++){
 			availableDisplays[i] = Integer.toString(i);
