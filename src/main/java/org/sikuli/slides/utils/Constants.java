@@ -63,6 +63,15 @@ public class Constants {
 	 */
 	public static int MAX_WAIT_TIME_MS_DEFAULT = 15000;
 	/**
+	 * The key name for the score value that controls how fuzzy the image search is. A value of 1 means the search
+	 * is very precise and less fuzzy. This is defined as minscore in the API
+	 */
+	public static final String PRECISE_SEARCH_SCORE = "precise_search_score";
+	/**
+	 * The default key value for the score value that controls how fuzzy the image search is
+	 */
+	public static final double PRECISE_SEARCH_SCORE_DEFAULT = 0.7;
+	/**
 	 *  The key name for the time to display a label on the screen.
 	 */
 	public static final String LABEL_DISPLAY_TIME_SEC = "label_display_time_sec";
@@ -92,11 +101,6 @@ public class Constants {
 	 * 0 means the default monitor and 1 means the secondary monitor.
 	 */
 	public static int ScreenId=0;
-	/**
-	 * This control how fuzzy the image search is. A value of 1 means the search
-	 * is very precise and less fuzzy
-	 */
-	public static double MinScore=0.7;
 	/**
 	 * Flag for the old syntax. Prior to version 1.2.0, we use special shapes to represent each action.
 	 */
