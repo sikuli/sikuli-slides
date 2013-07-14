@@ -22,14 +22,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.text.DefaultCaret;
 import org.sikuli.slides.Main;
 import org.sikuli.slides.utils.Constants;
@@ -43,11 +40,10 @@ import ch.qos.logback.classic.PatternLayout;
 
 
 
-public class MainUI extends JFrame implements ActionListener, ChangeListener {
+public class MainUI extends JFrame implements ActionListener {
 	private static final long serialVersionUID = -839784598366545263L;
     private JButton btn_open;
     private JComboBox runningModeList;
-    private JSlider perciseControlSlider;
     private JLabel statusLabel;
     public JTextArea logArea;
     private JPanel bottomPanel;
@@ -116,7 +112,7 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener {
         
         ImageIcon open_file_icon=new ImageIcon(MainUI.class.getResource(Constants.RESOURCES_ICON_DIR+"powerpoint-icon.png"));
         btn_open= new JButton("Open",open_file_icon);
-        btn_open.setToolTipText("Open PowerPoint file (*.pptx");
+        btn_open.setToolTipText("Open PowerPoint file (*.pptx)");
         btn_open.addActionListener(this);
         btn_open.setFocusable(false);
         btn_open.setMaximumSize(btn_open.getPreferredSize());
@@ -133,21 +129,6 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener {
         runningModeList.setMaximumSize(runningModeList.getPreferredSize());
         runningModeList.addActionListener(this);
         horizontal_toolbar.add(runningModeList);
-        
-        // precise control
-        JLabel perciseControlLabel=new JLabel("  Precision Value:");
-        horizontal_toolbar.add(perciseControlLabel);
-        
-        int initPreciseVal=(int)(Constants.MinScore*10);
-        perciseControlSlider=new JSlider(JSlider.HORIZONTAL,1,10,initPreciseVal);
-        perciseControlSlider.setPaintLabels(true);
-        perciseControlSlider.setPaintTicks(true);
-        perciseControlSlider.setMajorTickSpacing(1);
-        perciseControlSlider.setMinorTickSpacing(1);
-        perciseControlSlider.setMaximumSize(perciseControlSlider.getPreferredSize());
-        perciseControlSlider.addChangeListener(this);
-        //perciseControlSlider.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Precision"));
-        horizontal_toolbar.add(perciseControlSlider);
         
         // output area
         bottomPanel=new JPanel(new BorderLayout());
@@ -170,7 +151,8 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener {
         setFocusable(true);
         
         setTitle("Sikuli-Slides");
-        pack();
+        setSize(600, 200);
+        //pack();
         setResizable(false);
         setLocationRelativeTo(null); //center the window on the screen
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -213,14 +195,6 @@ public class MainUI extends JFrame implements ActionListener, ChangeListener {
         else if(e.getSource() == quitMenuItem){
         	System.exit(0);
         }
-	}
-	
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		if(e.getSource()==perciseControlSlider){
-			int precision=perciseControlSlider.getValue();
-			Constants.MinScore=(double)precision/10;
-		}
 	}
 	
 	private File openFile(){
