@@ -12,6 +12,7 @@ import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.processing.ImageProcessing;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
+import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.UserPreferencesEditor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +92,7 @@ public class RegionSelector {
 				break;
 			}
 			else{
-				ScreenRegion screenRegion=new DesktopScreenRegion(leftEdge, 
+				ScreenRegion screenRegion=new DesktopScreenRegion(Constants.ScreenId, leftEdge, 
 				slideTargetRegion.getY(), newWidth, slideTargetRegion.getHeight());
 				screenRegions.add(screenRegion);
 			}
@@ -117,7 +118,7 @@ public class RegionSelector {
 				break;
 			}
 			else{
-				ScreenRegion screenRegion=new DesktopScreenRegion(slideTargetRegion.getX(), 
+				ScreenRegion screenRegion=new DesktopScreenRegion(Constants.ScreenId, slideTargetRegion.getX(), 
 				slideTargetRegion.getY(), regionWidth, slideTargetRegion.getHeight());
 				screenRegions.add(screenRegion);
 			}
@@ -144,7 +145,7 @@ public class RegionSelector {
 				break;
 			}
 			else{
-				ScreenRegion screenRegion=new DesktopScreenRegion(slideTargetRegion.getX(), 
+				ScreenRegion screenRegion=new DesktopScreenRegion(Constants.ScreenId, slideTargetRegion.getX(), 
 						upperEdge, slideTargetRegion.getWidth(),newHeight);
 				screenRegions.add(screenRegion);
 			}
@@ -170,7 +171,7 @@ public class RegionSelector {
 				break;
 			}
 			else{
-				ScreenRegion screenRegion=new DesktopScreenRegion(slideTargetRegion.getX(), 
+				ScreenRegion screenRegion=new DesktopScreenRegion(Constants.ScreenId, slideTargetRegion.getX(), 
 						slideTargetRegion.getY(), slideTargetRegion.getWidth(),regionHeight);
 				screenRegions.add(screenRegion);
 			}
@@ -190,7 +191,7 @@ public class RegionSelector {
 	private ScreenRegion doDirectionalSearch(ImageTarget imageTarget,
 			SlideTargetRegion slideTargetRegion, int direction) {
 		
-		ScreenRegion fullScreenRegion=SikuliController.getFullScreenRegion();
+		ScreenRegion fullScreenRegion = new DesktopScreenRegion(Constants.ScreenId);
 		List<ScreenRegion> directionScreenRegions;
 		if(direction==TOP){
 			directionScreenRegions=getTopScreenRegionList();

@@ -22,6 +22,7 @@ import org.sikuli.api.robot.desktop.DesktopKeyboard;
 import org.sikuli.api.robot.desktop.DesktopMouse;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
+import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.core.SlideComponent;
 import org.sikuli.slides.media.Sound;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
@@ -125,7 +126,7 @@ public class SlideAction {
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
 		imageTarget.setMinScore(prefsEditor.getPreciseSearchScore());
 		if(imageTarget!=null){
-			ScreenRegion fullScreenRegion=SikuliController.getFullScreenRegion();
+			ScreenRegion fullScreenRegion = new DesktopScreenRegion(Constants.ScreenId);
 	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, prefsEditor.getMaxWaitTime());
 	    	
 	    	if(targetRegion!=null){
@@ -234,7 +235,7 @@ public class SlideAction {
 	private void performLeftClick(ScreenRegion targetRegion){
 		logger.info("performing left click event on target...");
 		Mouse mouse = new DesktopMouse();
-		SikuliController.displayBox(targetRegion);
+		displayBoxOnRegion(targetRegion);
 		mouse.click(targetRegion.getCenter());
 	}
 	
@@ -245,7 +246,7 @@ public class SlideAction {
 	private void performRightClick(ScreenRegion targetRegion){
 		logger.info("performing right click event on target...");
 		Mouse mouse = new DesktopMouse();
-		SikuliController.displayBox(targetRegion);
+		displayBoxOnRegion(targetRegion);
 		mouse.rightClick(targetRegion.getCenter());
 	}
 	/**
@@ -255,7 +256,7 @@ public class SlideAction {
 	private void performDoubleClick(ScreenRegion targetRegion){
 		logger.info("performing double click event on target...");
 		Mouse mouse = new DesktopMouse();
-		SikuliController.displayBox(targetRegion);
+		displayBoxOnRegion(targetRegion);
 		mouse.doubleClick(targetRegion.getCenter());
 	}
 	
@@ -267,11 +268,11 @@ public class SlideAction {
 		logger.info("performing drag and drop event on targets...");
 		Mouse mouse = new DesktopMouse();
 		if(slideShape.getOrder()==0){
-			SikuliController.displayBox(targetRegion);
+			displayBoxOnRegion(targetRegion);
 			mouse.drag(targetRegion.getCenter());
 		}
 		else if(slideShape.getOrder()==1){
-			SikuliController.displayBox(targetRegion);
+			displayBoxOnRegion(targetRegion);
 			mouse.drop(targetRegion.getCenter());
 		}
 		else{
@@ -288,7 +289,7 @@ public class SlideAction {
 		logger.info("performing keyboard typing event on target...");
 		Mouse mouse = new DesktopMouse();
 		Keyboard keyboard=new DesktopKeyboard();
-		SikuliController.displayBox(targetRegion);
+		displayBoxOnRegion(targetRegion);
 		mouse.click(targetRegion.getCenter());
 		keyboard.type(slideShape.getText());
 	}
@@ -340,8 +341,8 @@ public class SlideAction {
 			}
 			// display a label
 			Dimension dimension=MyScreen.getScreenDimensions();
-			ScreenRegion canvasRegion=new DesktopScreenRegion(0, dimension.height-200,50,200);
-			Canvas canvas=new DesktopCanvas();
+			ScreenRegion canvasRegion=new DesktopScreenRegion(Constants.ScreenId, 0, dimension.height-200,50,200);
+			Canvas canvas=new ScreenRegionCanvas(new DesktopScreenRegion(Constants.ScreenId));
 			String readyTime=getReadyDate(timeUnit, timeout);
 			String waitMessage="Please wait for "+timeout+" "+timeUnit.toString().toLowerCase()+"...."+
 					"This might end at "+readyTime;
@@ -385,5 +386,11 @@ public class SlideAction {
 			return sdf.format(timeoutCalendar.getTime()).toString();
 		}
 		return null;
+	}
+	private void displayBoxOnRegion(ScreenRegion screenRegion){
+		Canvas canvas=new ScreenRegionCanvas(new DesktopScreenRegion(Constants.ScreenId));
+		// Display the canvas around the target
+		canvas.addBox(screenRegion);
+		canvas.display(2);
 	}
 }

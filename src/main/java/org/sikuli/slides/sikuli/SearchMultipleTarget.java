@@ -8,6 +8,7 @@ import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
+import org.sikuli.slides.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +26,7 @@ public class SearchMultipleTarget {
 	 * @return returns true if the screen contains multiple occurrences of the target image (similar targets).
 	 */
 	public boolean hasMultipleOccurance(ImageTarget imageTarget){
-		ScreenRegion fullScreenRegion=new DesktopScreenRegion();
+		ScreenRegion fullScreenRegion=new DesktopScreenRegion(Constants.ScreenId);
 		List<ScreenRegion> targetList=fullScreenRegion.findAll(imageTarget);
 		if(targetList!=null && targetList.size()>1){
 			logger.info("Found "+targetList.size()+" similar targets on the screen.");

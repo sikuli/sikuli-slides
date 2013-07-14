@@ -2,14 +2,14 @@
 @author Khalid Alharbi
 */
 package org.sikuli.slides.sikuli;
-import java.awt.Color;
 
+import java.awt.Color;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
-import org.sikuli.api.visual.DesktopCanvas;
+import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.listeners.GlobalKeyboardListeners;
 import org.sikuli.slides.listeners.GlobalMouseListeners;
 import org.sikuli.slides.shapes.SlideShape;
@@ -65,13 +65,13 @@ public class SlideTutorial {
 		if(targetRegion==null){
 			return;
 		}
-		Canvas canvas=new DesktopCanvas();
+		Canvas canvas=new ScreenRegionCanvas(new DesktopScreenRegion(Constants.ScreenId));
 		canvas.addBox(targetRegion).withLineWidth(prefsEditor.getCanvasWidthSize());
 		int x=targetRegion.getBounds().x;
 		int y=targetRegion.getBounds().y;
 		int w=targetRegion.getBounds().width;
 		int h=targetRegion.getBounds().height;
-		ScreenRegion labelRegion=new DesktopScreenRegion(x,y-h,w,h);
+		ScreenRegion labelRegion=new DesktopScreenRegion(Constants.ScreenId,x,y-h,w,h);
 		canvas.addLabel(labelRegion, getActionDisplayName())
 			.withColor(Color.black).withFontSize(prefsEditor.getInstructionHintFontSize());;
         logger.info("Waiting for the user to pefrom "+this.desktopEvent.toString()+" on the highlighted target.");
