@@ -123,7 +123,7 @@ public class SlideAction {
 
 	private ScreenRegion findTargetRegion(File targetFile, SlideTargetRegion slideTargetRegion){
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
-		imageTarget.setMinScore(Constants.MinScore);
+		imageTarget.setMinScore(prefsEditor.getPreciseSearchScore());
 		if(imageTarget!=null){
 			ScreenRegion fullScreenRegion=SikuliController.getFullScreenRegion();
 	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, prefsEditor.getMaxWaitTime());

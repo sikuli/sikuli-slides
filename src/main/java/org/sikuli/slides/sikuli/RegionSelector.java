@@ -12,7 +12,7 @@ import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.processing.ImageProcessing;
 import org.sikuli.slides.screenshots.SlideTargetRegion;
-import org.sikuli.slides.utils.Constants;
+import org.sikuli.slides.utils.UserPreferencesEditor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RegionSelector {
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(RegionSelector.class);
+	private static UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
 	private SlideTargetRegion slideTargetRegion;
 	private final int widthFactor=30;
 	private final int heightFactor=30;
@@ -222,7 +223,7 @@ public class RegionSelector {
 			*/
 			// check if there are more than one occurrence of the region itself
 			ImageTarget newImageTarget=new ImageTarget(croppedRegionImage);
-			newImageTarget.setMinScore(Constants.MinScore);
+			newImageTarget.setMinScore(prefsEditor.getPreciseSearchScore());
 			List<ScreenRegion>lookupRegion=fullScreenRegion.findAll(newImageTarget);
 			if(lookupRegion.size()>1){
 				continue;
