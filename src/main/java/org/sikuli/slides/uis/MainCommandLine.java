@@ -14,6 +14,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+import org.sikuli.api.robot.desktop.DesktopScreen;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyFileFilter;
 import org.sikuli.slides.utils.UserPreferencesEditor;
@@ -52,6 +53,19 @@ public class MainCommandLine {
 	    	else if (cmd.hasOption("w")){
 	    		int wait=Integer.parseInt(cmd.getOptionValue("w"));
 	        	prefsEditor.putMaxWaitTime(wait);
+	    	}
+	    	else if (cmd.hasOption("d")){
+	    		int screenId=Integer.parseInt(cmd.getOptionValue("d"));
+	        	if(screenId > DesktopScreen.getNumberScreens()){
+	    			String errorMessage="Invalid display id or display is not connected.\n" +
+	    					"Please enter the id of the connected display or monitor. \n" +
+	    					"Example: 0 means main display, 1 means the secondary display, etc.";
+	    			System.out.write(errorMessage.getBytes());
+	    			throw new Exception();
+	        	}
+	        	else{
+	        		Constants.ScreenId = screenId;
+	        	}
 	    	}
 	    	else if (cmd.hasOption("oldsyntax")){
 	        	Constants.UseOldSyntax=true;
@@ -131,6 +145,12 @@ public class MainCommandLine {
                 		"on the screen (current default value is "+prefsEditor.getMaxWaitTime()+" ms)." )
                 .create("w");
 		
+		Option displayOption=OptionBuilder.withArgName("display_id")
+                .hasArg()
+                .withDescription("The id of the connected display or monitor " +
+                		"(current default value is "+Constants.ScreenId+")." )
+                .create("d");
+		
 		Option precisionOption=OptionBuilder.withArgName("precision")
                 .hasArg()
                 .withDescription("The precision value to control the degree of fuzziness of " +
@@ -155,6 +175,7 @@ public class MainCommandLine {
 		
 		posixOptions.addOption(helpOption);
 		posixOptions.addOption(waitOption);
+		posixOptions.addOption(displayOption);
 		posixOptions.addOption(precisionOption);
 		posixOptions.addOption(oldSyntaxOption);
 		posixOptions.addOption(modeOption);
