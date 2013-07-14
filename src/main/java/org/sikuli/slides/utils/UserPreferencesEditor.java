@@ -10,19 +10,44 @@ import org.slf4j.LoggerFactory;
 public class UserPreferencesEditor {
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(UserPreferencesEditor.class);
 	private Preferences prefs;
+	private static final String NEW_LINE = System.getProperty("line.separator");
 	
 	public UserPreferencesEditor(){
 		prefs = Preferences.userNodeForPackage(UserPreferencesEditor.class);
 	}
 	/**
+	 * Returns the stored user preferences value for fuzziness score value that controls how fuzzy the image 
+	 * search is. It returns a value between 0.1 and 1, where 0.1 is the least precise search and 1 is the most 
+	 * precise search (default is 0.7).
+	 * @return the fuzziness score value that controls how fuzzy the image search is.
+	 */
+	public double getPreciseSearchScore(){
+		return prefs.getDouble(Constants.PRECISE_SEARCH_SCORE, Constants.PRECISE_SEARCH_SCORE_DEFAULT);
+	}
+	/**
+	 * Sets the fuzziness score value that controls how fuzzy the image. It accepts a value between 1 and 10, where 1 
+	 * is the least precise search and 10 is the most precise search.
+	 * precise search (default is 7). The new value is stored in user preferences.
+	 * @param PRECISE_SEARCH_SCORE_VALUE the fuzziness score value that controls how fuzzy the image search is.
+	 */
+	public void putPreciseSearchScore(int PRECISE_SEARCH_SCORE_VALUE){
+		if(PRECISE_SEARCH_SCORE_VALUE > 0 && PRECISE_SEARCH_SCORE_VALUE <= 10){
+			prefs.putDouble(Constants.PRECISE_SEARCH_SCORE, PRECISE_SEARCH_SCORE_VALUE/10);
+		}
+		else{
+			logger.error("Invalid precision score value. Please enter a valid score value.{}Accepted values are between " +
+					"1 and 10, where 1 is the least precise search and 10 is the most precise search.",NEW_LINE);
+		}
+	}
+	/**
 	 * Returns the stored user preferences value for maximum wait time in milliseconds for all find target operations.
-	 * @return maximum wait time in milliseconds for all find target operations
+	 * @return the maximum wait time in milliseconds for all find target operations
 	 */
 	public int getMaxWaitTime(){
 		return prefs.getInt(Constants.MAX_WAIT_TIME_MS, Constants.MAX_WAIT_TIME_MS_DEFAULT);
 	}
 	/**
-	 * Set the maximum wait time in milliseconds for all find target operations and store
+	 * Sets the maximum wait time in milliseconds for all find target operations and store
 	 * the new value in user preferences 
 	 * @param MAX_WAIT_TIME_MS_NEW_VALUE maximum wait time in milliseconds for all find target operations
 	 */
