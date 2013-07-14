@@ -32,6 +32,7 @@ public class MainCommandLine {
 			applicationName+"-"+versionNumber+".jar "+
 			"presentation_file.pptx";
 	private static final String fileNotFoundError="No such file.";
+	
 	/**
 	* Parse the command-line arguments as POSIX like options (one character long option).
 	* @param args Command-line arguments
@@ -76,8 +77,8 @@ public class MainCommandLine {
 	    	}
 	    	else if(cmd.hasOption("p")){
 	    		int precision=Integer.parseInt(cmd.getOptionValue("p"));
-	    		if(precision>0&&precision<11){
-	    			Constants.MinScore=(double)precision/10;
+	    		if(precision> 0 && precision <= 10){
+	    			prefsEditor.putPreciseSearchScore(precision);
 	    		}
 	    		else{
 	    			String errorMessage="Invalid precision scale value.\n";
@@ -134,7 +135,7 @@ public class MainCommandLine {
                 .hasArg()
                 .withDescription("The precision value to control the degree of fuzziness of " +
                 		"the image recognition search. It's a 10-point scale where 1 is the least precise search" +
-                		" and 10 is the most precise search. (default is 7)." )
+                		" and 10 is the most precise search. (default is 7). The new value is stored in user preferences." )
                 .create("p");
 		
 		Option oldSyntaxOption=OptionBuilder.withArgName("oldsyntax")
