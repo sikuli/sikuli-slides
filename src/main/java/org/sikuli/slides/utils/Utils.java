@@ -4,6 +4,8 @@ Khalid
 package org.sikuli.slides.utils;
 
 import java.awt.Desktop;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -172,5 +174,19 @@ public class Utils {
     	catch (Exception e) {
     		logger.error("Failed to open the following URL: "+ URLString);
     	}
+    }
+    
+    /**
+     * Gets number of connected displays
+     * 
+     * @return Returns the number of connected displays
+     */
+    public static int getConnectedDisplays(){
+    	GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    	GraphicsDevice sd[] = ge.getScreenDevices();
+    	if(sd != null){
+    		return sd.length;
+    	}
+    	return 0;
     }
 }
