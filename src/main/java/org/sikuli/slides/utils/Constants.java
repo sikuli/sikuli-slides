@@ -31,6 +31,10 @@ public class Constants {
 	 */
 	public static final String SIKULI_DIRECTORY=File.separator+"sikuli";
 	/**
+	 * The name of the directory that contains the downloaded files.
+	 */
+	public static final String SIKULI_DOWNLOAD_DIRECTORY=File.separator+"download";
+	/**
 	 * The name of the images directory that contains the cropped target images.
 	 */
 	public static final String IMAGES_DIRECTORY=File.separator+"images";

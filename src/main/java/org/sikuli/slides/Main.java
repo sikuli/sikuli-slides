@@ -1,9 +1,7 @@
 package org.sikuli.slides;
 
-import java.io.File;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
 import org.sikuli.slides.uis.MainCommandLine;
 import org.sikuli.slides.uis.MainUI;
 import org.sikuli.slides.utils.Constants;
@@ -36,11 +34,11 @@ public class Main{
 	/**
 	 * starts processing the work
 	 */
-	public void doSikuliPowerPoint(File file){	
+	public void doSikuliPowerPoint(String pptxSourceName){	
 		Constants.Execution_Start_Time=System.currentTimeMillis();
-		if(file!=null){
+		if(pptxSourceName != null){
 			// run sikuli-slides work
-			SikuliPowerPoint sikuliPowerPoint=new SikuliPowerPoint(file);
+			SikuliPowerPoint sikuliPowerPoint=new SikuliPowerPoint(pptxSourceName);
 			sikuliPowerPoint.runSikuliPowerPoint();
 		}
 	}
@@ -78,9 +76,9 @@ public class Main{
 		}
 		// Otherwise, run the command line tool and get the file name
 		else{			
-			String FileName=MainCommandLine.runCommandLineTool(args);
-			if(FileName!=null){
-				main.doSikuliPowerPoint(new File(FileName));
+			String pptxSourceName=MainCommandLine.runCommandLineTool(args);
+			if(pptxSourceName != null){
+				main.doSikuliPowerPoint(pptxSourceName);
 			}
 		}
 	}

@@ -8,13 +8,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sun.media.Log;
 
 public class Utils {
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(Utils.class);
@@ -124,7 +129,7 @@ public class Utils {
  
             int len;
             while ((len = zis.read(buffer)) > 0) {
-       		fos.write(buffer, 0, len);
+            	fos.write(buffer, 0, len);
             }
  
             fos.close();   
@@ -172,5 +177,55 @@ public class Utils {
     	catch (Exception e) {
     		logger.error("Failed to open the following URL: "+ URLString);
     	}
+    }
+    public static File downloadFile(String URL){
+    	URL downloadURL = getGoogleDriveDownloadLink(URL);
+    	File destination = null;
+		try {
+			//destination = new File(Constants.workingDirectoryPath + Constants.SIKULI_DOWNLOAD_DIRECTORY + File.separator + "tmp.pptx");
+			destination = File.createTempFile("gdrive", ".pptx", new File(Constants.workingDirectoryPath + Constants.SIKULI_DOWNLOAD_DIRECTORY));
+			FileUtils.copyURLToFile(downloadURL, destination, 300000, 30000);
+		} catch (IOException e) {
+			Log.error("Error while downloading the file");
+		}
+    	
+    	return destination;
+    }
+    private static URL getGoogleDriveDownloadLink(String gDriveShareLink){
+    	// Example input: https://docs.google.com/presentation/d/1-qXEu7jYvm1Oql-hBcjgXU5zLQUGWd_uGH6mc8buRkI/export/pptx
+    	//https://docs.google.com/presentation/d/1-qXEu7jYvm1Oql-hBcjgXU5zLQUGWd_uGH6mc8buRkI/export/pptx
+    	if(gDriveShareLink != null){
+    		try {
+				URI uri = new URI(gDriveShareLink);
+				
+				// check if the domain is Google.com
+				String domain = uri.getHost();
+				String domainName = domain.startsWith("www.")? domain.substring(4) : domain;
+				if(domainName.equalsIgnoreCase("docs.google.com")){
+					try{
+						int startIndex = gDriveShareLink.indexOf("/d/") + 3;
+						int lastIndex = gDriveShareLink.indexOf("/edit");
+						String documentId = gDriveShareLink.substring( startIndex, lastIndex);
+						
+						// construct download link
+						String downloadLink = "https://docs.google.com/presentation/d/" + 
+								documentId + "/export/pptx";
+						return new URL(downloadLink);
+					}
+					catch(StringIndexOutOfBoundsException e){
+						logger.error("ERROR: Invalid Google Drive link.");
+					}
+				}
+				else{
+					logger.error("ERROR: Invalid Google Drive link.");
+				}
+			} catch (URISyntaxException e) {
+				logger.error("ERROR: Invalid Google Drive share link.");
+			}
+    		catch (MalformedURLException e){
+    			logger.error("ERROR: Invalid Google Drive share link.");
+    		}
+    	}
+    	return null;
     }
 }

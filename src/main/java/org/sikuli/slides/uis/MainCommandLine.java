@@ -28,10 +28,10 @@ import org.sikuli.slides.utils.UserPreferencesEditor;
 public class MainCommandLine {
 	private static UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
 	private static final String applicationName = "sikuli-slides";
-	private static final String versionNumber="1.2.0";
+	private static final String versionNumber="1.3.0";
 	private static final String commandLineSyntax = "java -jar "+
 			applicationName+"-"+versionNumber+".jar "+
-			"presentation_file.pptx";
+			"Path_to_presentation_file.pptx | URL_to_presentation_file.pptx";
 	private static final String fileNotFoundError="No such file.";
 	
 	/**
@@ -108,26 +108,32 @@ public class MainCommandLine {
 	        	return null;
 	        }
 	        else if(remainingArguments.length>0){
-	        	MyFileFilter myFileFilter=new MyFileFilter();
-	        	String FileName=remainingArguments[0];
-	        	File source_file=new File(FileName);
-	        	if(myFileFilter.accept(source_file)){
-	        		if(source_file.exists()){
-	        			showTextHeader(System.out);
-	        			displayBlankLine();
-	        			return source_file.getAbsolutePath();
-	        		}
-	        		else{
-	        			System.out.write(fileNotFoundError.getBytes()); 
-	        			displayBlankLine();
-	        			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
-	        		}
+	        	String argName=remainingArguments[0];
+	        	// check if the file is remotely stored in the cloud
+	        	if(argName.startsWith("http")){
+	        		return argName;
 	        	}
 	        	else{
-	        		printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+	        		// the file is locally stored
+	        		MyFileFilter myFileFilter=new MyFileFilter();
+	        		File source_file=new File(argName);
+	        		if(myFileFilter.accept(source_file)){
+	        			if(source_file.exists()){
+	        				showTextHeader(System.out);
+	        				displayBlankLine();
+	        				return source_file.getAbsolutePath();
+	        			}
+	        			else{
+	        				System.out.write(fileNotFoundError.getBytes()); 
+	        				displayBlankLine();
+	        				printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+	        			}
+	        		}
 	        	}
 	        }
-
+	        else{
+	        	printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+	        }
 		return null;
 	}
 	

@@ -31,23 +31,20 @@ import org.slf4j.LoggerFactory;
 //TODO: This class needs to be refactored.
 public class SikuliPowerPoint {
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(SikuliPowerPoint.class);
-	private File file;
 	private Presentation presentation;
+	private String pptxSourceName;
 	private AtomicInteger counter;
 	private List<SikuliAction> tasks;
 	private static final String NEW_LINE = System.getProperty("line.separator");
 	
-	public SikuliPowerPoint(File file){
-		this.file=file;
+	public SikuliPowerPoint(String pptxSourceName){
+		this.pptxSourceName = pptxSourceName;
 		counter=new AtomicInteger();
 		tasks=new ArrayList<SikuliAction>();
 	}
 	public void runSikuliPowerPoint(){
-		// set the project directory name
-		Constants.projectDirectory=Constants.workingDirectoryPath+File.separator+FilenameUtils.removeExtension(file.getName());
-
 		// load the .pptx file
-		loadPresentationFile(file);
+		loadPresentationFile();
 		// parse the general presentation.xml file
 		parsePresentationFile();
 		// parse each slide file in the presentation document
@@ -62,13 +59,31 @@ public class SikuliPowerPoint {
 	}
 	
 
-	private void loadPresentationFile(File file) {
-		// compress the file.
-		Utils.doZipFile(file);
-		// decompress the file.
-		Utils.doUnZipFile(file);
-		// create images directory
-		Utils.createSikuliImagesDirectory();
+	private void loadPresentationFile() {
+		File file = null;
+		// if the file is remotely stored in the cloud
+		if(pptxSourceName.startsWith("http")){
+			file = Utils.downloadFile(pptxSourceName);
+		}
+		else{
+			file = new File(pptxSourceName);
+		}
+		if(file !=null){
+			// set the project directory name
+			Constants.projectDirectory=Constants.workingDirectoryPath + 
+					File.separator + 
+					FilenameUtils.removeExtension(file.getName());
+			// compress the file.
+			Utils.doZipFile(file);
+			// decompress the file.
+			Utils.doUnZipFile(file);
+			// create images directory
+			Utils.createSikuliImagesDirectory();
+		}
+		else{
+			logger.error("ERROR: Failed to find the .pptx file");
+			System.exit(0);
+		}
 	}
 	
 	private void parsePresentationFile(){
