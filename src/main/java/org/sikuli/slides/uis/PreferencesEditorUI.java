@@ -277,8 +277,8 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 		prefs.putCanvasWidthSize(Constants.CANVAS_WIDTH_SIZE_DEFAULT);
 		canvasWidthSizeSpinner.setValue(Constants.CANVAS_WIDTH_SIZE_DEFAULT);
 		
-		prefs.putPreciseSearchScore( (int) Constants.PRECISE_SEARCH_SCORE_DEFAULT * 10);
-		preciseControlSlider.setValue((int) Constants.PRECISE_SEARCH_SCORE_DEFAULT * 10);
+		prefs.putPreciseSearchScore((int) (Constants.PRECISE_SEARCH_SCORE_DEFAULT * 10));
+		preciseControlSlider.setValue((int) (Constants.PRECISE_SEARCH_SCORE_DEFAULT * 10));
 		
 		
 	}
