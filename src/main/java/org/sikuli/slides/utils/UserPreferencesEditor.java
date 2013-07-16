@@ -32,7 +32,8 @@ public class UserPreferencesEditor {
 	 */
 	public void putPreciseSearchScore(int PRECISE_SEARCH_SCORE_VALUE){
 		if(PRECISE_SEARCH_SCORE_VALUE > 0 && PRECISE_SEARCH_SCORE_VALUE <= 10){
-			prefs.putDouble(Constants.PRECISE_SEARCH_SCORE, PRECISE_SEARCH_SCORE_VALUE/10);
+			double score = (double) PRECISE_SEARCH_SCORE_VALUE / 10.0;
+			prefs.putDouble(Constants.PRECISE_SEARCH_SCORE, score);
 		}
 		else{
 			logger.error("Invalid precision score value. Please enter a valid score value.{}Accepted values are between " +
