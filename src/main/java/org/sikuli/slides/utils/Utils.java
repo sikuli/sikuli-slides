@@ -182,8 +182,9 @@ public class Utils {
     	URL downloadURL = getGoogleDriveDownloadLink(URL);
     	File destination = null;
 		try {
-			//destination = new File(Constants.workingDirectoryPath + Constants.SIKULI_DOWNLOAD_DIRECTORY + File.separator + "tmp.pptx");
-			destination = File.createTempFile("gdrive", ".pptx", new File(Constants.workingDirectoryPath + Constants.SIKULI_DOWNLOAD_DIRECTORY));
+			File directory = new File(Constants.workingDirectoryPath + Constants.SIKULI_DOWNLOAD_DIRECTORY);
+			directory.mkdir();
+			destination = File.createTempFile("gdrive", ".pptx", directory);
 			FileUtils.copyURLToFile(downloadURL, destination, 300000, 30000);
 		} catch (IOException e) {
 			Log.error("Error while downloading the file");
