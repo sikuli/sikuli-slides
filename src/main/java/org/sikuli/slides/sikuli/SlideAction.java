@@ -218,13 +218,13 @@ public class SlideAction {
 			int height = UnitConverter.emuToPixels(slideLabel.getCy());
 			int x = (dimension.width-width)/2;
 			int y = (dimension.height-height)/2;
-			targetRegion = new DesktopScreenRegion(x, y, width, height);
+			targetRegion = new DesktopScreenRegion(Constants.ScreenId, x, y, width, height);
 		}
 		double fontSize=UnitConverter.WholePointsToPoints(slideLabel.getTextSize());
 		if(fontSize==0){
 			fontSize=prefsEditor.getInstructionHintFontSize();
 		}
-		Canvas canvas = new DesktopCanvas();
+		Canvas canvas = new ScreenRegionCanvas(new DesktopScreenRegion(Constants.ScreenId));
 		canvas.addLabel(targetRegion, slideLabel.getText()).
 			withColor(Color.black).withFontSize((int)fontSize).withLineWidth(prefsEditor.getCanvasWidthSize());
 		canvas.display(prefsEditor.getLabelDisplayTime());
