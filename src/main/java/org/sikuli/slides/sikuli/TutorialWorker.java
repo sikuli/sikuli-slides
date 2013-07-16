@@ -1,14 +1,21 @@
 
 package org.sikuli.slides.sikuli;
 
+import java.awt.Dimension;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.JLabel;
 import javax.swing.SwingWorker;
+import org.sikuli.api.DesktopScreenRegion;
+import org.sikuli.api.ScreenRegion;
+import org.sikuli.api.visual.Canvas;
+import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.core.SikuliAction;
 import org.sikuli.slides.listeners.tutorials.Observer;
 import org.sikuli.slides.uis.TutorialConrollerUI;
 import org.sikuli.slides.utils.Constants;
+import org.sikuli.slides.utils.MyScreen;
+import org.sikuli.slides.utils.UserPreferencesEditor;
 import org.sikuli.slides.utils.Constants.NavigationStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 public class TutorialWorker extends SwingWorker<Boolean, Integer> implements Observer{
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(TutorialWorker.class);
+	private UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
 	private static AtomicInteger currentStep=null;
 	private List<SikuliAction> tasks=null;
 	private final JLabel currentSlideLabel;
@@ -74,10 +82,11 @@ public class TutorialWorker extends SwingWorker<Boolean, Integer> implements Obs
 		}
 		else{
 			logger.info("There are no next steps to move forward to.");
+			showCompleteNotification();
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Returns true if the presentation slides have more backward steps
 	 * @return true if the presentation slides have more backward steps
@@ -112,5 +121,18 @@ public class TutorialWorker extends SwingWorker<Boolean, Integer> implements Obs
 				currentStep.decrementAndGet();
 			}
 		}
+	}
+	
+	private void showCompleteNotification() {
+		Dimension screenDimension = MyScreen.getScreenDimensions();
+		int x = (int) (screenDimension.getWidth() / 2.0);
+		int y = (int) (screenDimension.getHeight() / 2.0);
+		ScreenRegion fullScreenRegion = new DesktopScreenRegion(Constants.ScreenId,
+				200,200,x, y);
+		Canvas canvas = new ScreenRegionCanvas(new DesktopScreenRegion(Constants.ScreenId));
+		canvas.addLabel(fullScreenRegion, 
+				"Great job! You have successfully completed this tutorial.")
+				.withFontSize(prefsEditor.getInstructionHintFontSize());
+		canvas.display(prefsEditor.getLabelDisplayTime());
 	}
 }
