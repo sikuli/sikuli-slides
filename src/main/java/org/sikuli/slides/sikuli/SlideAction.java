@@ -211,6 +211,8 @@ public class SlideAction {
 		   This is important in case of opening the default browser or label target region could not be found.
 		*/
 		if(targetRegion==null){
+			logger.error("Failed to find the target to display a label on.");
+			logger.info("Displaying the label on the center of the screen.");
 			Dimension dimension = MyScreen.getScreenDimensions();
 			int width = UnitConverter.emuToPixels(slideLabel.getCx());
 			int height = UnitConverter.emuToPixels(slideLabel.getCy());
