@@ -99,12 +99,20 @@ public class Constants {
 	 *  The default key value of the canvas width size.
 	 */
 	public static int CANVAS_WIDTH_SIZE_DEFAULT=5;
+	/**
+	 *  The key name for the display id.
+	 */
+	public static final String DISPLAY_ID="display_id";
+	/**
+	 *  The default key value of the canvas width size.
+	 */
+	public static int DISPLAY_ID_DEFAULT = 0;
 	
 	/**
 	 * Screen id. Use this constant to run the test on a secondary monitor, 
 	 * 0 means the default monitor and 1 means the secondary monitor.
 	 */
-	public static int ScreenId=0;
+	public static int ScreenId = 0;
 	/**
 	 * Flag for the old syntax. Prior to version 1.2.0, we use special shapes to represent each action.
 	 */
