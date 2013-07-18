@@ -260,7 +260,7 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 			this.dispose();
 		}
 		else if(e.getSource() == displaysComboBox){
-			Constants.ScreenId = displaysComboBox.getSelectedIndex();
+			prefs.putDisplayId(displaysComboBox.getSelectedIndex());
 		}
 	}
 	
