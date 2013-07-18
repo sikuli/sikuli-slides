@@ -4,6 +4,8 @@ Khalid
 package org.sikuli.slides.utils;
 
 import java.util.prefs.Preferences;
+
+import org.sikuli.api.robot.desktop.DesktopScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +61,32 @@ public class UserPreferencesEditor {
 		}
 		else{
 			prefs.putInt(Constants.MAX_WAIT_TIME_MS, MAX_WAIT_TIME_MS_NEW_VALUE);
+		}
+	}
+	/**
+	 * Returns the stored user preferences value for the display/monitor id.
+	 * @return stored user preferences value for the display/monitor id
+	 */
+	public int getDisplayId(){
+		return prefs.getInt(Constants.DISPLAY_ID, Constants.DISPLAY_ID_DEFAULT);
+	}
+	/**
+	 * Sets the display/monitor id
+	 * the new value is stored in user preferences 
+	 * @param DISPLAY_ID_VALUE the new display/monitor id
+	 */
+	public void putDisplayId(int DISPLAY_ID_VALUE){
+		if(DISPLAY_ID_VALUE < 0 || DISPLAY_ID_VALUE >= DesktopScreen.getNumberScreens()){
+			logger.error("Invalid display id. Please enter a valid display id. " +
+					"Example: 0 refers to the main display, 1 is the secondary display, etc.");
+			logger.info("resetting default screen to main display, screen 0");
+			prefs.putInt(Constants.DISPLAY_ID, 0);
+			Constants.ScreenId = 0;
+			return;
+		}
+		else{
+			prefs.putInt(Constants.DISPLAY_ID, DISPLAY_ID_VALUE);
+			Constants.ScreenId = DISPLAY_ID_VALUE;
 		}
 	}
 	/**
