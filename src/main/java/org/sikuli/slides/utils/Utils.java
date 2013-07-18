@@ -180,6 +180,10 @@ public class Utils {
     }
     public static File downloadFile(String URL){
     	URL downloadURL = getGoogleDriveDownloadLink(URL);
+    	if(downloadURL == null){
+    		logger.error("Error: Invalid URL.");
+    		return null;
+    	}
     	File destination = null;
 		try {
 			File directory = new File(Constants.workingDirectoryPath + Constants.SIKULI_DOWNLOAD_DIRECTORY);
@@ -188,6 +192,8 @@ public class Utils {
 			FileUtils.copyURLToFile(downloadURL, destination, 300000, 30000);
 		} catch (IOException e) {
 			Log.error("Error while downloading the file");
+		}
+		catch (NullPointerException npe) {
 		}
     	
     	return destination;
@@ -201,6 +207,9 @@ public class Utils {
 				
 				// check if the domain is Google.com
 				String domain = uri.getHost();
+				if(domain == null){
+					return null;
+				}
 				String domainName = domain.startsWith("www.")? domain.substring(4) : domain;
 				if(domainName.equalsIgnoreCase("docs.google.com")){
 					try{
