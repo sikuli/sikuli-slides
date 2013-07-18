@@ -64,7 +64,7 @@ public class MainCommandLine {
 	    			throw new Exception();
 	        	}
 	        	else{
-	        		Constants.ScreenId = screenId;
+	        		prefsEditor.putDisplayId(screenId);
 	        	}
 	    	}
 	    	else if (cmd.hasOption("oldsyntax")){
@@ -154,7 +154,7 @@ public class MainCommandLine {
 		Option displayOption=OptionBuilder.withArgName("display_id")
                 .hasArg()
                 .withDescription("The id of the connected display or monitor " +
-                		"(current default value is "+Constants.ScreenId+")." )
+                		"(current default value is "+prefsEditor.getDisplayId()+")." )
                 .create("d");
 		
 		Option precisionOption=OptionBuilder.withArgName("precision")
