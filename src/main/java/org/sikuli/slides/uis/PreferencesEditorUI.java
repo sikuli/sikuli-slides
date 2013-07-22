@@ -191,8 +191,8 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 		// Instruction hint font size
 		JLabel instructionHintFontSizeLabel = new JLabel("Instruction hint (tooltip) font size:");
 		
-		int currentSpinnerinstructionHintFontSize = prefs.getLabelDisplayTime();
-		int maxSpinnerinstructionHintFontSize = 21600; // 6 hours 
+		int currentSpinnerinstructionHintFontSize = prefs.getInstructionHintFontSize();
+		int maxSpinnerinstructionHintFontSize = 288; // 288 points 
 		
 		SpinnerNumberModel instructionHintFontSizeModel = new SpinnerNumberModel(currentSpinnerinstructionHintFontSize, 0, maxSpinnerinstructionHintFontSize, 1);
 		instructionHintFontSizeSpinner = new JSpinner(instructionHintFontSizeModel);
