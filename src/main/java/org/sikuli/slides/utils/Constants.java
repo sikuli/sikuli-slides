@@ -127,7 +127,7 @@ public class Constants {
 	/**
 	 * Running modes
 	 */
-	public static boolean ACTION_MODE=false;
+	public static boolean AUTOMATION_MODE=false;
 	public static boolean HELP_MODE=false;
 	public static boolean TUTORIAL_MODE=false;
 	public static boolean DEVELOPMENT_MODE=false;
@@ -157,4 +157,9 @@ public class Constants {
 	public enum NavigationStatus {
 		NEXT, PREVIOUS
 	}
+	/**
+	 * The total screen width of the connected screens. This value is used by the global mouse listeners to
+	 * find the location of the x mouse events.
+	 */
+	public static int Total_Screen_Width = 0;
 }
