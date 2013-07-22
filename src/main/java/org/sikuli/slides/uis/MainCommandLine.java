@@ -50,16 +50,16 @@ public class MainCommandLine {
     					"sikuli-slides -- help", "sikuli-slides -- (END)", 5, 3, true, System.out);
         		return null;
 	        }
-	    	else if (cmd.hasOption("w")){
+	    	if (cmd.hasOption("w")){
 	    		int wait=Integer.parseInt(cmd.getOptionValue("w"));
 	        	prefsEditor.putMaxWaitTime(wait);
 	    	}
-	    	else if (cmd.hasOption("d")){
-	    		int screenId=Integer.parseInt(cmd.getOptionValue("d"));
+	    	if (cmd.hasOption("s")){
+	    		int screenId=Integer.parseInt(cmd.getOptionValue("s"));
 	        	if(screenId > DesktopScreen.getNumberScreens()){
-	    			String errorMessage="Invalid display id or display is not connected.\n" +
+	    			String errorMessage="Invalid screen id or screen is not connected.\n" +
 	    					"Please enter the id of the connected display or monitor. \n" +
-	    					"Example: 0 means main display, 1 means the secondary display, etc.";
+	    					"Example: 0 means main screen, 1 means the secondary screen, etc.";
 	    			System.out.write(errorMessage.getBytes());
 	    			throw new Exception();
 	        	}
@@ -67,19 +67,19 @@ public class MainCommandLine {
 	        		prefsEditor.putDisplayId(screenId);
 	        	}
 	    	}
-	    	else if (cmd.hasOption("oldsyntax")){
+	    	if (cmd.hasOption("oldsyntax")){
 	        	Constants.UseOldSyntax=true;
 	    	}
-	    	else if (cmd.hasOption("m")){
+	    	if (cmd.hasOption("m")){
 	    		String mode=cmd.getOptionValue("m");
-	    		if(mode.equalsIgnoreCase("action")){
-	    			Constants.ACTION_MODE=true;
+	    		if(mode.equalsIgnoreCase("automation")){
+	    			Constants.AUTOMATION_MODE = true;
 	    		}
 	    		else if(mode.equalsIgnoreCase("help")){
-	    			Constants.HELP_MODE=true;
+	    			Constants.HELP_MODE = true;
 	    		}
 	    		else if(mode.equalsIgnoreCase("tutorial")){
-	    			Constants.TUTORIAL_MODE=true;
+	    			Constants.TUTORIAL_MODE = true;
 	    		}
 	    		else{
 	    			String errorMessage="Invalid running mode value.\n" +
@@ -89,7 +89,7 @@ public class MainCommandLine {
 	    			throw new Exception();
 	    		}
 	    	}
-	    	else if(cmd.hasOption("p")){
+	    	if(cmd.hasOption("p")){
 	    		int precision=Integer.parseInt(cmd.getOptionValue("p"));
 	    		if(precision> 0 && precision <= 10){
 	    			prefsEditor.putPreciseSearchScore(precision);
@@ -151,11 +151,11 @@ public class MainCommandLine {
                 		"on the screen (current default value is "+prefsEditor.getMaxWaitTime()+" ms)." )
                 .create("w");
 		
-		Option displayOption=OptionBuilder.withArgName("display_id")
+		Option displayOption=OptionBuilder.withArgName("screen_id")
                 .hasArg()
-                .withDescription("The id of the connected display or monitor " +
+                .withDescription("The id of the connected screen/monitor " +
                 		"(current default value is "+prefsEditor.getDisplayId()+")." )
-                .create("d");
+                .create("s");
 		
 		Option precisionOption=OptionBuilder.withArgName("precision")
                 .hasArg()
