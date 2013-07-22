@@ -261,7 +261,7 @@ public class SikuliPowerPoint {
 					slideShapes.remove(slideShape);
 					break;
 				}
-				else if(action.toLowerCase().contains("wait")){
+				else if(action.equalsIgnoreCase("wait") || action.equalsIgnoreCase("delay")){
 					desktopEvent = DesktopEvent.WAIT;
 					slideShapes.remove(slideShape);
 					break;
