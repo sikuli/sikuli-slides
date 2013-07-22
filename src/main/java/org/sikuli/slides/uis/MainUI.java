@@ -43,25 +43,25 @@ import ch.qos.logback.classic.PatternLayout;
 
 public class MainUI extends JFrame implements ActionListener {
 	private static final long serialVersionUID = -839784598366545263L;
-    private JButton btn_open_file, btn_open_url;
+    private JButton btn_open_file, btn_open_url, btn_run;
     private JComboBox runningModeList;
     private JLabel statusLabel;
     public JTextArea logArea;
-    private JPanel bottomPanel;
-    private JMenuBar menuBar;
-    private JMenu fileMenu, editMenu, helpMenu;
-    private JMenuItem openFileMenuItem, openURLMenuItem,quitMenuItem, editPrefsMenuItem, helpMenuItem;
+    private JMenuItem openFileMenuItem, openURLMenuItem,quitMenuItem, 
+    	editPrefsMenuItem, runInAutomationModeMenuItem, runInHelpModeMenuItem, 
+    	runInTutorialModeMenuItem, helpMenuItem;
     private ImageIcon open_url_icon;
-
+    private File pptxFile = null;
+    
     public MainUI(){
         super("sikuli-slides");
     }
     
     private void createAndShowUI() {
     	// create the menu
-    	menuBar = new JMenuBar();
+    	JMenuBar menuBar = new JMenuBar();
     	
-    	fileMenu = new JMenu("File");
+    	JMenu fileMenu = new JMenu("File");
     	fileMenu.setMnemonic(KeyEvent.VK_F); // Use keyboard shortcut: Alt + F
     	fileMenu.getAccessibleContext().setAccessibleDescription("File menu that has the main menu items.");
     	menuBar.add(fileMenu);
@@ -73,10 +73,10 @@ public class MainUI extends JFrame implements ActionListener {
     	openFileMenuItem.addActionListener(this);
     	fileMenu.add(openFileMenuItem);
     	
-    	openURLMenuItem = new JMenuItem("Open Google Presentation...");
+    	openURLMenuItem = new JMenuItem("Open Remote Presentation...");
     	openURLMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-    	        KeyEvent.VK_G, ActionEvent.CTRL_MASK));
-    	openURLMenuItem.getAccessibleContext().setAccessibleDescription("Open Google Presentation");
+    	        KeyEvent.VK_U, ActionEvent.CTRL_MASK));
+    	openURLMenuItem.getAccessibleContext().setAccessibleDescription("Open URL");
     	openURLMenuItem.addActionListener(this);
     	fileMenu.add(openURLMenuItem);
     	
@@ -87,7 +87,7 @@ public class MainUI extends JFrame implements ActionListener {
     	quitMenuItem.addActionListener(this);
     	fileMenu.add(quitMenuItem);
     	
-    	editMenu = new JMenu("Edit");
+    	JMenu editMenu = new JMenu("Edit");
     	editMenu.setMnemonic(KeyEvent.VK_E); // Use keyboard shortcut: Alt + E
     	editMenu.getAccessibleContext().setAccessibleDescription("Edit menu that has the user's preferences and settings");
     	menuBar.add(editMenu);
@@ -99,7 +99,30 @@ public class MainUI extends JFrame implements ActionListener {
     	editPrefsMenuItem.addActionListener(this);
     	editMenu.add(editPrefsMenuItem);
     	
-    	helpMenu = new JMenu("Help");
+    	JMenu runMenuItem = new JMenu("Run");
+    	runMenuItem.setMnemonic(KeyEvent.VK_R); // Use keyboard shortcut: Alt + R
+    	runMenuItem.getAccessibleContext().setAccessibleDescription("Run menu");
+    	menuBar.add(runMenuItem);
+    	
+    	runInAutomationModeMenuItem = new JMenuItem("Run in automation mode");
+    	runInAutomationModeMenuItem.getAccessibleContext().setAccessibleDescription("Run in automation mode");
+    	runInAutomationModeMenuItem.addActionListener(this);
+    	runInAutomationModeMenuItem.setEnabled(false);
+    	runMenuItem.add(runInAutomationModeMenuItem);
+    	
+    	runInHelpModeMenuItem = new JMenuItem("Run in help mode");
+    	runInHelpModeMenuItem.getAccessibleContext().setAccessibleDescription("Run in help mode");
+    	runInHelpModeMenuItem.addActionListener(this);
+    	runInHelpModeMenuItem.setEnabled(false);
+    	runMenuItem.add(runInHelpModeMenuItem);
+    	
+    	runInTutorialModeMenuItem = new JMenuItem("Run in tutorial mode");
+    	runInTutorialModeMenuItem.getAccessibleContext().setAccessibleDescription("Run in tutorial mode");
+    	runInTutorialModeMenuItem.addActionListener(this);
+    	runInTutorialModeMenuItem.setEnabled(false);
+    	runMenuItem.add(runInTutorialModeMenuItem);
+    	
+    	JMenu helpMenu = new JMenu("Help");
     	helpMenu.setMnemonic(KeyEvent.VK_H); // Use keyboard shortcut: Alt + H
     	helpMenu.getAccessibleContext().setAccessibleDescription("Help menu");
     	menuBar.add(helpMenu);
@@ -118,17 +141,17 @@ public class MainUI extends JFrame implements ActionListener {
         horizontal_toolbar.setFocusable(false);
         add(horizontal_toolbar, BorderLayout.NORTH);
         
-        ImageIcon open_file_icon=new ImageIcon(MainUI.class.getResource(Constants.RESOURCES_ICON_DIR+"powerpoint-icon.png"));
-        btn_open_file = new JButton("Open",open_file_icon);
-        btn_open_file.setToolTipText("Open PowerPoint file (*.pptx)");
+        ImageIcon open_file_icon = new ImageIcon(MainUI.class.getResource(Constants.RESOURCES_ICON_DIR+"powerpoint-icon.png"));
+        btn_open_file = new JButton("Open File",open_file_icon);
+        btn_open_file.setToolTipText("Open PowerPoint file (*.pptx) stored locally");
         btn_open_file.addActionListener(this);
         btn_open_file.setFocusable(false);
         btn_open_file.setMaximumSize(btn_open_file.getPreferredSize());
         horizontal_toolbar.add(btn_open_file);
         
-        open_url_icon=new ImageIcon(MainUI.class.getResource(Constants.RESOURCES_ICON_DIR+"google-drive-icon.png"));
-        btn_open_url = new JButton("Open Google Presentation",open_url_icon);
-        btn_open_url.setToolTipText("Open Google Presentation stored in Google Drive.");
+        open_url_icon = new ImageIcon(MainUI.class.getResource(Constants.RESOURCES_ICON_DIR+"file-cloud-icon.png"));
+        btn_open_url = new JButton("Open URL",open_url_icon);
+        btn_open_url.setToolTipText("Open URL to a presentation file (*.pptx) stored remotely");
         btn_open_url.addActionListener(this);
         btn_open_url.setFocusable(false);
         btn_open_url.setMaximumSize(btn_open_url.getPreferredSize());
@@ -141,7 +164,7 @@ public class MainUI extends JFrame implements ActionListener {
         horizontal_toolbar.addSeparator();
         horizontal_toolbar.add(runningModeLabel);
         
-        String[]validModes={"Action","Help","Tutorial"};
+        String[]validModes={"Automation","Help","Tutorial"};
         runningModeList=new JComboBox(validModes);
         
         runningModeList.addActionListener(this);
@@ -149,8 +172,18 @@ public class MainUI extends JFrame implements ActionListener {
         runningModeList.addActionListener(this);
         horizontal_toolbar.add(runningModeList);
         
+        ImageIcon btn_run_icon = new ImageIcon(MainUI.class.getResource(Constants.RESOURCES_ICON_DIR+"icon_32.png"));
+        btn_run = new JButton("Run",btn_run_icon);
+        btn_run.setToolTipText("Run Sikuli-Slides");
+        btn_run.addActionListener(this);
+        btn_run.setFocusable(false);
+        btn_run.setMaximumSize(btn_open_url.getPreferredSize());
+        btn_run.setEnabled(false);
+        horizontal_toolbar.addSeparator();
+        horizontal_toolbar.add(btn_run);
+        
         // output area
-        bottomPanel=new JPanel(new BorderLayout());
+        JPanel bottomPanel=new JPanel(new BorderLayout());
         
         logArea=new JTextArea(5,30);
         DefaultCaret caret = (DefaultCaret)logArea.getCaret();
@@ -183,27 +216,49 @@ public class MainUI extends JFrame implements ActionListener {
 		  // open .pptx file
         if (e.getSource() == btn_open_file || e.getSource() == openFileMenuItem) {
                 // open the .pptx file
-                File file = openFile();
-                runSikuli(file);
+                this.pptxFile = openFile();
+    			if(this.pptxFile != null){
+    				enableRunComponents();
+    				statusLabel.setText(this.pptxFile.getName());
+    			}
+    			else{
+    				disableRunComponents();
+    			}
         }
         else if (e.getSource() == btn_open_url || e.getSource() == openURLMenuItem) {
         	showURLDialog();
         }
+        else if(e.getSource() == btn_run) {
+        	if(this.pptxFile != null){
+        		logArea.setText("");
+        		runSikuli(this.pptxFile);
+        	}
+        }
+        else if(e.getSource() == runInAutomationModeMenuItem){
+        	if(this.pptxFile != null){
+        		setRunningMode('a');
+        	}
+        }
+        else if(e.getSource() == runInHelpModeMenuItem){
+        	if(this.pptxFile != null){
+        		setRunningMode('h');
+        	}
+        }
+        else if(e.getSource() == runInTutorialModeMenuItem){
+        	if(this.pptxFile != null){
+        		setRunningMode('t');
+        		runSikuli(this.pptxFile);
+        	}
+        }
         else if(e.getSource() == runningModeList){
         	if(runningModeList.getSelectedIndex()==0){
-        		Constants.ACTION_MODE=true;
-        		Constants.HELP_MODE=false;
-        		Constants.TUTORIAL_MODE=false;
+        		setRunningMode('a');
         	}
         	else if(runningModeList.getSelectedIndex()==1){
-        		Constants.ACTION_MODE=false;
-        		Constants.HELP_MODE=true;
-        		Constants.TUTORIAL_MODE=false;
+        		setRunningMode('h');
         	}
         	else if(runningModeList.getSelectedIndex()==2){
-        		Constants.ACTION_MODE=false;
-        		Constants.HELP_MODE=false;
-        		Constants.TUTORIAL_MODE=true;
+        		setRunningMode('t');
         	}
         }
         else if(e.getSource() == editPrefsMenuItem){
@@ -218,14 +273,20 @@ public class MainUI extends JFrame implements ActionListener {
         	System.exit(0);
         }
 	}
-	
+
 	private void showURLDialog() {
-		String googleDriveURL= (String) JOptionPane.showInputDialog(this,
-				"Google Presentation shared link:", "Open Google Presentation", 
+		String downloadFileURL= (String) JOptionPane.showInputDialog(this,
+				"Remote presentation file download link:", "Open Remote Presentation", 
 				JOptionPane.YES_NO_OPTION, open_url_icon, null, null);
-		if(googleDriveURL != null){
-			File file = Utils.downloadFile(googleDriveURL);
-			runSikuli(file);
+		if(downloadFileURL != null){
+			this.pptxFile = Utils.downloadFile(downloadFileURL);
+			if(this.pptxFile != null){
+				enableRunComponents();
+				this.statusLabel.setText(downloadFileURL);
+			}
+			else{
+				disableRunComponents();
+			}
 		}
 		
 	}
@@ -249,12 +310,46 @@ public class MainUI extends JFrame implements ActionListener {
         }
         else return null;
 	}
-
+	private void enableRunComponents() {
+		this.btn_run.setEnabled(true);
+		this.runInAutomationModeMenuItem.setEnabled(true);
+		this.runInHelpModeMenuItem.setEnabled(true);
+		this.runInTutorialModeMenuItem.setEnabled(true);
+	}
+	
+	private void disableRunComponents() {
+		this.btn_run.setEnabled(false);
+		this.runInAutomationModeMenuItem.setEnabled(false);
+		this.runInHelpModeMenuItem.setEnabled(false);
+		this.runInTutorialModeMenuItem.setEnabled(false);
+		this.statusLabel.setText("");
+	}
+	/**
+	 * Sets the running mode
+	 * @param mode the first character of the mode to be run. 'a' = automation mode, 
+	 * 'h' = help mode, and 't' = tutorial mode.
+	 */
+	private void setRunningMode(char mode){
+		if(mode == 'a'){
+    		Constants.AUTOMATION_MODE = true;
+    		Constants.HELP_MODE = false;
+    		Constants.TUTORIAL_MODE = false;
+		}
+		else if(mode == 'h'){
+			Constants.AUTOMATION_MODE = false;
+			Constants.HELP_MODE = true;
+			Constants.TUTORIAL_MODE = false;
+		}
+		else if(mode == 't'){
+			Constants.AUTOMATION_MODE = false;
+			Constants.HELP_MODE = false;
+			Constants.TUTORIAL_MODE = true;
+		}
+	}
 	
 	private void runSikuli(File file){		
 		Main main=new Main();
 		if(file!=null){
-			statusLabel.setText(file.getName());
 			// Minimize the running JFrame window
 			setState(JFrame.ICONIFIED);
 			main.doSikuliPowerPoint(file.getAbsolutePath());
