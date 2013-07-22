@@ -2,6 +2,7 @@
 package org.sikuli.slides.sikuli;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.JLabel;
@@ -11,6 +12,7 @@ import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.core.SikuliAction;
+import org.sikuli.slides.listeners.tutorials.Observable;
 import org.sikuli.slides.listeners.tutorials.Observer;
 import org.sikuli.slides.uis.TutorialConrollerUI;
 import org.sikuli.slides.utils.Constants;
@@ -28,13 +30,15 @@ import org.slf4j.LoggerFactory;
  *
  */
 
-public class TutorialWorker extends SwingWorker<Boolean, Integer> implements Observer{
+public class TutorialWorker extends SwingWorker<Boolean, Integer> implements Observer, Observable{
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(TutorialWorker.class);
 	private UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
 	private static AtomicInteger currentStep=null;
 	private List<SikuliAction> tasks=null;
 	private final JLabel currentSlideLabel;
 	private TutorialConrollerUI observable;
+	private ArrayList<Observer> observers;
+	private NavigationStatus navigationStatus;
 	
 	public TutorialWorker(List<SikuliAction> tasks,JLabel currentSlideLabel,TutorialConrollerUI observable){
 		this.tasks=tasks;
@@ -42,6 +46,7 @@ public class TutorialWorker extends SwingWorker<Boolean, Integer> implements Obs
 		currentStep=new AtomicInteger(-1);
 		this.observable=observable;
 		this.observable.register(this);
+		this.observers = new ArrayList<Observer>();
 	}
 	
 	@Override
@@ -134,5 +139,25 @@ public class TutorialWorker extends SwingWorker<Boolean, Integer> implements Obs
 				"Great job! You have successfully completed this tutorial.")
 				.withFontSize(prefsEditor.getInstructionHintFontSize());
 		canvas.display(prefsEditor.getLabelDisplayTime());
+		navigationStatus = NavigationStatus.DONE;
+		notifyObserver();
+	}
+	
+	@Override
+	public void register(Observer observer) {
+		observers.add(observer);
+	}
+
+	@Override
+	public void unregister(Observer observer) {
+		int index = observers.indexOf(observer);
+		observers.remove(index);
+	}
+
+	@Override
+	public void notifyObserver() {
+		for(final Observer observer : observers){
+			observer.update(navigationStatus);
+		}
 	}
 }
