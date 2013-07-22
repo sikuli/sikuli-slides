@@ -155,7 +155,7 @@ public class Constants {
 	 * Tutorial mode navigation status
 	 */
 	public enum NavigationStatus {
-		NEXT, PREVIOUS
+		NEXT, PREVIOUS, DONE
 	}
 	/**
 	 * The total screen width of the connected screens. This value is used by the global mouse listeners to
