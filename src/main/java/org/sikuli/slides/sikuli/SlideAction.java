@@ -21,7 +21,6 @@ import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopKeyboard;
 import org.sikuli.api.robot.desktop.DesktopMouse;
 import org.sikuli.api.visual.Canvas;
-import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.core.SlideComponent;
 import org.sikuli.slides.media.Sound;
@@ -390,9 +389,11 @@ public class SlideAction {
 		return null;
 	}
 	private void displayBoxOnRegion(ScreenRegion screenRegion){
-		Canvas canvas=new ScreenRegionCanvas(new DesktopScreenRegion(Constants.ScreenId));
-		// Display the canvas around the target
-		canvas.addBox(screenRegion);
-		canvas.display(2);
+		if(screenRegion != null){
+			Canvas canvas=new ScreenRegionCanvas(screenRegion);
+			// Display the canvas around the target
+			canvas.addBox(screenRegion);
+			canvas.display(2);
+		}
 	}
 }
