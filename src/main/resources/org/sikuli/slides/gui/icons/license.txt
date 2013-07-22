@@ -12,3 +12,8 @@ License: GNU Lesser General Public License
 Next button icon (next-icon.png) is provided by: Oxygen Team
 URL: http://www.iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Actions-go-next-icon.html
 License: GNU Lesser General Public License
+
+Cloud icon is provided by: VisualPharm (http://www.visualpharm.com)
+URL: http://www.iconarchive.com/show/icons8-metro-style-icons-by-visualpharm/Weather-Clouds-icon.html
+License: Linkware http://www.visualpharm.com 
+
