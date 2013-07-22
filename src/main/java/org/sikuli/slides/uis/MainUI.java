@@ -267,7 +267,7 @@ public class MainUI extends JFrame implements ActionListener {
         }
         else if(e.getSource() == helpMenuItem){
         	// open sikuli-slides help
-        	Utils.openURLInBrowser("http://sikuli.org");
+        	Utils.openURLInBrowser("http://slides.sikuli.org");
         }
         else if(e.getSource() == quitMenuItem){
         	System.exit(0);
