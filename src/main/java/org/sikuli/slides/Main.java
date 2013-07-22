@@ -7,6 +7,7 @@ import org.sikuli.api.robot.desktop.DesktopScreen;
 import org.sikuli.slides.uis.MainCommandLine;
 import org.sikuli.slides.uis.MainUI;
 import org.sikuli.slides.utils.Constants;
+import org.sikuli.slides.utils.MyScreen;
 import org.sikuli.slides.utils.UserPreferencesEditor;
 import org.sikuli.slides.utils.Utils;
 import org.sikuli.slides.core.SikuliPowerPoint;
@@ -35,6 +36,8 @@ public class Main{
 		}
 		// check default screen
 		checkScreen();
+		// set the total screen width
+		Constants.Total_Screen_Width = MyScreen.getTotalScreenWidth(Constants.ScreenId);
 	}
 	// check if the value of the screen id is connected.
 	private void checkScreen() {
