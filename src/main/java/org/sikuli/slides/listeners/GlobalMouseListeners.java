@@ -68,10 +68,10 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 	 * Otherwise, it returns false.
 	 */
 	private boolean inRange(NativeMouseEvent e) {
-		int x_val=(int)region.getBounds().getX();
-		int y_val=(int)region.getBounds().getY();
-		int max_x=(int)(this.region.getBounds().width +x_val);
-		int max_y=(int)(this.region.getBounds().height + y_val);
+		int x_val=(int) this.region.getBounds().getX() + Constants.Total_Screen_Width;
+		int y_val=(int) this.region.getBounds().getY();
+		int max_x=(int) (this.region.getBounds().width +x_val);
+		int max_y=(int) (this.region.getBounds().height + y_val);
 		int clicked_x=e.getX();
 		int clicked_y=e.getY();
 		
@@ -120,7 +120,7 @@ public class GlobalMouseListeners implements NativeMouseInputListener, Runnable{
 	}
 	
 	private void handleClickError(){
-		logger.info("Error: Please click on the heighlighted rectangle.");
+		logger.info("Error: Please click inside the heighlighted rectangle.");
 	}
 	
 	@Override
