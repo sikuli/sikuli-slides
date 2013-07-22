@@ -20,4 +20,19 @@ public class MyScreen {
 		GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
 		return defaultScreen.getDefaultConfiguration().getBounds();
 	}
+	
+	/**
+	 * Returns the total width of the connected screens.
+	 * @param currentScreen the screen id for the current screen to get the total width for.
+	 * @return the total width of the connected screens.
+	 */
+	public static int getTotalScreenWidth(int currentScreen){
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice [] devices = ge.getScreenDevices();
+		int baseWidth = 0;
+		for(int i=0; i<currentScreen; i++){
+			baseWidth += devices[i].getDisplayMode().getWidth();
+		}
+		return baseWidth;
+	}
 }
