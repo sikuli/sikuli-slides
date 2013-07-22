@@ -11,6 +11,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -31,7 +32,7 @@ import org.sikuli.slides.utils.Constants.NavigationStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TutorialConrollerUI extends JFrame implements ActionListener, Observable{
+public class TutorialConrollerUI extends JFrame implements ActionListener, Observable, Observer{
 	
 	private static final long serialVersionUID = -7849896402606865992L;
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(TutorialConrollerUI.class);
@@ -110,13 +111,14 @@ public class TutorialConrollerUI extends JFrame implements ActionListener, Obser
 	private void runTasks(List<SikuliAction> tasks){
 		// run the tutorial tasks in the background using a worker thread and pass the observable object to the observers :)
 		tutorialWorker= new TutorialWorker(tasks, currentSlideLabel, this);
+		this.tutorialWorker.register(this);
 		tutorialWorker.execute();
 		try {
 			tutorialWorker.get();
 		} catch (InterruptedException e) {
-			logger.error("Error 1050: Unexpected error in running tutorial mode.");
+			logger.error("Error: Unexpected error in running tutorial mode.");
 		} catch (ExecutionException e) {
-			logger.error("Error 1051:Unexpected error in running tutorial mode.");
+			logger.error("Error: Unexpected error in running tutorial mode.");
 		}
 	}
 	
@@ -158,7 +160,13 @@ public class TutorialConrollerUI extends JFrame implements ActionListener, Obser
 			observer.update(navigationStatus);
 		}
 	}
-
+	
+	@Override
+	public void update(NavigationStatus navigationStatus) {
+		if(navigationStatus.equals(NavigationStatus.DONE)){
+			System.exit(0);
+		}
+	}
 
 }
 
