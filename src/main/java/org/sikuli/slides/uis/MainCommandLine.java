@@ -28,11 +28,11 @@ import org.sikuli.slides.utils.UserPreferencesEditor;
 public class MainCommandLine {
 	private static UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
 	private static final String applicationName = "sikuli-slides";
-	private static final String versionNumber="1.3.0";
+	private static final String versionNumber = MainCommandLine.class.getPackage().getImplementationVersion();
 	private static final String commandLineSyntax = "java -jar "+
-			applicationName+"-"+versionNumber+".jar "+
+			applicationName + "-" + versionNumber+".jar "+
 			"Path_to_presentation_file.pptx | URL_to_presentation_file.pptx";
-	private static final String fileNotFoundError="No such file.";
+	private static final String NEW_LINE = System.getProperty("line.separator");
 	
 	/**
 	* Parse the command-line arguments as POSIX like options (one character long option).
@@ -50,6 +50,12 @@ public class MainCommandLine {
     					"sikuli-slides -- help", "sikuli-slides -- (END)", 5, 3, true, System.out);
         		return null;
 	        }
+	        else if (cmd.hasOption("v")){
+	        	String versionMsg = "sikuli-slides -- version "+ 
+    					versionNumber + NEW_LINE;
+	        	System.out.write(versionMsg.getBytes());
+        		System.exit(0);
+	        }
 	    	if (cmd.hasOption("w")){
 	    		int wait=Integer.parseInt(cmd.getOptionValue("w"));
 	        	prefsEditor.putMaxWaitTime(wait);
@@ -57,8 +63,8 @@ public class MainCommandLine {
 	    	if (cmd.hasOption("s")){
 	    		int screenId=Integer.parseInt(cmd.getOptionValue("s"));
 	        	if(screenId > DesktopScreen.getNumberScreens()){
-	    			String errorMessage="Invalid screen id or screen is not connected.\n" +
-	    					"Please enter the id of the connected display or monitor. \n" +
+	    			String errorMessage="Invalid screen id or screen is not connected." +NEW_LINE+
+	    					"Please enter the id of the connected display or monitor." +NEW_LINE+
 	    					"Example: 0 means main screen, 1 means the secondary screen, etc.";
 	    			System.out.write(errorMessage.getBytes());
 	    			throw new Exception();
@@ -82,9 +88,9 @@ public class MainCommandLine {
 	    			Constants.TUTORIAL_MODE = true;
 	    		}
 	    		else{
-	    			String errorMessage="Invalid running mode value.\n" +
+	    			String errorMessage="Invalid running mode value." + NEW_LINE +
 	    					"Please enter one of the following running modes:" +
-	    					"\naction\nhelp\ntutorial\n";
+	    					NEW_LINE + "action" + NEW_LINE + "help" + NEW_LINE + "tutorial" + NEW_LINE;
 	    			System.out.write(errorMessage.getBytes());
 	    			throw new Exception();
 	    		}
@@ -95,7 +101,7 @@ public class MainCommandLine {
 	    			prefsEditor.putPreciseSearchScore(precision);
 	    		}
 	    		else{
-	    			String errorMessage="Invalid precision scale value.\n";
+	    			String errorMessage="Invalid precision scale value." + NEW_LINE;
 	    			System.out.write(errorMessage.getBytes());
 	    			throw new Exception();
 	    		}
@@ -124,6 +130,7 @@ public class MainCommandLine {
 	        				return source_file.getAbsolutePath();
 	        			}
 	        			else{
+	        				String fileNotFoundError = "No such file." + NEW_LINE;
 	        				System.out.write(fileNotFoundError.getBytes()); 
 	        				displayBlankLine();
 	        				printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
@@ -177,9 +184,11 @@ public class MainCommandLine {
                 		" action, tutorial, and development (default is action)." )
                 .create("m");
 		
-		Option helpOption=new Option("h", "help");
+		Option helpOption=new Option("h", "help.");
+		Option versionOption=new Option("v", "print the version number.");
 		
 		posixOptions.addOption(helpOption);
+		posixOptions.addOption(versionOption);
 		posixOptions.addOption(waitOption);
 		posixOptions.addOption(displayOption);
 		posixOptions.addOption(precisionOption);
@@ -238,7 +247,7 @@ public class MainCommandLine {
 	
 	private static void displayBlankLine(){
 		try {
-			System.out.write("\n".getBytes());
+			System.out.write(NEW_LINE.getBytes());
 		} catch (IOException e) {
 			System.out.println();
 		}
