@@ -184,13 +184,14 @@ public class Utils {
     		logger.error("Error: Invalid URL.");
     		return null;
     	}
-    	logger.info("Downloading file. Please wait...");
     	File destination = null;
 		try {
 			File directory = new File(Constants.workingDirectoryPath + Constants.SIKULI_DOWNLOAD_DIRECTORY);
 			directory.mkdir();
 			destination = File.createTempFile("download", ".pptx", directory);
+			logger.info("The file is being downloaded, please wait...");
 			FileUtils.copyURLToFile(downloadURL, destination, 300000, 30000);
+			logger.info("Download complete.");
 		} catch (IOException e) {
 			Log.error("Error while downloading the file.");
 			destination = null;
