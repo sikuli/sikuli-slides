@@ -113,14 +113,14 @@ public class SikuliPowerPoint {
 			setSoundFileName(sound, slideName);
 		}
 		// get the label to be displayed on the screen
-		List<SlideShape> labels=mySlideParser.getLabels();
-		SlideShape label=null;
-		if(labels!=null&&labels.size()>0){
-			label=labels.get(0);
+		List<SlideShape> labels = mySlideParser.getLabels();
+		SlideShape label = null;
+		if(labels != null && labels.size() > 0){
+			label = labels.get(0);
 		}
 		// get targets and desktop events
-		DesktopEvent desktopEvent=null;
-		List<SlideShape> targetShapes=null;
+		DesktopEvent desktopEvent = null;
+		List<SlideShape> targetShapes = null;
 		
 		// running old syntax
 		if(Constants.UseOldSyntax){
@@ -129,9 +129,9 @@ public class SikuliPowerPoint {
 				System.exit(1);
 			}
 			else{
-				desktopEvent=getOldDesktopEvent(slideShapes);
-				if(desktopEvent==null){
-					if(slideShapes.size()==1){
+				desktopEvent = getOldDesktopEvent(slideShapes);
+				if(desktopEvent == null){
+					if(slideShapes.size() == 1){
 						logger.error("Failed to process slide {}. The slide must contain a predefined shape.",slideNumber);
 					}
 					else{
@@ -141,8 +141,8 @@ public class SikuliPowerPoint {
 					}
                     System.exit(1);
 				}
-				if(slideShapes.size()==1){
-					targetShapes=new ArrayList<SlideShape>();
+				if(slideShapes.size() == 1 ){
+					targetShapes = new ArrayList<SlideShape>();
 					targetShapes.add(slideShapes.get(0));
 				}
 				else if(slideShapes.size()==2 && desktopEvent==DesktopEvent.DRAG_N_DROP){
@@ -167,7 +167,7 @@ public class SikuliPowerPoint {
 			targetShapes=getTargterShapes(slideShapes);
 
 			// if the slide doesn't contain a shape.
-			if(desktopEvent == null || slideShapes == null){
+			if((labels == null && desktopEvent == null) || slideShapes == null){
 					logger.error("Failed to process slide {}." +
 					"The slide must contain a shape and textbox that contains the action to be executed.{}" +
 					"The text box that descripes the action must contain one of the following actions:{}" +
@@ -188,15 +188,21 @@ public class SikuliPowerPoint {
 			tasks.add(new SikuliAction(null, targetShapes.get(0), screenshot, null, desktopEvent, sound, label, null, null));
 			return;
 		}
-
+		
 		// set the screenshot image file name
 		setScreenshotFileName(screenshot,slideName);
+		
+		// The slide contains only a label/caption to be displayed on the screen
+		if(desktopEvent == null && label != null){
+			startProcessing(screenshot, label, desktopEvent, slideNumber, sound, label);
+		}
 		
 		// calculate the target position and process the screenshot
 		
 		for(SlideShape slideShape:targetShapes){
 			startProcessing(screenshot,slideShape, desktopEvent, slideNumber, sound, label);
 		}
+
 		
 	}
 	
@@ -220,7 +226,7 @@ public class SikuliPowerPoint {
 		for(SlideShape slideShape:slideShapes){
 			// Get the shape that represents the desktop action and remove it from the shapes list
 			if(slideShape.getType().equals("rect")) {//&& slideShape.getName().contains("TextBox")){
-				String action=slideShape.getText().trim();
+				String action = slideShape.getText().trim();
 				if(action.equalsIgnoreCase("Click") || action.equalsIgnoreCase("Left Click")){
 					desktopEvent = DesktopEvent.LEFT_CLICK;
 					slideShapes.remove(slideShape);
@@ -284,7 +290,6 @@ public class SikuliPowerPoint {
 				return DesktopEvent.DRAG_N_DROP;
 			}
 		}
-		
 		else if(shapeType.equals("rect") && shapeName.contains("Rectangle")){
 			return DesktopEvent.LEFT_CLICK;
 		}
