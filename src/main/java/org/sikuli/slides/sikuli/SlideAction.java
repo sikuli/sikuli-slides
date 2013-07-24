@@ -71,7 +71,10 @@ public class SlideAction {
 			performNonSikuliAction();
 			performSikuliAction(null, desktopEvent);
 		}
-
+		else if(desktopEvent == null && slideLabel !=null){
+			performNonSikuliAction();
+			return;
+		}
 		// if the action is to find a target on the screen
 		// if the action is to interact with a target, find the target and perform the action
 		else{
