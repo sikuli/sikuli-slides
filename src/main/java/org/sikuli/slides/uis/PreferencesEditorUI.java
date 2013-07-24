@@ -74,7 +74,7 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
         GridBagConstraints constraints = new GridBagConstraints();
 		JPanel panel = new JPanel(false);
 		panel.setLayout(gridBagLayout);
-		JLabel maxWaitTimeLabel = new JLabel("Maximum wait time to find target on the screen:");
+		JLabel maxWaitTimeLabel = new JLabel("Maximum wait time to find a target on the screen:");
 		
 		int currentSpinnerMaxWaitTimeSec = prefs.getMaxWaitTime() / 1000;
 		int maxSpinnerMaxWaitTimeSec = 259200; // 72 hours 
@@ -108,7 +108,7 @@ public class PreferencesEditorUI extends JFrame implements ActionListener{
 		int currentPreciseScoreValue = (int) (prefs.getPreciseSearchScore() * 10);
 		final int maxPreciseScoreValue = 10;
 		
-		JLabel perciseControlLabel=new JLabel("Precision value score that controls how accurate the image search is:");
+		JLabel perciseControlLabel=new JLabel("minimum score value:");
 		
 		preciseControlSlider = new JSlider(JSlider.HORIZONTAL,1, maxPreciseScoreValue, currentPreciseScoreValue);
 		preciseControlSlider.setPaintLabels(true);

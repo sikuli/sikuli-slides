@@ -166,7 +166,7 @@ public class MainCommandLine {
 		
 		Option precisionOption=OptionBuilder.withArgName("precision")
                 .hasArg()
-                .withDescription("The precision value to control the degree of fuzziness of " +
+                .withDescription("The precision or minimum score value to control the degree of fuzziness of " +
                 		"the image recognition search. It's a 10-point scale where 1 is the least precise search" +
                 		" and 10 is the most precise search. (default is 7). The new value is stored in user preferences." )
                 .create("p");
