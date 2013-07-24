@@ -49,9 +49,10 @@ public class MainUI extends JFrame implements ActionListener {
     public JTextArea logArea;
     private JMenuItem openFileMenuItem, openURLMenuItem,quitMenuItem, 
     	editPrefsMenuItem, runInAutomationModeMenuItem, runInHelpModeMenuItem, 
-    	runInTutorialModeMenuItem, helpMenuItem;
+    	runInTutorialModeMenuItem, helpMenuItem, aboutMenuItem;
     private ImageIcon open_url_icon;
     private File pptxFile = null;
+    private static final String NEW_LINE = System.getProperty("line.separator");
     
     public MainUI(){
         super("sikuli-slides");
@@ -131,6 +132,11 @@ public class MainUI extends JFrame implements ActionListener {
     	helpMenuItem.getAccessibleContext().setAccessibleDescription("SikuliSlides Help");
     	helpMenuItem.addActionListener(this);
     	helpMenu.add(helpMenuItem);
+    	
+    	aboutMenuItem = new JMenuItem("About Sikuli-Slides");
+    	aboutMenuItem.getAccessibleContext().setAccessibleDescription("About Sikuli Slides");
+    	aboutMenuItem.addActionListener(this);
+    	helpMenu.add(aboutMenuItem);
     	
     	setJMenuBar(menuBar);
     	
@@ -269,6 +275,9 @@ public class MainUI extends JFrame implements ActionListener {
         	// open sikuli-slides help
         	Utils.openURLInBrowser("http://slides.sikuli.org");
         }
+        else if(e.getSource() == aboutMenuItem){
+        	showAboutDialog();
+        }
         else if(e.getSource() == quitMenuItem){
         	System.exit(0);
         }
@@ -288,7 +297,15 @@ public class MainUI extends JFrame implements ActionListener {
 				disableRunComponents();
 			}
 		}
-		
+	}
+	
+	public void showAboutDialog(){
+		String message = "Sikuli -slides" + NEW_LINE +
+				"Version: " + MainUI.class.getPackage().getImplementationVersion() + NEW_LINE +
+				"\u00A9 " + "Sikuli Lab 2013 | Department of Computer Science | University of Colorado Boulder";
+		ImageIcon about_icon = new ImageIcon(MainUI.class.getResource(Constants.RESOURCES_ICON_DIR+"icon_128.png"));
+		JOptionPane.showMessageDialog(this, message, "About Sikuli-Slides",
+				JOptionPane.OK_OPTION, about_icon);
 	}
 
 	private File openFile(){
