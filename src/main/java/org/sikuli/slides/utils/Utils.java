@@ -184,6 +184,7 @@ public class Utils {
     		logger.error("Error: Invalid URL.");
     		return null;
     	}
+    	logger.info("Downloading file. Please wait...");
     	File destination = null;
 		try {
 			File directory = new File(Constants.workingDirectoryPath + Constants.SIKULI_DOWNLOAD_DIRECTORY);
