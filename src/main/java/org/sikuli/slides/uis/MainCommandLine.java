@@ -46,8 +46,7 @@ public class MainCommandLine {
 	    CommandLine cmd;  
 	    	cmd = parser.parse(posixOptions, args);
 	        if (cmd.hasOption("help")){
-        		printHelp(getGNUCommandLineOptions(), 120, 
-    					"sikuli-slides -- help", "sikuli-slides -- (END)", 5, 3, true, System.out);
+	        	printHelp(getGNUCommandLineOptions());
         		return null;
 	        }
 	        else if (cmd.hasOption("version")){
@@ -221,28 +220,14 @@ public class MainCommandLine {
 	    usageFormatter.printUsage(writer, 120, commandLineSyntax, options);
 	    writer.flush();
 	}
+	
 	/**
 	 * Write command-line tool help
 	 * @param options the possible options for the command-line
-	 * @param printedRowWidth the raw width
-	 * @param header the header text at the beginning of the help
-	 * @param footer the footer text at the end of the help
-	 * @param leftPad the number of white spaces before the option
-	 * @param descPad the number of white spaces before the option description
-	 * @param autoUsage indicates whether the usage is displayed in the help or not
-	 * @param out the OutputStream to write to
-	 */
-	private static void printHelp(final Options options, final int printedRowWidth,
-			final String header, final String footer,
-			final int leftPad, final int descPad,
-			final boolean autoUsage,final OutputStream out){
-		showTextHeader(System.out);
-		displayBlankLine();
-		final PrintWriter printWriter = new PrintWriter(out);
-		final HelpFormatter helpFormatter = new HelpFormatter();
-		helpFormatter.printHelp(printWriter, printedRowWidth, 
-				commandLineSyntax, header, options, leftPad, descPad, footer, autoUsage);
-		printWriter.flush();
+	 */	
+	private static void printHelp(final Options options){
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp(commandLineSyntax, options);
 	}
 	
 	private static void displayBlankLine(){
@@ -252,6 +237,7 @@ public class MainCommandLine {
 			System.out.println();
 		}
 	}
+	
 	public static String runCommandLineTool(final String[] args){
 		if (args.length < 1){
 			printUsage(applicationName, getGNUCommandLineOptions(), System.out);
