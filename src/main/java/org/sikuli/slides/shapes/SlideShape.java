@@ -22,17 +22,21 @@ public class SlideShape implements Comparable<SlideShape>{
 	private Integer targetOrder; /* the order in which the target is sorted*/
 	private int textSize;
 	private String backgroundColor;
+	private int lineWidth;
+	private String lineColor;
 	public SlideShape(String id, String name, int order, String type, 
-			int offx, int offy, int cx, int cy, String backgroundColor){
-		this.id=id;
-		this.name=name;
-		this.order=order;
-		this.type=type;
-		this.offx=offx;
-		this.offy=offy;
-		this.cx=cx;
-		this.cy=cy;
-		this.backgroundColor=backgroundColor;
+			int offx, int offy, int cx, int cy, String backgroundColor,int lineWidth, String lineColor){
+		this.id = id;
+		this.name = name;
+		this.order = order;
+		this.type = type;
+		this.offx = offx;
+		this.offy = offy;
+		this.cx = cx;
+		this.cy = cy;
+		this.backgroundColor = backgroundColor;
+		this.lineWidth = lineWidth;
+		this.lineColor = lineColor;
 		this.setTargetOrder(0);
 	}
 	/**
@@ -133,7 +137,18 @@ public class SlideShape implements Comparable<SlideShape>{
 	public void setTargetOrder(int targetOrder) {
 		this.targetOrder =new Integer(targetOrder);
 	}
-	
+	public int getLineWidth() {
+		return lineWidth;
+	}
+	public void setLineWidth(int lineWidth) {
+		this.lineWidth = lineWidth;
+	}
+	public String getLineColor() {
+		return lineColor;
+	}
+	public void setLineColor(String lineColor) {
+		this.lineColor = lineColor;
+	}
 	public void doSikuliAction(SlideComponent slideComponent,DesktopEvent desktopEvent){
 		SlideAction slideAction=new SlideAction(slideComponent);
 		slideAction.doSlideAction(desktopEvent);
@@ -152,6 +167,4 @@ public class SlideShape implements Comparable<SlideShape>{
 	public int compareTo(SlideShape slideShape) {
 		return targetOrder.compareTo(slideShape.targetOrder);
 	}
-
-
 }

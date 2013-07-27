@@ -1,0 +1,19 @@
+--------------------------------
+Attribution for Icons and Photos
+--------------------------------
+Open file icon (powerpoint-icon.png) is provided by: FileTypeIcons.com
+URL: http://www.iconarchive.com/show/filetype-icons-by-filetypeicons/powerpoint-icon.html
+License: CC Attribution-Share Alike 3.0 (http://creativecommons.org/licenses/by-sa/3.0/)
+
+Previous button icon (previous-icon.png) is provided by: Oxygen Team
+URL: http://www.iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Actions-go-previous-icon.html
+License: GNU Lesser General Public License
+
+Next button icon (next-icon.png) is provided by: Oxygen Team
+URL: http://www.iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Actions-go-next-icon.html
+License: GNU Lesser General Public License
+
+Cloud icon is provided by: VisualPharm (http://www.visualpharm.com)
+URL: http://www.iconarchive.com/show/icons8-metro-style-icons-by-visualpharm/Weather-Clouds-icon.html
+License: Linkware http://www.visualpharm.com 
+

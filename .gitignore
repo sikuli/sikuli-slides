@@ -6,17 +6,13 @@
 # Java Files #
 *.class
 
-# Package Files #
-*.jar
-*.war
-*.ear
-
 # Binaries
 bin/
-target
+target/
 
-# Maven Files
+# Maven generated files
 dependency-reduced-pom.xml
 
 # Others
 .DS_Store
+

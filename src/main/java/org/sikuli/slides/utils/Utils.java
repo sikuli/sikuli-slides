@@ -3,16 +3,26 @@ Khalid
 */
 package org.sikuli.slides.utils;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sun.media.Log;
 
 public class Utils {
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(Utils.class);
 	
     /*
      * Get the extension of a file.
@@ -119,7 +129,7 @@ public class Utils {
  
             int len;
             while ((len = zis.read(buffer)) > 0) {
-       		fos.write(buffer, 0, len);
+            	fos.write(buffer, 0, len);
             }
  
             fos.close();   
@@ -134,7 +144,7 @@ public class Utils {
     	if(zipFile.delete())
     		return;
     	else
-    		System.err.println("Couldn't delete zip: "+Constants.workingDirectoryPath+File.separator+file.getName()+".zip");
+    		logger.error("Couldn't delete zip: "+Constants.workingDirectoryPath+File.separator+file.getName()+".zip");
      }
      catch(IOException ex){
        ex.printStackTrace(); 
@@ -152,5 +162,88 @@ public class Utils {
     		imagesFolder.mkdir();
     	}
     }
-    
+    /**
+     * Open a new URL in the default web browser
+     * @param uri
+     */
+    public static void openURLInBrowser(String URLString) {
+    	try {
+    		URI uri = new URI(URLString);
+    		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+    		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+    			desktop.browse(uri);
+    		}
+    	}
+    	catch (Exception e) {
+    		logger.error("Failed to open the following URL: "+ URLString);
+    	}
+    }
+    public static File downloadFile(String URL){
+    	URL downloadURL = getDownloadLink(URL);
+    	if(downloadURL == null){
+    		logger.error("Error: Invalid URL.");
+    		return null;
+    	}
+    	File destination = null;
+		try {
+			File directory = new File(Constants.workingDirectoryPath + Constants.SIKULI_DOWNLOAD_DIRECTORY);
+			directory.mkdir();
+			destination = File.createTempFile("download", ".pptx", directory);
+			logger.info("The file is being downloaded, please wait...");
+			FileUtils.copyURLToFile(downloadURL, destination, 300000, 30000);
+			logger.info("Download complete.");
+		} catch (IOException e) {
+			Log.error("Error while downloading the file.");
+			destination = null;
+		}
+		catch (NullPointerException npe) {
+			Log.error("Error while downloading the file.");
+			destination = null;
+		}
+    	
+    	return destination;
+    }
+    private static URL getDownloadLink(String downloadLink){
+    	// Example input: https://docs.google.com/presentation/d/1-qXEu7jYvm1Oql-hBcjgXU5zLQUGWd_uGH6mc8buRkI/export/pptx
+    	//https://docs.google.com/presentation/d/1-qXEu7jYvm1Oql-hBcjgXU5zLQUGWd_uGH6mc8buRkI/export/pptx
+    	if(downloadLink != null){
+    		try {
+				URI uri = new URI(downloadLink);
+				
+				// check if the domain is Google.com
+				String domain = uri.getHost();
+				if(domain == null){
+					return null;
+				}
+				String domainName = domain.startsWith("www.")? domain.substring(4) : domain;
+				// download the remote .pptx file
+				// 1) The file is hosted on google drive
+				if(domainName.equalsIgnoreCase("docs.google.com")){
+					try{
+						int startIndex = downloadLink.indexOf("/d/") + 3;
+						int lastIndex = downloadLink.indexOf("/edit");
+						String documentId = downloadLink.substring( startIndex, lastIndex);
+						
+						// construct GoogleDrive download link
+						String gDriveDownloadLink = "https://docs.google.com/presentation/d/" + 
+								documentId + "/export/pptx";
+						return new URL(gDriveDownloadLink);
+					}
+					catch(StringIndexOutOfBoundsException e){
+						logger.error("ERROR: Invalid Google Drive link.");
+					}
+				}
+				// 2) The file is hosted on a remote server.
+				else{
+					return new URL(downloadLink);
+				}
+			} catch (URISyntaxException e) {
+				logger.error("ERROR: Invalid share link.");
+			}
+    		catch (MalformedURLException e){
+    			logger.error("ERROR: Invalid share link.");
+    		}
+    	}
+    	return null;
+    }
 }

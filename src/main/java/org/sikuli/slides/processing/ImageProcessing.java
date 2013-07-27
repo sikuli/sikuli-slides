@@ -11,10 +11,12 @@ import java.awt.image.RasterFormatException;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ImageProcessing {
-	
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(ImageProcessing.class);
 	/**
 	 * scales the rectangle width to the full size screenshot. It scales the width of the rectangle in the slide to a larger width relative to the full size screenshot.
 	 * @param rectangleWidth the width of the rectangle in the slide (*.pptx file)
@@ -77,7 +79,7 @@ public class ImageProcessing {
 			e.printStackTrace();
 		}
 		catch(RasterFormatException e){
-			System.err.println("Error: The shape is not contained within the boundaries of the screenshot.");
+			logger.error("Error: The shape is not contained within the boundaries of the screenshot.");
 			System.exit(1);
 		}
 		return croppedImage;

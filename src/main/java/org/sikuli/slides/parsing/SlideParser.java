@@ -26,6 +26,7 @@ public class SlideParser extends DefaultHandler {
 	private boolean inSound=false;
 	private boolean inShapeProperties=false;
 	private boolean inShapeBackgroundColor=false;
+	private boolean inShapeLineProperties = false;
 	private boolean inShape=false;
 	private boolean inArrowShape=false;
 	private SlideShape slideShape;
@@ -40,6 +41,8 @@ public class SlideParser extends DefaultHandler {
 	private int order;
 	private String _shapeName, _shapeId; 
 	private int _offx, _offy, _cx, _cy;
+	
+	private static final String NEW_LINE = System.getProperty("line.separator"); 
 	
 	public SlideParser(String xmlFile){
 		this.xmlFile=xmlFile;
@@ -104,7 +107,7 @@ public class SlideParser extends DefaultHandler {
 					inScreenshot=true;
 					originalScreenshot.setName(name);
 				}
-				else if(name.contains("Sound")){
+				else if(name.contains("Sound") || name.contains(".wav")){
 					mSound=new Sound();
 					inSound=true;
 					mSound.setName(name);
@@ -166,20 +169,54 @@ public class SlideParser extends DefaultHandler {
 		// if the current child element is the shape persistent geometry, create the shape based on its type
 		else if(inShape && qName.equalsIgnoreCase("a:prstGeom")){
 			String shapeType=attributes.getValue("prst");
-			slideShape=new SlideShape(_shapeId,_shapeName,order,shapeType,_offx,_offy,_cx,_cy,"");
+			slideShape=new SlideShape(_shapeId,_shapeName,order,shapeType,_offx,_offy,_cx,_cy,"", 0, "");
 		}
-		// if the current element is the solid background color
+		// if the current element is the solid background fill color
 		else if(inShape && qName.equalsIgnoreCase("a:solidFill")){
 			inShapeBackgroundColor=true;
 		}
-		else if(inShape && inShapeBackgroundColor && qName.equalsIgnoreCase("a:srgbClr")){
+		else if(inShape && inShapeBackgroundColor && !inShapeLineProperties && qName.equalsIgnoreCase("a:srgbClr")){
 			if(slideShape!=null){
 				slideShape.setBackgroundColor(attributes.getValue("val"));
+			}
+		}
+		// if the current element is the shape line width
+		else if(inShape && qName.equalsIgnoreCase("a:ln")){
+			inShapeLineProperties = true;
+			if(slideShape != null){
+				String lineWidthValue = attributes.getValue("w");
+				int lineWidth = 0;
+				try{
+					lineWidth = Integer.parseInt(lineWidthValue);
+				}
+				catch(NumberFormatException e){
+				}
+				slideShape.setLineWidth(lineWidth);
+			}
+		}
+		// if the current element is the shape line color
+		else if(inShape && inShapeLineProperties && qName.equalsIgnoreCase("a:srgbClr")){
+			if(slideShape != null){
+				String lineColorValue = attributes.getValue("val");
+				String lineColor = (lineColorValue == null) ? "" : lineColorValue;
+				slideShape.setLineColor(lineColor);
 			}
 		}
 		// if the current element is the shape text body
 		else if(inShape && qName.equalsIgnoreCase("p:txBody")){
 			inTextBody=true;
+		}
+		// if the shape is a screenshot; some .pptx applications use the shape tag for screenshots
+		else if(inShape && qName.equalsIgnoreCase("a:blip")){
+			inShape = false;
+			originalScreenshot = new Screenshot();
+			originalScreenshot.setName(slideShape.getName());
+			originalScreenshot.setCx(slideShape.getCx());
+			originalScreenshot.setCy(slideShape.getCy());
+			originalScreenshot.setOffX(slideShape.getOffx());
+			originalScreenshot.setOffY(slideShape.getOffy());
+			originalScreenshot.setRelationshipID(attributes.getValue("r:embed"));
+			inScreenshot = true;
 		}
 		// get font size
 		else if(inTextBody && qName.equals("a:rPr")){
@@ -232,8 +269,14 @@ public class SlideParser extends DefaultHandler {
 			inArrowShape=false;
 			setRoundedRectangleDragAndDropOrder();
 		}
-		else if(inShape && qName.equalsIgnoreCase("a:solidFill")){
+		else if(inShapeBackgroundColor && qName.equalsIgnoreCase("a:solidFill")){
 			inShapeBackgroundColor=false;
+		}
+		else if(inShapeLineProperties && qName.equalsIgnoreCase("a:solidFill")){
+			inShapeLineProperties=false;
+		}
+		else if(inScreenshot && qName.equalsIgnoreCase("p:sp")){
+			inScreenshot = false;
 		}
 		else if(inTextBody && qName.equalsIgnoreCase("p:txBody")){
 			inTextBody=false;
@@ -274,6 +317,7 @@ public class SlideParser extends DefaultHandler {
 	public void characters(char[] ch, int start, int length){
 		if(inTextBody){
 			textBody+=new String(ch, start, length);
+			textBody+=NEW_LINE;
 		}
 	}
 	
