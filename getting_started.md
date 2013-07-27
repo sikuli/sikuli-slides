@@ -5,7 +5,7 @@ title: Getting Started
 
 ## Installation
 
-1. Make sure Java is installed on your computer.
+1. Make sure that the Java Runtime Environment (JRE) is installed on your computer.
 2. Download the latest jar from the [Downloads](/downloads.html) page.
 
 
@@ -40,7 +40,7 @@ $ java -jar sikuli-slides-1.3.0.jar https://docs.google.com/presentation/d/1w48g
 ## Your Own Slides
 
 
-You can make your own slides locally using Microsoft Powerpoint or online using Google Presentation Although you can make slides from scratch, it would be easier to use the helloworld example as a template and add your own contents.
+You can make your own slides locally using Microsoft Powerpoint or online using Google Presentation. Although you can make slides from scratch, it would be easier to use the helloworld example as a template and add your own contents.
 
 
 <ul class="nav nav-tabs" id="myTabs">

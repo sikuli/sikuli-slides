@@ -57,7 +57,7 @@ div .info {
 		
 		{% assign docid = '1Bfud47ZtFQQCOEvaBNUkaXvHT4G-7V6rNvcQM2EvvwI' %}
 		{% assign name = 'Delay' %}
-		{% assign description = 'Delay the execution by some amount of time. In this example, the execution of slide 3 is delayed by 10 seconds. The wait time unit can be in microseconds, milliseconds, seconds, minutes, hours, or even days.' %}
+		{% assign description = 'Delay the execution by some amount of time. In this example, the execution of slide 3 is delayed by 10 seconds. The delay time unit can be in microseconds, milliseconds, seconds, minutes, hours, or even days.' %}
 		{% include actions.html %}
 
 

@@ -3,7 +3,7 @@
 
 1. Open the helloworld example in the Google Presentation editor. Use the following link: [https://docs.google.com/presentation/d/1w48gExh5oLIT0J8xYXR1RxpqTrZTXJC8OR4UXxShTQ8/edit?usp=sharing](https://docs.google.com/presentation/d/1w48gExh5oLIT0J8xYXR1RxpqTrZTXJC8OR4UXxShTQ8/edit?usp=sharing).	
 2. Make a copy so you can edit.
-3. On Slide 1, change the URL to your the URL of your own website.
+3. On Slide 1, change the URL to the URL of your own website.
 
    <table>
 	<tr>

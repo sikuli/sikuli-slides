@@ -17,7 +17,7 @@ The source code of Sikuli Slides is located at [Github](http://github.com/sikuli
 
 
 ## Feedback
-To help improve the sikuli slides project, please complete this [survey](https://docs.google.com/forms/d/1ae-qFfTCJj4_odS8mGh4CHxDcEQTzFtp0goWmch-aFU/viewform)
+To help us improve the sikuli slides project, please complete this [survey](https://docs.google.com/forms/d/1ae-qFfTCJj4_odS8mGh4CHxDcEQTzFtp0goWmch-aFU/viewform)
 
 ## License
 
