@@ -13,14 +13,14 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.PosixParser;
+import org.apache.commons.cli.GnuParser;
 import org.sikuli.api.robot.desktop.DesktopScreen;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyFileFilter;
 import org.sikuli.slides.utils.UserPreferencesEditor;
 
 /**
- * sikuli-slides Command Line tool using POSIX like options.
+ * sikuli-slides Command Line tool using GNU like options.
  * 
  * @author Khalid
  *
@@ -30,38 +30,38 @@ public class MainCommandLine {
 	private static final String applicationName = "sikuli-slides";
 	private static final String versionNumber = MainCommandLine.class.getPackage().getImplementationVersion();
 	private static final String commandLineSyntax = "java -jar "+
-			applicationName + "-" + versionNumber+".jar "+
+			applicationName + "-" + versionNumber+".jar " +
 			"Path_to_presentation_file.pptx | URL_to_presentation_file.pptx";
 	private static final String NEW_LINE = System.getProperty("line.separator");
 	
 	/**
-	* Parse the command-line arguments as POSIX like options (one character long option).
+	* Parse the command-line arguments as GNU-style long option (one word long option).
 	* @param args Command-line arguments
-	* @return the .pptx file name
+	* @return the location of the .pptx file
 	*/
-	private static String usePosixParser(final String[] args) throws Exception 
+	private static String useGNUParser(final String[] args) throws Exception 
 	{
-		final CommandLineParser parser = new PosixParser();  
-	    final Options posixOptions = getPOSIXCommandLineOptions();  
+		final CommandLineParser parser = new GnuParser();  
+	    final Options posixOptions = getGNUCommandLineOptions();  
 	    CommandLine cmd;  
 	    	cmd = parser.parse(posixOptions, args);
-	        if (cmd.hasOption("h")){
-        		printHelp(getPOSIXCommandLineOptions(), 120, 
+	        if (cmd.hasOption("help")){
+        		printHelp(getGNUCommandLineOptions(), 120, 
     					"sikuli-slides -- help", "sikuli-slides -- (END)", 5, 3, true, System.out);
         		return null;
 	        }
-	        else if (cmd.hasOption("v")){
+	        else if (cmd.hasOption("version")){
 	        	String versionMsg = "sikuli-slides -- version "+ 
     					versionNumber + NEW_LINE;
 	        	System.out.write(versionMsg.getBytes());
         		System.exit(0);
 	        }
-	    	if (cmd.hasOption("w")){
-	    		int wait=Integer.parseInt(cmd.getOptionValue("w"));
+	    	if (cmd.hasOption("wait")){
+	    		int wait=Integer.parseInt(cmd.getOptionValue("wait"));
 	        	prefsEditor.putMaxWaitTime(wait);
 	    	}
-	    	if (cmd.hasOption("s")){
-	    		int screenId=Integer.parseInt(cmd.getOptionValue("s"));
+	    	if (cmd.hasOption("screen")){
+	    		int screenId=Integer.parseInt(cmd.getOptionValue("screen"));
 	        	if(screenId > DesktopScreen.getNumberScreens()){
 	    			String errorMessage="Invalid screen id or screen is not connected." +NEW_LINE+
 	    					"Please enter the id of the connected display or monitor." +NEW_LINE+
@@ -76,8 +76,8 @@ public class MainCommandLine {
 	    	if (cmd.hasOption("oldsyntax")){
 	        	Constants.UseOldSyntax=true;
 	    	}
-	    	if (cmd.hasOption("m")){
-	    		String mode=cmd.getOptionValue("m");
+	    	if (cmd.hasOption("mode")){
+	    		String mode=cmd.getOptionValue("mode");
 	    		if(mode.equalsIgnoreCase("automation")){
 	    			Constants.AUTOMATION_MODE = true;
 	    		}
@@ -95,13 +95,13 @@ public class MainCommandLine {
 	    			throw new Exception();
 	    		}
 	    	}
-	    	if(cmd.hasOption("p")){
-	    		int precision=Integer.parseInt(cmd.getOptionValue("p"));
+	    	if(cmd.hasOption("minscore")){
+	    		int precision=Integer.parseInt(cmd.getOptionValue("minscore"));
 	    		if(precision> 0 && precision <= 10){
 	    			prefsEditor.putPreciseSearchScore(precision);
 	    		}
 	    		else{
-	    			String errorMessage="Invalid precision scale value." + NEW_LINE;
+	    			String errorMessage="Invalid minscore value." + NEW_LINE;
 	    			System.out.write(errorMessage.getBytes());
 	    			throw new Exception();
 	    		}
@@ -110,7 +110,7 @@ public class MainCommandLine {
 	        // check arguments
 	        final String[] remainingArguments = cmd.getArgs();
 	        if(remainingArguments==null||remainingArguments.length==0){
-	        	printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+	        	printUsage(applicationName, getGNUCommandLineOptions(), System.out);
 	        	return null;
 	        }
 	        else if(remainingArguments.length>0){
@@ -133,43 +133,43 @@ public class MainCommandLine {
 	        				String fileNotFoundError = "No such file." + NEW_LINE;
 	        				System.out.write(fileNotFoundError.getBytes()); 
 	        				displayBlankLine();
-	        				printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+	        				printUsage(applicationName, getGNUCommandLineOptions(), System.out);
 	        			}
 	        		}
 	        	}
 	        }
 	        else{
-	        	printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+	        	printUsage(applicationName, getGNUCommandLineOptions(), System.out);
 	        }
 		return null;
 	}
 	
 	/**
-	 * Return all valid POSIX command-line options
-	 * @return valid POSIX command-line options
+	 * Return all valid GNU command-line options
+	 * @return valid GNU command-line options
 	 */
 	@SuppressWarnings("static-access")
-	private static Options getPOSIXCommandLineOptions() {
-		final Options posixOptions=new Options();
+	private static Options getGNUCommandLineOptions() {
+		final Options gnuOptions=new Options();
 		
 		Option waitOption=OptionBuilder.withArgName("max_wait_time")
                 .hasArg()
                 .withDescription("The maximum time to wait in milliseconds to find a target " +
                 		"on the screen (current default value is "+prefsEditor.getMaxWaitTime()+" ms)." )
-                .create("w");
+                .create("wait");
 		
 		Option displayOption=OptionBuilder.withArgName("screen_id")
                 .hasArg()
                 .withDescription("The id of the connected screen/monitor " +
                 		"(current default value is "+prefsEditor.getDisplayId()+")." )
-                .create("s");
+                .create("screen");
 		
-		Option precisionOption=OptionBuilder.withArgName("precision")
+		Option precisionOption=OptionBuilder.withArgName("minscore")
                 .hasArg()
-                .withDescription("The precision or minimum score value to control the degree of fuzziness of " +
+                .withDescription("The minimum score or precision value to control the degree of fuzziness of " +
                 		"the image recognition search. It's a 10-point scale where 1 is the least precise search" +
                 		" and 10 is the most precise search. (default is 7). The new value is stored in user preferences." )
-                .create("p");
+                .create("minscore");
 		
 		Option oldSyntaxOption=OptionBuilder.withArgName("oldsyntax")
                 .withDescription("Forces the system to use the old syntax that uses special shapes" +
@@ -182,20 +182,20 @@ public class MainCommandLine {
                 .hasArg()
                 .withDescription("The mode in which sikuli-slides is running. It can be one of the following:" +
                 		" action, tutorial, and development (default is action)." )
-                .create("m");
+                .create("mode");
 		
-		Option helpOption=new Option("h", "help.");
-		Option versionOption=new Option("v", "print the version number.");
+		Option helpOption=new Option("help", "help.");
+		Option versionOption=new Option("version", "print the version number.");
 		
-		posixOptions.addOption(helpOption);
-		posixOptions.addOption(versionOption);
-		posixOptions.addOption(waitOption);
-		posixOptions.addOption(displayOption);
-		posixOptions.addOption(precisionOption);
-		posixOptions.addOption(oldSyntaxOption);
-		posixOptions.addOption(modeOption);
+		gnuOptions.addOption(helpOption);
+		gnuOptions.addOption(versionOption);
+		gnuOptions.addOption(waitOption);
+		gnuOptions.addOption(displayOption);
+		gnuOptions.addOption(precisionOption);
+		gnuOptions.addOption(oldSyntaxOption);
+		gnuOptions.addOption(modeOption);
 		
-		return posixOptions;
+		return gnuOptions;
 	}
 	
 	private static void showTextHeader(final OutputStream out){
@@ -254,14 +254,14 @@ public class MainCommandLine {
 	}
 	public static String runCommandLineTool(final String[] args){
 		if (args.length < 1){
-			printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+			printUsage(applicationName, getGNUCommandLineOptions(), System.out);
 		}
 		else{
 			try{
-				return usePosixParser(args);
+				return useGNUParser(args);
 			}
 	    	catch(Exception exception){
-				printUsage(applicationName, getPOSIXCommandLineOptions(), System.out);
+				printUsage(applicationName, getGNUCommandLineOptions(), System.out);
 				displayBlankLine();
 	    	}
 		}
