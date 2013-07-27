@@ -31,7 +31,7 @@ public class MainCommandLine {
 	private static final String versionNumber = MainCommandLine.class.getPackage().getImplementationVersion();
 	private static final String commandLineSyntax = "java -jar "+
 			applicationName + "-" + versionNumber+".jar " +
-			"Path_to_presentation_file.pptx | URL_to_presentation_file.pptx";
+			"Path_to_presentation_file.pptx | URL_to_presentation_file.pptx [options]";
 	private static final String NEW_LINE = System.getProperty("line.separator");
 	
 	/**
