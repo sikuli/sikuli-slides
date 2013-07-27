@@ -1,5 +1,7 @@
 sikuli-slides
 =============
-sikuli-slides is a new tool that enables you to automate and test graphical user interfaces (GUI) using presentation slides based upon adding screenshots and annotating them. sikuli-slides enables users to automate GUIs and produce an interactive screenshot by screenshot tutorials without having to write code.
+sikuli-slides is a new tool that enables you to automate and test Graphical User Interfaces (GUIs) 
+using presentation slides by adding screenshots and annotating them. sikuli-slides aims at enabling 
+users to automate GUIs and produce a live screenshot by screenshot tutorials without having to write code.
 
-For more info visit [Google Code project page](http://code.google.com/p/sikuli-api "Google Code project page").
+For more info visit (http://slides.sikuli.org "http://slides.sikuli.org").
