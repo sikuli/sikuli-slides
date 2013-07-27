@@ -165,8 +165,8 @@ public class MainCommandLine {
 		
 		Option precisionOption=OptionBuilder.withArgName("minscore_value")
                 .hasArg()
-                .withDescription("The minimum score to control the degree of fuzziness of " +
-                		"the image recognition search. It's a 10-point scale where 1 is the least precise search" +
+                .withDescription("The minimum similar score for a target to be considered " +
+                		"a match in the image recognition search. It's a 10-point scale where 1 is the least precise search" +
                 		" and 10 is the most precise search. (default is 7). The new value is stored in user preferences." )
                 .create("minscore");
 		
@@ -183,7 +183,7 @@ public class MainCommandLine {
                 		" automation, tutorial, and help (default is automation)." )
                 .create("mode");
 		
-		Option helpOption=new Option("help", "help.");
+		Option helpOption=new Option("help", "print help info.");
 		Option versionOption=new Option("version", "print the version number.");
 		
 		gnuOptions.addOption(helpOption);
