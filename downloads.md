@@ -3,6 +3,12 @@ layout: default
 title: Downloads
 ---
 
+## Requirements
+### Windows and Mac OS X
+Java Runtime Environment (JRE) version 1.6 or newer.
+### Linux
+Oracle Java Runtime Environment (JRE) version 1.7.
+
 ## 1.3.0
 
 <a href="/downloads/sikuli-slides-1.3.0.jar" class="btn btn-large btn-primary"
@@ -12,6 +18,17 @@ Download sikuli-slides-1.3.0.jar
 
 ### Release Notes:
 
+
+* New GUI.
+* New running modes: automation, help, and tutorial mode.
+* Run remote presentation slides. This includes the ability to run Google Presentation in Google Drive, and .pptx files in DropBox.
+* Added multiple monitors support.
+* New wait action (The wait time can be in microseconds, milliseconds, seconds, minutes, hours, or even days).
+* Store user's settings in User Prefernces.
+* Play .wav audio files.
+* Display Caption/Label on the screen using any shape with a yellow background.
+* Added Linux 32 and 64 bit support.
+* Many bug fixes.
 
 ## 1.2.0
 
