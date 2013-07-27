@@ -66,6 +66,11 @@ div .info {
 		{% assign description = 'Check if the target marked by the rectangle exists. If not, the execution is aborted.' %}
 		{% include actions.html %}
 		
+		{% assign docid = '1EgzhcaX4aq-Z8TCdWFbKxgePvEos0h2Lsxf7xENE7bE' %}
+		{% assign name = 'Not Exist' %}
+		{% assign description = 'Check if the target marked by the rectangle does not exist. If it exists, the execution is aborted.' %}
+		{% include actions.html %}
+		
 </ul>
 
 
@@ -91,7 +96,7 @@ Sikuli Slides can be executed in three modes: automation, tutorial, and help.
 
 ## Parameters
 
-There are several parameters that can be set at the command line to control the execution behavior of Sikuli Slides.
+There are several command line options that can be set to control the execution behavior of Sikuli Slides.
 
 * **MinScore:** The minimum similar score for a target to be considered a match
-* **Delay:** The delay interval between two slides.
+* **maxwait** The maximum time to wait in milliseconds to find a target on the screen (default 15000 ms)
