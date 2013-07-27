@@ -56,11 +56,11 @@ public class MainCommandLine {
         		System.exit(0);
 	        }
 	    	if (cmd.hasOption("wait")){
-	    		int wait=Integer.parseInt(cmd.getOptionValue("wait"));
+	    		int wait=Integer.parseInt(cmd.getOptionValue("max_wait_time_ms"));
 	        	prefsEditor.putMaxWaitTime(wait);
 	    	}
 	    	if (cmd.hasOption("screen")){
-	    		int screenId=Integer.parseInt(cmd.getOptionValue("screen"));
+	    		int screenId=Integer.parseInt(cmd.getOptionValue("screen_id"));
 	        	if(screenId > DesktopScreen.getNumberScreens()){
 	    			String errorMessage="Invalid screen id or screen is not connected." +NEW_LINE+
 	    					"Please enter the id of the connected display or monitor." +NEW_LINE+
@@ -76,7 +76,7 @@ public class MainCommandLine {
 	        	Constants.UseOldSyntax=true;
 	    	}
 	    	if (cmd.hasOption("mode")){
-	    		String mode=cmd.getOptionValue("mode");
+	    		String mode=cmd.getOptionValue("running_mode");
 	    		if(mode.equalsIgnoreCase("automation")){
 	    			Constants.AUTOMATION_MODE = true;
 	    		}
@@ -95,7 +95,7 @@ public class MainCommandLine {
 	    		}
 	    	}
 	    	if(cmd.hasOption("minscore")){
-	    		int precision=Integer.parseInt(cmd.getOptionValue("minscore"));
+	    		int precision=Integer.parseInt(cmd.getOptionValue("minscore_value"));
 	    		if(precision> 0 && precision <= 10){
 	    			prefsEditor.putPreciseSearchScore(precision);
 	    		}
@@ -151,7 +151,7 @@ public class MainCommandLine {
 	private static Options getGNUCommandLineOptions() {
 		final Options gnuOptions=new Options();
 		
-		Option waitOption=OptionBuilder.withArgName("max_wait_time")
+		Option waitOption=OptionBuilder.withArgName("max_wait_time_ms")
                 .hasArg()
                 .withDescription("The maximum time to wait in milliseconds to find a target " +
                 		"on the screen (current default value is "+prefsEditor.getMaxWaitTime()+" ms)." )
@@ -163,9 +163,9 @@ public class MainCommandLine {
                 		"(current default value is "+prefsEditor.getDisplayId()+")." )
                 .create("screen");
 		
-		Option precisionOption=OptionBuilder.withArgName("minscore")
+		Option precisionOption=OptionBuilder.withArgName("minscore_value")
                 .hasArg()
-                .withDescription("The minimum score or precision value to control the degree of fuzziness of " +
+                .withDescription("The minimum score to control the degree of fuzziness of " +
                 		"the image recognition search. It's a 10-point scale where 1 is the least precise search" +
                 		" and 10 is the most precise search. (default is 7). The new value is stored in user preferences." )
                 .create("minscore");
@@ -177,10 +177,10 @@ public class MainCommandLine {
                 		"Text Box: Keyboard typing. Cloud: open URL in default browser.")
                 .create("oldsyntax");
 		
-		Option modeOption=OptionBuilder.withArgName("mode")
+		Option modeOption=OptionBuilder.withArgName("running_mode")
                 .hasArg()
                 .withDescription("The mode in which sikuli-slides is running. It can be one of the following:" +
-                		" action, tutorial, and development (default is action)." )
+                		" automation, tutorial, and help (default is automation)." )
                 .create("mode");
 		
 		Option helpOption=new Option("help", "help.");
