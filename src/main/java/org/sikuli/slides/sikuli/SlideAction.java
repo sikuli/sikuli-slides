@@ -105,11 +105,9 @@ public class SlideAction {
 				}
 			}
 			else{
-				/*if(targetRegion==null){
-					if(Constants.TUTORIAL_MODE){
-						logger.error("Couldn't find target on the screen.");
-					}
-				}*/
+				if(targetRegion == null){
+					return;
+				}
 				if(Constants.HELP_MODE){
 					new SlideTutorial(targetRegion, slideShape, desktopEvent).performTutorialSlideAction();
 				}
