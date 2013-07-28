@@ -188,7 +188,10 @@ public class SikuliPowerPoint {
 			tasks.add(new SikuliAction(null, targetShapes.get(0), screenshot, null, desktopEvent, sound, label, null, null));
 			return;
 		}
-		
+		else if(screenshot == null){
+			logger.info("Error in slide {}.", slideNumber);
+			return;
+		}
 		// set the screenshot image file name
 		setScreenshotFileName(screenshot,slideName);
 		
