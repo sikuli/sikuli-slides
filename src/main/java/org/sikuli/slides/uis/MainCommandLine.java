@@ -31,7 +31,7 @@ public class MainCommandLine {
 	private static final String versionNumber = MainCommandLine.class.getPackage().getImplementationVersion();
 	private static final String commandLineSyntax = "java -jar "+
 			applicationName + "-" + versionNumber+".jar " +
-			"Path_to_presentation_file.pptx | URL_to_presentation_file.pptx [options]";
+			"Path_to_presentation_file.pptx | URL_to_presentation_file.pptx";
 	private static final String NEW_LINE = System.getProperty("line.separator");
 	
 	/**
@@ -56,11 +56,11 @@ public class MainCommandLine {
         		System.exit(0);
 	        }
 	    	if (cmd.hasOption("wait")){
-	    		int wait=Integer.parseInt(cmd.getOptionValue("max_wait_time_ms"));
+	    		int wait=Integer.parseInt(cmd.getOptionValue("wait"));
 	        	prefsEditor.putMaxWaitTime(wait);
 	    	}
 	    	if (cmd.hasOption("screen")){
-	    		int screenId=Integer.parseInt(cmd.getOptionValue("screen_id"));
+	    		int screenId=Integer.parseInt(cmd.getOptionValue("screen"));
 	        	if(screenId > DesktopScreen.getNumberScreens()){
 	    			String errorMessage="Invalid screen id or screen is not connected." +NEW_LINE+
 	    					"Please enter the id of the connected display or monitor." +NEW_LINE+
@@ -76,7 +76,7 @@ public class MainCommandLine {
 	        	Constants.UseOldSyntax=true;
 	    	}
 	    	if (cmd.hasOption("mode")){
-	    		String mode=cmd.getOptionValue("running_mode");
+	    		String mode=cmd.getOptionValue("mode");
 	    		if(mode.equalsIgnoreCase("automation")){
 	    			Constants.AUTOMATION_MODE = true;
 	    		}
@@ -95,7 +95,7 @@ public class MainCommandLine {
 	    		}
 	    	}
 	    	if(cmd.hasOption("minscore")){
-	    		int precision=Integer.parseInt(cmd.getOptionValue("minscore_value"));
+	    		int precision=Integer.parseInt(cmd.getOptionValue("minscore"));
 	    		if(precision> 0 && precision <= 10){
 	    			prefsEditor.putPreciseSearchScore(precision);
 	    		}
