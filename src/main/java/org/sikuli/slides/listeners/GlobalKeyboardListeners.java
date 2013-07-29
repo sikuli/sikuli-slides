@@ -19,13 +19,16 @@ public class GlobalKeyboardListeners implements NativeKeyListener, Runnable{
 	private StringBuilder typedText;
 	public GlobalKeyboardListeners(ScreenRegion region, String textToBeTyped, DesktopEvent desktopEvent){
 		this.region=region;
-		this.textToBeTyped=textToBeTyped;
-		this.desktopEvent=desktopEvent;
-		this.isPerformed=new AtomicBoolean();
-		typedText=new StringBuilder();
+		this.textToBeTyped = textToBeTyped.replaceAll("\\s","");
+		this.desktopEvent = desktopEvent;
+		this.isPerformed = new AtomicBoolean();
+		typedText = new StringBuilder();
 	}
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent e) {
+		if(e.getKeyCode() == NativeKeyEvent.VK_ESCAPE){
+			isPerformed.set(true);
+		}
 	}
 
 	@Override
@@ -34,11 +37,12 @@ public class GlobalKeyboardListeners implements NativeKeyListener, Runnable{
 
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent e) {
-		// TODO: Fix user's typing errors. Use OCR to make sure the user types the required text.
 		char ch=e.getKeyChar();
-		typedText.append(ch);
-		if(textToBeTyped.equalsIgnoreCase(typedText.toString())){
-			this.isPerformed.set(true);
+		if(Character.isLetter(ch)){
+			typedText.append(ch);
+			if(textToBeTyped.equalsIgnoreCase(typedText.toString())){
+				isPerformed.set(true);
+			}
 		}
 	}
 
