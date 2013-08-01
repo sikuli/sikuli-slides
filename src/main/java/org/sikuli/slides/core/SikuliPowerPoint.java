@@ -44,14 +44,15 @@ public class SikuliPowerPoint {
 	}
 	
 	public void runSikuliPowerPoint(int start, int end){
-		if (end == -1){
-			end = presentation.getSlidesCount();
-		}		
-		
 		// load the .pptx file
 		loadPresentationFile();
 		// parse the general presentation.xml file
 		parsePresentationFile();
+		
+		if (end == -1){
+			end = presentation.getSlidesCount();
+		}		
+		
 		// parse each slide file in the presentation document
 		for(int i=start;i<=end;i++){
 			parseSlideFile(i);
