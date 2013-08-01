@@ -31,7 +31,7 @@ public class MainCommandLine {
 	private static final String applicationName = "sikuli-slides";
 	private static final String versionNumber = MainCommandLine.class.getPackage().getImplementationVersion();
 	private static final String commandLineSyntax = "java -jar "+
-			applicationName + "-" + versionNumber+".jar " +
+			applicationName + "-" + versionNumber+".jar execute " +
 			"Path_to_presentation_file.pptx | URL_to_presentation_file.pptx";
 	private static final String NEW_LINE = System.getProperty("line.separator");
 	
