@@ -10,6 +10,7 @@ import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyScreen;
 import org.sikuli.slides.utils.UserPreferencesEditor;
 import org.sikuli.slides.utils.Utils;
+import org.sikuli.slides.core.RunOptions;
 import org.sikuli.slides.core.SikuliPowerPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,12 +55,12 @@ public class Main{
 	/**
 	 * starts processing the work
 	 */
-	public void doSikuliPowerPoint(String pptxSourceName){	
+	public void doSikuliPowerPoint(RunOptions runOptions){	
 		Constants.Execution_Start_Time=System.currentTimeMillis();
-		if(pptxSourceName != null){
+		if(runOptions != null){
 			// run sikuli-slides work
-			SikuliPowerPoint sikuliPowerPoint=new SikuliPowerPoint(pptxSourceName);
-			sikuliPowerPoint.runSikuliPowerPoint();
+			SikuliPowerPoint sikuliPowerPoint=new SikuliPowerPoint(runOptions.getSourceName());
+			sikuliPowerPoint.runSikuliPowerPoint(runOptions.getStart(), runOptions.getEnd());
 		}
 	}
 	
@@ -96,9 +97,9 @@ public class Main{
 		}
 		// Otherwise, run the command line tool and get the file name
 		else{			
-			String pptxSourceName=MainCommandLine.runCommandLineTool(args);
-			if(pptxSourceName != null){
-				main.doSikuliPowerPoint(pptxSourceName);
+			RunOptions runOptions = MainCommandLine.runCommandLineTool(args);
+			if(runOptions != null){
+				main.doSikuliPowerPoint(runOptions);
 			}
 		}
 	}
