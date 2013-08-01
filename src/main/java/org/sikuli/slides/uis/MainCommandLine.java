@@ -15,6 +15,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.GnuParser;
 import org.sikuli.api.robot.desktop.DesktopScreen;
+import org.sikuli.slides.core.RunOptions;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyFileFilter;
 import org.sikuli.slides.utils.UserPreferencesEditor;
@@ -30,7 +31,7 @@ public class MainCommandLine {
 	private static final String applicationName = "sikuli-slides";
 	private static final String versionNumber = MainCommandLine.class.getPackage().getImplementationVersion();
 	private static final String commandLineSyntax = "java -jar "+
-			applicationName + "-" + versionNumber+".jar " +
+			applicationName + "-" + versionNumber+".jar execute " +
 			"Path_to_presentation_file.pptx | URL_to_presentation_file.pptx";
 	private static final String NEW_LINE = System.getProperty("line.separator");
 	
@@ -39,8 +40,10 @@ public class MainCommandLine {
 	* @param args Command-line arguments
 	* @return the location of the .pptx file
 	*/
-	private static String useGNUParser(final String[] args) throws Exception 
+	private static RunOptions useGNUParser(final String[] args) throws Exception 
 	{
+		RunOptions runOptions = new RunOptions();
+		
 		final CommandLineParser parser = new GnuParser();  
 	    final Options posixOptions = getGNUCommandLineOptions();  
 	    CommandLine cmd;  
@@ -105,6 +108,17 @@ public class MainCommandLine {
 	    			throw new Exception();
 	    		}
 	    	}
+	    	if(cmd.hasOption("range")){
+	    		String[] toks = cmd.getOptionValue("range").split("-");
+	    		if (toks.length == 1){
+	    			int i = Integer.parseInt(toks[0]);
+	    			runOptions.setStart(i);
+	    			runOptions.setEnd(i);
+	    		}else if (toks.length == 2){
+	    			runOptions.setStart(Integer.parseInt(toks[0]));
+	    			runOptions.setEnd(Integer.parseInt(toks[1]));	    			
+	    		}
+	    	}
 	        
 	        // check arguments
 	        final String[] remainingArguments = cmd.getArgs();
@@ -116,7 +130,8 @@ public class MainCommandLine {
 	        	String argName=remainingArguments[0];
 	        	// check if the file is remotely stored in the cloud
 	        	if(argName.startsWith("http")){
-	        		return argName;
+	        		runOptions.setSourceName(argName);
+	        		return runOptions;
 	        	}
 	        	else{
 	        		// the file is locally stored
@@ -126,7 +141,8 @@ public class MainCommandLine {
 	        			if(source_file.exists()){
 	        				showTextHeader(System.out);
 	        				displayBlankLine();
-	        				return source_file.getAbsolutePath();
+	        				runOptions.setSourceName(source_file.getAbsolutePath());
+	        				return runOptions;
 	        			}
 	        			else{
 	        				String fileNotFoundError = "No such file." + NEW_LINE;
@@ -183,6 +199,13 @@ public class MainCommandLine {
                 		" automation, tutorial, and help (default is automation)." )
                 .create("mode");
 		
+		Option rangeOption=OptionBuilder.withArgName("range")
+				.hasArg()
+				.withDescription("The range of the slides to execute. For example, 1-4 means executing slide 1 to slide 4. " +
+						"2 means executing slide 2 only. If this option is not specified, all the slides are executed from" +
+						" the beginning to the end.")
+				.create("range");						
+		
 		Option helpOption=new Option("help", "print help info.");
 		Option versionOption=new Option("version", "print the version number.");
 		
@@ -193,6 +216,7 @@ public class MainCommandLine {
 		gnuOptions.addOption(precisionOption);
 		gnuOptions.addOption(oldSyntaxOption);
 		gnuOptions.addOption(modeOption);
+		gnuOptions.addOption(rangeOption);
 		
 		return gnuOptions;
 	}
@@ -238,7 +262,7 @@ public class MainCommandLine {
 		}
 	}
 	
-	public static String runCommandLineTool(final String[] args){
+	public static RunOptions runCommandLineTool(final String[] args){
 		if (args.length < 1){
 			printUsage(applicationName, getGNUCommandLineOptions(), System.out);
 		}

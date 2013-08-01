@@ -1,15 +1,28 @@
 package org.sikuli.slides;
 
+import java.awt.Color;
+import java.util.Arrays;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.sikuli.api.DefaultRegion;
+import org.sikuli.api.DesktopScreenRegion;
+import org.sikuli.api.Region;
+import org.sikuli.api.Relative;
+import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.desktop.DesktopScreen;
+import org.sikuli.api.visual.Canvas;
+import org.sikuli.api.visual.DesktopCanvas;
+import org.sikuli.api.visual.ScreenRegionCanvas;
+import org.sikuli.recorder.RecorderMain;
 import org.sikuli.slides.uis.MainCommandLine;
 import org.sikuli.slides.uis.MainUI;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyScreen;
 import org.sikuli.slides.utils.UserPreferencesEditor;
 import org.sikuli.slides.utils.Utils;
+import org.sikuli.slides.core.RunOptions;
 import org.sikuli.slides.core.SikuliPowerPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public class Main{
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(Main.class);
 	private UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
-	
+
 	private void initProject(){
 		// create the project working directory directory
 		if(!Utils.createWorkingDirectory()){
@@ -54,53 +67,77 @@ public class Main{
 	/**
 	 * starts processing the work
 	 */
-	public void doSikuliPowerPoint(String pptxSourceName){	
+	public void doSikuliPowerPoint(RunOptions runOptions){	
 		Constants.Execution_Start_Time=System.currentTimeMillis();
-		if(pptxSourceName != null){
+		if(runOptions != null){
 			// run sikuli-slides work
-			SikuliPowerPoint sikuliPowerPoint=new SikuliPowerPoint(pptxSourceName);
-			sikuliPowerPoint.runSikuliPowerPoint();
+			SikuliPowerPoint sikuliPowerPoint=new SikuliPowerPoint(runOptions.getSourceName());
+			sikuliPowerPoint.runSikuliPowerPoint(runOptions.getStart(), runOptions.getEnd());
 		}
 	}
 	
+	public static void showHelp(){
+		String helpMessage =
+		"Sikuli Slides commands:\n\n"+ 
+		"     execute         execute slides\n" +
+		"     record          record actionsas slides\n" +
+		"     gui             launch GUI";
+		System.out.println(helpMessage);
+
+	}
+
 	public static void main(String[]args){
 		// Set the application name in Mac OS X title bar
 		if (System.getProperty("os.name").contains("Mac")){
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 			// set the name of the application menu item
 			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Sikuli-Slides");
-	        // set the look and feel
-	        try {
-	        	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-	        } 
-	        catch (ClassNotFoundException e) {
-	                e.printStackTrace();
-	        }
-	        catch (InstantiationException e) {
-	                e.printStackTrace();
-	        }
-	        catch (IllegalAccessException e) {
-	                e.printStackTrace();
-	        } 
-	        catch (UnsupportedLookAndFeelException e) {
-	        	e.printStackTrace();
-	        }
-		}
-		
+			// set the look and feel
+//			try {
+//				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//			} 
+//			catch (ClassNotFoundException e) {
+//				e.printStackTrace();
+//			}
+//			catch (InstantiationException e) {
+//				e.printStackTrace();
+//			}
+//			catch (IllegalAccessException e) {
+//				e.printStackTrace();
+//			} 
+//			catch (UnsupportedLookAndFeelException e) {
+//				e.printStackTrace();
+//			}
+		}								
+
 		Main main=new Main();
 		main.initProject();
 		
-		// if no arguments are passed, run the GUI mode
-		if(args.length==0){
-			MainUI.runGuiTool();
-		}
-		// Otherwise, run the command line tool and get the file name
-		else{			
-			String pptxSourceName=MainCommandLine.runCommandLineTool(args);
-			if(pptxSourceName != null){
-				main.doSikuliPowerPoint(pptxSourceName);
+		// if arguments are passed
+		if (args.length >= 1){
+			String command = args[0];	
+			String[] otherArgs;
+			if (args.length >= 2){
+				otherArgs = Arrays.copyOfRange(args,1,args.length);
+			}else{
+				otherArgs = new String[]{};
 			}
+			if (command.compareToIgnoreCase("execute") == 0){
+				RunOptions runOptions = MainCommandLine.runCommandLineTool(otherArgs);
+				if(runOptions != null){
+					main.doSikuliPowerPoint(runOptions);					
+				}				
+			}else if (command.compareToIgnoreCase("gui") == 0){
+				MainUI.runGuiTool();			
+			}else if (command.compareToIgnoreCase("record") == 0){
+				RecorderMain.main(otherArgs);				
+			}else{
+				System.err.println("[" + command + "] is not a valid command");
+				showHelp();
+			}
+		}else{
+			showHelp();
 		}
 	}
-	
+
 }

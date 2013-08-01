@@ -225,7 +225,7 @@ public class SlideAction {
 			fontSize=prefsEditor.getInstructionHintFontSize();
 		}
 		Canvas canvas = new ScreenRegionCanvas(new DesktopScreenRegion(Constants.ScreenId));
-		canvas.addLabel(targetRegion, slideLabel.getText()).
+		canvas.addLabel(targetRegion.getUpperLeftCorner(), slideLabel.getText()).
 			withColor(Color.black).withFontSize((int)fontSize).withLineWidth(prefsEditor.getCanvasWidthSize());
 		canvas.display(prefsEditor.getLabelDisplayTime());
 	}
