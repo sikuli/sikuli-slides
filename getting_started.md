@@ -22,7 +22,8 @@ There are two methods to execute these slides on your own computer.
 
 **Method 1:** Download and Execute
 
-1. Download the slides from this link: [helloworld.pptx](https://docs.google.com/feeds/download/presentations/Export?id=1w48gExh5oLIT0J8xYXR1RxpqTrZTXJC8OR4UXxShTQ8&amp;exportFormat=pptx)
+1. Download the slides from this link:
+[helloworld.pptx](https://docs.google.com/feeds/download/presentations/Export?id=1w48gExh5oLIT0J8xYXR1RxpqTrZTXJC8OR4UXxShTQ8&&exportFormat=pptx)
 
 2. Execute the slides
 
