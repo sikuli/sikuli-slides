@@ -1,18 +1,37 @@
 package org.sikuli.slides.api;
 
+import static org.junit.Assert.*;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.jnativehook.NativeHookException;
+import org.jnativehook.mouse.NativeMouseEvent;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.DefaultLocation;
-import org.sikuli.api.DefaultScreenLocation;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
+import org.sikuli.slides.actions.InputDetector;
 
 public class SlidesTest {	
+	
+	private InputDetector detector;
+
+	@Before
+	public void setUp() throws NativeHookException{
+		detector = new InputDetector();
+		detector.start();		
+	}
+
+	@After
+	public void tearDown(){
+		detector.stop();
+	}
 	
 	@Test
 	public void testExecute() throws IOException{
@@ -24,5 +43,8 @@ public class SlidesTest {
 		
 		URL url = getClass().getResource("click.pptx");		
 		Slides.exeute(url);
+		
+		NativeMouseEvent ev = detector.getLastMouseEvent();
+		assertEquals("x", 200, ev.getX());
 	}
 }
