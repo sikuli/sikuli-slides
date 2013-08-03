@@ -30,7 +30,7 @@ public class TargetScreenRegion implements ScreenRegion {
 		if (targetScreenRegion == null){			
 			targetScreenRegion = screenRegion.wait(target, MAX_WAITTIME);
 			if (targetScreenRegion == null){
-				return new NullScreenRegion(getScreen());				
+				targetScreenRegion = new NullScreenRegion(screenRegion.getScreen());				
 			}
 		}
 		return targetScreenRegion;

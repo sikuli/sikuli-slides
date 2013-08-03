@@ -46,5 +46,23 @@ public class SlidesTest {
 		
 		NativeMouseEvent ev = detector.getLastMouseEvent();
 		assertEquals("x", 200, ev.getX());
+		
+		canvas.hide();
+	}
+	
+	@Test
+	public void testExecuteFiveStepsPPTX() throws IOException{
+		Canvas canvas = new DesktopCanvas();
+				
+		BufferedImage image = ImageIO.read(getClass().getResource("sikuli_context.png"));
+		canvas.addImage(new DefaultLocation(150,150), image);
+		canvas.show();
+		
+		URL url = getClass().getResource("fivesteps.pptx");		
+		Slides.exeute(url);
+				
+		canvas.hide();
+		
+		assertEquals("mouse events", 4, detector.getNumMouseEvents());
 	}
 }

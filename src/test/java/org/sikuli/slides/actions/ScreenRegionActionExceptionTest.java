@@ -21,7 +21,7 @@ import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.slides.api.ActionRuntimeException;
 import org.sikuli.slides.sikuli.NullScreenRegion;
 
-public class ScreenRegionActionFailureTest {
+public class ScreenRegionActionExceptionTest {
 
 	private NullScreenRegion nullScreenRegion;	
 

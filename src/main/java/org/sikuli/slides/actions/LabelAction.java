@@ -20,7 +20,7 @@ public class LabelAction extends ScreenRegionAction {
 
 	private String text = "";
 	private int fontSize = 12;
-	private int duration;
+	private int duration = 3000;
 
 	public LabelAction(ScreenRegion targetRegion){
 		setTargetScreenRegion(targetRegion);

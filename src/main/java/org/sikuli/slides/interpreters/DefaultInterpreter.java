@@ -13,6 +13,7 @@ import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.BrowserAction;
 import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.ExistAction;
+import org.sikuli.slides.actions.LabelAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.NotExistAction;
 import org.sikuli.slides.actions.RightClickAction;
@@ -89,6 +90,21 @@ public class DefaultInterpreter implements Interpreter {
 		return null;
 	}
 	
+	
+	Action interpretAsLabel(ParsedSlide parsedSlide, ScreenRegion screenRegion){
+		if (parsedSlide.getActionWords().size() == 0){		
+			ScreenRegion targetScreenRegion = parsedSlide.getTargetScreenRegion(screenRegion);
+			SlideElement targetElement = parsedSlide.getTargetSlideElement();
+			if (targetScreenRegion != null){
+				LabelAction action = new LabelAction(targetScreenRegion);
+				action.setText(targetElement.getText());
+				double fontSize = UnitConverter.WholePointsToPoints(targetElement.getTextSize());
+				action.setFontSize((int)fontSize);
+				return action;
+			}
+		}
+		return null;
+	}
 	
 	
 	Action interpretAsType(ParsedSlide parsedSlide, ScreenRegion screenRegion){
@@ -175,6 +191,8 @@ public class DefaultInterpreter implements Interpreter {
 		}else if ((action = interpretAsDoubleClick(parsedSlide, screenRegion)) != null){			
 
 		}else if ((action = interpretAsType(parsedSlide, screenRegion)) != null){
+			
+		}else if ((action = interpretAsLabel(parsedSlide, screenRegion)) != null){
 			
 		}else if ((action = interpretAsExist(parsedSlide, screenRegion)) != null){
 		

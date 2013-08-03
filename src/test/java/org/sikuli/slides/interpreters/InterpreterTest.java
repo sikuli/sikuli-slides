@@ -20,6 +20,7 @@ import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.BrowserAction;
 import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.ExistAction;
+import org.sikuli.slides.actions.LabelAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.NotExistAction;
 import org.sikuli.slides.actions.RightClickAction;
@@ -31,7 +32,7 @@ import org.sikuli.slides.models.SlideElement;
 
 public class InterpreterTest {
 
-	private static final String TEST_TYPE_STRING = "things to type";
+	private static final String TEST_TEXT = "some text";
 	private StaticImageScreenRegion screenRegion;
 	private DefaultInterpreter interpreter;
 
@@ -75,7 +76,8 @@ public class InterpreterTest {
 		targetElement.setOffy(223);
 		targetElement.setCx(200);
 		targetElement.setCy(200);		
-		targetElement.setText(TEST_TYPE_STRING);
+		targetElement.setTextSize(3600);
+		targetElement.setText(TEST_TEXT);
 		slide.add(targetElement);
 	}
 	
@@ -120,6 +122,12 @@ public class InterpreterTest {
 		addTarget(slide);		
 		return slide;
 	}	
+	
+	private Slide createLabelSlide(){		
+		Slide slide = new Slide();		
+		addTarget(slide);		
+		return slide;
+	}
 	
 	private Slide createExistSlide(){		
 		Slide slide = new Slide();
@@ -196,6 +204,15 @@ public class InterpreterTest {
 	}
 	
 	@Test
+	public void testInterpretLabelAction() {
+		Slide slide = createLabelSlide();
+		LabelAction action = (LabelAction) interpreter.interpret(slide);		
+		assertNotNull(action);
+		assertEquals(TEST_TEXT, action.getText());
+		assertEquals(36, action.getFontSize());
+	}	
+	
+	@Test
 	public void testInterpretExistAction() {
 		Slide slide = createExistSlide();
 		ExistAction action = (ExistAction) interpreter.interpret(slide);		
@@ -215,7 +232,7 @@ public class InterpreterTest {
 		Slide slide = createTypeSlide();
 		TypeAction action = (TypeAction) interpreter.interpret(slide);		
 		assertNotNull(action);
-		assertEquals(TEST_TYPE_STRING, action.getText());
+		assertEquals(TEST_TEXT, action.getText());
 	}	
 
 	@Test

@@ -73,7 +73,7 @@ public class Slides {
 			Slide slide = parser.parse(getSlideXML(i), getSlideXMLRel(i));
 			if (slide != null){
 				slides.add(slide);
-				logger.debug("" + slide);
+				logger.debug("Slide " + 1 + " :\n" + slide);
 			}
 		}
 		

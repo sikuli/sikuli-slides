@@ -44,6 +44,12 @@ public class InputDetector {
 	public int getNumKeyEvents(){
 		return  keyboardDetector.events.size();
 	}
+	
+	public int getNumMouseEvents(){
+		return  mouseDetector.events.size();
+	}
+	
+	
 	public NativeKeyEvent getLastKeyEvent(){
 		if (keyboardDetector.events.size() == 0)
 			return null;
