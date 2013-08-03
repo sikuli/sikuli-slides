@@ -151,4 +151,15 @@ public class ScreenRegionActionTest {
 		assertEquals("x", 350, x);
 		assertEquals("y", 350, y);
 	}
+	
+	@Test
+	public void testLabelAction(){
+		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,200);
+		LabelAction labelAction = new LabelAction(screenRegion);
+		labelAction.setText("This is a test label");
+		labelAction.setFontSize(15);
+		labelAction.setDuration(1000);
+		labelAction.perform();
+	}	
+	
 }

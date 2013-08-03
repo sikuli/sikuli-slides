@@ -15,7 +15,7 @@ public class AutomationExecutor implements SlideExecutor {
 	}
 
 	@Override
-	public void execute(List<Slide> slides) throws SlideExecutionException {
+	public void execute(List<Slide> slides) throws ActionRuntimeException {
 		// TODO Auto-generated method stub
 					
 		// Translate the content of a slide into an action

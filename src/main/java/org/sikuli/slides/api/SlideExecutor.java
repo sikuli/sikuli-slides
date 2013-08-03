@@ -7,6 +7,6 @@ import org.sikuli.slides.models.Slide;
 public interface SlideExecutor {
 			
 	// Execute a list of slides
-	public void execute(List<Slide> slide) throws SlideExecutionException;	
+	public void execute(List<Slide> slide) throws ActionRuntimeException;	
 	
 }

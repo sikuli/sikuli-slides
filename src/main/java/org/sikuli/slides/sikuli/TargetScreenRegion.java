@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 
-import org.sikuli.api.ImageTarget;
 import org.sikuli.api.Screen;
 import org.sikuli.api.ScreenLocation;
 import org.sikuli.api.ScreenRegion;
@@ -29,7 +28,10 @@ public class TargetScreenRegion implements ScreenRegion {
 	
 	private ScreenRegion getTargetScreenRegion() {
 		if (targetScreenRegion == null){			
-			targetScreenRegion = screenRegion.wait(target, MAX_WAITTIME);		
+			targetScreenRegion = screenRegion.wait(target, MAX_WAITTIME);
+			if (targetScreenRegion == null){
+				return new NullScreenRegion(getScreen());				
+			}
 		}
 		return targetScreenRegion;
 	}

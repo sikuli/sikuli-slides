@@ -1,8 +1,11 @@
 package org.sikuli.slides.actions;
 
+import java.awt.Rectangle;
+
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
+import org.sikuli.slides.api.ActionRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,20 +15,19 @@ abstract public class ScreenRegionAction implements Action {
 	protected Logger logger = LoggerFactory.getLogger(ScreenRegionAction.class);
 
 	public void perform(){
-		if (getTargetScreenRegion() != null){
-			displayBoxOnRegion(targetScreenRegion);
-			performOnScreenRegion(targetScreenRegion);
+		if (targetScreenRegion != null) {
+			Rectangle r = targetScreenRegion.getBounds();
+			if (r != null){
+				Canvas canvas = new ScreenRegionCanvas(targetScreenRegion);
+				canvas.addBox(targetScreenRegion);
+				canvas.show();
+				performOnScreenRegion(targetScreenRegion);
+				canvas.hide();
+			}else{
+				throw new ActionRuntimeException(this);
+			}
 		}
 	}	
-
-	// Display the canvas around the target
-	static public void displayBoxOnRegion(ScreenRegion screenRegion){
-		if(screenRegion != null){
-			Canvas canvas = new ScreenRegionCanvas(screenRegion);
-			canvas.addBox(screenRegion);
-			canvas.display(2);
-		}
-	}
 
 	// subclasses must implement this
 	abstract protected void performOnScreenRegion(ScreenRegion targetRegion);
