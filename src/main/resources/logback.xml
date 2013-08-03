@@ -8,6 +8,7 @@
 		</encoder>
 	</appender>
 	<logger name="org.sikuli.slides" level="DEBUG" />
+	<logger name="org.sikuli.slides.interpreters" level="TRACE" />
 	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />
 	</root>
