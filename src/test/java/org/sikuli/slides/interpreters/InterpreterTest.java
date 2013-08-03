@@ -1,7 +1,7 @@
 package org.sikuli.slides.interpreters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+
+import static org.junit.Assert.*;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -21,6 +21,7 @@ import org.sikuli.slides.actions.BrowserAction;
 import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.RightClickAction;
+import org.sikuli.slides.actions.TypeAction;
 import org.sikuli.slides.actions.WaitAction;
 import org.sikuli.slides.models.ScreenshotElement;
 import org.sikuli.slides.models.Slide;
@@ -28,6 +29,7 @@ import org.sikuli.slides.models.SlideElement;
 
 public class InterpreterTest {
 
+	private static final String TEST_TYPE_STRING = "things to type";
 	private StaticImageScreenRegion screenRegion;
 	private DefaultInterpreter interpreter;
 
@@ -60,17 +62,18 @@ public class InterpreterTest {
 	private void addTarget(Slide slide){
 		ScreenshotElement screenshotElement = new ScreenshotElement();
 		screenshotElement.setSource(getClass().getResource("sikuli_context.png"));
-		screenshotElement.setCx(100);
-		screenshotElement.setCy(100);
-		screenshotElement.setOffx(1100);
-		screenshotElement.setOffy(1100);
+		screenshotElement.setOffx(100);
+		screenshotElement.setOffy(100);
+		screenshotElement.setCx(1000);
+		screenshotElement.setCy(1000);
 		slide.add(screenshotElement);
 		
 		SlideElement targetElement = new SlideElement(); 
-		targetElement.setCx(348);
-		targetElement.setCy(223);		
-		targetElement.setOffx(548);
-		targetElement.setOffy(423);
+		targetElement.setOffx(348);
+		targetElement.setOffy(223);
+		targetElement.setCx(200);
+		targetElement.setCy(200);		
+		targetElement.setText(TEST_TYPE_STRING);
 		slide.add(targetElement);
 	}
 	
@@ -116,6 +119,17 @@ public class InterpreterTest {
 		return slide;
 	}	
 	
+	private Slide createTypeSlide() {
+		Slide slide = new Slide();
+		SlideElement actionElement = new SlideElement();
+		actionElement.setText("type");
+		slide.add(actionElement);
+		
+		addTarget(slide);		
+		return slide;
+	}
+
+	
 	
 	@Before
 	public void setUp() throws IOException{
@@ -151,7 +165,7 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testInterpretDoubleClickAction() throws IOException {
+	public void testInterpretDoubleClickAction() {
 		Slide slide = createDoubleClickSlide();
 		Action action = interpreter.interpret(slide);
 		
@@ -159,7 +173,14 @@ public class InterpreterTest {
 		assertEquals("double-click action", DoubleClickAction.class, action.getClass());
 	}
 	
-	
+	@Test
+	public void testInterpretTypeAction() {
+		Slide slide = createTypeSlide();
+		TypeAction action = (TypeAction) interpreter.interpret(slide);		
+		assertNotNull(action);
+		assertEquals(TEST_TYPE_STRING, action.getText());
+	}	
+
 	@Test
 	public void testInterpretWaitAction() {
 		Slide slide = createWaitSlide("2 seconds");		

@@ -14,6 +14,7 @@ import org.sikuli.slides.actions.BrowserAction;
 import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.RightClickAction;
+import org.sikuli.slides.actions.TypeAction;
 import org.sikuli.slides.actions.WaitAction;
 import org.sikuli.slides.models.ScreenshotElement;
 import org.sikuli.slides.models.Slide;
@@ -64,6 +65,19 @@ public class DefaultInterpreter implements Interpreter {
 			ScreenRegion targetScreenRegion = parsedSlide.getTargetScreenRegion(screenRegion);
 			if (targetScreenRegion != null)
 				return new DoubleClickAction(targetScreenRegion);			
+		}
+		return null;
+	}
+	
+	Action interpretAsType(ParsedSlide parsedSlide, ScreenRegion screenRegion){
+		if (parsedSlide.isAction(ActionDictionary.TYPE)){
+			ScreenRegion targetScreenRegion = parsedSlide.getTargetScreenRegion(screenRegion);
+			SlideElement targetElement = parsedSlide.getTargetSlideElement();
+			if (targetScreenRegion != null){
+				TypeAction typeAction = new TypeAction(targetScreenRegion);
+				typeAction.setText(targetElement.getText());
+				return typeAction;
+			}
 		}
 		return null;
 	}
@@ -138,7 +152,9 @@ public class DefaultInterpreter implements Interpreter {
 
 		}else if ((action = interpretAsDoubleClick(parsedSlide, screenRegion)) != null){			
 
-		}else if ((action = interpretAsBrowser(parsedSlide)) != null){
+		}else if ((action = interpretAsType(parsedSlide, screenRegion)) != null){
+			
+		}else if ((action = interpretAsBrowser(parsedSlide)) != null){		
 
 		}else if ((action = interpretAsWait(parsedSlide)) != null){
 
@@ -172,7 +188,11 @@ class ParsedSlide extends Slide {
 	}
 	public ScreenRegion getTargetScreenRegion(ScreenRegion screenRegion) {
 		return extractTargetScreenRegion(slide, screenRegion);	
+	}
+	public SlideElement getTargetSlideElement() {
+		return extractTargetSlideElement(slide);	
 	}	
+	
 	public List<String> getArgumentStrings() {
 		return argumentStrings;
 	}	
@@ -196,6 +216,21 @@ class ParsedSlide extends Slide {
 		return Lists.newArrayList(actionWords);
 	}
 
+	static SlideElement extractTargetSlideElement(Slide slide){
+		List<ScreenshotElement> screenshots = getScreenshotElements(slide);
+		Collection<SlideElement> otherElements = getNotActionElements(slide);
+
+		ScreenshotElement screenshotElement = null;
+		SlideElement boundsElement = null;
+		if (screenshots.size() > 0) {		
+			screenshotElement = screenshots.get(0);				
+			List<SlideElement> elementsInsideScreenshot = filterElementsContainedBy(otherElements, screenshotElement);					
+			if (elementsInsideScreenshot.size() > 0){
+				boundsElement = elementsInsideScreenshot.get(0);
+			}
+		}
+		return boundsElement;
+	}
 
 	static ScreenRegion extractTargetScreenRegion(Slide slide, ScreenRegion screenRegion){
 		List<ScreenshotElement> screenshots = getScreenshotElements(slide);
@@ -236,8 +271,6 @@ class ParsedSlide extends Slide {
 		return Lists.newArrayList(Collections2.filter(elements, new Predicate<SlideElement>(){
 			@Override
 			public boolean apply(SlideElement element) {				
-				boolean ret = (r.contains(element.getBounds()) && element != container);
-				System.out.println(element.getBounds() + "<->" + container.getBounds() + " " + ret);
 				return r.contains(element.getBounds()) && element != container;				
 			}			
 		}));		

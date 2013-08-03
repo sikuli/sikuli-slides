@@ -4,7 +4,6 @@ import org.sikuli.api.ScreenLocation;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopMouse;
-import org.sikuli.slides.api.ActionRuntimeException;
 
 public class LeftClickAction extends ScreenRegionAction {
 	

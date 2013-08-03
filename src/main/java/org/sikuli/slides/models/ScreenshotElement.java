@@ -24,6 +24,7 @@ public class ScreenshotElement extends SlideElement {
 		return null;
 	}
 	public void setSource(URL source) {
+		fileName = source.getPath();
 		this.source = source;
 	}
 	

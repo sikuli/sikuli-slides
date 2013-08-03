@@ -11,6 +11,8 @@ import java.util.List;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseInputListener;
 import org.junit.After;
@@ -28,6 +30,22 @@ import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.RightClickAction;
 import org.sikuli.slides.api.ActionRuntimeException;
 import org.sikuli.slides.sikuli.NullScreenRegion;
+
+class GlobalKeyListenerExample implements NativeKeyListener {
+	List<NativeKeyEvent> events = new ArrayList<NativeKeyEvent>();
+
+	public void nativeKeyPressed(NativeKeyEvent e) {
+    }
+
+    public void nativeKeyReleased(NativeKeyEvent e) {
+    }
+
+    public void nativeKeyTyped(NativeKeyEvent e) {
+    	//System.out.println("Key Typed: " + e.getKeyText(e.getKeyCode()));
+    	System.out.println("Key Typed: " + e.getKeyChar());
+    	events.add(e);
+    }
+}
 
 class MouseEventDetector extends EventDetector 
 implements NativeMouseInputListener {
@@ -70,27 +88,42 @@ implements NativeMouseInputListener {
 
 public class ScreenRegionActionTest {
 
-	private MouseEventDetector detector;
-	private NullScreenRegion nullScreenRegion;	
+	private MouseEventDetector mouseDetector;
+	private NullScreenRegion nullScreenRegion;
+	private GlobalKeyListenerExample keyboardDetector;	
 
 	private NativeMouseEvent getLastMouseEvent(){
-		if (detector.events.size() == 0)
+		if (mouseDetector.events.size() == 0)
 			return null;
 		else
-			return detector.events.get(detector.events.size()-1);		
+			return mouseDetector.events.get(mouseDetector.events.size()-1);		
+	}
+	
+	
+	private int getNumKeyEvents(){
+		return  keyboardDetector.events.size();
+	}
+	private NativeKeyEvent getLastKeyEvent(){
+		if (keyboardDetector.events.size() == 0)
+			return null;
+		else
+			return keyboardDetector.events.get(keyboardDetector.events.size()-1);		
 	}
 
 	@Before
 	public void setUp() throws NativeHookException{
 		GlobalScreen.registerNativeHook();
-		detector = new MouseEventDetector();
-		GlobalScreen.getInstance().addNativeMouseListener(detector);	
+		mouseDetector = new MouseEventDetector();
+		keyboardDetector = new GlobalKeyListenerExample();
+		GlobalScreen.getInstance().addNativeKeyListener(keyboardDetector);
+		GlobalScreen.getInstance().addNativeMouseListener(mouseDetector);	
 		nullScreenRegion = new NullScreenRegion(new DesktopScreen(0));
 	}
 
 	@After
 	public void tearDown(){
-		GlobalScreen.getInstance().removeNativeMouseListener(detector);
+		GlobalScreen.getInstance().removeNativeMouseListener(mouseDetector);
+		GlobalScreen.getInstance().removeNativeKeyListener(keyboardDetector);
 		GlobalScreen.unregisterNativeHook();
 	}
 
@@ -155,6 +188,27 @@ public class ScreenRegionActionTest {
 		int y = getLastMouseEvent().getY();
 		assertEquals("x", 350, x);
 		assertEquals("y", 350, y);
+	}
+	
+	@Test
+	public void testTypeAction(){
+		Canvas canvas = new DesktopCanvas();		
+		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);
+		TypeAction action = new TypeAction(screenRegion);
+		action.setText("abcde");
+		canvas.addLabel(screenRegion, "type here")
+		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
+		canvas.addBox(screenRegion);		
+		canvas.show();
+		action.perform();
+		canvas.hide();	
+
+		assertNotNull("last mouse event", getLastMouseEvent());
+		assertEquals("mouse button", MouseEvent.BUTTON1, getLastMouseEvent().getButton());
+		assertEquals("click count", 1, getLastMouseEvent().getClickCount());
+		
+		assertEquals("last key typed", 'e', getLastKeyEvent().getKeyChar());
+		assertEquals("num keys typed", 5, getNumKeyEvents());
 	}
 	
 	@Test
