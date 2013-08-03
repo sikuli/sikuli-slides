@@ -12,7 +12,9 @@ import org.sikuli.api.Target;
 import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.BrowserAction;
 import org.sikuli.slides.actions.DoubleClickAction;
+import org.sikuli.slides.actions.ExistAction;
 import org.sikuli.slides.actions.LeftClickAction;
+import org.sikuli.slides.actions.NotExistAction;
 import org.sikuli.slides.actions.RightClickAction;
 import org.sikuli.slides.actions.TypeAction;
 import org.sikuli.slides.actions.WaitAction;
@@ -68,6 +70,26 @@ public class DefaultInterpreter implements Interpreter {
 		}
 		return null;
 	}
+	
+	Action interpretAsExist(ParsedSlide parsedSlide, ScreenRegion screenRegion){
+		if (parsedSlide.isAction(ActionDictionary.EXIST)){
+			ScreenRegion targetScreenRegion = parsedSlide.getTargetScreenRegion(screenRegion);
+			if (targetScreenRegion != null)
+				return new ExistAction(targetScreenRegion);			
+		}
+		return null;
+	}
+	
+	Action interpretAsNotExist(ParsedSlide parsedSlide, ScreenRegion screenRegion){
+		if (parsedSlide.isAction(ActionDictionary.NOT_EXIST)){
+			ScreenRegion targetScreenRegion = parsedSlide.getTargetScreenRegion(screenRegion);
+			if (targetScreenRegion != null)
+				return new NotExistAction(targetScreenRegion);			
+		}
+		return null;
+	}
+	
+	
 	
 	Action interpretAsType(ParsedSlide parsedSlide, ScreenRegion screenRegion){
 		if (parsedSlide.isAction(ActionDictionary.TYPE)){
@@ -153,6 +175,10 @@ public class DefaultInterpreter implements Interpreter {
 		}else if ((action = interpretAsDoubleClick(parsedSlide, screenRegion)) != null){			
 
 		}else if ((action = interpretAsType(parsedSlide, screenRegion)) != null){
+			
+		}else if ((action = interpretAsExist(parsedSlide, screenRegion)) != null){
+		
+		}else if ((action = interpretAsNotExist(parsedSlide, screenRegion)) != null){		
 			
 		}else if ((action = interpretAsBrowser(parsedSlide)) != null){		
 

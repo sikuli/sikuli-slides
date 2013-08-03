@@ -19,7 +19,9 @@ import org.sikuli.api.StaticImageScreenRegion;
 import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.BrowserAction;
 import org.sikuli.slides.actions.DoubleClickAction;
+import org.sikuli.slides.actions.ExistAction;
 import org.sikuli.slides.actions.LeftClickAction;
+import org.sikuli.slides.actions.NotExistAction;
 import org.sikuli.slides.actions.RightClickAction;
 import org.sikuli.slides.actions.TypeAction;
 import org.sikuli.slides.actions.WaitAction;
@@ -119,6 +121,27 @@ public class InterpreterTest {
 		return slide;
 	}	
 	
+	private Slide createExistSlide(){		
+		Slide slide = new Slide();
+		SlideElement actionElement = new SlideElement();
+		actionElement.setText("exist");
+		slide.add(actionElement);
+		
+		addTarget(slide);		
+		return slide;
+	}
+	
+	private Slide createNotExistSlide(){		
+		Slide slide = new Slide();
+		SlideElement actionElement = new SlideElement();
+		actionElement.setText("not exist");
+		slide.add(actionElement);
+		
+		addTarget(slide);		
+		return slide;
+	}	
+	
+	
 	private Slide createTypeSlide() {
 		Slide slide = new Slide();
 		SlideElement actionElement = new SlideElement();
@@ -167,11 +190,25 @@ public class InterpreterTest {
 	@Test
 	public void testInterpretDoubleClickAction() {
 		Slide slide = createDoubleClickSlide();
-		Action action = interpreter.interpret(slide);
-		
+		Action action = interpreter.interpret(slide);		
 		assertNotNull(action);
 		assertEquals("double-click action", DoubleClickAction.class, action.getClass());
 	}
+	
+	@Test
+	public void testInterpretExistAction() {
+		Slide slide = createExistSlide();
+		ExistAction action = (ExistAction) interpreter.interpret(slide);		
+		assertNotNull(action);
+	}	
+
+	@Test
+	public void testInterpretNotExistAction() {
+		Slide slide = createNotExistSlide();
+		NotExistAction action = (NotExistAction) interpreter.interpret(slide);		
+		assertNotNull(action);
+	}	
+	
 	
 	@Test
 	public void testInterpretTypeAction() {
