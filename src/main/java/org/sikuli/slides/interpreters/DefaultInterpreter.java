@@ -10,7 +10,9 @@ import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
 import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.BrowserAction;
+import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.LeftClickAction;
+import org.sikuli.slides.actions.RightClickAction;
 import org.sikuli.slides.models.ScreenshotElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
@@ -44,6 +46,26 @@ public class DefaultInterpreter implements Interpreter {
 		return null;
 	}
 	
+	
+	Action interpretAsRightClick(ParsedSlide parsedSlide, ScreenRegion screenRegion){
+		if (parsedSlide.isAction(ActionDictionary.RIGHT_CLICK)){
+			ScreenRegion targetScreenRegion = parsedSlide.getTargetScreenRegion(screenRegion);
+			if (targetScreenRegion != null)
+				return new RightClickAction(targetScreenRegion);			
+		}
+		return null;
+	}
+	
+	Action interpretAsDoubleClick(ParsedSlide parsedSlide, ScreenRegion screenRegion){
+		if (parsedSlide.isAction(ActionDictionary.DOUBLE_CLICK)){
+			ScreenRegion targetScreenRegion = parsedSlide.getTargetScreenRegion(screenRegion);
+			if (targetScreenRegion != null)
+				return new DoubleClickAction(targetScreenRegion);			
+		}
+		return null;
+	}
+
+	
 	Action interpretAsBrowser(ParsedSlide parsedSlide){
 		if (parsedSlide.isAction(ActionDictionary.BROWSER)){			
 			List<String> arguments = parsedSlide.getArgumentStrings();
@@ -72,6 +94,10 @@ public class DefaultInterpreter implements Interpreter {
 		Action action = null;
 		if ((action = interpretAsClick(parsedSlide, screenRegion)) != null){			
 		
+		}else if ((action = interpretAsRightClick(parsedSlide, screenRegion)) != null){			
+			
+		}else if ((action = interpretAsDoubleClick(parsedSlide, screenRegion)) != null){			
+			
 		}else if ((action = interpretAsBrowser(parsedSlide)) != null){
 			
 		}		

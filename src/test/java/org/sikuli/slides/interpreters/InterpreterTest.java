@@ -11,18 +11,23 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.StaticImageScreenRegion;
 import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.BrowserAction;
+import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.LeftClickAction;
+import org.sikuli.slides.actions.RightClickAction;
 import org.sikuli.slides.models.ScreenshotElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
 
 public class InterpreterTest {
+
+	private StaticImageScreenRegion screenRegion;
 
 	@Test
 	public void testInterpretBrowserAction() throws MalformedURLException{
@@ -77,10 +82,35 @@ public class InterpreterTest {
 		return slide;
 	}
 	
+	private Slide createRightClickSlide(){		
+		Slide slide = new Slide();
+		SlideElement actionElement = new SlideElement();
+		actionElement.setText("right click");
+		slide.add(actionElement);
+		
+		addTarget(slide);		
+		return slide;
+	}	
+	
+	private Slide createDoubleClickSlide(){		
+		Slide slide = new Slide();
+		SlideElement actionElement = new SlideElement();
+		actionElement.setText("double click");
+		slide.add(actionElement);
+		
+		addTarget(slide);		
+		return slide;
+	}	
+	
+	
+	@Before
+	public void setUp() throws IOException{
+		BufferedImage image = ImageIO.read(getClass().getResource("sikuli_context.png"));
+		screenRegion = new StaticImageScreenRegion(image);				
+	}
+	
 	@Test
 	public void testInterpretLeftClickAction() throws IOException {
-		BufferedImage image = ImageIO.read(getClass().getResource("sikuli_context.png"));
-		ScreenRegion screenRegion = new StaticImageScreenRegion(image);				
 		Slide slide = createClickSlide();
 		
 		Interpreter interpreter = new DefaultInterpreter(screenRegion);
@@ -97,4 +127,27 @@ public class InterpreterTest {
 		assertEquals(129, b.x);
 		assertEquals(43, b.y);
 	}
+	
+	@Test
+	public void testInterpretRightClickAction() throws IOException {
+		Slide slide = createRightClickSlide();
+		
+		Interpreter interpreter = new DefaultInterpreter(screenRegion);
+		Action action = interpreter.interpret(slide);
+		
+		assertNotNull(action);
+		assertEquals("right-click action", RightClickAction.class, action.getClass());
+	}
+	
+	@Test
+	public void testInterpretDoubleClickAction() throws IOException {
+		Slide slide = createDoubleClickSlide();
+		
+		Interpreter interpreter = new DefaultInterpreter(screenRegion);
+		Action action = interpreter.interpret(slide);
+		
+		assertNotNull(action);
+		assertEquals("double-click action", DoubleClickAction.class, action.getClass());
+	}
+	
 }
