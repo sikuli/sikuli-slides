@@ -1,5 +1,7 @@
 package org.sikuli.slides.models;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.google.common.base.Objects;
@@ -14,14 +16,12 @@ public class ScreenshotElement extends SlideElement {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-//	public Region getTargetRegion() {
-//		return targetRegion;
-//	}
-//	public void setTargetRegion(Region targetRegion) {
-//		this.targetRegion = targetRegion;
-//	}
 	public URL getSource() {
-		return source;
+		try {
+			return (new File(fileName)).toURI().toURL();
+		} catch (MalformedURLException e) {
+		}
+		return null;
 	}
 	public void setSource(URL source) {
 		this.source = source;

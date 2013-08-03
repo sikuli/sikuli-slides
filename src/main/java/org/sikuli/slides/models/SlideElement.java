@@ -128,12 +128,12 @@ public class SlideElement {
 	}
 	
 	public Rectangle getBounds(){
-		return new Rectangle(cx,cy,offx,offy);
+		return new Rectangle(getOffx(),getOffy(),getCx(),getCy());
 	}
 	
 	@Override
 	public String toString(){
-		return Objects.toStringHelper(this)
+		return Objects.toStringHelper(SlideElement.class)
 				.add("id", id).add("name",name)
 				.add("offx",offx).add("offy",offy)
 				.add("cx",cx).add("cy",cy)

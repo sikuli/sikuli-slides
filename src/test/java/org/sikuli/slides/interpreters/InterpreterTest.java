@@ -21,6 +21,7 @@ import org.sikuli.slides.actions.BrowserAction;
 import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.RightClickAction;
+import org.sikuli.slides.actions.WaitAction;
 import org.sikuli.slides.models.ScreenshotElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
@@ -28,6 +29,7 @@ import org.sikuli.slides.models.SlideElement;
 public class InterpreterTest {
 
 	private StaticImageScreenRegion screenRegion;
+	private DefaultInterpreter interpreter;
 
 	@Test
 	public void testInterpretBrowserAction() throws MalformedURLException{
@@ -82,6 +84,18 @@ public class InterpreterTest {
 		return slide;
 	}
 	
+	private Slide createWaitSlide(String text){		
+		Slide slide = new Slide();
+		SlideElement actionElement = new SlideElement();
+		actionElement.setText("wait");
+		slide.add(actionElement);
+
+		SlideElement argumentElement = new SlideElement();
+		argumentElement.setText(text);
+		slide.add(argumentElement);
+		return slide;
+	}
+	
 	private Slide createRightClickSlide(){		
 		Slide slide = new Slide();
 		SlideElement actionElement = new SlideElement();
@@ -106,14 +120,13 @@ public class InterpreterTest {
 	@Before
 	public void setUp() throws IOException{
 		BufferedImage image = ImageIO.read(getClass().getResource("sikuli_context.png"));
-		screenRegion = new StaticImageScreenRegion(image);				
+		screenRegion = new StaticImageScreenRegion(image);		
+		interpreter = new DefaultInterpreter(screenRegion);
 	}
 	
 	@Test
 	public void testInterpretLeftClickAction() throws IOException {
-		Slide slide = createClickSlide();
-		
-		Interpreter interpreter = new DefaultInterpreter(screenRegion);
+		Slide slide = createClickSlide();		
 		Action action = interpreter.interpret(slide);
 		
 		assertNotNull(action);
@@ -130,9 +143,7 @@ public class InterpreterTest {
 	
 	@Test
 	public void testInterpretRightClickAction() throws IOException {
-		Slide slide = createRightClickSlide();
-		
-		Interpreter interpreter = new DefaultInterpreter(screenRegion);
+		Slide slide = createRightClickSlide();		
 		Action action = interpreter.interpret(slide);
 		
 		assertNotNull(action);
@@ -142,12 +153,43 @@ public class InterpreterTest {
 	@Test
 	public void testInterpretDoubleClickAction() throws IOException {
 		Slide slide = createDoubleClickSlide();
-		
-		Interpreter interpreter = new DefaultInterpreter(screenRegion);
 		Action action = interpreter.interpret(slide);
 		
 		assertNotNull(action);
 		assertEquals("double-click action", DoubleClickAction.class, action.getClass());
+	}
+	
+	
+	@Test
+	public void testInterpretWaitAction() {
+		Slide slide = createWaitSlide("2 seconds");		
+		Action action = interpreter.interpret(slide);
+		
+		assertNotNull(action);
+		assertEquals("wait action", WaitAction.class, action.getClass());
+		WaitAction waitAction = (WaitAction) action;				
+		assertEquals(2000, waitAction.getDuration());
+		
+		slide = createWaitSlide("2");		
+		waitAction = (WaitAction) interpreter.interpret(slide);
+		assertEquals(2000, waitAction.getDuration());
+		
+		slide = createWaitSlide("1 minute");		
+		waitAction = (WaitAction) interpreter.interpret(slide);
+		assertEquals(1000 * 60, waitAction.getDuration());
+
+		slide = createWaitSlide("0.5 second");		
+		waitAction = (WaitAction) interpreter.interpret(slide);
+		assertEquals(500, waitAction.getDuration());
+
+		slide = createWaitSlide("0.5");		
+		waitAction = (WaitAction) interpreter.interpret(slide);
+		assertEquals(500, waitAction.getDuration());
+
+		slide = createWaitSlide("0");		
+		waitAction = (WaitAction) interpreter.interpret(slide);
+		assertEquals(0, waitAction.getDuration());
+		
 	}
 	
 }

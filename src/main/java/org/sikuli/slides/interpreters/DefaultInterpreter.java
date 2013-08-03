@@ -172,15 +172,15 @@ class ParsedSlide extends Slide {
 		ScreenRegion targetScreenRegion = null;
 		if (screenshotElement != null && boundsElement != null){
 
-			int w = screenshotElement.getOffx() - screenshotElement.getCx();
-			int h = screenshotElement.getOffy() - screenshotElement.getCy();
+			int w = screenshotElement.getCx();
+			int h = screenshotElement.getCy();
 
 			if (w > 0 && h > 0){
 
-				double xmin = 1.0 * (boundsElement.getCx() - screenshotElement.getCx()) / w;
-				double ymin = 1.0 * (boundsElement.getCy() - screenshotElement.getCy()) / h;
-				double xmax = 1.0 * (boundsElement.getOffx() - screenshotElement.getCx()) / w;
-				double ymax = 1.0 * (boundsElement.getOffy() - screenshotElement.getCy()) / h;					
+				double xmax = 1.0 * (boundsElement.getOffx() + boundsElement.getCx() - screenshotElement.getOffx()) / w;
+				double ymax = 1.0 * (boundsElement.getOffy() + boundsElement.getCy() - screenshotElement.getOffy()) / h;
+				double xmin = 1.0 * (boundsElement.getOffx() - screenshotElement.getOffx()) / w;
+				double ymin = 1.0 * (boundsElement.getOffy() - screenshotElement.getOffy()) / h;					
 
 				Target target = new ContextualImageTarget(screenshotElement.getSource(), xmin, ymin, xmax, ymax); 
 				targetScreenRegion = new TargetScreenRegion(target, screenRegion);
@@ -194,6 +194,8 @@ class ParsedSlide extends Slide {
 		return Lists.newArrayList(Collections2.filter(elements, new Predicate<SlideElement>(){
 			@Override
 			public boolean apply(SlideElement element) {				
+				boolean ret = (r.contains(element.getBounds()) && element != container);
+				System.out.println(element.getBounds() + "<->" + container.getBounds() + " " + ret);
 				return r.contains(element.getBounds()) && element != container;				
 			}			
 		}));		

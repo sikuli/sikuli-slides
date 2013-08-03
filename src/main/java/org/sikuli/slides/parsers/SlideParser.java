@@ -4,6 +4,7 @@ Tom Yeh
 */
 package org.sikuli.slides.parsers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -25,14 +26,15 @@ import com.google.common.collect.Maps;
 
 public class SlideParser {
 	
-	static Map<String, String> parseRelationships(Document doc){
+	static Map<String, String> parseRelationships(Document doc, URL xmlUrl){
 		Map<String, String> ret = Maps.newHashMap();
 		NodeList nodeList = doc.getElementsByTagName("Relationship");
 		for (int i = 0; i < nodeList.getLength(); ++i){
 			Element el = (Element) nodeList.item(i);
 			String id = el.getAttribute("Id");
-			String target = el.getAttribute("Target");
-			ret.put(id,  target);
+			String target = el.getAttribute("Target");			
+			String absoluteTarget = new File(xmlUrl.getFile()).getParent() + File.separator + target;
+			ret.put(id,  absoluteTarget);
 		}
 		return ret;
 	}
@@ -97,7 +99,7 @@ public class SlideParser {
 	}
 	
 	
-	Slide parse(URL xmlUrl, URL relUrl){
+	public Slide parse(URL xmlUrl, URL relUrl){
 		Slide slide = new Slide();
 		
 		
@@ -116,7 +118,7 @@ public class SlideParser {
 		if (doc == null)
 			return null;
 
-		Map<String, String> map  = parseRelationships(relDoc);
+		Map<String, String> map  = parseRelationships(relDoc, xmlUrl);
 		
 		
 		NodeList shapeNodeList = doc.getElementsByTagName("p:sp");			
@@ -137,7 +139,8 @@ public class SlideParser {
 		for (int i = 0 ; i < picList.getLength(); ++ i){
 			Node nNode = picList.item(i);
 			ScreenshotElement e = new ScreenshotElement();
-			parseScreenshotElement(nNode, e, map);				
+			parseScreenshotElement(nNode, e, map);	
+			slide.add(e);
 		}		
 		return slide;
 	}
