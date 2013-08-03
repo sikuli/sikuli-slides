@@ -11,7 +11,6 @@ import org.sikuli.api.Target;
 import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.BrowserAction;
 import org.sikuli.slides.actions.LeftClickAction;
-import org.sikuli.slides.actions.ScreenRegionAction;
 import org.sikuli.slides.models.ScreenshotElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
@@ -35,75 +34,135 @@ public class DefaultInterpreter implements Interpreter {
 	public DefaultInterpreter(ScreenRegion screenRegion){
 		this.screenRegion = screenRegion;
 	}	
-
-	@Override
-	public Action interpret(Slide slide){
-
-		Collection<ActionWord> words = getActionWords(slide);
-		logger.trace("found {} action words", words.size());
-		if (words.size() == 1){
-			ActionWord singleActionWord = words.iterator().next();			
-			if (singleActionWord.isMatched(ActionDictionary.CLICK)){
-
-				//				ScreenRegionFinder finder = null;								
-				List<ScreenshotElement> screenshots = getScreenshotElements(slide);
-				Collection<SlideElement> otherElements = getNotActionElements(slide);
-
-				ScreenshotElement screenshotElement = null;
-				SlideElement boundsElement = null;
-				if (screenshots.size() > 0) {		
-					screenshotElement = screenshots.get(0);				
-					List<SlideElement> elementsInsideScreenshot = filterElementsContainedBy(otherElements, screenshotElement);					
-					if (elementsInsideScreenshot.size() > 0){
-						boundsElement = elementsInsideScreenshot.get(0);
-					}
-				}
-
-				ScreenRegion targetScreenRegion = null;
-				if (screenshotElement != null && boundsElement != null){
-
-					int w = screenshotElement.getOffx() - screenshotElement.getCx();
-					int h = screenshotElement.getOffy() - screenshotElement.getCy();
-
-					if (w > 0 && h > 0){
-
-						double xmin = 1.0 * (boundsElement.getCx() - screenshotElement.getCx()) / w;
-						double ymin = 1.0 * (boundsElement.getCy() - screenshotElement.getCy()) / h;
-						double xmax = 1.0 * (boundsElement.getOffx() - screenshotElement.getCx()) / w;
-						double ymax = 1.0 * (boundsElement.getOffy() - screenshotElement.getCy()) / h;					
-
-						Target target = new ContextualImageTarget(screenshotElement.getSource(), xmin, ymin, xmax, ymax); 
-						targetScreenRegion = new TargetScreenRegion(target, getScreenRegion());
-					}
-				}	
-				
-				if (targetScreenRegion != null)
-					return new LeftClickAction(targetScreenRegion);
-				else
-					return null;
-			}else if (singleActionWord.isMatched(ActionDictionary.BROWSER)){
-
-				List<String> arguments = getArgumentStrings(slide);
-				if (arguments.size() > 0){				
-					BrowserAction a = new BrowserAction();
-					// find the first string that is a valid URL
-					for (String arg : arguments){
-						URL url;
-						try {
-							url = new URL(arg);
-							a.setUrl(url);
-							return a;
-						} catch (MalformedURLException e) {
-						}							
-					}					
-				}				
-				return null;				
-			}
-
+	
+	Action interpretAsClick(ParsedSlide parsedSlide, ScreenRegion screenRegion){
+		if (parsedSlide.isAction(ActionDictionary.CLICK)){
+			ScreenRegion targetScreenRegion = parsedSlide.getTargetScreenRegion(screenRegion);
+			if (targetScreenRegion != null)
+				return new LeftClickAction(targetScreenRegion);			
+		}
+		return null;
+	}
+	
+	Action interpretAsBrowser(ParsedSlide parsedSlide){
+		if (parsedSlide.isAction(ActionDictionary.BROWSER)){			
+			List<String> arguments = parsedSlide.getArgumentStrings();
+			if (arguments.size() > 0){				
+				BrowserAction a = new BrowserAction();
+				// find the first string that is a valid URL
+				for (String arg : arguments){
+					URL url;
+					try {
+						url = new URL(arg);
+						a.setUrl(url);
+						return a;
+					} catch (MalformedURLException e) {
+					}							
+				}					
+			}			
 		}
 		return null;
 	}	
+	
+	
+	@Override
+	public Action interpret(Slide slide){
 
+		ParsedSlide parsedSlide = new ParsedSlide(slide);
+		Action action = null;
+		if ((action = interpretAsClick(parsedSlide, screenRegion)) != null){			
+		
+		}else if ((action = interpretAsBrowser(parsedSlide)) != null){
+			
+		}		
+		return action;
+	}
+}
+
+
+class ParsedSlide extends Slide {
+	private List<ActionWord> actionWords;
+	private List<String> argumentStrings;
+	private Slide slide;
+		
+	ParsedSlide(Slide slide){
+		this.slide = slide;
+		actionWords = extractActionWords(slide);
+		argumentStrings = extractArgumentStrings(slide);
+
+	}
+	
+	public boolean isAction(String actionName) {
+		if (actionWords.size() == 1){
+			return actionWords.get(0).isMatched(actionName);
+		}
+		return false;
+	}
+
+	public List<ActionWord> getActionWords() {
+		return actionWords;
+	}
+	public ScreenRegion getTargetScreenRegion(ScreenRegion screenRegion) {
+		return extractTargetScreenRegion(slide, screenRegion);	
+	}	
+	public List<String> getArgumentStrings() {
+		return argumentStrings;
+	}	
+	
+	
+	static private List<ActionWord> extractActionWords(Slide slide) {				
+		Collection<SlideElement> elements = slide.getElements();
+		Collection<ActionWord> actionWords =
+				Collections2.filter(
+						Collections2.transform(elements, new Function<SlideElement, ActionWord>(){
+							@Override
+							public ActionWord apply(SlideElement element) {
+								String word = element.getText();
+								if (word == null)
+									return null;
+								return findMatchedActionWord(word);
+							}				    	
+						}),
+						Predicates.notNull()
+						);
+		return Lists.newArrayList(actionWords);
+	}
+	
+	
+	static ScreenRegion extractTargetScreenRegion(Slide slide, ScreenRegion screenRegion){
+		List<ScreenshotElement> screenshots = getScreenshotElements(slide);
+		Collection<SlideElement> otherElements = getNotActionElements(slide);
+
+		ScreenshotElement screenshotElement = null;
+		SlideElement boundsElement = null;
+		if (screenshots.size() > 0) {		
+			screenshotElement = screenshots.get(0);				
+			List<SlideElement> elementsInsideScreenshot = filterElementsContainedBy(otherElements, screenshotElement);					
+			if (elementsInsideScreenshot.size() > 0){
+				boundsElement = elementsInsideScreenshot.get(0);
+			}
+		}
+
+		ScreenRegion targetScreenRegion = null;
+		if (screenshotElement != null && boundsElement != null){
+
+			int w = screenshotElement.getOffx() - screenshotElement.getCx();
+			int h = screenshotElement.getOffy() - screenshotElement.getCy();
+
+			if (w > 0 && h > 0){
+
+				double xmin = 1.0 * (boundsElement.getCx() - screenshotElement.getCx()) / w;
+				double ymin = 1.0 * (boundsElement.getCy() - screenshotElement.getCy()) / h;
+				double xmax = 1.0 * (boundsElement.getOffx() - screenshotElement.getCx()) / w;
+				double ymax = 1.0 * (boundsElement.getOffy() - screenshotElement.getCy()) / h;					
+
+				Target target = new ContextualImageTarget(screenshotElement.getSource(), xmin, ymin, xmax, ymax); 
+				targetScreenRegion = new TargetScreenRegion(target, screenRegion);
+			}
+		}	
+		return targetScreenRegion;
+	}
+	
 	static private List<SlideElement> filterElementsContainedBy(Collection<SlideElement> elements, final SlideElement container){
 		final Rectangle r = container.getBounds();
 		return Lists.newArrayList(Collections2.filter(elements, new Predicate<SlideElement>(){
@@ -123,7 +182,7 @@ public class DefaultInterpreter implements Interpreter {
 		return null;
 	}
 
-	private Collection<SlideElement> getNotActionElements(Slide slide){
+	static private Collection<SlideElement> getNotActionElements(Slide slide){
 		Collection<SlideElement> elements = slide.getElements();		
 		return Collections2.filter(elements, new Predicate<SlideElement>(){
 			@Override
@@ -135,7 +194,7 @@ public class DefaultInterpreter implements Interpreter {
 	}
 
 
-	private List<ScreenshotElement> getScreenshotElements(Slide slide){
+	static private List<ScreenshotElement> getScreenshotElements(Slide slide){
 		Collection<SlideElement> elements = slide.getElements();		
 		Collection<ScreenshotElement> ret = Collections2.filter(
 				Collections2.transform(elements, new Function<SlideElement, ScreenshotElement>(){
@@ -154,7 +213,7 @@ public class DefaultInterpreter implements Interpreter {
 	}
 
 
-	private List<String> getArgumentStrings(Slide slide){
+	static private List<String> extractArgumentStrings(Slide slide){
 		Collection<SlideElement> elements = slide.getElements();		
 		Collection<String> strings = Collections2.filter(
 				Collections2.transform(elements, new Function<SlideElement, String>(){
@@ -173,33 +232,5 @@ public class DefaultInterpreter implements Interpreter {
 				);
 		return Lists.newArrayList(strings);
 	}
-
-
-	private Collection<ActionWord> getActionWords(Slide slide) {				
-		Collection<SlideElement> elements = slide.getElements();
-		Collection<ActionWord> actionWords =
-				Collections2.filter(
-						Collections2.transform(elements, new Function<SlideElement, ActionWord>(){
-							@Override
-							public ActionWord apply(SlideElement element) {
-								String word = element.getText();
-								if (word == null)
-									return null;
-								return findMatchedActionWord(word);
-							}				    	
-						}),
-						Predicates.notNull()
-						);
-		return actionWords;
-	}
-
-	public ScreenRegion getScreenRegion() {
-		return screenRegion;
-	}
-
-	public void setScreenRegion(ScreenRegion screenRegion) {
-		this.screenRegion = screenRegion;
-	}
-
 
 }
