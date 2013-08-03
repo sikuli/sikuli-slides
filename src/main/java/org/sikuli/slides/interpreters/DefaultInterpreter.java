@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
@@ -13,11 +14,13 @@ import org.sikuli.slides.actions.BrowserAction;
 import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.RightClickAction;
+import org.sikuli.slides.actions.WaitAction;
 import org.sikuli.slides.models.ScreenshotElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
 import org.sikuli.slides.sikuli.ContextualImageTarget;
 import org.sikuli.slides.sikuli.TargetScreenRegion;
+import org.sikuli.slides.utils.UnitConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,13 +33,13 @@ import com.google.common.collect.Lists;
 public class DefaultInterpreter implements Interpreter {
 
 	Logger logger = LoggerFactory.getLogger(DefaultInterpreter.class);
-		
+
 	// the screen region the actions will be applied to
 	private ScreenRegion screenRegion;
 	public DefaultInterpreter(ScreenRegion screenRegion){
 		this.screenRegion = screenRegion;
 	}	
-	
+
 	Action interpretAsClick(ParsedSlide parsedSlide, ScreenRegion screenRegion){
 		if (parsedSlide.isAction(ActionDictionary.CLICK)){
 			ScreenRegion targetScreenRegion = parsedSlide.getTargetScreenRegion(screenRegion);
@@ -45,8 +48,8 @@ public class DefaultInterpreter implements Interpreter {
 		}
 		return null;
 	}
-	
-	
+
+
 	Action interpretAsRightClick(ParsedSlide parsedSlide, ScreenRegion screenRegion){
 		if (parsedSlide.isAction(ActionDictionary.RIGHT_CLICK)){
 			ScreenRegion targetScreenRegion = parsedSlide.getTargetScreenRegion(screenRegion);
@@ -55,7 +58,7 @@ public class DefaultInterpreter implements Interpreter {
 		}
 		return null;
 	}
-	
+
 	Action interpretAsDoubleClick(ParsedSlide parsedSlide, ScreenRegion screenRegion){
 		if (parsedSlide.isAction(ActionDictionary.DOUBLE_CLICK)){
 			ScreenRegion targetScreenRegion = parsedSlide.getTargetScreenRegion(screenRegion);
@@ -65,7 +68,7 @@ public class DefaultInterpreter implements Interpreter {
 		return null;
 	}
 
-	
+
 	Action interpretAsBrowser(ParsedSlide parsedSlide){
 		if (parsedSlide.isAction(ActionDictionary.BROWSER)){			
 			List<String> arguments = parsedSlide.getArgumentStrings();
@@ -85,22 +88,61 @@ public class DefaultInterpreter implements Interpreter {
 		}
 		return null;
 	}	
-	
-	
+
+	Action interpretAsWait(ParsedSlide parsedSlide){
+		if (parsedSlide.isAction(ActionDictionary.WAIT)){			
+			List<String> arguments = parsedSlide.getArgumentStrings();
+			if (arguments.size() > 0){				
+				WaitAction a = new WaitAction();
+				// find the first string argument that provides the wait duration
+				for (String arg : arguments){
+					// extract the time unit
+					TimeUnit timeUnit = UnitConverter.extractTimeUnitFromString(arg);
+					// TODO: "2 hours" doesn't get extracted correctly
+					// if the time unit was not specified, default to seconds
+					if(timeUnit==null){
+						timeUnit=TimeUnit.SECONDS;
+					}
+					// extract the wait time string value, replace all non digits with blank
+					String waitTimeString = arg.replaceAll("[^0-9.]", "");
+					if(waitTimeString != null){
+						double duration = Double.parseDouble(waitTimeString);
+						double durationInMilliSeconds = 0;
+						if (timeUnit == TimeUnit.SECONDS){
+							durationInMilliSeconds = duration * 1000;
+						}else if (timeUnit == TimeUnit.MINUTES){
+							durationInMilliSeconds = duration * 1000 * 60;
+						}else if (timeUnit == TimeUnit.HOURS){
+							durationInMilliSeconds = duration * 1000 * 60 * 60;
+						}
+						a.setDuration((long) durationInMilliSeconds);
+						return a;
+					}			
+				}
+				logger.error("Error: Please enter the wait time value in a shape."
+						+" Valid examples include: 10 seconds, 10 minutes, 10 hours, or even 2 days.");
+			}			
+		}
+		return null;
+	}	
+
+
 	@Override
 	public Action interpret(Slide slide){
 
 		ParsedSlide parsedSlide = new ParsedSlide(slide);
 		Action action = null;
 		if ((action = interpretAsClick(parsedSlide, screenRegion)) != null){			
-		
+
 		}else if ((action = interpretAsRightClick(parsedSlide, screenRegion)) != null){			
-			
+
 		}else if ((action = interpretAsDoubleClick(parsedSlide, screenRegion)) != null){			
-			
+
 		}else if ((action = interpretAsBrowser(parsedSlide)) != null){
-			
-		}		
+
+		}else if ((action = interpretAsWait(parsedSlide)) != null){
+
+		}
 		return action;
 	}
 }
@@ -110,14 +152,14 @@ class ParsedSlide extends Slide {
 	private List<ActionWord> actionWords;
 	private List<String> argumentStrings;
 	private Slide slide;
-		
+
 	ParsedSlide(Slide slide){
 		this.slide = slide;
 		actionWords = extractActionWords(slide);
 		argumentStrings = extractArgumentStrings(slide);
 
 	}
-	
+
 	public boolean isAction(String actionName) {
 		if (actionWords.size() == 1){
 			return actionWords.get(0).isMatched(actionName);
@@ -134,8 +176,8 @@ class ParsedSlide extends Slide {
 	public List<String> getArgumentStrings() {
 		return argumentStrings;
 	}	
-	
-	
+
+
 	static private List<ActionWord> extractActionWords(Slide slide) {				
 		Collection<SlideElement> elements = slide.getElements();
 		Collection<ActionWord> actionWords =
@@ -153,8 +195,8 @@ class ParsedSlide extends Slide {
 						);
 		return Lists.newArrayList(actionWords);
 	}
-	
-	
+
+
 	static ScreenRegion extractTargetScreenRegion(Slide slide, ScreenRegion screenRegion){
 		List<ScreenshotElement> screenshots = getScreenshotElements(slide);
 		Collection<SlideElement> otherElements = getNotActionElements(slide);
@@ -188,7 +230,7 @@ class ParsedSlide extends Slide {
 		}	
 		return targetScreenRegion;
 	}
-	
+
 	static private List<SlideElement> filterElementsContainedBy(Collection<SlideElement> elements, final SlideElement container){
 		final Rectangle r = container.getBounds();
 		return Lists.newArrayList(Collections2.filter(elements, new Predicate<SlideElement>(){

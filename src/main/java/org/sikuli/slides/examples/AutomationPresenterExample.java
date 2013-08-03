@@ -2,27 +2,31 @@ package org.sikuli.slides.examples;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.sikuli.slides.AutomationPresenter;
-import org.sikuli.slides.Presenter;
-import org.sikuli.slides.PresenterException;
-import org.sikuli.slides.SlideDeck;
+import org.sikuli.slides.api.AutomationExecutor;
+import org.sikuli.slides.api.SlideExecutionException;
+import org.sikuli.slides.api.SlideExecutor;
+import org.sikuli.slides.models.Slide;
 
 public class AutomationPresenterExample {
 
-	public static void main(String[] args) throws IOException, PresenterException {
+	public static void main(String[] args) throws IOException, SlideExecutionException {
 		
 		URL url = AutomationPresenterExample.class.getResource("helloworld.pptx");
 		
-		SlideDeck slideDeck = SlideDeck.createFromPowerPoint(url);
-		Presenter presenter = new AutomationPresenter();	
+		SlideExecutor executor = new AutomationExecutor();
 		
-		// play the entire slide deck
-		presenter.play(slideDeck);
+		List<Slide> slides = new ArrayList<Slide>();
+		
+		
+		
+		
 				
-		// play a single slide in a slide deck
-		presenter.play(slideDeck.get(0));
-		
+		// execute a list of slides
+		executor.execute(slides);
+				
 		
 	}
 }

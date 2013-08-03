@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" Target="../slideLayouts/slideLayout1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/image1.png"/></Relationships>
+
+
+SlideElement{id=5, name=Rectangle 4, offx=1928836, offy=1964991, cx=1533484, cy=1521671, width=0, height=0, geom=rect, text=null, fontSize=0, order=0, backgroundColor=800000}
+SlideElement{id=6, name=TextBox 5, offx=491194, offy=635028, cx=1227244, cy=646331, width=0, height=0, geom=rect, text=CLICK, fontSize=3600, order=0, backgroundColor=null}
+SlideElement{id=7, name=Rectangle 6, offx=8002872, offy=1162221, cx=914400, cy=914400, width=0, height=0, geom=rect, text=null, fontSize=0, order=0, backgroundColor=800000}
+ScreenshotElement{sourceUrl=null, fileName=../media/image1.png, super=ScreenshotElement{id=4, name=Picture 3, offx=394297, offy=1486900, cx=6591300, cy=4406900, width=0, height=0, geom=rect, text=null, fontSize=0, order=0, backgroundColor=null}}
+

@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+
 import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +71,26 @@ public class ImageProcessing {
     	g.dispose();
     	return scaledBI;
 	}
+	
+	public static BufferedImage cropImage(URL imageUrl, double xmin, double ymin, double xmax, double ymax){
+		BufferedImage imageTocrop,croppedImage=null;
+		try {
+			imageTocrop= ImageIO.read(imageUrl);
+			int x = (int) xmin * imageTocrop.getWidth();
+			int y = (int) ymin * imageTocrop.getHeight();
+			int width = (int) (xmax - xmin) * imageTocrop.getWidth();
+			int height = (int) (ymax - ymin) * imageTocrop.getHeight();
+			return croppedImage = imageTocrop.getSubimage(x, y, width, height);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		catch(RasterFormatException e){
+			logger.error("Error: The shape is not contained within the boundaries of the screenshot.");
+			System.exit(1);
+		}
+		return croppedImage;
+	}
+	
 	
 	public static BufferedImage cropImage(String imageLocation, int x, int y, int width, int height){
 		BufferedImage imageTocrop,croppedImage=null;
