@@ -88,6 +88,15 @@ public class SlideParser {
 		}		
 	}
 	
+	void parseScreenshotElement(Node node, ScreenshotElement e, Map<String,String> map){
+		parseSlideElement(node, e);			
+		Element blip = (Element) ((Element) node).getElementsByTagName("a:blip").item(0);			
+		String relationshipID = blip.getAttribute("r:embed");			
+		String target = map.get(relationshipID);
+		e.setFileName(target);
+	}
+	
+	
 	Slide parse(URL xmlUrl, URL relUrl){
 		Slide slide = new Slide();
 		
@@ -112,26 +121,24 @@ public class SlideParser {
 		
 		NodeList shapeNodeList = doc.getElementsByTagName("p:sp");			
 		for (int i = 0 ; i < shapeNodeList.getLength(); ++ i){
-			Node nNode = shapeNodeList.item(i);		
-			SlideElement e = new SlideElement();
-			parseSlideElement(nNode, e);		
-			slide.add(e);
+			Node nNode = shapeNodeList.item(i);							
+			if (((Element) nNode).getElementsByTagName("a:blip").getLength()>0){			
+				ScreenshotElement e = new ScreenshotElement();
+				parseScreenshotElement(nNode, e, map);	
+				slide.add(e);				
+			}else{		
+				SlideElement e = new SlideElement();
+				parseSlideElement(nNode, e);		
+				slide.add(e);
+			}
 		}
 		
 		NodeList picList = doc.getElementsByTagName("p:pic");			
 		for (int i = 0 ; i < picList.getLength(); ++ i){
 			Node nNode = picList.item(i);
 			ScreenshotElement e = new ScreenshotElement();
-			parseSlideElement(nNode, e);	
-			
-			Element blip = (Element) ((Element) nNode).getElementsByTagName("a:blip").item(0);
-			
-			String relationshipID = blip.getAttribute("r:embed");			
-			String target = map.get(relationshipID);
-			e.setFileName(target);						
-			slide.add(e);
-		}
-		
+			parseScreenshotElement(nNode, e, map);				
+		}		
 		return slide;
 	}
 	
