@@ -23,29 +23,15 @@ import org.sikuli.slides.sikuli.NullScreenRegion;
 
 public class ScreenRegionActionFailureTest {
 
-	private MouseEventDetector detector;
 	private NullScreenRegion nullScreenRegion;	
-
-	private NativeMouseEvent getLastMouseEvent(){
-		if (detector.events.size() == 0)
-			return null;
-		else
-			return detector.events.get(detector.events.size()-1);		
-	}
 
 	@Before
 	public void setUp() throws NativeHookException{
-		GlobalScreen.registerNativeHook();
-		detector = new MouseEventDetector();		
-		GlobalScreen.getInstance().addNativeMouseListener(detector);
-		
 		nullScreenRegion = new NullScreenRegion(new DesktopScreen(0));
 	}
 
 	@After
 	public void tearDown(){
-		GlobalScreen.getInstance().removeNativeMouseListener(detector);
-		GlobalScreen.unregisterNativeHook();
 	}
 
 	@Test(expected = ActionRuntimeException.class)  

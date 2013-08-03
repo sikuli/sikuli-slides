@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
+import org.sikuli.api.robot.desktop.DesktopScreen;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.recorder.detector.EventDetector;
@@ -25,6 +26,8 @@ import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.RightClickAction;
+import org.sikuli.slides.api.ActionRuntimeException;
+import org.sikuli.slides.sikuli.NullScreenRegion;
 
 class MouseEventDetector extends EventDetector 
 implements NativeMouseInputListener {
@@ -67,7 +70,8 @@ implements NativeMouseInputListener {
 
 public class ScreenRegionActionTest {
 
-	private MouseEventDetector detector;	
+	private MouseEventDetector detector;
+	private NullScreenRegion nullScreenRegion;	
 
 	private NativeMouseEvent getLastMouseEvent(){
 		if (detector.events.size() == 0)
@@ -80,7 +84,8 @@ public class ScreenRegionActionTest {
 	public void setUp() throws NativeHookException{
 		GlobalScreen.registerNativeHook();
 		detector = new MouseEventDetector();
-		GlobalScreen.getInstance().addNativeMouseListener(detector);			
+		GlobalScreen.getInstance().addNativeMouseListener(detector);	
+		nullScreenRegion = new NullScreenRegion(new DesktopScreen(0));
 	}
 
 	@After
@@ -162,4 +167,31 @@ public class ScreenRegionActionTest {
 		labelAction.perform();
 	}	
 	
+	
+	@Test
+	public void testExistAction() {		
+		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);		
+		Action action = new ExistAction(screenRegion);
+		action.perform();
+	}
+	
+	@Test(expected = ActionRuntimeException.class)
+	public void testExistActionWithNullScreenRegion() {		
+		Action action = new ExistAction(nullScreenRegion);
+		action.perform();
+	}
+	
+	
+	@Test(expected = ActionRuntimeException.class)
+	public void testNotExistAction() {	
+		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);		
+		Action action = new NotExistAction(screenRegion);
+		action.perform();
+	}
+	
+	@Test	
+	public void testNotExistActionWithNullScreenRegion() {				
+		Action action = new NotExistAction(nullScreenRegion);
+		action.perform();
+	}
 }
