@@ -1,31 +1,20 @@
 package org.sikuli.slides.interpreters;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.imageio.ImageIO;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.StaticImageScreenRegion;
-import org.sikuli.slides.actions.Action;
-import org.sikuli.slides.actions.BrowserAction;
-import org.sikuli.slides.actions.DoubleClickAction;
-import org.sikuli.slides.actions.ExistAction;
-import org.sikuli.slides.actions.LabelAction;
 import org.sikuli.slides.actions.LeftClickAction;
-import org.sikuli.slides.actions.NotExistAction;
-import org.sikuli.slides.actions.RightClickAction;
-import org.sikuli.slides.actions.TypeAction;
-import org.sikuli.slides.actions.WaitAction;
 import org.sikuli.slides.models.ScreenshotElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
@@ -97,7 +86,7 @@ public class InterpreterCornerCaseTest {
 	}
 	
 	@Test
-	public void testInterpretLeftClickActionWhenTargetExceedsScreenshotLowerBelow() throws IOException {
+	public void testInterpretLeftClickActionWhenTargetExceedsScreenshotBelow() throws IOException {
 		Slide slide = new Slide();
 		slide.add(clicklement);
 		slide.add(screenshotElement);
