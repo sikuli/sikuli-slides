@@ -13,7 +13,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.sikuli.slides.models.ScreenshotElement;
+import org.sikuli.slides.models.ImageElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
 import org.w3c.dom.Document;
@@ -90,7 +90,7 @@ public class SlideParser {
 		}		
 	}
 	
-	void parseScreenshotElement(Node node, ScreenshotElement e, Map<String,String> map){
+	void parseScreenshotElement(Node node, ImageElement e, Map<String,String> map){
 		parseSlideElement(node, e);			
 		Element blip = (Element) ((Element) node).getElementsByTagName("a:blip").item(0);			
 		String relationshipID = blip.getAttribute("r:embed");			
@@ -125,7 +125,7 @@ public class SlideParser {
 		for (int i = 0 ; i < shapeNodeList.getLength(); ++ i){
 			Node nNode = shapeNodeList.item(i);							
 			if (((Element) nNode).getElementsByTagName("a:blip").getLength()>0){			
-				ScreenshotElement e = new ScreenshotElement();
+				ImageElement e = new ImageElement();
 				parseScreenshotElement(nNode, e, map);	
 				slide.add(e);				
 			}else{		
@@ -138,7 +138,7 @@ public class SlideParser {
 		NodeList picList = doc.getElementsByTagName("p:pic");			
 		for (int i = 0 ; i < picList.getLength(); ++ i){
 			Node nNode = picList.item(i);
-			ScreenshotElement e = new ScreenshotElement();
+			ImageElement e = new ImageElement();
 			parseScreenshotElement(nNode, e, map);	
 			slide.add(e);
 		}		

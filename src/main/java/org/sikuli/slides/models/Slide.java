@@ -20,20 +20,7 @@ public class Slide {
 		return Lists.newArrayList(elements);		
 	}
 	
-	public Collection<ScreenshotElement> getScreenshotElements(){
-		Collection<SlideElement> es = Collections2.filter(elements, new Predicate<SlideElement>(){
-			@Override
-			public boolean apply(SlideElement input) {
-				return input instanceof ScreenshotElement;
-			}			
-		});	
-		return Collections2.transform(es, new Function<SlideElement, ScreenshotElement>(){
-			@Override
-			public ScreenshotElement apply(SlideElement input) {				
-				return (ScreenshotElement) input;
-			}			
-		});
-	}
+
 
 	public String toString(){
 		String txt = "";

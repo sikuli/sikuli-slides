@@ -26,7 +26,7 @@ import org.sikuli.slides.actions.NotExistAction;
 import org.sikuli.slides.actions.RightClickAction;
 import org.sikuli.slides.actions.TypeAction;
 import org.sikuli.slides.actions.WaitAction;
-import org.sikuli.slides.models.ScreenshotElement;
+import org.sikuli.slides.models.ImageElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
 
@@ -63,7 +63,7 @@ public class InterpreterTest {
 	
 	
 	private void addTarget(Slide slide){
-		ScreenshotElement screenshotElement = new ScreenshotElement();
+		ImageElement screenshotElement = new ImageElement();
 		screenshotElement.setSource(getClass().getResource("sikuli_context.png"));
 		screenshotElement.setOffx(100);
 		screenshotElement.setOffy(100);

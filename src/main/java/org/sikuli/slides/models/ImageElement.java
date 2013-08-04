@@ -6,7 +6,7 @@ import java.net.URL;
 
 import com.google.common.base.Objects;
 
-public class ScreenshotElement extends SlideElement {
+public class ImageElement extends SlideElement {
 	private String fileName;
 	private URL source;
 		
