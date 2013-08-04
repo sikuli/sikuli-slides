@@ -241,6 +241,7 @@ class ParsedSlide extends Slide {
 		return argumentStrings;
 	}	
 
+	static Logger logger = LoggerFactory.getLogger(ParsedSlide.class);
 
 	static private List<ActionWord> extractActionWords(Slide slide) {				
 		Collection<SlideElement> elements = slide.getElements();
@@ -282,13 +283,22 @@ class ParsedSlide extends Slide {
 
 		ScreenshotElement screenshotElement = null;
 		SlideElement boundsElement = null;
-		if (screenshots.size() > 0) {		
-			screenshotElement = screenshots.get(0);				
-			List<SlideElement> elementsInsideScreenshot = filterElementsContainedBy(otherElements, screenshotElement);					
-			if (elementsInsideScreenshot.size() > 0){
-				boundsElement = elementsInsideScreenshot.get(0);
-			}
+		if (screenshots.size() == 0) {
+			// parsing error: no picture
+			return null;
 		}
+		
+		// TODO: handle multiple screenshots
+		screenshotElement = screenshots.get(0);				
+		List<SlideElement> intersectingElements = filterElementsIntersectingWith(otherElements, screenshotElement);					
+		if (intersectingElements.size() == 0){
+			// parsing error: no bounds
+			return null;
+		}
+		
+		// TODO: handle intersecting elements
+		boundsElement = intersectingElements.get(0);
+				
 
 		ScreenRegion targetScreenRegion = null;
 		if (screenshotElement != null && boundsElement != null){
@@ -301,7 +311,14 @@ class ParsedSlide extends Slide {
 				double xmax = 1.0 * (boundsElement.getOffx() + boundsElement.getCx() - screenshotElement.getOffx()) / w;
 				double ymax = 1.0 * (boundsElement.getOffy() + boundsElement.getCy() - screenshotElement.getOffy()) / h;
 				double xmin = 1.0 * (boundsElement.getOffx() - screenshotElement.getOffx()) / w;
-				double ymin = 1.0 * (boundsElement.getOffy() - screenshotElement.getOffy()) / h;					
+				double ymin = 1.0 * (boundsElement.getOffy() - screenshotElement.getOffy()) / h;
+								
+				xmax = Math.min(1.0, xmax);
+				ymax = Math.min(1.0, ymax);
+				xmin = Math.max(0, xmin);
+				ymin = Math.max(0, ymin);
+				
+				logger.trace("x: {}-{} y: {}-{}", xmin, xmax, ymin, ymax);				
 
 				Target target = new ContextualImageTarget(screenshotElement.getSource(), xmin, ymin, xmax, ymax); 
 				targetScreenRegion = new TargetScreenRegion(target, screenRegion);
@@ -316,6 +333,16 @@ class ParsedSlide extends Slide {
 			@Override
 			public boolean apply(SlideElement element) {				
 				return r.contains(element.getBounds()) && element != container;				
+			}			
+		}));		
+	}
+	
+	static private List<SlideElement> filterElementsIntersectingWith(Collection<SlideElement> elements, final SlideElement container){
+		final Rectangle r = container.getBounds();
+		return Lists.newArrayList(Collections2.filter(elements, new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement element) {				
+				return r.intersects(element.getBounds()) && element != container;				
 			}			
 		}));		
 	}
