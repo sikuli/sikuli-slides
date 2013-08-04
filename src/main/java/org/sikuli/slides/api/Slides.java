@@ -8,7 +8,7 @@ import org.sikuli.slides.models.Slide;
 
 public class Slides {
 
-	static public void exeute(URL url) throws SlideExecutionException, IOException {		
+	static public void execute(URL url) throws SlideExecutionException, IOException {		
 		SlidesReader reader = new PPTXSlidesReader();		
 		List<Slide> slides;
 		slides = reader.read(url);

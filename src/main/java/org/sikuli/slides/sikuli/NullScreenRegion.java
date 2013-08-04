@@ -12,11 +12,20 @@ import org.sikuli.api.Target;
 import org.sikuli.api.event.StateChangeListener;
 import org.sikuli.api.event.TargetEventListener;
 
+// this represents an undefined region on a screen
+// it holds a reference to the screen
+// it is useful when we need to know which screen to perform some default
+// behavior when there is no region specified, for instance, displaying
+// a label in the middle of a screen when no specific region is given
 public class NullScreenRegion implements ScreenRegion {
 	
 	Screen screen;
 	public NullScreenRegion(Screen screen){
 		this.screen = screen;
+	}
+	
+	public NullScreenRegion(ScreenRegion screenRegion){
+		this.screen = screenRegion.getScreen();
 	}
 
 	@Override

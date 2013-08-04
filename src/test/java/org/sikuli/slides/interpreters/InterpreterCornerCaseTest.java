@@ -14,8 +14,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.StaticImageScreenRegion;
+import org.sikuli.slides.actions.LabelAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.models.Slide;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public class InterpreterCornerCaseTest {
 
@@ -64,5 +67,15 @@ public class InterpreterCornerCaseTest {
 		Rectangle b = targetScreenRegion.getBounds();	
 		assertEquals(0, b.x);
 		assertEquals(0, b.y);
+	}	
+	
+	@Test
+	public void testInterpretLabelActionWithoutAnyTarget() throws IOException {
+		Slide slide = new Slide();
+		slide.add(fixtures.textElement);
+
+		LabelAction action = (LabelAction) interpreter.interpret(slide);		
+		assertThat(action, notNullValue());
+		assertThat(action.getText(), equalToIgnoringCase(fixtures.textElement.getText()));
 	}	
 }

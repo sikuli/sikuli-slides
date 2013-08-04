@@ -72,16 +72,6 @@ public class SlideTokenizerTest {
 	}
 	
 	@Test
-	public void testGetTargetElements_OneImageOneTarget(){
-		Slide slide = new Slide();
-		slide.add(fixtures.clickElement);
-		slide.add(fixtures.imageElement);
-		slide.add(fixtures.targetElement);
-		tknzr = new SlideTokenizer(slide);		
-		assertThat("# of target", tknzr.getTargetElements().size(), equalTo(1));		
-	}
-	
-	@Test
 	public void testGetElementsOn(){
 		Slide slide = new Slide();
 		slide.add(fixtures.imageElement);
@@ -90,5 +80,18 @@ public class SlideTokenizerTest {
 		tknzr = new SlideTokenizer(slide);						
 		assertThat("# of target", tknzr.getElementsOn(fixtures.imageElement).size(), equalTo(1));		
 	}
+	
+	@Test
+	public void testGetNonKeywordTextElements(){
+		Slide slide = new Slide();		
+		slide.add(fixtures.textElement);
+		slide.add(fixtures.textElement);
+		slide.add(fixtures.textElement);
+		slide.add(fixtures.clickElement);		
+		tknzr = new SlideTokenizer(slide);						
+		assertThat("# of target", tknzr.getNonKeywordTextElements().size(), equalTo(3));		
+	}
+	
+	
 
 }

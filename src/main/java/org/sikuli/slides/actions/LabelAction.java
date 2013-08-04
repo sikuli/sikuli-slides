@@ -18,6 +18,10 @@ public class LabelAction extends ScreenRegionAction {
 		setTargetScreenRegion(targetRegion);
 	}
 
+	public LabelAction(){
+		setTargetScreenRegion(null);
+	}
+
 	@Override
 	public void execute(){
 		exceuteOnScreenRegion(getTargetScreenRegion());
@@ -30,14 +34,15 @@ public class LabelAction extends ScreenRegionAction {
 	 */	
 	protected void exceuteOnScreenRegion(ScreenRegion targetRegion){
 		logger.info("performing label action on target...");
-		Rectangle r = targetRegion.getBounds();		
-		if(r == null){			
-			logger.error("Failed to find the target to display a label on.");
-			logger.info("Displaying the label on the center of the screen.");
-			// make the target region the entire screen
+		if (targetRegion.getBounds() == null){
 			targetRegion = new DefaultScreenRegion(targetRegion.getScreen());
 		}
+				//			logger.error("Failed to find the target to display a label on.");
+				//			logger.info("Displaying the label on the center of the screen.");
+				//			// make the target region the entire screen
+				targetRegion = new DefaultScreenRegion(targetRegion.getScreen());
 		
+
 		Canvas canvas = new ScreenRegionCanvas(targetRegion);
 		canvas.addLabel(targetRegion, text)
 		.withColor(Color.black).withFontSize((int)fontSize).withLineWidth(2)

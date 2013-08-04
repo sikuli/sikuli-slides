@@ -61,7 +61,7 @@ public class PPTXSlidesReader implements SlidesReader {
 			logger.error("Failed to create sikuli-slides working directory in +"+System.getProperty("java.io.tmpdir"));
 			throw new IOException();
 		}
-		if (!loadPresentationFile(url.getPath())){
+		if (url == null || !loadPresentationFile(url.getPath())){
 			throw new IOException("ERROR: Failed to open " + url);
 		}
 

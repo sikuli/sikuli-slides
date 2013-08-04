@@ -21,6 +21,7 @@ import org.sikuli.slides.models.ImageElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
 import org.sikuli.slides.sikuli.ContextualImageTarget;
+import org.sikuli.slides.sikuli.NullScreenRegion;
 import org.sikuli.slides.sikuli.TargetScreenRegion;
 import org.sikuli.slides.utils.UnitConverter;
 import org.slf4j.Logger;
@@ -150,16 +151,28 @@ public class DefaultInterpreter implements Interpreter {
 
 	Action interpretAsLabel(SlideTokenizer tknzr, ScreenRegion screenRegion){
 		if (tknzr.getActionWords().size() == 0){	
+			// if there is a valid target
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
-			if (targetIterpreter.interpret(tknzr, screenRegion)){
+			if (targetIterpreter.interpret(tknzr, screenRegion)){		
+				// show the label over that target
 				ScreenRegion targetScreenRegion = targetIterpreter.getTargetScreenRegion();
 				SlideElement targetElement = targetIterpreter.getTargetElement();
-
 				LabelAction action = new LabelAction(targetScreenRegion);
 				action.setText(targetElement.getText());
 				double fontSize = UnitConverter.WholePointsToPoints(targetElement.getTextSize());
 				action.setFontSize((int)fontSize);
 				return action;
+			}else{
+				// show the label without a specific target
+				List<SlideElement> textElements = tknzr.getNonKeywordTextElements();
+				if (textElements.size() > 0){
+					LabelAction action = new LabelAction(new NullScreenRegion(screenRegion));
+					SlideElement textElement = textElements.get(0);
+					action.setText(textElement.getText());
+					double fontSize = UnitConverter.WholePointsToPoints(textElement.getTextSize());
+					action.setFontSize((int)fontSize);		
+					return action;
+				}
 			}
 		}
 		return null;

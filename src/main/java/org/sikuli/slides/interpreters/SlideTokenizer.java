@@ -43,18 +43,28 @@ class SlideTokenizer extends Slide {
 		}
 		return actionWords;
 	}
-	
+
 	// return all elements on a particular element
 	public List<SlideElement> getElementsOn(SlideElement element){
 		List<SlideElement> intersectingElements = filterElementsIntersectingWith(slide.getElements(), element);
 		return intersectingElements;
 	}
-	
+
 	public List<String> getArgumentStrings() {
 		if (argumentStrings == null){
 			argumentStrings = extractArgumentStrings(slide);
 		}
 		return argumentStrings;		
+	}
+
+	public List<SlideElement> getNonKeywordTextElements() {	
+		Collection<SlideElement> els = Collections2.filter(slide.getElements(), new Predicate<SlideElement>(){
+				public boolean apply(SlideElement element) {
+					String word = element.getText();
+					return word != null && word.length() > 0 && findMatchedActionWord(word) == null;					
+				}			
+		});
+		return Lists.newArrayList(els);
 	}
 
 	public List<ImageElement> getImageElements(){
@@ -94,7 +104,7 @@ class SlideTokenizer extends Slide {
 						);
 		return Lists.newArrayList(actionWords);
 	}
-	
+
 	SlideElement extractTargetSlideElement(Slide slide){
 		List<ImageElement> screenshots = getImageElements();
 		Collection<SlideElement> otherElements = getNotActionElements(slide);
@@ -174,14 +184,14 @@ class SlideTokenizer extends Slide {
 	public static List<SlideElement> filterByNonKeywordElements(List<SlideElement> elements) {
 		return Lists.newArrayList(
 				Collections2.filter(elements, new Predicate<SlideElement>(){
-			@Override
-			public boolean apply(SlideElement element) {
-				String word = element.getText();
-				if (word == null)
-					return false;
-				return findMatchedActionWord(word) != null;
-			}			
-		}));		
+					@Override
+					public boolean apply(SlideElement element) {
+						String word = element.getText();
+						if (word == null)
+							return false;
+						return findMatchedActionWord(word) != null;
+					}			
+				}));		
 	}
 
 }
