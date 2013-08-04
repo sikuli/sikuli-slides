@@ -18,7 +18,7 @@ public class TypeAction extends ScreenRegionAction {
 	 * perform type
 	 * @param targetRegion the region to click into and type
 	 */	
-	protected void performOnScreenRegion(ScreenRegion targetRegion){
+	protected void exceuteOnScreenRegion(ScreenRegion targetRegion){
 		logger.info("performing keyboard typing event on target...");
 		Mouse mouse = new DesktopMouse();
 		Keyboard keyboard=new DesktopKeyboard();

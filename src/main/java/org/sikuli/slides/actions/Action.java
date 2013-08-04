@@ -1,5 +1,5 @@
 package org.sikuli.slides.actions;
 
 public interface Action {
-	public void perform(); 
+	public void execute() throws ActionExecutionException; 
 }

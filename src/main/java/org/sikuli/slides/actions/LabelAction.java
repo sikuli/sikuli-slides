@@ -1,20 +1,12 @@
 package org.sikuli.slides.actions;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Rectangle;
 
 import org.sikuli.api.DefaultScreenRegion;
-import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
-import org.sikuli.api.robot.Mouse;
-import org.sikuli.api.robot.desktop.DesktopMouse;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
-import org.sikuli.slides.api.ActionRuntimeException;
-import org.sikuli.slides.utils.Constants;
-import org.sikuli.slides.utils.MyScreen;
-import org.sikuli.slides.utils.UnitConverter;
 
 public class LabelAction extends ScreenRegionAction {
 
@@ -27,8 +19,8 @@ public class LabelAction extends ScreenRegionAction {
 	}
 
 	@Override
-	public void perform(){
-		performOnScreenRegion(getTargetScreenRegion());
+	public void execute(){
+		exceuteOnScreenRegion(getTargetScreenRegion());
 	}	
 
 
@@ -36,7 +28,7 @@ public class LabelAction extends ScreenRegionAction {
 	 * perform the action to display this label at the targetRegion
 	 * @param targetRegion the region to display this label
 	 */	
-	protected void performOnScreenRegion(ScreenRegion targetRegion){
+	protected void exceuteOnScreenRegion(ScreenRegion targetRegion){
 		logger.info("performing label action on target...");
 		Rectangle r = targetRegion.getBounds();		
 		if(r == null){			

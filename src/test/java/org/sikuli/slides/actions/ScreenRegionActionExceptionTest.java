@@ -1,24 +1,11 @@
 package org.sikuli.slides.actions;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-
-import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
-import org.jnativehook.mouse.NativeMouseEvent;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.sikuli.api.DesktopScreenRegion;
-import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.desktop.DesktopScreen;
-import org.sikuli.api.visual.Canvas;
-import org.sikuli.api.visual.DesktopCanvas;
-import org.sikuli.slides.api.ActionRuntimeException;
 import org.sikuli.slides.sikuli.NullScreenRegion;
 
 public class ScreenRegionActionExceptionTest {
@@ -34,22 +21,22 @@ public class ScreenRegionActionExceptionTest {
 	public void tearDown(){
 	}
 
-	@Test(expected = ActionRuntimeException.class)  
-	public void testLeftClickActionOnNullScreenRegion() {
+	@Test(expected = ActionExecutionException.class)  
+	public void testLeftClickActionOnNullScreenRegion() throws ActionExecutionException {
 		Action action = new LeftClickAction(nullScreenRegion);
-		action.perform();
+		action.execute();
 	}
 
-	@Test(expected = ActionRuntimeException.class)  
-	public void testRightClickActionOnNullScreenRegion() {
+	@Test(expected = ActionExecutionException.class)  
+	public void testRightClickActionOnNullScreenRegion() throws ActionExecutionException {
 		Action action = new RightClickAction(nullScreenRegion);
-		action.perform();
+		action.execute();
 	}
 	
-	@Test(expected = ActionRuntimeException.class)  
-	public void testDoubleClickActionOnNullScreenRegion() {
+	@Test(expected = ActionExecutionException.class)  
+	public void testDoubleClickActionOnNullScreenRegion() throws ActionExecutionException {
 		Action action = new DoubleClickAction(nullScreenRegion);
-		action.perform();
+		action.execute();
 	}
 	
 	@Test
@@ -58,7 +45,7 @@ public class ScreenRegionActionExceptionTest {
 		labelAction.setText("This is a test label");
 		labelAction.setFontSize(15);
 		labelAction.setDuration(1000);
-		labelAction.perform();
+		labelAction.execute();
 	}
 	
 	

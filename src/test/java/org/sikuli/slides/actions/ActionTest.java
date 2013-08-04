@@ -12,7 +12,7 @@ public class ActionTest {
 		waitAction.setDuration(1000);
 				
 		long startTime = System.currentTimeMillis();
-		waitAction.perform();
+		waitAction.execute();
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		
 		assertThat(elapsedTime,  greaterThanOrEqualTo(1000L));
@@ -21,7 +21,7 @@ public class ActionTest {
 		waitAction.setDuration(500);
 		
 		startTime = System.currentTimeMillis();
-		waitAction.perform();
+		waitAction.execute();
 		elapsedTime = System.currentTimeMillis() - startTime;
 		
 		assertThat(elapsedTime,  greaterThanOrEqualTo(500L));

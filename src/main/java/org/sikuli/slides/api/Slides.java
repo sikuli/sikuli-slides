@@ -9,6 +9,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.actions.Action;
+import org.sikuli.slides.actions.ActionExecutionException;
 import org.sikuli.slides.interpreters.DefaultInterpreter;
 import org.sikuli.slides.interpreters.Interpreter;
 import org.sikuli.slides.models.Slide;
@@ -91,7 +92,13 @@ public class Slides {
 		}				
 		
 		for (Action action : actions){
-			action.perform();
+			try {
+				
+				action.execute();
+				
+			} catch (ActionExecutionException e) {
+
+			}
 		}
 		
 	}

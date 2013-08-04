@@ -16,7 +16,7 @@ public class RightClickAction extends ScreenRegionAction {
 	 * perform right click
 	 * @param targetRegion the region to perform right click input event on.
 	 */	
-	protected void performOnScreenRegion(ScreenRegion targetRegion) {
+	protected void exceuteOnScreenRegion(ScreenRegion targetRegion) {
 		logger.info("performing right click event on target...");		
 		Mouse mouse = new DesktopMouse();
 		ScreenLocation loc = targetRegion.getCenter();

@@ -14,7 +14,7 @@ public class DoubleClickAction extends ScreenRegionAction {
 	 * perform double click
 	 * @param targetRegion the region to perform double click input event on.
 	 */	
-	protected void performOnScreenRegion(ScreenRegion targetRegion){
+	protected void exceuteOnScreenRegion(ScreenRegion targetRegion){
 		logger.info("performing double click event on target...");
 		Mouse mouse = new DesktopMouse();
 		mouse.doubleClick(targetRegion.getCenter());

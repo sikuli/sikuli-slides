@@ -12,7 +12,7 @@ public class WaitAction implements Action {
 	private long duration;
 
 	@Override
-	public void perform() {
+	public void execute() {
 		logger.info("Performing wait operation...");
 		try {
 			//long timeout=Long.parseLong(waitTimeString);

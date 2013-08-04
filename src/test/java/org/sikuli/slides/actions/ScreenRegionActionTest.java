@@ -20,7 +20,6 @@ import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.RightClickAction;
-import org.sikuli.slides.api.ActionRuntimeException;
 import org.sikuli.slides.sikuli.NullScreenRegion;
 
 
@@ -45,7 +44,7 @@ public class ScreenRegionActionTest {
 	}
 
 	@Test
-	public void testLeftClickAction() throws IOException{
+	public void testLeftClickAction() throws IOException, ActionExecutionException{
 		Canvas canvas = new DesktopCanvas();		
 		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);
 		Action action = new LeftClickAction(screenRegion);
@@ -53,7 +52,7 @@ public class ScreenRegionActionTest {
 		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();;
 		canvas.addBox(screenRegion);
 		canvas.show();
-		action.perform();
+		action.execute();
 		canvas.hide();
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -66,7 +65,7 @@ public class ScreenRegionActionTest {
 	}
 
 	@Test
-	public void testRightClickAction() throws IOException{
+	public void testRightClickAction() throws IOException, ActionExecutionException{
 		Canvas canvas = new DesktopCanvas();		
 		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);		
 		Action action = new RightClickAction(screenRegion);
@@ -74,7 +73,7 @@ public class ScreenRegionActionTest {
 		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();;
 		canvas.addBox(screenRegion);		
 		canvas.show();
-		action.perform();
+		action.execute();
 		canvas.hide();
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -87,7 +86,7 @@ public class ScreenRegionActionTest {
 	}
 
 	@Test
-	public void testDoubleClickAction() throws IOException{
+	public void testDoubleClickAction() throws IOException, ActionExecutionException{
 		Canvas canvas = new DesktopCanvas();		
 		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);
 		Action action = new DoubleClickAction(screenRegion);
@@ -95,7 +94,7 @@ public class ScreenRegionActionTest {
 		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
 		canvas.addBox(screenRegion);		
 		canvas.show();
-		action.perform();
+		action.execute();
 		canvas.hide();	
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -108,7 +107,7 @@ public class ScreenRegionActionTest {
 	}
 	
 	@Test
-	public void testTypeAction(){
+	public void testTypeAction() throws ActionExecutionException{
 		Canvas canvas = new DesktopCanvas();		
 		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);
 		TypeAction action = new TypeAction(screenRegion);
@@ -117,7 +116,7 @@ public class ScreenRegionActionTest {
 		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
 		canvas.addBox(screenRegion);		
 		canvas.show();
-		action.perform();
+		action.execute();
 		canvas.hide();	
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -135,34 +134,34 @@ public class ScreenRegionActionTest {
 		labelAction.setText("This is a test label");
 		labelAction.setFontSize(15);
 		labelAction.setDuration(1000);
-		labelAction.perform();
+		labelAction.execute();
 	}	
 	
 	
 	@Test
-	public void testExistAction() {		
+	public void testExistAction() throws ActionExecutionException {		
 		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);		
 		Action action = new ExistAction(screenRegion);
-		action.perform();
+		action.execute();
 	}
 	
-	@Test(expected = ActionRuntimeException.class)
-	public void testExistActionWithNullScreenRegion() {		
+	@Test(expected = ActionExecutionException.class)
+	public void testExistActionWithNullScreenRegion() throws ActionExecutionException {		
 		Action action = new ExistAction(nullScreenRegion);
-		action.perform();
+		action.execute();
 	}
 	
 	
-	@Test(expected = ActionRuntimeException.class)
-	public void testNotExistAction() {	
+	@Test(expected = ActionExecutionException.class)
+	public void testNotExistAction() throws ActionExecutionException {	
 		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);		
 		Action action = new NotExistAction(screenRegion);
-		action.perform();
+		action.execute();
 	}
 	
 	@Test	
-	public void testNotExistActionWithNullScreenRegion() {				
+	public void testNotExistActionWithNullScreenRegion() throws ActionExecutionException {				
 		Action action = new NotExistAction(nullScreenRegion);
-		action.perform();
+		action.execute();
 	}
 }

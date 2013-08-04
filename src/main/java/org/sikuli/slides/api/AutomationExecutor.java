@@ -2,6 +2,7 @@ package org.sikuli.slides.api;
 
 import java.util.List;
 
+import org.sikuli.slides.actions.ActionExecutionException;
 import org.sikuli.slides.models.Slide;
 
 public class AutomationExecutor implements SlideExecutor {
@@ -15,7 +16,7 @@ public class AutomationExecutor implements SlideExecutor {
 	}
 
 	@Override
-	public void execute(List<Slide> slides) throws ActionRuntimeException {
+	public void execute(List<Slide> slides) {
 		// TODO Auto-generated method stub
 					
 		// Translate the content of a slide into an action
