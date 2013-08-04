@@ -4,13 +4,9 @@ import java.awt.Rectangle;
 import java.util.Collection;
 import java.util.List;
 
-import org.sikuli.api.ScreenRegion;
-import org.sikuli.api.Target;
 import org.sikuli.slides.models.ImageElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
-import org.sikuli.slides.sikuli.ContextualImageTarget;
-import org.sikuli.slides.sikuli.TargetScreenRegion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,54 +19,63 @@ import com.google.common.collect.Lists;
 
 // Convenient utility class for extracting tokens from a slide object
 class SlideTokenizer extends Slide {
+	static Logger logger = LoggerFactory.getLogger(SlideTokenizer.class);
+
 	private List<ActionWord> actionWords;
 	private List<String> argumentStrings;
+	private List<ImageElement> imageElements;
 	private Slide slide;
 
 	SlideTokenizer(Slide slide){
-		this.slide = slide;
-		actionWords = extractActionWords(slide);
-		argumentStrings = extractArgumentStrings(slide);
+		this.slide = slide;			
 	}
 
 	public boolean hasActionWord(String actionName) {
-		if (actionWords.size() == 1){
-			return actionWords.get(0).isMatched(actionName);
+		if (getActionWords().size() == 1){
+			return getActionWords().get(0).isMatched(actionName);
 		}
 		return false;
 	}
 
 	public List<ActionWord> getActionWords() {
+		if (actionWords == null){
+			actionWords = extractActionWords(slide);
+		}
 		return actionWords;
 	}
-	public ScreenRegion getTargetScreenRegion(ScreenRegion screenRegion) {
-		return extractTargetScreenRegion(slide, screenRegion);	
+	
+	// return all elements on a particular element
+	public List<SlideElement> getElementsOn(SlideElement element){
+		List<SlideElement> intersectingElements = filterElementsIntersectingWith(slide.getElements(), element);
+		return intersectingElements;
 	}
-	public SlideElement getTargetSlideElement() {
-		return extractTargetSlideElement(slide);	
-	}	
-
+	
 	public List<String> getArgumentStrings() {
-		return argumentStrings;
-	}	
+		if (argumentStrings == null){
+			argumentStrings = extractArgumentStrings(slide);
+		}
+		return argumentStrings;		
+	}
 
 	public List<ImageElement> getImageElements(){
-		Collection<SlideElement> es = Collections2.filter(slide.getElements(), new Predicate<SlideElement>(){
-			@Override
-			public boolean apply(SlideElement input) {
-				return input instanceof ImageElement;
-			}			
-		});	
-		return Lists.newArrayList(
-				Collections2.transform(es, new Function<SlideElement, ImageElement>(){
-					@Override
-					public ImageElement apply(SlideElement input) {				
-						return (ImageElement) input;
-					}			
-				}));
+		if (imageElements == null){
+			Collection<SlideElement> es = Collections2.filter(slide.getElements(), new Predicate<SlideElement>(){
+				@Override
+				public boolean apply(SlideElement input) {
+					return input instanceof ImageElement;
+				}			
+			});	
+			imageElements = Lists.newArrayList(
+					Collections2.transform(es, new Function<SlideElement, ImageElement>(){
+						@Override
+						public ImageElement apply(SlideElement input) {				
+							return (ImageElement) input;
+						}			
+					}));
+		}		
+		return imageElements;
 	}
 
-	static Logger logger = LoggerFactory.getLogger(SlideTokenizer.class);
 
 	static private List<ActionWord> extractActionWords(Slide slide) {				
 		Collection<SlideElement> elements = slide.getElements();
@@ -89,7 +94,7 @@ class SlideTokenizer extends Slide {
 						);
 		return Lists.newArrayList(actionWords);
 	}
-
+	
 	SlideElement extractTargetSlideElement(Slide slide){
 		List<ImageElement> screenshots = getImageElements();
 		Collection<SlideElement> otherElements = getNotActionElements(slide);
@@ -104,56 +109,6 @@ class SlideTokenizer extends Slide {
 			}
 		}
 		return boundsElement;
-	}
-
-	ScreenRegion extractTargetScreenRegion(Slide slide, ScreenRegion screenRegion){
-		List<ImageElement> screenshots = getImageElements();
-		Collection<SlideElement> otherElements = getNotActionElements(slide);
-
-		ImageElement screenshotElement = null;
-		SlideElement boundsElement = null;
-		if (screenshots.size() == 0) {
-			// parsing error: no picture
-			return null;
-		}
-
-		// TODO: handle multiple screenshots
-		screenshotElement = screenshots.get(0);				
-		List<SlideElement> intersectingElements = filterElementsIntersectingWith(otherElements, screenshotElement);					
-		if (intersectingElements.size() == 0){
-			// parsing error: no bounds
-			return null;
-		}
-
-		// TODO: handle intersecting elements
-		boundsElement = intersectingElements.get(0);
-
-
-		ScreenRegion targetScreenRegion = null;
-		if (screenshotElement != null && boundsElement != null){
-
-			int w = screenshotElement.getCx();
-			int h = screenshotElement.getCy();
-
-			if (w > 0 && h > 0){
-
-				double xmax = 1.0 * (boundsElement.getOffx() + boundsElement.getCx() - screenshotElement.getOffx()) / w;
-				double ymax = 1.0 * (boundsElement.getOffy() + boundsElement.getCy() - screenshotElement.getOffy()) / h;
-				double xmin = 1.0 * (boundsElement.getOffx() - screenshotElement.getOffx()) / w;
-				double ymin = 1.0 * (boundsElement.getOffy() - screenshotElement.getOffy()) / h;
-
-				xmax = Math.min(1.0, xmax);
-				ymax = Math.min(1.0, ymax);
-				xmin = Math.max(0, xmin);
-				ymin = Math.max(0, ymin);
-
-				logger.trace("x: {}-{} y: {}-{}", xmin, xmax, ymin, ymax);				
-
-				Target target = new ContextualImageTarget(screenshotElement.getSource(), xmin, ymin, xmax, ymax); 
-				targetScreenRegion = new TargetScreenRegion(target, screenRegion);
-			}
-		}	
-		return targetScreenRegion;
 	}
 
 	static private List<SlideElement> filterElementsContainedBy(Collection<SlideElement> elements, final SlideElement container){
@@ -214,6 +169,19 @@ class SlideTokenizer extends Slide {
 				Predicates.notNull()
 				);
 		return Lists.newArrayList(strings);
+	}
+
+	public static List<SlideElement> filterByNonKeywordElements(List<SlideElement> elements) {
+		return Lists.newArrayList(
+				Collections2.filter(elements, new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement element) {
+				String word = element.getText();
+				if (word == null)
+					return false;
+				return findMatchedActionWord(word) != null;
+			}			
+		}));		
 	}
 
 }

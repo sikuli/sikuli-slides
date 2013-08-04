@@ -50,4 +50,45 @@ public class SlideTokenizerTest {
 		
 		assertThat("# of images", tknzr.getImageElements().size(), equalTo(0));		
 	}
+	
+	@Test
+	public void testGetArgumentStrings_OneArgument(){
+		Slide slide = new Slide();
+		slide.add(fixtures.clickElement);
+		slide.add(fixtures.textElement);
+		tknzr = new SlideTokenizer(slide);		
+		assertThat("# of string arguments", tknzr.getArgumentStrings().size(), equalTo(1));
+		assertThat("first argument", tknzr.getArgumentStrings().get(0), equalToIgnoringCase(fixtures.textElement.getText()));
+	}
+	
+	@Test
+	public void testGetArgumentStrings_TwoArguments(){
+		Slide slide = new Slide();
+		slide.add(fixtures.clickElement);
+		slide.add(fixtures.textElement);
+		slide.add(fixtures.textElement);
+		tknzr = new SlideTokenizer(slide);		
+		assertThat("# of string arguments", tknzr.getArgumentStrings().size(), equalTo(2));		
+	}
+	
+	@Test
+	public void testGetTargetElements_OneImageOneTarget(){
+		Slide slide = new Slide();
+		slide.add(fixtures.clickElement);
+		slide.add(fixtures.imageElement);
+		slide.add(fixtures.targetElement);
+		tknzr = new SlideTokenizer(slide);		
+		assertThat("# of target", tknzr.getTargetElements().size(), equalTo(1));		
+	}
+	
+	@Test
+	public void testGetElementsOn(){
+		Slide slide = new Slide();
+		slide.add(fixtures.imageElement);
+		slide.add(fixtures.targetElement);
+		slide.add(fixtures.clickElement);		
+		tknzr = new SlideTokenizer(slide);						
+		assertThat("# of target", tknzr.getElementsOn(fixtures.imageElement).size(), equalTo(1));		
+	}
+
 }

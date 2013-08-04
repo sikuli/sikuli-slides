@@ -10,6 +10,8 @@ class SlideElementFixtures {
 	public SlideElement targetElement;
 	public SlideElement belowTargetElement;
 	public SlideElement aboveTargetElement;
+	public SlideElement urlArgumentElement;
+	public SlideElement textElement;
 
 	SlideElementFixtures(){
 		clickElement = new SlideElement();
@@ -28,7 +30,7 @@ class SlideElementFixtures {
 		targetElement.setCx(200);
 		targetElement.setCy(200);		
 		targetElement.setTextSize(3600);
-		targetElement.setText("some text");
+		targetElement.setText("target text");
 
 		belowTargetElement = new SlideElement();
 		belowTargetElement.setOffx(800);
@@ -36,11 +38,17 @@ class SlideElementFixtures {
 		belowTargetElement.setCx(350);
 		belowTargetElement.setCy(350);
 
-
 		aboveTargetElement = new SlideElement();
 		aboveTargetElement.setOffx(50);
 		aboveTargetElement.setOffy(50);
 		aboveTargetElement.setCx(350);
 		aboveTargetElement.setCy(350);
+		
+		urlArgumentElement = new SlideElement();
+		urlArgumentElement.setText("http://path.to");
+		
+		textElement = new SlideElement();
+		textElement.setText("some text");
+
 	}
 }
