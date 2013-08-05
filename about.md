@@ -13,7 +13,7 @@ Sikuli Slides can be used for visual automation, GUI testing, or computer-based 
 
 ## Source
 
-The source code of Sikuli Slides is located at [Github](http://github.com/sikuli/sikulislides).
+The source code of Sikuli Slides is located at [Github](http://github.com/sikuli/sikuli-slides).
 
 ## License
 
