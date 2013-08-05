@@ -35,7 +35,8 @@ public class DefaultInterpreter implements Interpreter {
 	static class TargetIterpreter {
 		private SlideElement targetElement;
 		private ImageElement imageElement;
-		private ScreenRegion targetScreenRegion;		
+		private ScreenRegion targetScreenRegion;	
+		private Target target;
 		boolean interpret(SlideTokenizer tknzr, ScreenRegion screenRegion){
 			List<ImageElement> images = tknzr.getImageElements();
 			if (images.isEmpty()){
@@ -67,8 +68,8 @@ public class DefaultInterpreter implements Interpreter {
 
 					//				logger.trace("x: {}-{} y: {}-{}", xmin, xmax, ymin, ymax);				
 
-					Target target = new ContextualImageTarget(imageElement.getSource(), xmin, ymin, xmax, ymax); 
-					targetScreenRegion = new TargetScreenRegion(target, screenRegion);
+					target = new ContextualImageTarget(imageElement.getSource(), xmin, ymin, xmax, ymax); 
+					targetScreenRegion = new TargetScreenRegion(getTarget(), screenRegion);
 					return true;
 				}
 			}
@@ -83,6 +84,9 @@ public class DefaultInterpreter implements Interpreter {
 		}
 		public ImageElement getImageElement() {
 			return imageElement;
+		}
+		public Target getTarget() {
+			return target;
 		}
 	}
 
@@ -131,8 +135,7 @@ public class DefaultInterpreter implements Interpreter {
 		if (tknzr.hasActionWord(ActionDictionary.EXIST)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
 			if (targetIterpreter.interpret(tknzr, screenRegion)){
-				ScreenRegion targetScreenRegion = targetIterpreter.getTargetScreenRegion();				
-				return new ExistAction(targetScreenRegion);
+				return new ExistAction(targetIterpreter.getTarget());
 			}
 		}
 		return null;
@@ -142,8 +145,7 @@ public class DefaultInterpreter implements Interpreter {
 		if (tknzr.hasActionWord(ActionDictionary.NOT_EXIST)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
 			if (targetIterpreter.interpret(tknzr, screenRegion)){
-				ScreenRegion targetScreenRegion = targetIterpreter.getTargetScreenRegion();				
-				return new NotExistAction(targetScreenRegion);
+				return new NotExistAction(targetIterpreter.getTarget());
 			}
 		}
 		return null;

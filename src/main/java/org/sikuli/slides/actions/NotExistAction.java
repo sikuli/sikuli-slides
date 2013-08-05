@@ -1,25 +1,22 @@
 package org.sikuli.slides.actions;
 
-import java.awt.Rectangle;
 import org.sikuli.api.ScreenRegion;
+import org.sikuli.api.Target;
 import org.sikuli.slides.api.Context;
 
 public class NotExistAction implements Action {
 	
-	ScreenRegion targetScreenRegion;
-	public NotExistAction(ScreenRegion targetScreenRegion){
-		this.targetScreenRegion = targetScreenRegion; 
+	private Target target;
+	public NotExistAction(Target target){
+		this.target = target; 
 	}
 	
 	@Override
 	public void execute(Context context) throws ActionExecutionException{
-		if (targetScreenRegion != null){
-			Rectangle bounds = targetScreenRegion.getBounds();
-			if (bounds != null){
-				// the bounds are valid, the target can be found, but
-				// it's not supposed to exist.
-				throw new ActionExecutionException(this);
-			}
+		ScreenRegion screenRegion = context.getScreenRegion();
+		ScreenRegion ret = screenRegion.find(target);
+		if (ret != null){
+			throw new ActionExecutionException(this);
 		}
 	}	
 
