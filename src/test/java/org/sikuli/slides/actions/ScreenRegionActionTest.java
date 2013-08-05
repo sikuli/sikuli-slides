@@ -20,6 +20,7 @@ import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.RightClickAction;
+import org.sikuli.slides.api.Context;
 import org.sikuli.slides.sikuli.NullScreenRegion;
 
 
@@ -29,6 +30,7 @@ public class ScreenRegionActionTest {
 
 	private NullScreenRegion nullScreenRegion;
 	private InputDetector detector;
+	private Context context;
 
 
 	@Before
@@ -36,6 +38,7 @@ public class ScreenRegionActionTest {
 		detector = new InputDetector();
 		detector.start();
 		nullScreenRegion = new NullScreenRegion(new DesktopScreen(0));
+		context = new Context();
 	}
 
 	@After
@@ -52,7 +55,7 @@ public class ScreenRegionActionTest {
 		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();;
 		canvas.addBox(screenRegion);
 		canvas.show();
-		action.execute();
+		action.execute(context);
 		canvas.hide();
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -73,7 +76,7 @@ public class ScreenRegionActionTest {
 		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();;
 		canvas.addBox(screenRegion);		
 		canvas.show();
-		action.execute();
+		action.execute(null);
 		canvas.hide();
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -94,7 +97,7 @@ public class ScreenRegionActionTest {
 		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
 		canvas.addBox(screenRegion);		
 		canvas.show();
-		action.execute();
+		action.execute(null);
 		canvas.hide();	
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -116,7 +119,7 @@ public class ScreenRegionActionTest {
 		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
 		canvas.addBox(screenRegion);		
 		canvas.show();
-		action.execute();
+		action.execute(context);
 		canvas.hide();	
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -134,7 +137,7 @@ public class ScreenRegionActionTest {
 		labelAction.setText("This is a test label");
 		labelAction.setFontSize(15);
 		labelAction.setDuration(1000);
-		labelAction.execute();
+		labelAction.execute(context);
 	}	
 	
 	
@@ -142,13 +145,13 @@ public class ScreenRegionActionTest {
 	public void testExistAction() throws ActionExecutionException {		
 		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);		
 		Action action = new ExistAction(screenRegion);
-		action.execute();
+		action.execute(context);
 	}
 	
 	@Test(expected = ActionExecutionException.class)
 	public void testExistActionWithNullScreenRegion() throws ActionExecutionException {		
 		Action action = new ExistAction(nullScreenRegion);
-		action.execute();
+		action.execute(context);
 	}
 	
 	
@@ -156,12 +159,12 @@ public class ScreenRegionActionTest {
 	public void testNotExistAction() throws ActionExecutionException {	
 		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);		
 		Action action = new NotExistAction(screenRegion);
-		action.execute();
+		action.execute(context);
 	}
 	
 	@Test	
 	public void testNotExistActionWithNullScreenRegion() throws ActionExecutionException {				
 		Action action = new NotExistAction(nullScreenRegion);
-		action.execute();
+		action.execute(context);
 	}
 }

@@ -2,6 +2,7 @@ package org.sikuli.slides.actions;
 
 import java.util.concurrent.TimeUnit;
 
+import org.sikuli.slides.api.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,7 @@ public class WaitAction implements Action {
 	private long duration;
 
 	@Override
-	public void execute() {
+	public void execute(Context context) {
 		logger.info("Performing wait operation...");
 		try {
 			//long timeout=Long.parseLong(waitTimeString);

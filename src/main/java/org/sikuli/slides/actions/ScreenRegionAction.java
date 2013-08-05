@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
+import org.sikuli.slides.api.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,8 @@ abstract public class ScreenRegionAction implements Action {
 	private ScreenRegion targetScreenRegion;
 	protected Logger logger = LoggerFactory.getLogger(ScreenRegionAction.class);
 
-	public void execute() throws ActionExecutionException{
+	@Override
+	public void execute(Context context) throws ActionExecutionException{
 		if (targetScreenRegion != null) {
 			Rectangle r = targetScreenRegion.getBounds();
 			if (r != null){

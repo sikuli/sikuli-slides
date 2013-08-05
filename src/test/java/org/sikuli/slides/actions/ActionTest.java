@@ -1,6 +1,8 @@
 package org.sikuli.slides.actions;
 
 import org.junit.Test;
+import org.sikuli.slides.api.Context;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -10,9 +12,11 @@ public class ActionTest {
 	public void testWaitAction(){
 		WaitAction waitAction = new WaitAction();
 		waitAction.setDuration(1000);
+		
+		Context context = new Context();
 				
 		long startTime = System.currentTimeMillis();
-		waitAction.execute();
+		waitAction.execute(context);
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		
 		assertThat(elapsedTime,  greaterThanOrEqualTo(1000L));
@@ -21,7 +25,7 @@ public class ActionTest {
 		waitAction.setDuration(500);
 		
 		startTime = System.currentTimeMillis();
-		waitAction.execute();
+		waitAction.execute(context);
 		elapsedTime = System.currentTimeMillis() - startTime;
 		
 		assertThat(elapsedTime,  greaterThanOrEqualTo(500L));

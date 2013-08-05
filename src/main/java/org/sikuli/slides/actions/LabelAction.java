@@ -7,6 +7,7 @@ import org.sikuli.api.DefaultScreenRegion;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
+import org.sikuli.slides.api.Context;
 
 public class LabelAction extends ScreenRegionAction {
 
@@ -23,7 +24,7 @@ public class LabelAction extends ScreenRegionAction {
 	}
 
 	@Override
-	public void execute(){
+	public void execute(Context context){
 		exceuteOnScreenRegion(getTargetScreenRegion());
 	}	
 

@@ -2,6 +2,7 @@ package org.sikuli.slides.actions;
 
 import java.awt.Rectangle;
 import org.sikuli.api.ScreenRegion;
+import org.sikuli.slides.api.Context;
 
 public class NotExistAction implements Action {
 	
@@ -11,7 +12,7 @@ public class NotExistAction implements Action {
 	}
 	
 	@Override
-	public void execute() throws ActionExecutionException{
+	public void execute(Context context) throws ActionExecutionException{
 		if (targetScreenRegion != null){
 			Rectangle bounds = targetScreenRegion.getBounds();
 			if (bounds != null){

@@ -29,11 +29,14 @@ public class AutomationExecutor implements SlidesExecutor {
 			slideActionMap.put(slide, action);
 		}				
 		
+		Context context = new Context();
+		context.setScreenRegion(screenRegion);
+		
 		for (Slide slide : slides) {
 			try {				
 				Action action = slideActionMap.get(slide);
 				if (action != null){
-					action.execute();
+					action.execute(context);
 				}
 			} catch (ActionExecutionException e) {
 				throw new SlideExecutionException(slide, e.getAction());
