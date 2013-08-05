@@ -11,7 +11,7 @@ import org.sikuli.slides.api.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LabelAction implements TargetScreenRegionAction {
+public class LabelAction implements Action {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -20,16 +20,9 @@ public class LabelAction implements TargetScreenRegionAction {
 	private int duration = 3000;
 
 	@Override
-	public void execute(Context context, ScreenRegion targetRegion) {
+	public void execute(Context context){
 		logger.info("performing label action on target...");
-		if (targetRegion.getBounds() == null){
-			targetRegion = new DefaultScreenRegion(targetRegion.getScreen());
-		}
-				//			logger.error("Failed to find the target to display a label on.");
-				//			logger.info("Displaying the label on the center of the screen.");
-				//			// make the target region the entire screen
-				targetRegion = new DefaultScreenRegion(targetRegion.getScreen());
-		
+		ScreenRegion targetRegion = context.getScreenRegion();
 
 		Canvas canvas = new ScreenRegionCanvas(targetRegion);
 		canvas.addLabel(targetRegion, text)

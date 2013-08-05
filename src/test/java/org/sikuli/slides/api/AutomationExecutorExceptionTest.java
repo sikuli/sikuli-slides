@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.DefaultLocation;
 import org.sikuli.api.visual.DesktopCanvas;
+import org.sikuli.slides.actions.FindDoAction;
 import org.sikuli.slides.actions.InputDetector;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.models.Slide;
@@ -62,7 +63,7 @@ public class AutomationExecutorExceptionTest {
 			executor.execute(slides);
 		} catch (SlideExecutionException e) {
 			assertEquals("slide", e.getSlide(), slides.get(0));
-			assertEquals("action", e.getAction().getClass(), LeftClickAction.class);
+			assertEquals("action", e.getAction().getClass(), FindDoAction.class);
 		}		
 	}
 	

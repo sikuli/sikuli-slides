@@ -2,11 +2,11 @@ package org.sikuli.slides.interpreters;
 
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -17,7 +17,6 @@ import javax.imageio.ImageIO;
 import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.DesktopScreenRegion;
-import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.StaticImageScreenRegion;
 import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.BrowserAction;

@@ -2,20 +2,22 @@ package org.sikuli.slides.actions;
 
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
+import org.sikuli.api.visual.Canvas;
+import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.api.Context;
 
 public class FindDoAction implements Action {
 
 	Target target;
-	private TargetScreenRegionAction targetAction;
+	private Action targetAction;
 	private Action noTargetAction;
 	
-	public FindDoAction(Target target, TargetScreenRegionAction targetAction){
+	public FindDoAction(Target target, Action targetAction){
 		this.target = target;
 		this.targetAction = targetAction;
 	}
 	
-	public FindDoAction(Target target, TargetScreenRegionAction targetAction, Action noTargetAction){
+	public FindDoAction(Target target, Action targetAction, Action noTargetAction){
 		this.target = target;
 		this.targetAction = targetAction;
 		this.noTargetAction = noTargetAction;
@@ -26,7 +28,15 @@ public class FindDoAction implements Action {
 		ScreenRegion screenRegion = context.getScreenRegion();
 		ScreenRegion ret = screenRegion.wait(target, 5000);
 		if (ret != null){
-			targetAction.execute(context, ret);			
+			Canvas canvas = new ScreenRegionCanvas(ret);
+			canvas.addBox(ret);
+			canvas.show();
+			
+			context.setScreenRegion(ret);			
+			targetAction.execute(context);
+			context.setScreenRegion(screenRegion);
+
+			canvas.hide();
 		}else if (noTargetAction != null){
 			noTargetAction.execute(context);
 		}else{
@@ -34,11 +44,11 @@ public class FindDoAction implements Action {
 		}
 	}
 
-	public TargetScreenRegionAction getTargetAction() {
+	public Action getTargetAction() {
 		return targetAction;
 	}
 
-	public void setTargetAction(TargetScreenRegionAction targetAction) {
+	public void setTargetAction(Action targetAction) {
 		this.targetAction = targetAction;
 	}
 

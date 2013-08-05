@@ -22,8 +22,6 @@ import org.sikuli.slides.models.ImageElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
 import org.sikuli.slides.sikuli.ContextualImageTarget;
-import org.sikuli.slides.sikuli.NullScreenRegion;
-import org.sikuli.slides.sikuli.TargetScreenRegion;
 import org.sikuli.slides.utils.UnitConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +34,6 @@ public class DefaultInterpreter implements Interpreter {
 	static class TargetIterpreter {
 		private SlideElement targetElement;
 		private ImageElement imageElement;
-		private ScreenRegion targetScreenRegion;	
 		private Target target;
 		boolean interpret(SlideTokenizer tknzr, ScreenRegion screenRegion){
 			List<ImageElement> images = tknzr.getImageElements();
@@ -70,7 +67,6 @@ public class DefaultInterpreter implements Interpreter {
 					//				logger.trace("x: {}-{} y: {}-{}", xmin, xmax, ymin, ymax);				
 
 					target = new ContextualImageTarget(imageElement.getSource(), xmin, ymin, xmax, ymax); 
-					targetScreenRegion = new TargetScreenRegion(getTarget(), screenRegion);
 					return true;
 				}
 			}
@@ -79,9 +75,6 @@ public class DefaultInterpreter implements Interpreter {
 		}
 		public SlideElement getTargetElement() {
 			return targetElement;
-		}
-		public ScreenRegion getTargetScreenRegion() {
-			return targetScreenRegion;
 		}
 		public ImageElement getImageElement() {
 			return imageElement;
@@ -160,21 +153,19 @@ public class DefaultInterpreter implements Interpreter {
 				action.setText(targetElement.getText());
 				double fontSize = UnitConverter.WholePointsToPoints(targetElement.getTextSize());
 				action.setFontSize((int)fontSize);
-
 				return new FindDoAction(targetIterpreter.getTarget(), action, null);
-//				
-//				return action;
-//			}else{
-//				// show the label without a specific target
-//				List<SlideElement> textElements = tknzr.getNonKeywordTextElements();
-//				if (textElements.size() > 0){
-//					LabelAction action = new LabelAction(new NullScreenRegion(screenRegion));
-//					SlideElement textElement = textElements.get(0);
-//					action.setText(textElement.getText());
-//					double fontSize = UnitConverter.WholePointsToPoints(textElement.getTextSize());
-//					action.setFontSize((int)fontSize);		
-//					return action;
-//				}
+				
+			}else{
+				// show the label without a specific target
+				List<SlideElement> textElements = tknzr.getNonKeywordTextElements();
+				if (textElements.size() > 0){
+					LabelAction action = new LabelAction();
+					SlideElement textElement = textElements.get(0);
+					action.setText(textElement.getText());
+					double fontSize = UnitConverter.WholePointsToPoints(textElement.getTextSize());
+					action.setFontSize((int)fontSize);		
+					return action;
+				}
 			}
 		}
 		return null;

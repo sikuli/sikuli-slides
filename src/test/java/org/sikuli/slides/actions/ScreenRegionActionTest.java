@@ -12,15 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.DesktopScreenRegion;
-import org.sikuli.api.ScreenRegion;
-import org.sikuli.api.Target;
 import org.sikuli.api.robot.desktop.DesktopScreen;
-import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
-import org.sikuli.slides.actions.Action;
-import org.sikuli.slides.actions.DoubleClickAction;
-import org.sikuli.slides.actions.LeftClickAction;
-import org.sikuli.slides.actions.RightClickAction;
 import org.sikuli.slides.api.Context;
 import org.sikuli.slides.mocks.IdentiyScreenRegionTarget;
 import org.sikuli.slides.mocks.NotFoundScreenTarget;
@@ -80,8 +73,8 @@ public class ScreenRegionActionTest {
 	
 	@Test
 	public void testLeftClickAction() throws IOException, ActionExecutionException{
-		TargetScreenRegionAction action = new LeftClickAction();
-		action.execute(context, screenRegion);
+		Action action = new LeftClickAction();
+		action.execute(context);
 		
 		
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -96,8 +89,8 @@ public class ScreenRegionActionTest {
 
 	@Test
 	public void testRightClickAction() throws IOException, ActionExecutionException{
-		TargetScreenRegionAction action = new RightClickAction();
-		action.execute(context, screenRegion);
+		Action action = new RightClickAction();
+		action.execute(context);
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
 		assertEquals("mouse button", MouseEvent.BUTTON2, detector.getLastMouseEvent().getButton());
@@ -106,8 +99,8 @@ public class ScreenRegionActionTest {
 
 	@Test
 	public void testDoubleClickAction() throws IOException, ActionExecutionException{
-		TargetScreenRegionAction action = new DoubleClickAction();
-		action.execute(context, screenRegion);
+		Action action = new DoubleClickAction();
+		action.execute(context);
 	
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
 		assertEquals("mouse button", MouseEvent.BUTTON1, detector.getLastMouseEvent().getButton());
@@ -143,7 +136,7 @@ public class ScreenRegionActionTest {
 		labelAction.setText("This is a test label");
 		labelAction.setFontSize(15);
 		labelAction.setDuration(1000);
-		labelAction.execute(context, screenRegion);
+		labelAction.execute(context);
 	}	
 	
 	@Test
