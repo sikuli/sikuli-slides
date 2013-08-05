@@ -11,6 +11,7 @@ import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.BrowserAction;
 import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.ExistAction;
+import org.sikuli.slides.actions.FindDoAction;
 import org.sikuli.slides.actions.LabelAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.NotExistAction;
@@ -100,8 +101,7 @@ public class DefaultInterpreter implements Interpreter {
 		if (tknzr.hasActionWord(ActionDictionary.CLICK)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
 			if (targetIterpreter.interpret(tknzr, screenRegion)){
-				ScreenRegion targetScreenRegion = targetIterpreter.getTargetScreenRegion();
-				return new LeftClickAction(targetScreenRegion);	
+				return new FindDoAction(targetIterpreter.getTarget(), new LeftClickAction());
 			}
 		}
 		return null;

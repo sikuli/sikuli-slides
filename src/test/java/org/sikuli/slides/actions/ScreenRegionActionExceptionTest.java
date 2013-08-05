@@ -24,11 +24,11 @@ public class ScreenRegionActionExceptionTest {
 	public void tearDown(){
 	}
 
-	@Test(expected = ActionExecutionException.class)  
-	public void testLeftClickActionOnNullScreenRegion() throws ActionExecutionException {
-		Action action = new LeftClickAction(nullScreenRegion);
-		action.execute(context);
-	}
+//	@Test(expected = ActionExecutionException.class)  
+//	public void testLeftClickActionOnNullScreenRegion() throws ActionExecutionException {
+//		Action action = new LeftClickAction(nullScreenRegion);
+//		action.execute(context);
+//	}
 
 	@Test(expected = ActionExecutionException.class)  
 	public void testRightClickActionOnNullScreenRegion() throws ActionExecutionException {

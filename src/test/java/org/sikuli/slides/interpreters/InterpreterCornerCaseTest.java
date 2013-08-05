@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.StaticImageScreenRegion;
+import org.sikuli.slides.actions.FindDoAction;
 import org.sikuli.slides.actions.LabelAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.models.Slide;
@@ -44,13 +45,8 @@ public class InterpreterCornerCaseTest {
 		slide.add(fixtures.imageElement);
 		slide.add(fixtures.belowTargetElement);
 
-		LeftClickAction action = (LeftClickAction) interpreter.interpret(slide);		
+		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
 		assertNotNull(action);
-		
-		ScreenRegion targetScreenRegion = action.getTargetScreenRegion();
-		Rectangle b = targetScreenRegion.getBounds();	
-		assertEquals(363, b.x);
-		assertEquals(243, b.y);
 	}
 	
 	@Test
@@ -60,13 +56,8 @@ public class InterpreterCornerCaseTest {
 		slide.add(fixtures.imageElement);
 		slide.add(fixtures.aboveTargetElement);
 
-		LeftClickAction action = (LeftClickAction) interpreter.interpret(slide);		
-		assertNotNull(action);
-		
-		ScreenRegion targetScreenRegion = action.getTargetScreenRegion();
-		Rectangle b = targetScreenRegion.getBounds();	
-		assertEquals(0, b.x);
-		assertEquals(0, b.y);
+		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
+		assertNotNull(action);		
 	}	
 	
 	@Test

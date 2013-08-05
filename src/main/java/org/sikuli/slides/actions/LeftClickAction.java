@@ -4,21 +4,17 @@ import org.sikuli.api.ScreenLocation;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopMouse;
+import org.sikuli.slides.api.Context;
 
-public class LeftClickAction extends ScreenRegionAction {
+public class LeftClickAction implements TargetScreenRegionAction {
 	
-	public LeftClickAction(ScreenRegion screenRegion){
-		setTargetScreenRegion(screenRegion);
+	public LeftClickAction(){
 	}
-	
-	/**
-	 * perform left click
-	 * @param targetRegion the region to perform left click input event on.
-	 */	
-	protected void exceuteOnScreenRegion(ScreenRegion targetRegion){
-		logger.info("performing left click event on target...");				
+
+	@Override
+	public void execute(Context context, ScreenRegion screenRegion) {
 		Mouse mouse = new DesktopMouse();
-		ScreenLocation loc = targetRegion.getCenter();
+		ScreenLocation loc = screenRegion.getCenter();
 		mouse.click(loc);
 	}
 }

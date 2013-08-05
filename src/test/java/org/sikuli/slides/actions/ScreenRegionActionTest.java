@@ -6,13 +6,11 @@ import static org.junit.Assert.assertNotNull;
 
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.List;
 
 import org.jnativehook.NativeHookException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.sikuli.api.DefaultTarget;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
@@ -24,9 +22,10 @@ import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.RightClickAction;
 import org.sikuli.slides.api.Context;
+import org.sikuli.slides.mocks.IdentiyScreenRegionTarget;
+import org.sikuli.slides.mocks.NotFoundScreenTarget;
 import org.sikuli.slides.sikuli.NullScreenRegion;
 
-import com.google.common.collect.Lists;
 
 
 
@@ -36,6 +35,8 @@ public class ScreenRegionActionTest {
 	private NullScreenRegion nullScreenRegion;
 	private InputDetector detector;
 	private Context context;
+	private DesktopCanvas canvas;
+	private DesktopScreenRegion screenRegion;
 
 
 	@Before
@@ -43,8 +44,15 @@ public class ScreenRegionActionTest {
 		detector = new InputDetector();
 		detector.start();
 		nullScreenRegion = new NullScreenRegion(new DesktopScreen(0));
+		screenRegion = new DesktopScreenRegion(100,100,500,500);
+
 		context = new Context();
-		context.setScreenRegion(new DesktopScreenRegion());
+		context.setScreenRegion(screenRegion);
+		
+		canvas = new DesktopCanvas();		
+		canvas.addLabel(screenRegion, "here")
+		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();;
+		canvas.addBox(screenRegion);
 	}
 
 	@After
@@ -53,25 +61,30 @@ public class ScreenRegionActionTest {
 	}
 
 	@Test
-	public void testLeftClickAction() throws IOException, ActionExecutionException{
-		Canvas canvas = new DesktopCanvas();		
-		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);
-		Action action = new LeftClickAction(screenRegion);
-		canvas.addLabel(screenRegion, "left click here")
-		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();;
-		canvas.addBox(screenRegion);
+	public void testFindDoLeftClick() throws ActionExecutionException {
 		canvas.show();
+		Action action = new FindDoAction(new IdentiyScreenRegionTarget(), new LeftClickAction());
 		action.execute(context);
-		canvas.hide();
-
+		
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
 		assertEquals("mouse button", MouseEvent.BUTTON1, detector.getLastMouseEvent().getButton());
 		assertEquals("click count", 1, detector.getLastMouseEvent().getClickCount());		
 		int x = detector.getLastMouseEvent().getX();
 		int y = detector.getLastMouseEvent().getY();
-		assertEquals("x", 350, x);
-		assertEquals("y", 350, y);
+		assertEquals("x", screenRegion.getCenter().getX(), x);
+		assertEquals("y", screenRegion.getCenter().getY(), y);
+
 	}
+	
+	@Test
+	public void testLeftClickAction() throws IOException, ActionExecutionException{
+		TargetScreenRegionAction action = new LeftClickAction();
+		action.execute(context, screenRegion);
+		
+		int x = detector.getLastMouseEvent().getX();
+		int y = detector.getLastMouseEvent().getY();
+		assertEquals("x", screenRegion.getCenter().getX(), x);
+		assertEquals("y", screenRegion.getCenter().getY(), y);	}
 
 	@Test
 	public void testRightClickAction() throws IOException, ActionExecutionException{
@@ -146,38 +159,9 @@ public class ScreenRegionActionTest {
 		labelAction.execute(context);
 	}	
 	
-	static class IdentiyRegionScreenTarget extends DefaultTarget {
-
-		@Override
-		public List<ScreenRegion> doFindAll(ScreenRegion screenRegion) {
-			return Lists.newArrayList(screenRegion);
-		}
-
-		@Override
-		protected List<ScreenRegion> getUnorderedMatches(
-				ScreenRegion screenRegion) {
-			return Lists.newArrayList(screenRegion);
-		}		
-	}
-	
-	static class NotFoundScreenTarget extends DefaultTarget {
-
-		@Override
-		public List<ScreenRegion> doFindAll(ScreenRegion screenRegion) {
-			return Lists.newArrayList();
-		}
-
-		@Override
-		protected List<ScreenRegion> getUnorderedMatches(
-				ScreenRegion screenRegion) {
-			return Lists.newArrayList();
-		}		
-	}
-	
-	
 	@Test
 	public void testExistAction() throws ActionExecutionException {	
-		Action action = new ExistAction(new IdentiyRegionScreenTarget());
+		Action action = new ExistAction(new IdentiyScreenRegionTarget());
 		action.execute(context);
 	}
 	
@@ -189,7 +173,7 @@ public class ScreenRegionActionTest {
 	
 	@Test(expected = ActionExecutionException.class)
 	public void testNotExistActionFailed() throws ActionExecutionException {			
-		Action action = new NotExistAction(new IdentiyRegionScreenTarget());
+		Action action = new NotExistAction(new IdentiyScreenRegionTarget());
 		action.execute(context);
 	}
 	
