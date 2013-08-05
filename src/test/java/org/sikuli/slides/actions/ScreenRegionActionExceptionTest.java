@@ -30,26 +30,26 @@ public class ScreenRegionActionExceptionTest {
 //		action.execute(context);
 //	}
 
-	@Test(expected = ActionExecutionException.class)  
-	public void testRightClickActionOnNullScreenRegion() throws ActionExecutionException {
-		Action action = new RightClickAction(nullScreenRegion);
-		action.execute(context);
-	}
+//	@Test(expected = ActionExecutionException.class)  
+//	public void testRightClickActionOnNullScreenRegion() throws ActionExecutionException {
+//		TargetScreenRegionAction action = new RightClickAction();
+//		action.execute(context, screenRegion);
+//	}
+//	
+//	@Test(expected = ActionExecutionException.class)  
+//	public void testDoubleClickActionOnNullScreenRegion() throws ActionExecutionException {
+//		TargetScreenRegionAction action = new DoubleClickAction();
+//		action.execute(context);
+//	}
 	
-	@Test(expected = ActionExecutionException.class)  
-	public void testDoubleClickActionOnNullScreenRegion() throws ActionExecutionException {
-		Action action = new DoubleClickAction(nullScreenRegion);
-		action.execute(context);
-	}
-	
-	@Test
-	public void testLabelActionOnNullScreenRegion(){
-		LabelAction labelAction = new LabelAction(nullScreenRegion);
-		labelAction.setText("This is a test label");
-		labelAction.setFontSize(15);
-		labelAction.setDuration(1000);
-		labelAction.execute(context);
-	}
+//	@Test
+//	public void testLabelActionOnNullScreenRegion(){
+//		LabelAction labelAction = new LabelAction();
+//		labelAction.setText("This is a test label");
+//		labelAction.setFontSize(15);
+//		labelAction.setDuration(1000);
+//		labelAction.execute(context);
+//	}
 	
 	
 	

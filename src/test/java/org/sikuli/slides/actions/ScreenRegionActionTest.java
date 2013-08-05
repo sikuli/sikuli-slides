@@ -53,16 +53,18 @@ public class ScreenRegionActionTest {
 		canvas.addLabel(screenRegion, "here")
 		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();;
 		canvas.addBox(screenRegion);
+		canvas.show();
+
 	}
 
 	@After
 	public void tearDown(){
 		detector.stop();
+		canvas.hide();
 	}
 
 	@Test
 	public void testFindDoLeftClick() throws ActionExecutionException {
-		canvas.show();
 		Action action = new FindDoAction(new IdentiyScreenRegionTarget(), new LeftClickAction());
 		action.execute(context);
 		
@@ -81,65 +83,51 @@ public class ScreenRegionActionTest {
 		TargetScreenRegionAction action = new LeftClickAction();
 		action.execute(context, screenRegion);
 		
+		
+		assertNotNull("last mouse event", detector.getLastMouseEvent());
+		assertEquals("mouse button", MouseEvent.BUTTON1, detector.getLastMouseEvent().getButton());
+		assertEquals("click count", 1, detector.getLastMouseEvent().getClickCount());
+
 		int x = detector.getLastMouseEvent().getX();
 		int y = detector.getLastMouseEvent().getY();
 		assertEquals("x", screenRegion.getCenter().getX(), x);
-		assertEquals("y", screenRegion.getCenter().getY(), y);	}
+		assertEquals("y", screenRegion.getCenter().getY(), y);	
+	}
 
 	@Test
 	public void testRightClickAction() throws IOException, ActionExecutionException{
-		Canvas canvas = new DesktopCanvas();		
-		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);		
-		Action action = new RightClickAction(screenRegion);
-		canvas.addLabel(screenRegion, "right click here")
-		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();;
-		canvas.addBox(screenRegion);		
-		canvas.show();
-		action.execute(null);
-		canvas.hide();
+		TargetScreenRegionAction action = new RightClickAction();
+		action.execute(context, screenRegion);
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
 		assertEquals("mouse button", MouseEvent.BUTTON2, detector.getLastMouseEvent().getButton());
 		assertEquals("click count", 1, detector.getLastMouseEvent().getClickCount());
-		int x = detector.getLastMouseEvent().getX();
-		int y = detector.getLastMouseEvent().getY();
-		assertEquals("x", 350, x);
-		assertEquals("y", 350, y);
 	}
 
 	@Test
 	public void testDoubleClickAction() throws IOException, ActionExecutionException{
-		Canvas canvas = new DesktopCanvas();		
-		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);
-		Action action = new DoubleClickAction(screenRegion);
-		canvas.addLabel(screenRegion, "double click here")
-		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
-		canvas.addBox(screenRegion);		
-		canvas.show();
-		action.execute(null);
-		canvas.hide();	
-
+		TargetScreenRegionAction action = new DoubleClickAction();
+		action.execute(context, screenRegion);
+	
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
 		assertEquals("mouse button", MouseEvent.BUTTON1, detector.getLastMouseEvent().getButton());
 		assertEquals("click count", 2, detector.getLastMouseEvent().getClickCount());
-		int x = detector.getLastMouseEvent().getX();
-		int y = detector.getLastMouseEvent().getY();
-		assertEquals("x", 350, x);
-		assertEquals("y", 350, y);
 	}
 	
 	@Test
-	public void testTypeAction() throws ActionExecutionException{
-		Canvas canvas = new DesktopCanvas();		
-		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,500);
-		TypeAction action = new TypeAction(screenRegion);
-		action.setText("abcde");
-		canvas.addLabel(screenRegion, "type here")
-		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
-		canvas.addBox(screenRegion);		
-		canvas.show();
+	public void testFindDoType() throws ActionExecutionException{
+		TypeAction typeAction = new TypeAction();
+		typeAction.setText("abcde");
+		
+		Action action = new FindDoAction(new IdentiyScreenRegionTarget(), typeAction);
 		action.execute(context);
-		canvas.hide();	
+
+//		canvas.addLabel(screenRegion, "type here")
+//		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
+//		canvas.addBox(screenRegion);		
+//		canvas.show();
+//		action.execute(context);
+//		canvas.hide();	
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
 		assertEquals("mouse button", MouseEvent.BUTTON1, detector.getLastMouseEvent().getButton());
@@ -151,12 +139,11 @@ public class ScreenRegionActionTest {
 	
 	@Test
 	public void testLabelAction(){
-		ScreenRegion screenRegion = new DesktopScreenRegion(100,100,500,200);
-		LabelAction labelAction = new LabelAction(screenRegion);
+		LabelAction labelAction = new LabelAction();
 		labelAction.setText("This is a test label");
 		labelAction.setFontSize(15);
 		labelAction.setDuration(1000);
-		labelAction.execute(context);
+		labelAction.execute(context, screenRegion);
 	}	
 	
 	@Test

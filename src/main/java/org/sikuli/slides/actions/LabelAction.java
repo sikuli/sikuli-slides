@@ -8,25 +8,35 @@ import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.api.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class LabelAction extends ScreenRegionAction {
+public class LabelAction implements TargetScreenRegionAction {
+	
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String text = "";
 	private int fontSize = 12;
 	private int duration = 3000;
 
-	public LabelAction(ScreenRegion targetRegion){
-		setTargetScreenRegion(targetRegion);
-	}
-
-	public LabelAction(){
-		setTargetScreenRegion(null);
-	}
-
 	@Override
-	public void execute(Context context){
-		exceuteOnScreenRegion(getTargetScreenRegion());
-	}	
+	public void execute(Context context, ScreenRegion targetRegion) {
+		logger.info("performing label action on target...");
+		if (targetRegion.getBounds() == null){
+			targetRegion = new DefaultScreenRegion(targetRegion.getScreen());
+		}
+				//			logger.error("Failed to find the target to display a label on.");
+				//			logger.info("Displaying the label on the center of the screen.");
+				//			// make the target region the entire screen
+				targetRegion = new DefaultScreenRegion(targetRegion.getScreen());
+		
+
+		Canvas canvas = new ScreenRegionCanvas(targetRegion);
+		canvas.addLabel(targetRegion, text)
+		.withColor(Color.black).withFontSize((int)fontSize).withLineWidth(2)
+		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
+		canvas.display(1.0*duration/1000);		
+	}
 
 
 	/**
@@ -74,6 +84,5 @@ public class LabelAction extends ScreenRegionAction {
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
-
 
 }

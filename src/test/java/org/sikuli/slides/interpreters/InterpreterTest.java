@@ -196,27 +196,32 @@ public class InterpreterTest {
 	@Test
 	public void testInterpretRightClickAction() throws IOException {
 		Slide slide = createRightClickSlide();		
-		Action action = interpreter.interpret(slide);
+		FindDoAction action = (FindDoAction) interpreter.interpret(slide);
 		
 		assertNotNull(action);
-		assertEquals("right-click action", RightClickAction.class, action.getClass());
+		assertThat(action, instanceOf(FindDoAction.class));
+		assertThat(action.getTargetAction(), instanceOf(RightClickAction.class));
 	}
 	
 	@Test
 	public void testInterpretDoubleClickAction() {
 		Slide slide = createDoubleClickSlide();
-		Action action = interpreter.interpret(slide);		
+		FindDoAction action = (FindDoAction) interpreter.interpret(slide);
+		
 		assertNotNull(action);
-		assertEquals("double-click action", DoubleClickAction.class, action.getClass());
+		assertThat(action.getTargetAction(), instanceOf(DoubleClickAction.class));
 	}
 	
 	@Test
 	public void testInterpretLabelAction() {
 		Slide slide = createLabelSlide();
-		LabelAction action = (LabelAction) interpreter.interpret(slide);		
+		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
 		assertNotNull(action);
-		assertEquals(TEST_TEXT, action.getText());
-		assertEquals(36, action.getFontSize());
+		
+		assertThat(action.getTargetAction(), instanceOf(LabelAction.class));
+		LabelAction label = (LabelAction) action.getTargetAction();
+		assertEquals(TEST_TEXT, label.getText());
+		assertEquals(36, label.getFontSize());
 	}	
 	
 	@Test
@@ -237,9 +242,12 @@ public class InterpreterTest {
 	@Test
 	public void testInterpretTypeAction() {
 		Slide slide = createTypeSlide();
-		TypeAction action = (TypeAction) interpreter.interpret(slide);		
+		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
 		assertNotNull(action);
-		assertEquals(TEST_TEXT, action.getText());
+		assertThat(action.getTargetAction(), instanceOf(TypeAction.class));
+		
+		TypeAction typeAction = (TypeAction) action.getTargetAction();
+		assertThat(typeAction.getText(), equalToIgnoringCase(TEST_TEXT));
 	}	
 
 	@Test

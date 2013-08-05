@@ -4,24 +4,20 @@ import org.sikuli.api.ScreenLocation;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopMouse;
+import org.sikuli.slides.api.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class RightClickAction extends ScreenRegionAction {
-	
-	public RightClickAction(ScreenRegion targetRegion){
-		setTargetScreenRegion(targetRegion);		
-	}
-	
+public class RightClickAction implements TargetScreenRegionAction {
+		
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	/**
-	 * perform right click
-	 * @param targetRegion the region to perform right click input event on.
-	 */	
-	protected void exceuteOnScreenRegion(ScreenRegion targetRegion) {
-		logger.info("performing right click event on target...");		
+	@Override
+	public void execute(Context context, ScreenRegion screenRegion) {
+		logger .info("performing right click event on target...");
 		Mouse mouse = new DesktopMouse();
-		ScreenLocation loc = targetRegion.getCenter();
+		ScreenLocation loc = screenRegion.getCenter();
 		mouse.rightClick(loc);
 	}
-
 
 }

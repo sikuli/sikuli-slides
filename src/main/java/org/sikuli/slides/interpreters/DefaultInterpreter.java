@@ -111,8 +111,7 @@ public class DefaultInterpreter implements Interpreter {
 		if (tknzr.hasActionWord(ActionDictionary.RIGHT_CLICK)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
 			if (targetIterpreter.interpret(tknzr, screenRegion)){
-				ScreenRegion targetScreenRegion = targetIterpreter.getTargetScreenRegion();				
-				return new RightClickAction(targetScreenRegion);	
+				return new FindDoAction(targetIterpreter.getTarget(), new RightClickAction());	
 			}
 		}
 		return null;
@@ -122,8 +121,7 @@ public class DefaultInterpreter implements Interpreter {
 		if (tknzr.hasActionWord(ActionDictionary.DOUBLE_CLICK)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
 			if (targetIterpreter.interpret(tknzr, screenRegion)){
-				ScreenRegion targetScreenRegion = targetIterpreter.getTargetScreenRegion();				
-				return new DoubleClickAction(targetScreenRegion);
+				return new FindDoAction(targetIterpreter.getTarget(), new DoubleClickAction());
 			}
 		}
 		return null;
@@ -157,24 +155,26 @@ public class DefaultInterpreter implements Interpreter {
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
 			if (targetIterpreter.interpret(tknzr, screenRegion)){		
 				// show the label over that target
-				ScreenRegion targetScreenRegion = targetIterpreter.getTargetScreenRegion();
 				SlideElement targetElement = targetIterpreter.getTargetElement();
-				LabelAction action = new LabelAction(targetScreenRegion);
+				LabelAction action = new LabelAction();
 				action.setText(targetElement.getText());
 				double fontSize = UnitConverter.WholePointsToPoints(targetElement.getTextSize());
 				action.setFontSize((int)fontSize);
-				return action;
-			}else{
-				// show the label without a specific target
-				List<SlideElement> textElements = tknzr.getNonKeywordTextElements();
-				if (textElements.size() > 0){
-					LabelAction action = new LabelAction(new NullScreenRegion(screenRegion));
-					SlideElement textElement = textElements.get(0);
-					action.setText(textElement.getText());
-					double fontSize = UnitConverter.WholePointsToPoints(textElement.getTextSize());
-					action.setFontSize((int)fontSize);		
-					return action;
-				}
+
+				return new FindDoAction(targetIterpreter.getTarget(), action, null);
+//				
+//				return action;
+//			}else{
+//				// show the label without a specific target
+//				List<SlideElement> textElements = tknzr.getNonKeywordTextElements();
+//				if (textElements.size() > 0){
+//					LabelAction action = new LabelAction(new NullScreenRegion(screenRegion));
+//					SlideElement textElement = textElements.get(0);
+//					action.setText(textElement.getText());
+//					double fontSize = UnitConverter.WholePointsToPoints(textElement.getTextSize());
+//					action.setFontSize((int)fontSize);		
+//					return action;
+//				}
 			}
 		}
 		return null;
@@ -185,11 +185,10 @@ public class DefaultInterpreter implements Interpreter {
 		if (tknzr.hasActionWord(ActionDictionary.TYPE)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
 			if (targetIterpreter.interpret(tknzr, screenRegion)){
-				ScreenRegion targetScreenRegion = targetIterpreter.getTargetScreenRegion();
 				SlideElement targetElement = targetIterpreter.getTargetElement();
-				TypeAction typeAction = new TypeAction(targetScreenRegion);
+				TypeAction typeAction = new TypeAction();
 				typeAction.setText(targetElement.getText());
-				return typeAction;
+				return new FindDoAction(targetIterpreter.getTarget(), typeAction);
 			}
 		}
 		return null;

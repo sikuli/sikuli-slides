@@ -8,9 +8,17 @@ public class FindDoAction implements Action {
 
 	Target target;
 	private TargetScreenRegionAction targetAction;
+	private Action noTargetAction;
+	
 	public FindDoAction(Target target, TargetScreenRegionAction targetAction){
 		this.target = target;
-		this.setTargetAction(targetAction);
+		this.targetAction = targetAction;
+	}
+	
+	public FindDoAction(Target target, TargetScreenRegionAction targetAction, Action noTargetAction){
+		this.target = target;
+		this.targetAction = targetAction;
+		this.noTargetAction = noTargetAction;
 	}		
 
 	@Override
@@ -18,7 +26,9 @@ public class FindDoAction implements Action {
 		ScreenRegion screenRegion = context.getScreenRegion();
 		ScreenRegion ret = screenRegion.wait(target, 5000);
 		if (ret != null){
-			getTargetAction().execute(context, ret);			
+			targetAction.execute(context, ret);			
+		}else if (noTargetAction != null){
+			noTargetAction.execute(context);
 		}else{
 			throw new ActionExecutionException(this);
 		}
@@ -31,4 +41,5 @@ public class FindDoAction implements Action {
 	public void setTargetAction(TargetScreenRegionAction targetAction) {
 		this.targetAction = targetAction;
 	}
+
 }
