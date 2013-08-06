@@ -12,6 +12,7 @@ class SlideElementFixtures {
 	public SlideElement aboveTargetElement;
 	public SlideElement urlArgumentElement;
 	public SlideElement textElement;
+	private SlideElement parameterizedTextElement;
 
 	SlideElementFixtures(){
 		clickElement = new SlideElement();
@@ -49,6 +50,8 @@ class SlideElementFixtures {
 		
 		textElement = new SlideElement();
 		textElement.setText("some text");
-
+		
+		parameterizedTextElement = new SlideElement();
+		parameterizedTextElement.setText("Hello {{name}}!");
 	}
 }

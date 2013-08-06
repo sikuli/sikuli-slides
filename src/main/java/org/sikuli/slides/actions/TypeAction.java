@@ -25,10 +25,11 @@ public class TypeAction implements Action {
 	@Override
 	public void execute(Context context) {
 		logger.info("performing keyboard typing event on target...");
+		String textToType = context.render(getText());
 		ScreenRegion screenRegion = context.getScreenRegion();
 		Mouse mouse = new DesktopMouse();
 		Keyboard keyboard=new DesktopKeyboard();
 		mouse.click(screenRegion.getCenter());
-		keyboard.type(getText());		
+		keyboard.type(textToType);		
 	}
 }

@@ -2,6 +2,7 @@ package org.sikuli.slides.actions;
 
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.util.Map;
 
 import org.sikuli.api.DefaultScreenRegion;
 import org.sikuli.api.ScreenRegion;
@@ -10,6 +11,7 @@ import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.api.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.stringtemplate.v4.ST;
 
 public class LabelAction implements Action {
 	
@@ -24,36 +26,15 @@ public class LabelAction implements Action {
 		logger.info("performing label action on target...");
 		ScreenRegion targetRegion = context.getScreenRegion();
 
+		String textToDisplay = context.render(text);
+		
 		Canvas canvas = new ScreenRegionCanvas(targetRegion);
-		canvas.addLabel(targetRegion, text)
+		canvas.addLabel(targetRegion, textToDisplay)
 		.withColor(Color.black).withFontSize((int)fontSize).withLineWidth(2)
 		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
 		canvas.display(1.0*duration/1000);		
 	}
-
-
-	/**
-	 * perform the action to display this label at the targetRegion
-	 * @param targetRegion the region to display this label
-	 */	
-	protected void exceuteOnScreenRegion(ScreenRegion targetRegion){
-		logger.info("performing label action on target...");
-		if (targetRegion.getBounds() == null){
-			targetRegion = new DefaultScreenRegion(targetRegion.getScreen());
-		}
-				//			logger.error("Failed to find the target to display a label on.");
-				//			logger.info("Displaying the label on the center of the screen.");
-				//			// make the target region the entire screen
-				targetRegion = new DefaultScreenRegion(targetRegion.getScreen());
-		
-
-		Canvas canvas = new ScreenRegionCanvas(targetRegion);
-		canvas.addLabel(targetRegion, text)
-		.withColor(Color.black).withFontSize((int)fontSize).withLineWidth(2)
-		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
-		canvas.display(1.0*duration/1000);
-	}
-
+	
 	public String getText() {
 		return text;
 	}

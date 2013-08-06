@@ -1,6 +1,9 @@
 package org.sikuli.slides.actions;
 
 
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -24,19 +27,15 @@ import org.sikuli.slides.sikuli.NullScreenRegion;
 
 public class ScreenRegionActionTest {
 
-
-	private NullScreenRegion nullScreenRegion;
 	private InputDetector detector;
 	private Context context;
 	private DesktopCanvas canvas;
 	private DesktopScreenRegion screenRegion;
 
-
 	@Before
 	public void setUp() throws NativeHookException{
 		detector = new InputDetector();
 		detector.start();
-		nullScreenRegion = new NullScreenRegion(new DesktopScreen(0));
 		screenRegion = new DesktopScreenRegion(100,100,500,500);
 
 		context = new Context();
@@ -110,17 +109,9 @@ public class ScreenRegionActionTest {
 	@Test
 	public void testFindDoType() throws ActionExecutionException{
 		TypeAction typeAction = new TypeAction();
-		typeAction.setText("abcde");
-		
+		typeAction.setText("abcde");		
 		Action action = new FindDoAction(new IdentiyScreenRegionTarget(), typeAction);
 		action.execute(context);
-
-//		canvas.addLabel(screenRegion, "type here")
-//		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
-//		canvas.addBox(screenRegion);		
-//		canvas.show();
-//		action.execute(context);
-//		canvas.hide();	
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
 		assertEquals("mouse button", MouseEvent.BUTTON1, detector.getLastMouseEvent().getButton());
@@ -137,7 +128,8 @@ public class ScreenRegionActionTest {
 		labelAction.setFontSize(15);
 		labelAction.setDuration(1000);
 		labelAction.execute(context);
-	}	
+	}
+	
 	
 	@Test
 	public void testExistAction() throws ActionExecutionException {	
