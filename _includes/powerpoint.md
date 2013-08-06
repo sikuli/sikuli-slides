@@ -24,7 +24,7 @@
 	</tr>
    </table>
 
-5. Execute the slides using the pptx file.
+5. Open the pptx file in sikuli-slides and execute the slides.
 
 {% highlight bash %}
 $ java -jar sikuli-slides-1.3.0.jar helloworld.pptx 

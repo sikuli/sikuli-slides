@@ -18,21 +18,21 @@ Below is our Hello World example on Google Presentation. This example has two sl
 <iframe src="https://docs.google.com/presentation/d/1w48gExh5oLIT0J8xYXR1RxpqTrZTXJC8OR4UXxShTQ8/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="400" height="300" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
 </iframe>
 
-There are two methods to execute these slides on your own computer.
+There are two methods to open the slides in sikuli-slides and execute them on your own computer.
 
-**Method 1:** Download and Execute
+**Method 1:** Download, Open, and Execute
 
 1. Download the slides from this link:
 [helloworld.pptx](https://docs.google.com/feeds/download/presentations/Export?id=1w48gExh5oLIT0J8xYXR1RxpqTrZTXJC8OR4UXxShTQ8&&exportFormat=pptx)
 
-2. Execute the slides
+2. Open and execute the slides
 
 {% highlight bash %}
 $ java -jar sikuli-slides-1.3.0.jar helloworld.pptx 
 {% endhighlight %}
 
 
-**Method 2:** Execute from an URL
+**Method 2:** Open and execute from an URL
 
 {% highlight bash %}
 $ java -jar sikuli-slides-1.3.0.jar https://docs.google.com/presentation/d/1w48gExh5oLIT0J8xYXR1RxpqTrZTXJC8OR4UXxShTQ8/edit?usp=sharing
@@ -41,7 +41,12 @@ $ java -jar sikuli-slides-1.3.0.jar https://docs.google.com/presentation/d/1w48g
 ## Your Own Slides
 
 
-You can make your own slides locally using Microsoft Powerpoint or online using Google Presentation. Although you can make slides from scratch, it would be easier to use the helloworld example as a template and add your own contents.
+You can make your own slides locally using Microsoft Powerpoint or online using Google Presentation. The presentation file must be in .pptx format.
+A slide may contain a screenshot and a set of annotations. The screenshot can be of any part of a user interface, such as a button, a group of buttons, a form, a dialog box, a window, or the entire desktop. 
+The annotations are shapes such as rectangles, ovals, etc, to indicate targets and text boxes to indicate actions to be performed on the targets.
+Targets refere to any User Interface component such as icons, buttons, etc. Actions refer to mouse and keyboard events such as Click, Right Click, 
+Double Click, Drag and drop, Type, and other actions such as browser and wait. A slide may contain one or more targets and only one action.
+Although you can make slides from scratch, it would be easier to use the helloworld example as a template and add your own contents.
 
 
 <ul class="nav nav-tabs" id="myTabs">
