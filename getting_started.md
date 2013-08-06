@@ -32,7 +32,7 @@ $ java -jar sikuli-slides-1.3.0.jar helloworld.pptx
 {% endhighlight %}
 
 
-**Method 2:** Open and execute from an URL
+**Method 2:** Open and execute from a URL
 
 {% highlight bash %}
 $ java -jar sikuli-slides-1.3.0.jar https://docs.google.com/presentation/d/1w48gExh5oLIT0J8xYXR1RxpqTrZTXJC8OR4UXxShTQ8/edit?usp=sharing
