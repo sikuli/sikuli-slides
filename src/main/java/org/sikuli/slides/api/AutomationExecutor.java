@@ -19,7 +19,7 @@ public class AutomationExecutor implements SlidesExecutor {
 	@Override
 	public void execute(List<Slide> slides) throws SlideExecutionException {
 		ScreenRegion screenRegion = new DesktopScreenRegion();		
-		Interpreter interpreter = new DefaultInterpreter(screenRegion);
+		Interpreter interpreter = new DefaultInterpreter();
 		
 		List<Action> actions = Lists.newArrayList();
 		Map<Slide,Action> slideActionMap = Maps.newHashMap();

@@ -38,7 +38,6 @@ import org.sikuli.slides.models.SlideElement;
 public class InterpreterTest {
 
 	private static final String TEST_TEXT = "some text";
-	private StaticImageScreenRegion screenRegion;
 	private DefaultInterpreter interpreter;
 
 	@Test
@@ -55,7 +54,7 @@ public class InterpreterTest {
 		slide.add(actionElement);
 		slide.add(argumentElement);
 		
-		Interpreter interpreter = new DefaultInterpreter(new DesktopScreenRegion());
+		Interpreter interpreter = new DefaultInterpreter();
 		Action action = interpreter.interpret(slide);
 		
 		assertNotNull(action);
@@ -169,9 +168,7 @@ public class InterpreterTest {
 	
 	@Before
 	public void setUp() throws IOException{
-		BufferedImage image = ImageIO.read(getClass().getResource("sikuli_context.png"));
-		screenRegion = new StaticImageScreenRegion(image);		
-		interpreter = new DefaultInterpreter(screenRegion);
+		interpreter = new DefaultInterpreter();
 	}
 	
 	@Test
@@ -181,15 +178,7 @@ public class InterpreterTest {
 		
 		assertNotNull(action);
 		assertThat(action, instanceOf(FindDoAction.class));
-		assertThat(action.getTargetAction(), instanceOf(LeftClickAction.class));
-		//LeftClickAction leftClickAction = (LeftClickAction) action;
-		
-//		ScreenRegion targetScreenRegion = leftClickAction.getTargetScreenRegion();
-//		assertNotNull(targetScreenRegion);
-//		action.execute(context);
-//		Rectangle b = targetScreenRegion.getBounds();	
-//		assertEquals(129, b.x);
-//		assertEquals(43, b.y);
+		assertThat(action.getTargetAction(), instanceOf(LeftClickAction.class));	
 	}
 	
 	@Test

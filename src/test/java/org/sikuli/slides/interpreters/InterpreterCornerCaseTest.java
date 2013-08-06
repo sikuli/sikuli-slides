@@ -20,18 +20,12 @@ import org.sikuli.slides.models.Slide;
 
 public class InterpreterCornerCaseTest {
 
-
-	private StaticImageScreenRegion screenRegion;
 	private DefaultInterpreter interpreter;
 	private SlideElementFixtures fixtures;	
 
 	@Before
-	public void setUp() throws IOException{
-		
-		BufferedImage image = ImageIO.read(getClass().getResource("sikuli_context.png"));
-		screenRegion = new StaticImageScreenRegion(image);		
-		interpreter = new DefaultInterpreter(screenRegion);
-		
+	public void setUp() throws IOException{		
+		interpreter = new DefaultInterpreter();		
 		fixtures = new SlideElementFixtures();
 	}
 	

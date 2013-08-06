@@ -35,7 +35,7 @@ public class DefaultInterpreter implements Interpreter {
 		private SlideElement targetElement;
 		private ImageElement imageElement;
 		private Target target;
-		boolean interpret(SlideTokenizer tknzr, ScreenRegion screenRegion){
+		boolean interpret(SlideTokenizer tknzr){
 			List<ImageElement> images = tknzr.getImageElements();
 			if (images.isEmpty()){
 				return false;
@@ -64,8 +64,6 @@ public class DefaultInterpreter implements Interpreter {
 					xmin = Math.max(0, xmin);
 					ymin = Math.max(0, ymin);
 
-					//				logger.trace("x: {}-{} y: {}-{}", xmin, xmax, ymin, ymax);				
-
 					target = new ContextualImageTarget(imageElement.getSource(), xmin, ymin, xmax, ymax); 
 					return true;
 				}
@@ -83,37 +81,31 @@ public class DefaultInterpreter implements Interpreter {
 			return target;
 		}
 	}
-
-	// the screen region the actions will be applied to
-	private ScreenRegion screenRegion;
-	public DefaultInterpreter(ScreenRegion screenRegion){
-		this.screenRegion = screenRegion;
-	}	
-
-	Action interpretAsClick(SlideTokenizer tknzr, ScreenRegion screenRegion){
+	
+	Action interpretAsClick(SlideTokenizer tknzr){
 		if (tknzr.hasActionWord(ActionDictionary.CLICK)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
-			if (targetIterpreter.interpret(tknzr, screenRegion)){
+			if (targetIterpreter.interpret(tknzr)){
 				return new FindDoAction(targetIterpreter.getTarget(), new LeftClickAction());
 			}
 		}
 		return null;
 	}
 
-	Action interpretAsRightClick(SlideTokenizer tknzr, ScreenRegion screenRegion){
+	Action interpretAsRightClick(SlideTokenizer tknzr){
 		if (tknzr.hasActionWord(ActionDictionary.RIGHT_CLICK)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
-			if (targetIterpreter.interpret(tknzr, screenRegion)){
+			if (targetIterpreter.interpret(tknzr)){
 				return new FindDoAction(targetIterpreter.getTarget(), new RightClickAction());	
 			}
 		}
 		return null;
 	}
 
-	Action interpretAsDoubleClick(SlideTokenizer tknzr, ScreenRegion screenRegion){
+	Action interpretAsDoubleClick(SlideTokenizer tknzr){
 		if (tknzr.hasActionWord(ActionDictionary.DOUBLE_CLICK)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
-			if (targetIterpreter.interpret(tknzr, screenRegion)){
+			if (targetIterpreter.interpret(tknzr)){
 				return new FindDoAction(targetIterpreter.getTarget(), new DoubleClickAction());
 			}
 		}
@@ -122,31 +114,31 @@ public class DefaultInterpreter implements Interpreter {
 
 
 
-	Action interpretAsExist(SlideTokenizer tknzr, ScreenRegion screenRegion){
+	Action interpretAsExist(SlideTokenizer tknzr){
 		if (tknzr.hasActionWord(ActionDictionary.EXIST)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
-			if (targetIterpreter.interpret(tknzr, screenRegion)){
+			if (targetIterpreter.interpret(tknzr)){
 				return new ExistAction(targetIterpreter.getTarget());
 			}
 		}
 		return null;
 	}
 
-	Action interpretAsNotExist(SlideTokenizer tknzr, ScreenRegion screenRegion){
+	Action interpretAsNotExist(SlideTokenizer tknzr){
 		if (tknzr.hasActionWord(ActionDictionary.NOT_EXIST)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
-			if (targetIterpreter.interpret(tknzr, screenRegion)){
+			if (targetIterpreter.interpret(tknzr)){
 				return new NotExistAction(targetIterpreter.getTarget());
 			}
 		}
 		return null;
 	}
 
-	Action interpretAsLabel(SlideTokenizer tknzr, ScreenRegion screenRegion){
+	Action interpretAsLabel(SlideTokenizer tknzr){
 		if (tknzr.getActionWords().size() == 0){	
 			// if there is a valid target
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
-			if (targetIterpreter.interpret(tknzr, screenRegion)){		
+			if (targetIterpreter.interpret(tknzr)){		
 				// show the label over that target
 				SlideElement targetElement = targetIterpreter.getTargetElement();
 				LabelAction action = new LabelAction();
@@ -172,10 +164,10 @@ public class DefaultInterpreter implements Interpreter {
 	}
 
 
-	Action interpretAsType(SlideTokenizer tknzr, ScreenRegion screenRegion){
+	Action interpretAsType(SlideTokenizer tknzr){
 		if (tknzr.hasActionWord(ActionDictionary.TYPE)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
-			if (targetIterpreter.interpret(tknzr, screenRegion)){
+			if (targetIterpreter.interpret(tknzr)){
 				SlideElement targetElement = targetIterpreter.getTargetElement();
 				TypeAction typeAction = new TypeAction();
 				typeAction.setText(targetElement.getText());
@@ -248,19 +240,19 @@ public class DefaultInterpreter implements Interpreter {
 
 		SlideTokenizer tknzr = new SlideTokenizer(slide);
 		Action action = null;
-		if ((action = interpretAsClick(tknzr, screenRegion)) != null){			
+		if ((action = interpretAsClick(tknzr)) != null){			
 
-		}else if ((action = interpretAsRightClick(tknzr, screenRegion)) != null){			
+		}else if ((action = interpretAsRightClick(tknzr)) != null){			
 
-		}else if ((action = interpretAsDoubleClick(tknzr, screenRegion)) != null){			
+		}else if ((action = interpretAsDoubleClick(tknzr)) != null){			
 
-		}else if ((action = interpretAsType(tknzr, screenRegion)) != null){
+		}else if ((action = interpretAsType(tknzr)) != null){
 
-		}else if ((action = interpretAsLabel(tknzr, screenRegion)) != null){
+		}else if ((action = interpretAsLabel(tknzr)) != null){
 
-		}else if ((action = interpretAsExist(tknzr, screenRegion)) != null){
+		}else if ((action = interpretAsExist(tknzr)) != null){
 
-		}else if ((action = interpretAsNotExist(tknzr, screenRegion)) != null){		
+		}else if ((action = interpretAsNotExist(tknzr)) != null){		
 
 		}else if ((action = interpretAsBrowser(tknzr)) != null){		
 
