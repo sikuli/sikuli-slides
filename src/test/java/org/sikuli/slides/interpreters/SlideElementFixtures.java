@@ -12,11 +12,15 @@ class SlideElementFixtures {
 	public SlideElement aboveTargetElement;
 	public SlideElement urlArgumentElement;
 	public SlideElement textElement;
-	private SlideElement parameterizedTextElement;
+	public SlideElement parameterizedTextElement;
+	public SlideElement doubleClickElement;
 
 	SlideElementFixtures(){
 		clickElement = new SlideElement();
 		clickElement.setText("click");
+		
+		doubleClickElement = new SlideElement();
+		doubleClickElement.setText("double click");
 
 		imageElement = new ImageElement();
 		imageElement.setSource(getClass().getResource("sikuli_context.png"));
