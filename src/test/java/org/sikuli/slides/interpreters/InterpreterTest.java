@@ -1,9 +1,8 @@
 package org.sikuli.slides.interpreters;
 
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalToIgnoringCase;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -14,6 +13,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.DesktopScreenRegion;
@@ -39,6 +39,8 @@ public class InterpreterTest {
 
 	private static final String TEST_TEXT = "some text";
 	private DefaultInterpreter interpreter;
+	private URL source;
+	private Slide slide;
 
 	@Test
 	public void testInterpretBrowserAction() throws MalformedURLException{
@@ -169,6 +171,8 @@ public class InterpreterTest {
 	@Before
 	public void setUp() throws IOException{
 		interpreter = new DefaultInterpreter();
+		slide = new Slide();
+		source = getClass().getResource("sikuli_context.png");
 	}
 	
 	@Test
@@ -201,7 +205,7 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testInterpretLabelAction() {
+	public void testInterpretTextWithoutKeywordAsLabelAction() {
 		Slide slide = createLabelSlide();
 		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
 		assertNotNull(action);
@@ -229,14 +233,32 @@ public class InterpreterTest {
 	
 	@Test
 	public void testInterpretTypeAction() {
-		Slide slide = createTypeSlide();
+		slide = new Slide();
+		slide.newElement().text("type").add();		
+		slide.newImageElement().source(source).bounds(100,100,50,50).add();
+		slide.newElement().text("some text").bounds(120,120,30,30).add();		
+		
 		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
 		assertNotNull(action);
 		assertThat(action.getTargetAction(), instanceOf(TypeAction.class));
 		
 		TypeAction typeAction = (TypeAction) action.getTargetAction();
-		assertThat(typeAction.getText(), equalToIgnoringCase(TEST_TEXT));
+		assertThat(typeAction.getText(), equalToIgnoringCase("some text"));
 	}	
+	
+	@Test
+	public void testInterpretTypeActionWithTextInKeywordElement(){
+		slide = new Slide();
+		slide.newElement().text("type some text").add();		
+		slide.newImageElement().source(source).bounds(100,100,50,50).add();
+		slide.newElement().bounds(120,120,30,30).add();
+		
+		FindDoAction action = (FindDoAction) interpreter.interpret(slide);
+		
+		TypeAction typeAction = (TypeAction) action.getTargetAction();
+		assertThat(typeAction.getText(), containsString("some text"));
+	}	
+
 
 	@Test
 	public void testInterpretWaitAction() {

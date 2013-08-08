@@ -3,6 +3,7 @@ package org.sikuli.slides.interpreters;
 import java.awt.Rectangle;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.sikuli.slides.models.ImageElement;
 import org.sikuli.slides.models.Slide;
@@ -21,23 +22,59 @@ import com.google.common.collect.Lists;
 class SlideTokenizer extends Slide {
 	static Logger logger = LoggerFactory.getLogger(SlideTokenizer.class);
 
-	private List<ActionWord> actionWords;
+	private List<Keyword> actionWords;
 	private List<String> argumentStrings;
 	private List<ImageElement> imageElements;
 	private Slide slide;
+//	private Map<String, SlideElement> keywords;
 
 	SlideTokenizer(Slide slide){
 		this.slide = slide;			
 	}
-
-	public boolean hasActionWord(String actionName) {
+	
+	public boolean hasKeyword(Keyword keyword){
+		String actionName = keyword.getName();
 		if (getActionWords().size() == 1){
 			return getActionWords().get(0).isMatched(actionName);
 		}
 		return false;
 	}
+	
+	// return a list of slide elements that contain keywords
+	public List<SlideElement> getKeywordElements(){
+		Collection<SlideElement> ret = Collections2.filter(slide.getElements(), new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement element) {
+				String word = element.getText();
+				if (word == null || word.isEmpty())
+					return false;
+				return findMatchedActionWord(word) != null;
+			}				    	
+		});
+		return Lists.newArrayList(ret);
+	}
+	
+	// return the first SlideELement that contains the given keyword
+	// return null if the keyword is not valid
+	// return null if no SlideElement has the keyword
+	public SlideElement findKeywordElement(String keyword) {
+		Keyword validWord = null;
+		for (Keyword w : KeywordDictionary.WORDS){
+			if (w.isMatched(keyword)){
+				validWord = w;
+			}
+		}
+		if (validWord != null){
+			for (SlideElement element : slide.getElements()){
+				if (validWord.isMatched(element.getText())){
+					return element;
+				}
+			}
+		}
+		return null;
+	}
 
-	public List<ActionWord> getActionWords() {
+	public List<Keyword> getActionWords() {
 		if (actionWords == null){
 			actionWords = extractActionWords(slide);
 		}
@@ -87,13 +124,13 @@ class SlideTokenizer extends Slide {
 	}
 
 
-	static private List<ActionWord> extractActionWords(Slide slide) {				
+	static private List<Keyword> extractActionWords(Slide slide) {				
 		Collection<SlideElement> elements = slide.getElements();
-		Collection<ActionWord> actionWords =
+		Collection<Keyword> actionWords =
 				Collections2.filter(
-						Collections2.transform(elements, new Function<SlideElement, ActionWord>(){
+						Collections2.transform(elements, new Function<SlideElement, Keyword>(){
 							@Override
-							public ActionWord apply(SlideElement element) {
+							public Keyword apply(SlideElement element) {
 								String word = element.getText();
 								if (word == null)
 									return null;
@@ -141,8 +178,8 @@ class SlideTokenizer extends Slide {
 		}));		
 	}
 
-	static private ActionWord findMatchedActionWord(String word){
-		for (ActionWord validWord : ActionDictionary.WORDS){
+	static private Keyword findMatchedActionWord(String word){
+		for (Keyword validWord : KeywordDictionary.WORDS){
 			if (validWord.isMatched(word)){
 				return validWord;
 			}
@@ -194,4 +231,5 @@ class SlideTokenizer extends Slide {
 				}));		
 	}
 
+	
 }

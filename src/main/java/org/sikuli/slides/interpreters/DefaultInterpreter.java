@@ -2,6 +2,7 @@ package org.sikuli.slides.interpreters;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -18,6 +19,7 @@ import org.sikuli.slides.actions.NotExistAction;
 import org.sikuli.slides.actions.RightClickAction;
 import org.sikuli.slides.actions.TypeAction;
 import org.sikuli.slides.actions.WaitAction;
+import org.sikuli.slides.interpreters.KeywordInterpreter.InterpretedKeyword;
 import org.sikuli.slides.models.ImageElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
@@ -25,6 +27,7 @@ import org.sikuli.slides.sikuli.ContextualImageTarget;
 import org.sikuli.slides.utils.UnitConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 
 public class DefaultInterpreter implements Interpreter {
@@ -80,20 +83,47 @@ public class DefaultInterpreter implements Interpreter {
 		public Target getTarget() {
 			return target;
 		}
+	}	
+		
+	Target interpretAsTarget(ImageElement imageElement, SlideElement targetElement){
+		if (imageElement == null || targetElement == null){
+			return null;
+		}
+		
+		Target target;
+		int w = imageElement.getCx();
+		int h = imageElement.getCy();
+		if (w > 0 && h > 0){
+
+			double xmax = 1.0 * (targetElement.getOffx() + targetElement.getCx() - imageElement.getOffx()) / w;
+			double ymax = 1.0 * (targetElement.getOffy() + targetElement.getCy() - imageElement.getOffy()) / h;
+			double xmin = 1.0 * (targetElement.getOffx() - imageElement.getOffx()) / w;
+			double ymin = 1.0 * (targetElement.getOffy() - imageElement.getOffy()) / h;
+
+			xmax = Math.min(1.0, xmax);
+			ymax = Math.min(1.0, ymax);
+			xmin = Math.max(0, xmin);
+			ymin = Math.max(0, ymin);
+
+			target = new ContextualImageTarget(imageElement.getSource(), xmin, ymin, xmax, ymax); 
+			return target;
+		}
+		return null;
 	}
 	
-	Action interpretAsClick(SlideTokenizer tknzr){
-		if (tknzr.hasActionWord(ActionDictionary.CLICK)){
-			TargetIterpreter targetIterpreter = new TargetIterpreter();			
-			if (targetIterpreter.interpret(tknzr)){
-				return new FindDoAction(targetIterpreter.getTarget(), new LeftClickAction());
-			}
+	Action interpretAsClick(Slide slide){				
+		if (slide.select().hasKeyword(KeywordDictionary.CLICK).exist()){
+			SlideElement targetElement = slide.select().isTarget().first();			
+			ImageElement imageElement = (ImageElement) slide.select().intersects(targetElement).isImage().first();			
+			Target target = interpretAsTarget(imageElement, targetElement);
+			if (target != null)
+				return new FindDoAction(target, new LeftClickAction());
 		}
 		return null;
 	}
 
 	Action interpretAsRightClick(SlideTokenizer tknzr){
-		if (tknzr.hasActionWord(ActionDictionary.RIGHT_CLICK)){
+		if (tknzr.hasKeyword(KeywordDictionary.RIGHT_CLICK)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
 			if (targetIterpreter.interpret(tknzr)){
 				return new FindDoAction(targetIterpreter.getTarget(), new RightClickAction());	
@@ -103,7 +133,7 @@ public class DefaultInterpreter implements Interpreter {
 	}
 
 	Action interpretAsDoubleClick(SlideTokenizer tknzr){
-		if (tknzr.hasActionWord(ActionDictionary.DOUBLE_CLICK)){
+		if (tknzr.hasKeyword(KeywordDictionary.DOUBLE_CLICK)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
 			if (targetIterpreter.interpret(tknzr)){
 				return new FindDoAction(targetIterpreter.getTarget(), new DoubleClickAction());
@@ -115,7 +145,7 @@ public class DefaultInterpreter implements Interpreter {
 
 
 	Action interpretAsExist(SlideTokenizer tknzr){
-		if (tknzr.hasActionWord(ActionDictionary.EXIST)){
+		if (tknzr.hasKeyword(KeywordDictionary.EXIST)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
 			if (targetIterpreter.interpret(tknzr)){
 				return new ExistAction(targetIterpreter.getTarget());
@@ -125,7 +155,7 @@ public class DefaultInterpreter implements Interpreter {
 	}
 
 	Action interpretAsNotExist(SlideTokenizer tknzr){
-		if (tknzr.hasActionWord(ActionDictionary.NOT_EXIST)){
+		if (tknzr.hasKeyword(KeywordDictionary.NOT_EXIST)){
 			TargetIterpreter targetIterpreter = new TargetIterpreter();			
 			if (targetIterpreter.interpret(tknzr)){
 				return new NotExistAction(targetIterpreter.getTarget());
@@ -162,24 +192,54 @@ public class DefaultInterpreter implements Interpreter {
 		}
 		return null;
 	}
-
-
-	Action interpretAsType(SlideTokenizer tknzr){
-		if (tknzr.hasActionWord(ActionDictionary.TYPE)){
-			TargetIterpreter targetIterpreter = new TargetIterpreter();			
-			if (targetIterpreter.interpret(tknzr)){
-				SlideElement targetElement = targetIterpreter.getTargetElement();
+	
+	Action interpretAsType(Slide slide){
+		SlideElement keywordElement = null;
+		if ((keywordElement = slide.select().hasKeyword(KeywordDictionary.TYPE).first())!= null){			
+			SlideElement targetElement = slide.select().isTarget().first();
+			ImageElement imageElement = (ImageElement) slide.select().intersects(targetElement).isImage().first();			
+			Target target = interpretAsTarget(imageElement, targetElement);			
+			if (target != null){
 				TypeAction typeAction = new TypeAction();
-				typeAction.setText(targetElement.getText());
-				return new FindDoAction(targetIterpreter.getTarget(), typeAction);
+				
+				String txt = keywordElement.getText();
+				int i = txt.indexOf(" ");
+				System.out.println(i);
+				if (i != -1){
+					txt = txt.substring(i, txt.length()); 
+				}else {
+					txt = "";
+				}
+				
+				if (txt.isEmpty()){
+					txt = targetElement.getText();
+				}
+				
+				typeAction.setText(txt);				
+				return new FindDoAction(target, typeAction);
 			}
 		}
 		return null;
 	}
+	
+//	Action interpretAsType(SlideTokenizer tknzr){
+//		SlideElement keywordElement = null;
+//		if ((keywordElement = tknzr.findKeywordElement(KeywordDictionary.TYPE)) != null){
+//			TargetIterpreter targetIterpreter = new TargetIterpreter();			
+//			if (targetIterpreter.interpret(tknzr)){
+//				SlideElement targetElement = targetIterpreter.getTargetElement();
+//				TypeAction typeAction = new TypeAction();
+//				
+//				typeAction.setText(targetElement.getText());
+//				return new FindDoAction(targetIterpreter.getTarget(), typeAction);
+//			}
+//		}		
+//		return null;
+//	}
 
 
 	Action interpretAsBrowser(SlideTokenizer tknzr){
-		if (tknzr.hasActionWord(ActionDictionary.BROWSER)){			
+		if (tknzr.hasKeyword(KeywordDictionary.BROWSER)){			
 			List<String> arguments = tknzr.getArgumentStrings();
 			if (arguments.size() > 0){				
 				BrowserAction a = new BrowserAction();
@@ -199,7 +259,7 @@ public class DefaultInterpreter implements Interpreter {
 	}	
 
 	Action interpretAsWait(SlideTokenizer tknzr){
-		if (tknzr.hasActionWord(ActionDictionary.WAIT)){			
+		if (tknzr.hasKeyword(KeywordDictionary.WAIT)){			
 			List<String> arguments = tknzr.getArgumentStrings();
 			if (arguments.size() > 0){				
 				WaitAction a = new WaitAction();
@@ -234,19 +294,91 @@ public class DefaultInterpreter implements Interpreter {
 		}
 		return null;
 	}	
+	
+	
+//	static class TypeInterpreter implements BaseInterpreter<TypeInterpreter.Result> {
+//		
+//		class Result implements BaseInterpretationResult{
+//			@Override
+//			public Slide getUninterpretedSlide() {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}			
+//		}
+//
+//		@Override
+//		public boolean interpret(Slide slide) {
+//			// TODO Auto-generated method stub
+//			return true;
+//		}
+//
+//		@Override
+//		public Result getResult() {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
+//	}
+	
+//	static class TypeInterpreter {
+//		
+//		public boolean interpret(){
+//			if (findKeyword() && findTarget() && findArgument()){
+//				
+//				
+//				
+//				return true;	
+//			}else if (findKeyword() && findArgument()){
+//				
+//				
+//				
+//				return true;
+//			}
+//			return false;
+//		}
+//		
+//		public boolean findKeyword(){
+//			return true;
+//		}
+//
+//		
+//		public boolean findTarget(){
+//			return true;
+//		}
+//		
+//		public boolean findArgument(){
+//			return true;
+//		}
+//		
+////		public void consumeKeyword(){
+////			
+////		}
+//		//public void consumeKeyword();		
+//	}
 
 	@Override
 	public Action interpret(Slide slide){
+//		
+//		KeywordInterpreter ki = new KeywordInterpreter();
+//		boolean ret = ki.interpret(slide);		
+//		if (ret){		
+//			List<InterpretedKeyword> keywords = ki.getResult().getInterpretedKeywords();
+//			for (InterpretedKeyword keyword : keywords){
+//							
+//				
+//			
+//			}
+//			
+//		}
 
 		SlideTokenizer tknzr = new SlideTokenizer(slide);
 		Action action = null;
-		if ((action = interpretAsClick(tknzr)) != null){			
+		if ((action = interpretAsClick(slide)) != null){			
 
 		}else if ((action = interpretAsRightClick(tknzr)) != null){			
 
 		}else if ((action = interpretAsDoubleClick(tknzr)) != null){			
 
-		}else if ((action = interpretAsType(tknzr)) != null){
+		}else if ((action = interpretAsType(slide)) != null){
 
 		}else if ((action = interpretAsLabel(tknzr)) != null){
 

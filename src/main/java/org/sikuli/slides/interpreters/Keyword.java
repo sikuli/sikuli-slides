@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-class Keyword {
+public class Keyword {
 
 	Keyword(String name){
 		this.setName(name);
