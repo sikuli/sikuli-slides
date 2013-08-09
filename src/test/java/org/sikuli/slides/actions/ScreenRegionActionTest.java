@@ -57,7 +57,7 @@ public class ScreenRegionActionTest {
 
 	@Test
 	public void testFindDoLeftClick() throws ActionExecutionException {
-		Action action = new FindDoAction(new IdentiyScreenRegionTarget(), new LeftClickAction());
+		Action action = new TargetAction(new IdentiyScreenRegionTarget(), new LeftClickAction());
 		action.execute(context);
 		
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -110,7 +110,7 @@ public class ScreenRegionActionTest {
 	public void testFindDoType() throws ActionExecutionException{
 		TypeAction typeAction = new TypeAction();
 		typeAction.setText("abcde");		
-		Action action = new FindDoAction(new IdentiyScreenRegionTarget(), typeAction);
+		Action action = new TargetAction(new IdentiyScreenRegionTarget(), typeAction);
 		action.execute(context);
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());

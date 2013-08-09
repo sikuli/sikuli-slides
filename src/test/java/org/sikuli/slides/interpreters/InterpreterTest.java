@@ -22,7 +22,7 @@ import org.sikuli.slides.actions.Action;
 import org.sikuli.slides.actions.BrowserAction;
 import org.sikuli.slides.actions.DoubleClickAction;
 import org.sikuli.slides.actions.ExistAction;
-import org.sikuli.slides.actions.FindDoAction;
+import org.sikuli.slides.actions.TargetAction;
 import org.sikuli.slides.actions.LabelAction;
 import org.sikuli.slides.actions.LeftClickAction;
 import org.sikuli.slides.actions.NotExistAction;
@@ -47,19 +47,13 @@ public class InterpreterTest {
 		URL url = new URL("http://slides.sikuli.org");
 		
 		Slide slide = new Slide();
-		SlideElement actionElement = new SlideElement();
-		actionElement.setText("browser");
-
-		SlideElement argumentElement = new SlideElement();
-		argumentElement.setText(url.toString());
-		
-		slide.add(actionElement);
-		slide.add(argumentElement);
+		slide.newKeywordElement().keyword(KeywordDictionary.BROWSER).add();
+		slide.newElement().text(url.toString()).add();
 		
 		Interpreter interpreter = new DefaultInterpreter();
 		Action action = interpreter.interpret(slide);
 		
-		assertNotNull(action);
+		assertThat(action, notNullValue());
 		assertEquals("browser action", BrowserAction.class, action.getClass());
 		
 		BrowserAction browserAction = (BrowserAction) action;
@@ -87,61 +81,17 @@ public class InterpreterTest {
 		slide.add(targetElement);
 	}
 	
-	private Slide createClickSlide(){		
+	private Slide createKeywordWithTargetSlide(Keyword keyword){		
 		Slide slide = new Slide();
-		SlideElement actionElement = new SlideElement();
-		actionElement.setText("click");
-		slide.add(actionElement);
-		
-		addTarget(slide);		
+		slide.newKeywordElement().keyword(keyword).add();		
+		addTarget(slide);
 		return slide;
 	}
 	
 	private Slide createWaitSlide(String text){		
 		Slide slide = new Slide();
-		SlideElement actionElement = new SlideElement();
-		actionElement.setText("wait");
-		slide.add(actionElement);
-
-		SlideElement argumentElement = new SlideElement();
-		argumentElement.setText(text);
-		slide.add(argumentElement);
-		return slide;
-	}
-	
-	private Slide createRightClickSlide(){		
-		Slide slide = new Slide();
-		SlideElement actionElement = new SlideElement();
-		actionElement.setText("right click");
-		slide.add(actionElement);
-		
-		addTarget(slide);		
-		return slide;
-	}	
-	
-	private Slide createDoubleClickSlide(){		
-		Slide slide = new Slide();
-		SlideElement actionElement = new SlideElement();
-		actionElement.setText("double click");
-		slide.add(actionElement);
-		
-		addTarget(slide);		
-		return slide;
-	}	
-	
-	private Slide createLabelSlide(){		
-		Slide slide = new Slide();		
-		addTarget(slide);		
-		return slide;
-	}
-	
-	private Slide createExistSlide(){		
-		Slide slide = new Slide();
-		SlideElement actionElement = new SlideElement();
-		actionElement.setText("exist");
-		slide.add(actionElement);
-		
-		addTarget(slide);		
+		slide.newKeywordElement().keyword(KeywordDictionary.WAIT).add();
+		slide.newElement().text(text).add();
 		return slide;
 	}
 	
@@ -155,19 +105,6 @@ public class InterpreterTest {
 		return slide;
 	}	
 	
-	
-	private Slide createTypeSlide() {
-		Slide slide = new Slide();
-		SlideElement actionElement = new SlideElement();
-		actionElement.setText("type");
-		slide.add(actionElement);
-		
-		addTarget(slide);		
-		return slide;
-	}
-
-	
-	
 	@Before
 	public void setUp() throws IOException{
 		interpreter = new DefaultInterpreter();
@@ -176,69 +113,85 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testInterpretLeftClickAction() throws IOException {
-		Slide slide = createClickSlide();		
-		FindDoAction action = (FindDoAction) interpreter.interpret(slide);
+	public void testLeftClickAction(){
+		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.CLICK);		
+		TargetAction action = (TargetAction) interpreter.interpret(slide);
 		
-		assertNotNull(action);
-		assertThat(action, instanceOf(FindDoAction.class));
+		assertThat(action, notNullValue());
+		assertThat(action, instanceOf(TargetAction.class));
 		assertThat(action.getTargetAction(), instanceOf(LeftClickAction.class));	
 	}
 	
 	@Test
-	public void testInterpretRightClickAction() throws IOException {
-		Slide slide = createRightClickSlide();		
-		FindDoAction action = (FindDoAction) interpreter.interpret(slide);
+	public void testRightClickAction() {
+		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.RIGHT_CLICK);		
+		TargetAction action = (TargetAction) interpreter.interpret(slide);
 		
 		assertNotNull(action);
-		assertThat(action, instanceOf(FindDoAction.class));
+		assertThat(action, instanceOf(TargetAction.class));
 		assertThat(action.getTargetAction(), instanceOf(RightClickAction.class));
 	}
 	
 	@Test
-	public void testInterpretDoubleClickAction() {
-		Slide slide = createDoubleClickSlide();
-		FindDoAction action = (FindDoAction) interpreter.interpret(slide);
+	public void testDoubleClickAction() {
+		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.DOUBLE_CLICK);
+		TargetAction action = (TargetAction) interpreter.interpret(slide);
 		
 		assertNotNull(action);
 		assertThat(action.getTargetAction(), instanceOf(DoubleClickAction.class));
 	}
 	
 	@Test
-	public void testInterpretTextWithoutKeywordAsLabelAction() {
-		Slide slide = createLabelSlide();
-		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
-		assertNotNull(action);
+	public void testLabelActionFromOnlyText() {
+		Slide slide = new Slide();
+		slide.newElement().text("label").add();
 		
-		assertThat(action.getTargetAction(), instanceOf(LabelAction.class));
-		LabelAction label = (LabelAction) action.getTargetAction();
-		assertEquals(TEST_TEXT, label.getText());
-		assertEquals(36, label.getFontSize());
+		LabelAction action = (LabelAction) interpreter.interpret(slide);
+		assertThat(action, notNullValue());
+		
+//		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
+//		assertNotNull(action);
+//		
+//		assertThat(action.getTargetAction(), instanceOf(LabelAction.class));
+//		LabelAction label = (LabelAction) action.getTargetAction();
+//		assertEquals(TEST_TEXT, label.getText());
+//		assertEquals(36, label.getFontSize());
 	}	
 	
 	@Test
-	public void testInterpretExistAction() {
-		Slide slide = createExistSlide();
+	public void testLabelActionFromOnlyTextTarget() {
+		Slide slide = new Slide();
+		slide.newElement().bounds(100,100,50,50).text("label").add();
+		slide.newImageElement().source(source).bounds(0,0,200,200).add();
+		
+		TargetAction action = (TargetAction) interpreter.interpret(slide);
+		assertThat(action, notNullValue());		
+		assertThat(action.getTargetAction(), instanceOf(LabelAction.class));
+	}	
+	
+	@Test
+	public void testExistAction() {
+		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.EXIST);
 		ExistAction action = (ExistAction) interpreter.interpret(slide);		
-		assertNotNull(action);
+		assertThat(action, notNullValue());
 	}	
 
 	@Test
 	public void testInterpretNotExistAction() {
-		Slide slide = createNotExistSlide();
+		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.NOT_EXIST);
 		NotExistAction action = (NotExistAction) interpreter.interpret(slide);		
 		assertNotNull(action);
 	}	
 	
 	
 	@Test
-	public void testInterpretTypeAction() {
+	public void testTypeActionOnTarget() {
 		slide = new Slide();
-		slide.newElement().text("type").add();		
+		slide.newKeywordElement().keyword(KeywordDictionary.TYPE).add();		
 		slide.newImageElement().source(source).bounds(100,100,50,50).add();
 		slide.newElement().text("some text").bounds(120,120,30,30).add();		
 		
-		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
+		TargetAction action = (TargetAction) interpreter.interpret(slide);		
 		assertNotNull(action);
 		assertThat(action.getTargetAction(), instanceOf(TypeAction.class));
 		
@@ -247,22 +200,28 @@ public class InterpreterTest {
 	}	
 	
 	@Test
-	public void testInterpretTypeActionWithTextInKeywordElement(){
+	public void testTypeActionWithTextInKeywordElement() {
 		slide = new Slide();
-		slide.newElement().text("type some text").add();		
-		slide.newImageElement().source(source).bounds(100,100,50,50).add();
-		slide.newElement().bounds(120,120,30,30).add();
+		slide.newKeywordElement().keyword(KeywordDictionary.TYPE).text("some text").add();		
 		
-		FindDoAction action = (FindDoAction) interpreter.interpret(slide);
+		TypeAction action = (TypeAction) interpreter.interpret(slide);		
+		assertThat(action, notNullValue());
+	}
+	
+	@Test
+	public void testTypeActionWithTextInAnotherElement() {
+		slide = new Slide();
+		slide.newKeywordElement().keyword(KeywordDictionary.TYPE).add();
+		slide.newElement().text("some text").add();
 		
-		TypeAction typeAction = (TypeAction) action.getTargetAction();
-		assertThat(typeAction.getText(), containsString("some text"));
-	}	
+		TypeAction action = (TypeAction) interpreter.interpret(slide);		
+		assertThat(action, notNullValue());
+	}
 
 
 	@Test
 	public void testInterpretWaitAction() {
-		Slide slide = createWaitSlide("2 seconds");		
+		Slide slide = createWaitSlide("2 seconds");				
 		Action action = interpreter.interpret(slide);
 		
 		assertNotNull(action);

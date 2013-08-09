@@ -11,7 +11,6 @@ import org.sikuli.slides.models.SlideElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -65,23 +64,6 @@ public class Selector {
 		return this;
 	}
 
-	public Selector hasKeyword(){		
-		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
-			@Override
-			public boolean apply(SlideElement element) {
-				for (Keyword w : KeywordDictionary.WORDS){
-					String text = element.getText();				
-					if (w.isMatched(text))
-						return true;
-				}
-				return false;
-			}		
-		});
-		return this;
-	}
-
-
-
 	public Selector hasText(){
 		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
 			@Override
@@ -91,61 +73,6 @@ public class Selector {
 		});
 		return this;
 	}
-
-	public Selector hasKeyword(final Keyword keyword){
-		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
-			@Override
-			public boolean apply(SlideElement element) {				
-				return keyword.isMatched(element.getText());
-			}		
-		});
-		return this;
-	}
-
-	public Selector hasNoKeyword(){		
-		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
-			@Override
-			public boolean apply(SlideElement element) {
-				for (Keyword w : KeywordDictionary.WORDS){
-					String text = element.getText();				
-					if (w.isMatched(text))
-						return false;
-				}
-				return true;
-			}		
-		});
-		return this;
-	}
-
-
-	//	public Selector hasKeyword(final String keyword){		
-	//		Keyword validWord = null;
-	//		for (Keyword w : KeywordDictionary.WORDS){
-	//			if (w.isMatched(keyword)){
-	//				validWord = w;
-	//			}
-	//		}
-	//		final Keyword validWord1 = validWord;
-	//		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
-	//			@Override
-	//			public boolean apply(SlideElement element) {				
-	//				return validWord1.isMatched(element.getText());
-	//			}		
-	//		});
-	//		return this;
-	//	}
-
-
-
-	//	public Selector hasText(){
-	//		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
-	//			@Override
-	//			public boolean apply(SlideElement e) {
-	//				return e.getText() != null && ! e.getText().isEmpty();
-	//			}		
-	//		});
-	//		return this;
-	//	}
 
 	public Selector isTarget(){
 		final List<SlideElement> images = Selector.select(elements).isImage().all();		

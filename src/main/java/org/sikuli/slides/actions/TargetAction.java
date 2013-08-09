@@ -6,18 +6,18 @@ import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.api.Context;
 
-public class FindDoAction implements Action {
+public class TargetAction implements Action {
 
 	Target target;
 	private Action targetAction;
 	private Action noTargetAction;
 	
-	public FindDoAction(Target target, Action targetAction){
+	public TargetAction(Target target, Action targetAction){
 		this.target = target;
 		this.targetAction = targetAction;
 	}
 	
-	public FindDoAction(Target target, Action targetAction, Action noTargetAction){
+	public TargetAction(Target target, Action targetAction, Action noTargetAction){
 		this.target = target;
 		this.targetAction = targetAction;
 		this.noTargetAction = noTargetAction;

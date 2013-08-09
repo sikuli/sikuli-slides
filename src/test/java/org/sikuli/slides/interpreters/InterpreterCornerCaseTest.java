@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.StaticImageScreenRegion;
-import org.sikuli.slides.actions.FindDoAction;
+import org.sikuli.slides.actions.TargetAction;
 import org.sikuli.slides.actions.LabelAction;
 import org.sikuli.slides.models.Slide;
 
@@ -36,7 +36,7 @@ public class InterpreterCornerCaseTest {
 		slide.add(fixtures.imageElement);
 		slide.add(fixtures.belowTargetElement);
 
-		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
+		TargetAction action = (TargetAction) interpreter.interpret(slide);		
 		assertNotNull(action);
 	}
 	
@@ -47,7 +47,7 @@ public class InterpreterCornerCaseTest {
 		slide.add(fixtures.imageElement);
 		slide.add(fixtures.aboveTargetElement);
 
-		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
+		TargetAction action = (TargetAction) interpreter.interpret(slide);		
 		assertNotNull(action);		
 	}	
 	
