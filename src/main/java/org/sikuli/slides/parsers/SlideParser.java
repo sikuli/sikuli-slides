@@ -13,7 +13,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.sikuli.slides.interpreters.Keyword;
+import org.sikuli.slides.interpreters.KeywordDictionary;
 import org.sikuli.slides.models.ImageElement;
+import org.sikuli.slides.models.KeywordElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
 import org.w3c.dom.Document;
@@ -90,14 +93,53 @@ public class SlideParser {
 		}		
 	}
 	
-	void parseScreenshotElement(Node node, ImageElement e, Map<String,String> map){
+	ImageElement parseScreenshotElement(Node node, Map<String,String> map){
+		ImageElement e = new ImageElement();
 		parseSlideElement(node, e);			
 		Element blip = (Element) ((Element) node).getElementsByTagName("a:blip").item(0);			
 		String relationshipID = blip.getAttribute("r:embed");			
 		String target = map.get(relationshipID);
 		e.setFileName(target);
+		return e;
 	}
 	
+	
+	String parseText(Node node){
+		Element element = (Element) node;
+		NodeList txBodyList = element.getElementsByTagName("p:txBody");
+		if (txBodyList.getLength() > 0){
+			Element txBodyElement = (Element) txBodyList.item(0);					
+			NodeList l = txBodyElement.getElementsByTagName("a:t");
+			if (l.getLength() > 0){
+				return l.item(0).getTextContent();					
+			}
+		}
+		return "";
+	}
+	
+	public KeywordElement parseKeywordElement(Node node){
+		String text = parseText(node);
+		if (text == null)
+			return null;
+		
+		Keyword keyword = KeywordDictionary.lookup(text);
+		if (keyword == null)
+			return null;
+		
+		KeywordElement keywordElement = new KeywordElement();
+		keywordElement.setKeyword(keyword);
+		
+		parseSlideElement(node, keywordElement);
+		
+		String matchedPrefix = keyword.match(text);
+				
+		// remove the keyword from the text
+		String rest = text.substring(matchedPrefix.length(), text.length());
+		rest = rest.trim();		
+		keywordElement.setText(rest);
+		
+		return keywordElement;
+	}
 	
 	public Slide parse(URL xmlUrl, URL relUrl){
 		Slide slide = new Slide();
@@ -123,23 +165,30 @@ public class SlideParser {
 		
 		NodeList shapeNodeList = doc.getElementsByTagName("p:sp");			
 		for (int i = 0 ; i < shapeNodeList.getLength(); ++ i){
-			Node nNode = shapeNodeList.item(i);							
-			if (((Element) nNode).getElementsByTagName("a:blip").getLength()>0){			
-				ImageElement e = new ImageElement();
-				parseScreenshotElement(nNode, e, map);	
-				slide.add(e);				
-			}else{		
-				SlideElement e = new SlideElement();
-				parseSlideElement(nNode, e);		
+			
+			Node nNode = shapeNodeList.item(i);	
+			SlideElement e;
+			if ((e = parseKeywordElement(nNode)) != null){
+							
 				slide.add(e);
+				
+			}else{
+									
+				if (((Element) nNode).getElementsByTagName("a:blip").getLength()>0){								
+					e = parseScreenshotElement(nNode, map);	
+					slide.add(e);				
+				}else{		
+					e = new SlideElement();
+					parseSlideElement(nNode, e);		
+					slide.add(e);
+				}
 			}
 		}
 		
 		NodeList picList = doc.getElementsByTagName("p:pic");			
 		for (int i = 0 ; i < picList.getLength(); ++ i){
 			Node nNode = picList.item(i);
-			ImageElement e = new ImageElement();
-			parseScreenshotElement(nNode, e, map);	
+			SlideElement e = parseScreenshotElement(nNode, map);	
 			slide.add(e);
 		}		
 		return slide;

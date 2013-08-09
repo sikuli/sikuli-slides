@@ -17,7 +17,7 @@ public class ImageElement extends SlideElement {
 		this.fileName = fileName;
 	}
 	public URL getSource() {
-		try {
+		try {			
 			return (new File(fileName)).toURI().toURL();
 		} catch (MalformedURLException e) {
 		}

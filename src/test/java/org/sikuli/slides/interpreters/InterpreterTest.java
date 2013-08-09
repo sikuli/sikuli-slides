@@ -95,16 +95,6 @@ public class InterpreterTest {
 		return slide;
 	}
 	
-	private Slide createNotExistSlide(){		
-		Slide slide = new Slide();
-		SlideElement actionElement = new SlideElement();
-		actionElement.setText("not exist");
-		slide.add(actionElement);
-		
-		addTarget(slide);		
-		return slide;
-	}	
-	
 	@Before
 	public void setUp() throws IOException{
 		interpreter = new DefaultInterpreter();

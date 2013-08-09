@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
@@ -21,20 +22,20 @@ import org.sikuli.slides.models.Slide;
 public class InterpreterCornerCaseTest {
 
 	private DefaultInterpreter interpreter;
-	private SlideElementFixtures fixtures;	
+	private URL source;	
 
 	@Before
 	public void setUp() throws IOException{		
 		interpreter = new DefaultInterpreter();		
-		fixtures = new SlideElementFixtures();
+		source = getClass().getResource("sikuli_context.png");
 	}
 	
 	@Test
 	public void testInterpretLeftClickActionWhenTargetExceedsScreenshotAbove() throws IOException {
 		Slide slide = new Slide();
-		slide.add(fixtures.clickElement);
-		slide.add(fixtures.imageElement);
-		slide.add(fixtures.belowTargetElement);
+		slide.newImageElement().source(source).bounds(20,20,200,200).add();
+		slide.newElement().bounds(0,0,100,100).add();
+		slide.newKeywordElement().keyword(KeywordDictionary.CLICK).add();
 
 		TargetAction action = (TargetAction) interpreter.interpret(slide);		
 		assertNotNull(action);
@@ -43,9 +44,9 @@ public class InterpreterCornerCaseTest {
 	@Test
 	public void testInterpretLeftClickActionWhenTargetExceedsScreenshotBelow() throws IOException {
 		Slide slide = new Slide();
-		slide.add(fixtures.clickElement);
-		slide.add(fixtures.imageElement);
-		slide.add(fixtures.aboveTargetElement);
+		slide.newImageElement().source(source).bounds(0,0,100,100).add();
+		slide.newElement().bounds(50,50,100,100).add();
+		slide.newKeywordElement().keyword(KeywordDictionary.CLICK).add();
 
 		TargetAction action = (TargetAction) interpreter.interpret(slide);		
 		assertNotNull(action);		
@@ -54,9 +55,10 @@ public class InterpreterCornerCaseTest {
 	@Test
 	public void testInterpretLabelActionWithoutAnyTarget() throws IOException {
 		Slide slide = new Slide();
-		slide.add(fixtures.textElement);
+		slide.newElement().text("some label").add();
+		
 		LabelAction action = (LabelAction) interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
-		assertThat(action.getText(), equalToIgnoringCase(fixtures.textElement.getText()));
+		assertThat(action.getText(), equalToIgnoringCase("some label"));
 	}	
 }

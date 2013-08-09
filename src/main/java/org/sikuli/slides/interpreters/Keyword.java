@@ -2,6 +2,7 @@ package org.sikuli.slides.interpreters;
 
 import java.util.List;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 public class Keyword {
@@ -59,6 +60,10 @@ public class Keyword {
 
 	static Builder word(String name){
 		return new Builder(name);
+	}
+	
+	public String toString(){
+		return Objects.toStringHelper("Keyword").add("name", name).add("aliases", aliases).toString();
 	}
 
 }

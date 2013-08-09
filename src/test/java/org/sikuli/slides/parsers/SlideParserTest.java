@@ -19,7 +19,8 @@ public class SlideParserTest {
 		Slide slide = parser.parse(xml, rel);
 		
 		System.out.println(slide);	
-		assertEquals("size", slide.getElements().size(),4);		
+		assertEquals("size", 4, slide.getElements().size());
+		
 	}
 
 	@Test 
@@ -32,7 +33,7 @@ public class SlideParserTest {
 		Slide slide = parser.parse(xml, rel);
 		
 		System.out.println(slide);	
-		assertEquals("size", slide.getElements().size(),3);
+		assertEquals("size", 3, slide.getElements().size());
 	}
 
 }

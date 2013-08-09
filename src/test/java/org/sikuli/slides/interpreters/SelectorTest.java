@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sikuli.slides.models.ImageElement;
 import org.sikuli.slides.models.Slide;
 import org.sikuli.slides.models.SlideElement;
 
@@ -119,34 +118,6 @@ public class SelectorTest {
 		assertThat(ret.get(0), equalTo(e1));
 	}
 
-
-//	@Test
-//	public void testAliasShouldBeSelectedByHasKeyword(){
-//
-////		slide.newKeywordElement().keyword(KeywordDictionary.CLICK).add();
-//		
-//		slide.newElement().text("double click").add();
-//		slide.newElement().text("double-click").add();
-//		slide.newElement().text("doubleclick").add();
-//		
-////		slide.identifyKeywords();
-//		
-//		SlideElement e1 = new SlideElement();
-//		e1.setText("double click");
-//
-//		SlideElement e2 = new SlideElement();
-//		e2.setText("double-click");
-//
-//		SlideElement e3 = new SlideElement();
-//		e3.setText("doubleclick");
-//
-//		slide.add(e1);
-//		slide.add(e2);
-//		slide.add(e3);
-//
-//		int n = Selector.select(slide).hasKeyword().all().size();
-//		assertThat(n, equalTo(3));
-//	}
 
 	@Test
 	public void testIsTargetCanFindOneTargetOnImage(){

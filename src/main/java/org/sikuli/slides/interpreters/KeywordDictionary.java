@@ -2,7 +2,7 @@ package org.sikuli.slides.interpreters;
 
 import static org.sikuli.slides.interpreters.Keyword.*;
 
-class KeywordDictionary{
+public class KeywordDictionary{
 	
 	final static Keyword CLICK = word("click").addAlias("leftclick").addAlias("left-click").build();
 	final static Keyword RIGHT_CLICK = word("Right Click").addAlias("right-click").addAlias("rightclick").build();
@@ -19,7 +19,7 @@ class KeywordDictionary{
 	final static Keyword[] WORDS = {
 		CLICK, RIGHT_CLICK, DOUBLE_CLICK, TYPE, DRAG, DROP, BROWSER, NOT_EXIST, EXIST, WAIT};
 	
-	public Keyword lookup(String name){
+	final static public Keyword lookup(String name){
 		for (Keyword word : WORDS){
 			if (word.isMatched(name))
 				return word;
