@@ -1,7 +1,7 @@
 package org.sikuli.slides.api;
 
-import org.sikuli.slides.actions.Action;
-import org.sikuli.slides.models.Slide;
+import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.models.Slide;
 
 public class SlideExecutionException extends Exception {
 	

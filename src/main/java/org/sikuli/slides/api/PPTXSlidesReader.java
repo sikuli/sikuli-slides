@@ -7,8 +7,8 @@ import java.net.URL;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
-import org.sikuli.slides.models.Slide;
-import org.sikuli.slides.parsers.SlideParser;
+import org.sikuli.slides.api.models.Slide;
+import org.sikuli.slides.api.parsers.SlideParser;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Utils;
 import org.slf4j.Logger;

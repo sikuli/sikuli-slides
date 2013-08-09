@@ -2,7 +2,7 @@ package org.sikuli.slides.api;
 
 import java.util.List;
 
-import org.sikuli.slides.models.Slide;
+import org.sikuli.slides.api.models.Slide;
 
 public interface SlidesExecutor {
 			

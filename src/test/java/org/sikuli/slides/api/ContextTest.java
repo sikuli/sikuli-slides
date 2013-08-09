@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 import org.junit.Test;
-import org.sikuli.slides.actions.LabelAction;
+import org.sikuli.slides.api.actions.LabelAction;
 
 public class ContextTest {
 	

@@ -15,8 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.DefaultLocation;
 import org.sikuli.api.visual.DesktopCanvas;
-import org.sikuli.slides.actions.InputDetector;
-import org.sikuli.slides.models.Slide;
+import org.sikuli.slides.api.actions.InputDetector;
+import org.sikuli.slides.api.models.Slide;
 
 public class AutomationExecutorTest {	
 	

@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.List;
 
 import org.junit.Test;
-import org.sikuli.slides.models.Slide;
+import org.sikuli.slides.api.models.Slide;
 
 public class SlidesReaderTest {
 	

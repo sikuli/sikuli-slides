@@ -5,11 +5,11 @@ import java.util.Map;
 
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
-import org.sikuli.slides.actions.Action;
-import org.sikuli.slides.actions.ActionExecutionException;
-import org.sikuli.slides.interpreters.DefaultInterpreter;
-import org.sikuli.slides.interpreters.Interpreter;
-import org.sikuli.slides.models.Slide;
+import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.actions.ActionExecutionException;
+import org.sikuli.slides.api.interpreters.DefaultInterpreter;
+import org.sikuli.slides.api.interpreters.Interpreter;
+import org.sikuli.slides.api.models.Slide;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
