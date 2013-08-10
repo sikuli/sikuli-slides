@@ -20,6 +20,7 @@ public class LabelAction implements Action {
 	private String text = "";
 	private int fontSize = 12;
 	private int duration = 3000;
+	private Color backgroundColor = Color.yellow;
 
 	@Override
 	public void execute(Context context){
@@ -28,9 +29,13 @@ public class LabelAction implements Action {
 
 		String textToDisplay = context.render(text);
 		
+		
+		//backgroundColor = Color.decodenm)
+		
 		Canvas canvas = new ScreenRegionCanvas(targetRegion);
 		canvas.addLabel(targetRegion, textToDisplay)
 		.withColor(Color.black).withFontSize((int)fontSize).withLineWidth(2)
+		.withBackgroundColor(backgroundColor)
 		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
 		canvas.display(1.0*duration/1000);		
 	}
@@ -57,6 +62,14 @@ public class LabelAction implements Action {
 
 	public void setDuration(int duration) {
 		this.duration = duration;
+	}
+
+	public Color getBackgroundColor() {
+		return backgroundColor;
+	}
+
+	public void setBackgroundColor(Color backgroundColor) {
+		this.backgroundColor = backgroundColor;
 	}
 
 }

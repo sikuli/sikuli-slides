@@ -15,10 +15,21 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class AutomationExecutor implements SlidesExecutor {
+	
+	
+	private Context context;
+
+	public AutomationExecutor(Context context){
+		this.context = context;
+	}
+	
+	public AutomationExecutor(){
+		context = new Context();
+	}
 
 	@Override
 	public void execute(List<Slide> slides) throws SlideExecutionException {
-		ScreenRegion screenRegion = new DesktopScreenRegion();		
+				
 		Interpreter interpreter = new DefaultInterpreter();
 		
 		List<Action> actions = Lists.newArrayList();
@@ -27,10 +38,7 @@ public class AutomationExecutor implements SlidesExecutor {
 			Action action = interpreter.interpret(slide);
 			actions.add(action);
 			slideActionMap.put(slide, action);
-		}				
-		
-		Context context = new Context();
-		context.setScreenRegion(screenRegion);
+		}		
 		
 		for (Slide slide : slides) {
 			try {				

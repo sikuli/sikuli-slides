@@ -4,15 +4,24 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import org.sikuli.api.DesktopScreenRegion;
+import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.api.models.Slide;
 
 public class Slides {
 
 	static public void execute(URL url) throws SlideExecutionException, IOException {		
+		ScreenRegion screenRegion = new DesktopScreenRegion();
+		Context context = new Context(screenRegion);
+		execute(url, context);		
+	}
+	
+	static public void execute(URL url, Context context) throws SlideExecutionException, IOException {		
 		SlidesReader reader = new PPTXSlidesReader();		
 		List<Slide> slides;
 		slides = reader.read(url);
-		SlidesExecutor executor = new AutomationExecutor();
+		
+		SlidesExecutor executor = new AutomationExecutor(context);
 		executor.execute(slides);
 	}
 

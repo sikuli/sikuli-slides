@@ -7,6 +7,7 @@ package org.sikuli.slides.api.parsers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -25,6 +26,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class SlideParser {
@@ -60,15 +63,14 @@ public class SlideParser {
 			e.setName(cNvPr.getAttribute("name"));
 			e.setId(cNvPr.getAttribute("id"));
 			
+			String text = parseText(node);
+			e.setText(text);
+			
 			NodeList txBodyList = element.getElementsByTagName("p:txBody");
 			if (txBodyList.getLength() > 0){
 				Element txBodyElement = (Element) txBodyList.item(0);					
-				NodeList l = txBodyElement.getElementsByTagName("a:t");
-				if (l.getLength() > 0){
-					e.setText(l.item(0).getTextContent());					
-				}
 								
-				l = txBodyElement.getElementsByTagName("a:rPr");
+				NodeList l = txBodyElement.getElementsByTagName("a:rPr");
 				if (l.getLength() > 0){
 					Element rPr = (Element) l.item(0);
 					if (rPr.hasAttribute("sz")){
@@ -78,15 +80,17 @@ public class SlideParser {
 			}
 				
 			NodeList list = element.getElementsByTagName("a:solidFill");
-			if (list.getLength() > 0){
+			if (list.getLength() > 0){				
 				Element solidFill = (Element) list.item(0);
+				System.out.println(solidFill);
 				Element srgbClr = (Element) solidFill.getElementsByTagName("a:srgbClr").item(0);
-				e.setBackgroundColor(srgbClr.getAttribute("val"));
+				if (srgbClr != null)
+					e.setBackgroundColor(srgbClr.getAttribute("val"));
 			}
 			
 			list = element.getElementsByTagName("a:prstGeom");
 			if (list.getLength() > 0){
-				Element prstGeom = (Element) list.item(0);
+				Element prstGeom = (Element) list.item(0);				
 				e.setGeom(prstGeom.getAttribute("prst"));
 			}			
 			
@@ -104,17 +108,28 @@ public class SlideParser {
 	}
 	
 	
+	String parseParagraph(Node paragraphNode){
+		NodeList l = ((Element) paragraphNode).getElementsByTagName("a:t");
+		String combinedText = "";
+		for (int i = 0; i < l.getLength(); ++i){
+			combinedText = combinedText + l.item(i).getTextContent();
+		}
+		return combinedText;
+	}
+	
 	String parseText(Node node){
 		Element element = (Element) node;
 		NodeList txBodyList = element.getElementsByTagName("p:txBody");
 		if (txBodyList.getLength() > 0){
-			Element txBodyElement = (Element) txBodyList.item(0);					
-			NodeList l = txBodyElement.getElementsByTagName("a:t");
-			if (l.getLength() > 0){
-				return l.item(0).getTextContent();					
+			Element txBodyElement = (Element) txBodyList.item(0);
+			NodeList paragraphNodes = txBodyElement.getElementsByTagName("a:p");
+			List<String> paras = Lists.newArrayList();
+			for (int i = 0; i < paragraphNodes.getLength(); ++i){
+				paras.add(parseParagraph(paragraphNodes.item(i)));
 			}
+			return Joiner.on("\n").join(paras);
 		}
-		return "";
+		return null;
 	}
 	
 	public KeywordElement parseKeywordElement(Node node){

@@ -1,5 +1,6 @@
 package org.sikuli.slides.api.interpreters;
 
+import java.awt.Color;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -98,6 +99,10 @@ public class DefaultInterpreter implements Interpreter {
 		action.setText(textElement.getText());
 		double fontSize = UnitConverter.WholePointsToPoints(textElement.getTextSize());
 		action.setFontSize((int)fontSize);
+		
+		Color bgColor = Color.decode("#" + textElement.getBackgroundColor());
+		if (bgColor != null)
+			action.setBackgroundColor(bgColor);
 
 		// check if the text intersects with an image
 		ImageElement image = (ImageElement) slide.select().intersects(textElement).isImage().first();
