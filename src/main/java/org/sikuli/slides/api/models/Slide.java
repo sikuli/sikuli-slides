@@ -6,16 +6,14 @@ import java.util.List;
 
 import org.sikuli.slides.api.interpreters.Keyword;
 import org.sikuli.slides.api.interpreters.Selector;
-import org.sikuli.slides.api.models.Slide.SlideElementBuilder;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 public class Slide {
 	
 	List<SlideElement> elements = Lists.newArrayList();
+	private int number; // one-based
+	
 	
 	public void add(SlideElement element){
 		elements.add(element);
@@ -51,6 +49,14 @@ public class Slide {
 		return new KeywordElementBuilder(this);
 	}
 	
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
 	public static class KeywordElementBuilder extends SlideElementBuilder {
 		KeywordElementBuilder(Slide slide){
 			super(slide);

@@ -74,6 +74,7 @@ public class PPTXSlidesReader implements SlidesReader {
 		for (int i = 1; i <= numSlides; ++i){
 			Slide slide = parser.parse(getSlideXML(i), getSlideXMLRel(i));
 			if (slide != null){
+				slide.setNumber(i);
 				slides.add(slide);
 				logger.debug("Slide " + i + ":\n" + slide);
 			}

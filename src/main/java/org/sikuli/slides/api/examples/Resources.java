@@ -4,10 +4,13 @@ import java.net.URL;
 
 public class Resources {
 	
-	static URL hello_world_pptx = Resources.class.getResource("helloworld.pptx");
-	static URL template_pptx = Resources.class.getResource("template.pptx");
-	static URL emulator_pptx = Resources.class.getResource("emulator.pptx");
+	public static URL hello_world_pptx = Resources.class.getResource("helloworld.pptx");
+	public static URL template_pptx = Resources.class.getResource("template.pptx");
+	public static URL emulator_pptx = Resources.class.getResource("emulator.pptx");
+	public static URL login_pptx = Resources.class.getResource("login.pptx");
+	public static URL fail_pptx = Resources.class.getResource("fail.pptx");;
 	
-	static URL emulator_png = Resources.class.getResource("emulator.png");
+	public static URL emulator_png = Resources.class.getResource("emulator.png");
+	
 
 }

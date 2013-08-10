@@ -16,7 +16,8 @@ public class EmulatorExample {
 		
 		// display a mock image of an emulator
 		Canvas canvas = new DesktopCanvas();
-		canvas.addImage(new DefaultLocation(100,100), ImageIO.read(Resources.emulator_png));		canvas.show();
+		canvas.addImage(new DefaultLocation(100,100), ImageIO.read(Resources.emulator_png));		
+		canvas.show();
 		
 		// execute a series of click operations defined in "emulator.pptx"
 		Slides.execute(Resources.emulator_pptx);

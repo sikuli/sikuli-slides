@@ -11,6 +11,8 @@ import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
 
+import com.google.common.base.Objects;
+
 public class ContextualImageTarget implements Target {
 	
 	private URL contextImage;
@@ -96,5 +98,11 @@ public class ContextualImageTarget implements Target {
 	public void setContextImage(URL contextImage) {
 		this.contextImage = contextImage;
 	}
+	
+	public String toString(){
+		return Objects.toStringHelper(this).add("image", contextImage).add("xmin",xmin).add("xmax",xmax)
+				.add("ymin",ymin).add("ymax",ymax).toString();
+	}
+
 
 }

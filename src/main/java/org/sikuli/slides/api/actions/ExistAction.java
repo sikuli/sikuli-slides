@@ -16,7 +16,7 @@ public class ExistAction implements Action {
 		ScreenRegion screenRegion = context.getScreenRegion();
 		ScreenRegion ret = screenRegion.wait(target, 5000);
 		if (ret == null){
-			throw new ActionExecutionException(this);
+			throw new ActionExecutionException("Unable to find the target expected to exist", this);
 		}
 	}
 }

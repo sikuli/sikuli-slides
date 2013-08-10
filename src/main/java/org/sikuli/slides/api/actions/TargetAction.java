@@ -6,6 +6,8 @@ import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.api.Context;
 
+import com.google.common.base.Objects;
+
 public class TargetAction implements Action {
 
 	Target target;
@@ -40,7 +42,7 @@ public class TargetAction implements Action {
 		}else if (noTargetAction != null){
 			noTargetAction.execute(context);
 		}else{
-			throw new ActionExecutionException(this);
+			throw new ActionExecutionException("Unable to locate the target on the screen", this);
 		}
 	}
 
@@ -50,6 +52,12 @@ public class TargetAction implements Action {
 
 	public void setTargetAction(Action targetAction) {
 		this.targetAction = targetAction;
+	}
+	
+	public String toString(){
+		return Objects.toStringHelper(this)
+				.add("action", targetAction)
+				.add("target", target).toString();
 	}
 
 }

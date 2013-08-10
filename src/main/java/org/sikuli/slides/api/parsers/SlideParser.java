@@ -204,7 +204,7 @@ public class SlideParser {
 			Node nNode = picList.item(i);
 			SlideElement e = parseScreenshotElement(nNode, map);	
 			slide.add(e);
-		}		
+		}				
 		return slide;
 	}
 	

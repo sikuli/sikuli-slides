@@ -47,7 +47,10 @@ public class AutomationExecutor implements SlidesExecutor {
 					action.execute(context);
 				}
 			} catch (ActionExecutionException e) {
-				throw new SlideExecutionException(slide, e.getAction());
+				SlideExecutionException ex = new SlideExecutionException(e);
+				ex.setAction(e.getAction());
+				ex.setSlide(slide);
+				throw ex;
 			}
 		}
 	}

@@ -16,7 +16,7 @@ public class NotExistAction implements Action {
 		ScreenRegion screenRegion = context.getScreenRegion();
 		ScreenRegion ret = screenRegion.find(target);
 		if (ret != null){
-			throw new ActionExecutionException(this);
+			throw new ActionExecutionException("Target not expected to exist is found", this);
 		}
 	}	
 

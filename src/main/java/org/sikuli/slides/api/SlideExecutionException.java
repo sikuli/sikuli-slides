@@ -1,23 +1,25 @@
 package org.sikuli.slides.api;
 
 import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.actions.ActionExecutionException;
 import org.sikuli.slides.api.models.Slide;
 
 public class SlideExecutionException extends Exception {
 	
-	public SlideExecutionException(Slide slide) {
-		super();
-		this.slide = slide;
-	}
-	
-	public SlideExecutionException(Slide slide, Action action) {
-		super();
-		this.slide = slide;
-		this.action = action;
-	}	
-	
 	private Action action;
 	private Slide slide;
+	public SlideExecutionException(String message) {
+		super(message);
+	}
+
+	public SlideExecutionException() {
+		super();
+	}
+
+	public SlideExecutionException(Throwable cause) {
+		super(cause);
+	}
+
 	public Action getAction() {
 		return action;
 	}
