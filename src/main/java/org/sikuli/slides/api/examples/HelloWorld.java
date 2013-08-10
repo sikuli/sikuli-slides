@@ -8,6 +8,6 @@ import org.sikuli.slides.api.Slides;
 public class HelloWorld {
 
 	public static void main(String[] arg) throws SlideExecutionException, IOException{		
-		Slides.execute(HelloWorld.class.getResource("helloworld.pptx"));
+		Slides.execute(Resources.hello_world_pptx);
 	}
 }

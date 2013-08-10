@@ -100,9 +100,12 @@ public class DefaultInterpreter implements Interpreter {
 		double fontSize = UnitConverter.WholePointsToPoints(textElement.getTextSize());
 		action.setFontSize((int)fontSize);
 		
-		Color bgColor = Color.decode("#" + textElement.getBackgroundColor());
-		if (bgColor != null)
+		try {
+			Color bgColor = Color.decode("#" + textElement.getBackgroundColor());		
 			action.setBackgroundColor(bgColor);
+		}catch(NumberFormatException e){
+			
+		}
 
 		// check if the text intersects with an image
 		ImageElement image = (ImageElement) slide.select().intersects(textElement).isImage().first();
