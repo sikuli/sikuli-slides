@@ -25,13 +25,13 @@
 	</tr>
    </table>
 
-5. Change  the Sharing setting to "Anyone who has the link can view" and locate the "Link to Share" URL. In this example, the URL is [https://docs.google.com/presentation/d/1bODdu4SOD49Z_i9Sq7qJpwmxbnnMx6ULvgNc3wQGYfw/edit?usp=sharing](https://docs.google.com/presentation/d/1bODdu4SOD49Z_i9Sq7qJpwmxbnnMx6ULvgNc3wQGYfw/edit?usp=sharing).
+5. Change the Sharing setting to "Anyone who has the link can access. No sign-in required." and locate the "Link to Share" URL. In this example, the URL is [https://docs.google.com/presentation/d/1bODdu4SOD49Z_i9Sq7qJpwmxbnnMx6ULvgNc3wQGYfw/edit?usp=sharing](https://docs.google.com/presentation/d/1bODdu4SOD49Z_i9Sq7qJpwmxbnnMx6ULvgNc3wQGYfw/edit?usp=sharing).
 
 
    <img src="/img/gdrive_link_to_share.png" class="img-polaroid" />
 
 
-6. Execute the slides using the URL.
+6. Open the slides from the URL in sikuli-slides and execute them.
 
 {% highlight bash %}
 $ java -jar sikuli-slides-1.3.0.jar https://docs.google.com/presentation/d/1bODdu4SOD49Z_i9Sq7qJpwmxbnnMx6ULvgNc3wQGYfw/edit?usp=sharing
