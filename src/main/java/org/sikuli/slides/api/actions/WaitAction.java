@@ -6,6 +6,8 @@ import org.sikuli.slides.api.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
+
 public class WaitAction implements Action {
 
 	Logger logger = LoggerFactory.getLogger(WaitAction.class);
@@ -31,5 +33,10 @@ public class WaitAction implements Action {
 
 	public void setDuration(long duration) {
 		this.duration = duration;
+	}
+	
+	
+	public String toString(){
+		return Objects.toStringHelper(this).add("duration", duration).toString();
 	}
 }

@@ -8,6 +8,8 @@ import org.sikuli.slides.api.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
+
 public class LeftClickAction implements Action {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -19,5 +21,9 @@ public class LeftClickAction implements Action {
 		Mouse mouse = new DesktopMouse();
 		ScreenLocation loc = screenRegion.getCenter();
 		mouse.click(loc);
+	}
+	
+	public String toString(){
+		return Objects.toStringHelper(this).toString();
 	}
 }

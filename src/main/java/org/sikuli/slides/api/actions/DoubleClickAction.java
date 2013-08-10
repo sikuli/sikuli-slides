@@ -8,6 +8,8 @@ import org.sikuli.slides.api.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
+
 public class DoubleClickAction implements Action {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -21,5 +23,7 @@ public class DoubleClickAction implements Action {
 		mouse.doubleClick(loc);
 	}
 
-
+	public String toString(){
+		return Objects.toStringHelper(this).toString();
+	}
 }

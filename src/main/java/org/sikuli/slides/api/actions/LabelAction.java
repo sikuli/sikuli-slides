@@ -1,17 +1,15 @@
 package org.sikuli.slides.api.actions;
 
 import java.awt.Color;
-import java.awt.Rectangle;
-import java.util.Map;
 
-import org.sikuli.api.DefaultScreenRegion;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.api.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.stringtemplate.v4.ST;
+
+import com.google.common.base.Objects;
 
 public class LabelAction implements Action {
 	
@@ -72,4 +70,8 @@ public class LabelAction implements Action {
 		this.backgroundColor = backgroundColor;
 	}
 
+	
+	public String toString(){
+		return Objects.toStringHelper(this).add("text", text).toString();
+	}
 }

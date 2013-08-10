@@ -4,6 +4,8 @@ import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
 import org.sikuli.slides.api.Context;
 
+import com.google.common.base.Objects;
+
 public class NotExistAction implements Action {
 	
 	private Target target;
@@ -19,5 +21,10 @@ public class NotExistAction implements Action {
 			throw new ActionExecutionException("Target not expected to exist is found", this);
 		}
 	}	
+	
+	public String toString(){
+		return Objects.toStringHelper(this).add("target",target).toString();
+	}
+
 
 }

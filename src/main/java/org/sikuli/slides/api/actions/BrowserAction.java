@@ -8,6 +8,8 @@ import org.sikuli.slides.api.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
+
 public class BrowserAction implements Action {
 	
 	Logger logger = LoggerFactory.getLogger(BrowserAction.class);
@@ -27,5 +29,9 @@ public class BrowserAction implements Action {
 
 	public void setUrl(URL url) {
 		this.url = url;
+	}
+	
+	public String toString(){
+		return Objects.toStringHelper(this).add("url",url).toString();
 	}
 }
