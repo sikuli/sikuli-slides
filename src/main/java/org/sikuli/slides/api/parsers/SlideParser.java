@@ -82,7 +82,6 @@ public class SlideParser {
 			NodeList list = element.getElementsByTagName("a:solidFill");
 			if (list.getLength() > 0){				
 				Element solidFill = (Element) list.item(0);
-				System.out.println(solidFill);
 				Element srgbClr = (Element) solidFill.getElementsByTagName("a:srgbClr").item(0);
 				if (srgbClr != null)
 					e.setBackgroundColor(srgbClr.getAttribute("val"));

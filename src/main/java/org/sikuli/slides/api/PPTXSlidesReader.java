@@ -67,7 +67,7 @@ public class PPTXSlidesReader implements SlidesReader {
 
 		String slidesDirectory = Constants.projectDirectory+Constants.SLIDES_DIRECTORY;		
 		int numSlides = (new File(slidesDirectory)).list().length - 1;
-		logger.debug("extracted {} slides", numSlides);
+		logger.debug("Found {} slides", numSlides);
 
 		SlideParser parser = new SlideParser();	
 		List<Slide> slides = Lists.newArrayList();
@@ -75,7 +75,7 @@ public class PPTXSlidesReader implements SlidesReader {
 			Slide slide = parser.parse(getSlideXML(i), getSlideXMLRel(i));
 			if (slide != null){
 				slides.add(slide);
-				logger.debug("Slide " + 1 + " :\n" + slide);
+				logger.debug("Slide " + i + ":\n" + slide);
 			}
 		}		
 		return slides;
