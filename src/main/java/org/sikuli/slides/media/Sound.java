@@ -4,10 +4,9 @@ Khalid
 package org.sikuli.slides.media;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.sikuli.api.audio.DesktopSpeaker;
-import org.sikuli.api.audio.Speaker;
+import java.io.IOException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import net.jsoundsystem.JSound;
 import org.sikuli.slides.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,12 +46,14 @@ public class Sound {
 	
 	public void playSound(){
 		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+getFileName();
-		Speaker speaker = new DesktopSpeaker();
 		try {
-			speaker.play(new URL("file://"+slideMediaLocation));
+			JSound sound = new JSound(slideMediaLocation);
+			sound.play();
 		}
-		catch (MalformedURLException e) {
-			logger.error("Unknown audio location..");
+		catch (UnsupportedAudioFileException e) {
+			logger.error("Error in playing the audio file: Unsupported audio file format");
+		} catch (IOException e) {
+			logger.error("Error in playing the audio file: Failed I/O operation.");
 		}
 	}
 	public String toString(){
