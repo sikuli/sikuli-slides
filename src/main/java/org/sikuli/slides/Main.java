@@ -64,28 +64,21 @@ public class Main{
 	}
 	
 	public static void main(String[]args){
-		// Set the application name in Mac OS X title bar
-		if (System.getProperty("os.name").contains("Mac")){
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
-			// set the name of the application menu item
-			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Sikuli-Slides");
-	        // set the look and feel
-	        try {
-	        	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-	        } 
-	        catch (ClassNotFoundException e) {
-	                e.printStackTrace();
-	        }
-	        catch (InstantiationException e) {
-	                e.printStackTrace();
-	        }
-	        catch (IllegalAccessException e) {
-	                e.printStackTrace();
-	        } 
-	        catch (UnsupportedLookAndFeelException e) {
-	        	e.printStackTrace();
-	        }
+		// Set the look and feel
+		try {
+			// Set the application name in Mac OS X title bar
+			if (System.getProperty("os.name").contains("Mac")){
+				System.setProperty("apple.laf.useScreenMenuBar", "true");
+				// set the name of the application menu item
+				System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Sikuli-Slides");
+			}
+			UIManager.setLookAndFeel(
+					UIManager.getSystemLookAndFeelClassName());
 		}
+		catch (ClassNotFoundException e) {}
+		catch (InstantiationException e) {}
+		catch (IllegalAccessException e) {}
+		catch (UnsupportedLookAndFeelException e) {}
 		
 		Main main=new Main();
 		main.initProject();
