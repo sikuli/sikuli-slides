@@ -321,7 +321,7 @@ public class SlideAction {
 	 * Perform wait action. It waits for the specified time in seconds
 	 */
 	private void performWaitAction(){
-		logger.info("Performing wait operation...");
+		logger.info("Performing wait action...");
 		// extract the time unit
 		TimeUnit timeUnit=UnitConverter.extractTimeUnitFromString(slideShape.getText());
 		// if the time unit was not specified, default to seconds
@@ -357,7 +357,7 @@ public class SlideAction {
 			Constants.IsWaitAction=false;
 			
 			canvas.hide();
-			logger.info("Waking up...");
+			logger.info("Wait time has been reached ...");
 		} 
 		catch(NumberFormatException e){
 			logger.error("Error: Invalid wait time.");
@@ -378,7 +378,6 @@ public class SlideAction {
 			
 			// get the end time in milli seconds
 			long waitTimeInMilliSeconds=timeUnit.toMillis(timeout);
-			logger.info("Wait time in milli seconds: "+waitTimeInMilliSeconds);
 			
 			Calendar nowCalendar=Calendar.getInstance();
 			Calendar timeoutCalendar = Calendar.getInstance();
