@@ -109,7 +109,8 @@ public class SlideTutorial {
             }
         }
         catch (NativeHookException ex) {
-            logger.error("There was a problem in running the tutorial mode.");
+            logger.error("There was a problem in running the tutorial mode. "
+            		+ ex.getMessage());
             System.exit(1);
         }
 	}
