@@ -108,7 +108,7 @@ public class SikuliPowerPoint {
 		// get the shape info
 		List<SlideShape> slideShapes=mySlideParser.getShapes();
 		// get the sound info
-		Sound sound=mySlideParser.getSound();
+		final Sound sound=mySlideParser.getSound();
 		if(sound!=null){
 			setSoundFileName(sound, slideName);
 		}
@@ -167,12 +167,12 @@ public class SikuliPowerPoint {
 			targetShapes=getTargterShapes(slideShapes);
 
 			// if the slide doesn't contain a shape.
-			if((labels == null && desktopEvent == null) || slideShapes == null){
-					logger.error("Failed to process slide {}." +
-					"The slide must contain a shape and textbox that contains the action to be executed.{}" +
-					"The text box that descripes the action must contain one of the following actions:{}" +
-					"Click, Right Click, Double Click, Type, Drag, Browser, Exist, Not Exist, Wait", slideNumber, NEW_LINE, NEW_LINE);
-					return;
+			if((labels == null && desktopEvent == null && sound == null) || slideShapes == null){
+				logger.error("Failed to process slide {}." +
+				"The slide must contain a shape and textbox that contains the action to be executed.{}" +
+				"The text box that descripes the action must contain one of the following actions:{}" +
+				"Click, Right Click, Double Click, Type, Drag, Browser, Exist, Not Exist, Wait", slideNumber, NEW_LINE, NEW_LINE);
+				return;
 			}
 		}
 		
@@ -186,6 +186,16 @@ public class SikuliPowerPoint {
 		// #2 Wait action
 		else if(desktopEvent==DesktopEvent.WAIT){
 			tasks.add(new SikuliAction(null, targetShapes.get(0), screenshot, null, desktopEvent, sound, label, null, null));
+			return;
+		}
+		// if the slide only contains an audio clip
+		else if(desktopEvent == null && sound != null){
+			new Thread(new Runnable() {
+			@Override
+			public void run() {
+				sound.playSound();
+			}
+			}).start();
 			return;
 		}
 		else if(screenshot == null){
