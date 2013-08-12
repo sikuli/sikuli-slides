@@ -6,13 +6,15 @@ title: Downloads
 ## Requirements
 ### Windows
 * Java Runtime Environment (JRE) version 1.6 or newer.
+
 ### Mac OS X
 * Java Runtime Environment (JRE) version 1.6 or newer.
 * Access for assistive devices must be enabled in order to use tutorial mode and help mode.
+
 ### Linux
 * Oracle Java Runtime Environment (JRE) version 1.7.
 
-
+<hr/>
 ## 1.3.1
 
 <a href="/downloads/sikuli-slides-1.3.1.jar" class="btn btn-large btn-primary"
