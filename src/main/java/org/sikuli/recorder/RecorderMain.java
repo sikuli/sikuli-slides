@@ -35,10 +35,6 @@ public class RecorderMain {
 		Recorder rec = new Recorder();
 		
 		if (Command.bounds != null){
-//			int x = Integer.parseInt(Command.bounds[0]);
-//			int y = Integer.parseInt(Command.bounds[1]);
-//			int w = Integer.parseInt(Command.bounds[2]);
-//			int h = Integer.parseInt(Command.bounds[3]);
 			int x = Command.bounds[0];
 			int y = Command.bounds[1];
 			int w = Command.bounds[2];

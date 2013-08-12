@@ -7,9 +7,13 @@ import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.api.models.Slide;
 import org.stringtemplate.v4.ST;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 
 public class Context {
+	private static final long DEFAULT_WAIT_TIME = 5000;
+	private static final float DEFAULT_MIN_SCORE = 0.7f;
+
 	private ScreenRegion screenRegion;
 	
 	// the default slide selector is to accept all
@@ -19,7 +23,10 @@ public class Context {
 			return true;
 		}		
 	};
-	private Map<String, Object> parameters = Maps.newHashMap();
+	private Map<String, Object> parameters = Maps.newHashMap();	
+	private float minScore = DEFAULT_MIN_SCORE;	
+	// how long to wait for a target in ms
+	private long waitTime = DEFAULT_WAIT_TIME;
 	
 	public Context(ScreenRegion screenRegion) {
 		this.screenRegion = screenRegion;
@@ -59,5 +66,28 @@ public class Context {
 
 	public void setSlideSelector(SlideSelector slideSelector) {
 		this.slideSelector = slideSelector;
+	}
+	
+	public String toString(){
+		return Objects.toStringHelper(this)
+				.add("minScore", minScore)
+				.add("parameter", parameters)				
+				.add("screenRegion", screenRegion).toString();
+	}
+
+	public float getMinScore() {
+		return minScore;
+	}
+
+	public void setMinScore(float minScore) {
+		this.minScore = minScore;
+	}
+
+	public long getWaitTime() {
+		return waitTime;
+	}
+
+	public void setWaitTime(long waitTime) {
+		this.waitTime = waitTime;
 	}
 }

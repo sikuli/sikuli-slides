@@ -27,8 +27,10 @@ public class TargetAction implements Action {
 
 	@Override
 	public void execute(Context context) throws ActionExecutionException {
+		target.setMinScore(context.getMinScore());
+		long waitTime = context.getWaitTime();
 		ScreenRegion screenRegion = context.getScreenRegion();
-		ScreenRegion ret = screenRegion.wait(target, 5000);
+		ScreenRegion ret = screenRegion.wait(target, (int) waitTime);
 		if (ret != null){
 			Canvas canvas = new ScreenRegionCanvas(ret);
 			canvas.addBox(ret);
