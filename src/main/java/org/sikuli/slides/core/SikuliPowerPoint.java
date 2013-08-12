@@ -108,7 +108,7 @@ public class SikuliPowerPoint {
 		// get the shape info
 		List<SlideShape> slideShapes=mySlideParser.getShapes();
 		// get the sound info
-		final Sound sound=mySlideParser.getSound();
+		Sound sound=mySlideParser.getSound();
 		if(sound!=null){
 			setSoundFileName(sound, slideName);
 		}
@@ -190,12 +190,7 @@ public class SikuliPowerPoint {
 		}
 		// if the slide only contains an audio clip
 		else if(desktopEvent == null && sound != null){
-			new Thread(new Runnable() {
-			@Override
-			public void run() {
-				sound.playSound();
-			}
-			}).start();
+			tasks.add(new SikuliAction(null, new SlideShape(), null, null, null, sound, null, null, null));
 			return;
 		}
 		else if(screenshot == null){
