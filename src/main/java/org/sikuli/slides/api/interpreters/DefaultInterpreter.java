@@ -5,10 +5,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+import org.sikuli.api.API;
 import org.sikuli.api.Target;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.BrowserAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
+import org.sikuli.slides.api.actions.DragAction;
+import org.sikuli.slides.api.actions.DropAction;
 import org.sikuli.slides.api.actions.ExistAction;
 import org.sikuli.slides.api.actions.LabelAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
@@ -16,7 +19,7 @@ import org.sikuli.slides.api.actions.NotExistAction;
 import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
-import org.sikuli.slides.api.actions.WaitAction;
+import org.sikuli.slides.api.actions.DelayAction;
 import org.sikuli.slides.api.models.ImageElement;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.models.SlideElement;
@@ -36,7 +39,7 @@ public class DefaultInterpreter implements Interpreter {
 		if (keywordElement == null)
 			return null;		
 		Action action = new LeftClickAction();
-		return interpretAsFindDo(slide, action);
+		return interpretAsTargetAction(slide, action);
 	}
 
 	Action interpretAsRightClick(Slide slide){				
@@ -45,7 +48,7 @@ public class DefaultInterpreter implements Interpreter {
 			return null;
 
 		Action action = new RightClickAction();
-		return interpretAsFindDo(slide, action);
+		return interpretAsTargetAction(slide, action);
 	}
 
 
@@ -55,11 +58,28 @@ public class DefaultInterpreter implements Interpreter {
 			return null;
 
 		Action action = new DoubleClickAction();
-		return interpretAsFindDo(slide, action);
+		return interpretAsTargetAction(slide, action);
 	}
 
+	Action interpretAsDrag(Slide slide){
+		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DRAG).first();
+		if (keywordElement == null)
+			return null;
 
+		Action action = new DragAction();
+		return interpretAsTargetAction(slide, action);
+	}
 
+	Action interpretAsDrop(Slide slide){
+		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DROP).first();
+		if (keywordElement == null)
+			return null;
+
+		Action action = new DropAction();
+		return interpretAsTargetAction(slide, action);
+	}
+
+	
 	Action interpretAsExist(Slide slide){
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.EXIST).first();
 		if (keywordElement == null)
@@ -152,7 +172,7 @@ public class DefaultInterpreter implements Interpreter {
 		return createTarget(imageElement, targetElement);		
 	}
 
-	Action interpretAsFindDo(Slide slide, Action doAction){
+	Action interpretAsTargetAction(Slide slide, Action doAction){
 		Target target = interpretAsTarget(slide);			
 		if (target == null)
 			return doAction;		
@@ -171,7 +191,7 @@ public class DefaultInterpreter implements Interpreter {
 		TypeAction typeAction = new TypeAction();
 		typeAction.setText(textElement.getText());
 
-		return interpretAsFindDo(slide, typeAction);
+		return interpretAsTargetAction(slide, typeAction);
 	}
 
 	Action interpretAsBrowser(Slide slide){
@@ -196,7 +216,7 @@ public class DefaultInterpreter implements Interpreter {
 	}	
 
 	Action interpretAsWait(Slide slide){
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.WAIT).first();
+		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DELAY).first();
 		if (keywordElement == null)
 			return null;
 
@@ -207,7 +227,7 @@ public class DefaultInterpreter implements Interpreter {
 
 		String arg = textElement.getText();
 		
-		WaitAction a = new WaitAction();
+		DelayAction a = new DelayAction();
 
 		// extract the time unit
 		TimeUnit timeUnit = UnitConverter.extractTimeUnitFromString(arg);
@@ -251,7 +271,11 @@ public class DefaultInterpreter implements Interpreter {
 
 		}else if ((action = interpretAsDoubleClick(slide)) != null){			
 
-		}else if ((action = interpretAsType(slide)) != null){
+		}else if ((action = interpretAsDoubleClick(slide)) != null){
+			
+		}else if ((action = interpretAsDrag(slide)) != null){		
+
+		}else if ((action = interpretAsDrop(slide)) != null){		
 
 		}else if ((action = interpretAsBrowser(slide)) != null){		
 
@@ -262,6 +286,6 @@ public class DefaultInterpreter implements Interpreter {
 		}else if ((action = interpretAsWait(slide)) != null){
 		
 		}
-		return action;
+		return action;		
 	}
 }

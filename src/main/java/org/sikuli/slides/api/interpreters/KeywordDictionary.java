@@ -13,11 +13,11 @@ public class KeywordDictionary{
 	final static Keyword BROWSER = word("Browser").addAlias("browse").build();
 	final static Keyword NOT_EXIST = word("Not Exist").build();
 	final static Keyword EXIST = word("Exist").build();
-	final static Keyword WAIT = word("Wait").build();		
+	final static Keyword DELAY = word("Delay").addAlias("sleep").addAlias("pause").build();		
 		
 	
 	final static Keyword[] WORDS = {
-		CLICK, RIGHT_CLICK, DOUBLE_CLICK, TYPE, DRAG, DROP, BROWSER, NOT_EXIST, EXIST, WAIT};
+		CLICK, RIGHT_CLICK, DOUBLE_CLICK, TYPE, DRAG, DROP, BROWSER, NOT_EXIST, EXIST, DELAY};
 	
 	final static public Keyword lookup(String name){
 		for (Keyword word : WORDS){

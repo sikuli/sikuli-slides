@@ -17,15 +17,7 @@ public class Slides {
 		Context context = new Context(screenRegion);
 		execute(url, context);		
 	}
-	
-	static public void execute(File file) throws SlideExecutionException {
-		try {
-			execute(file.toURI().toURL());
-		} catch (MalformedURLException e) {
-			throw new SlideExecutionException(e);
-		}
-	}
-	
+
 	static public void execute(URL url, Context context) throws SlideExecutionException {		
 		SlidesReader reader = new PPTXSlidesReader();		
 		List<Slide> slides;
@@ -34,10 +26,25 @@ public class Slides {
 		} catch (IOException e) {
 			throw new SlideExecutionException(e);		
 		}
-		
+
 		SlidesExecutor executor = new AutomationExecutor(context);
 		executor.execute(slides);
 	}
 
+	static public void execute(File file) throws SlideExecutionException {
+		try {
+			execute(file.toURI().toURL());
+		} catch (MalformedURLException e) {
+			throw new SlideExecutionException(e);
+		}
+	}
+
+	static public void execute(File file, Context context) throws SlideExecutionException {		
+		try {
+			execute(file.toURI().toURL(), context);
+		} catch (MalformedURLException e) {
+			throw new SlideExecutionException(e);
+		}
+	}
 
 }

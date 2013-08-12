@@ -4,12 +4,21 @@ import java.util.Map;
 
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
+import org.sikuli.slides.api.models.Slide;
 import org.stringtemplate.v4.ST;
 
 import com.google.common.collect.Maps;
 
 public class Context {
 	private ScreenRegion screenRegion;
+	
+	// the default slide selector is to accept all
+	private SlideSelector slideSelector = new SlideSelector(){
+		@Override
+		public boolean accept(Slide slide) {			
+			return true;
+		}		
+	};
 	private Map<String, Object> parameters = Maps.newHashMap();
 	
 	public Context(ScreenRegion screenRegion) {
@@ -42,5 +51,13 @@ public class Context {
 			st.add(e.getKey(), e.getValue());	
 		}
 		return st.render();
+	}
+
+	public SlideSelector getSlideSelector() {
+		return slideSelector;
+	}
+
+	public void setSlideSelector(SlideSelector slideSelector) {
+		this.slideSelector = slideSelector;
 	}
 }

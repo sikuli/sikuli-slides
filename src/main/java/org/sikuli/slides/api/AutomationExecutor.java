@@ -3,8 +3,6 @@ package org.sikuli.slides.api;
 import java.util.List;
 import java.util.Map;
 
-import org.sikuli.api.DesktopScreenRegion;
-import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.ActionExecutionException;
 import org.sikuli.slides.api.interpreters.DefaultInterpreter;
@@ -41,6 +39,10 @@ public class AutomationExecutor implements SlidesExecutor {
 		}		
 		
 		for (Slide slide : slides) {
+			if (!context.getSlideSelector().accept(slide))
+				continue;
+			
+			
 			try {				
 				Action action = slideActionMap.get(slide);
 				if (action != null){

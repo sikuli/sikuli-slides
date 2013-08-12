@@ -8,17 +8,17 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
-public class WaitAction implements Action {
+public class DelayAction implements Action {
 
-	Logger logger = LoggerFactory.getLogger(WaitAction.class);
+	Logger logger = LoggerFactory.getLogger(DelayAction.class);
 
 	private long duration;
 
 	@Override
 	public void execute(Context context) {
-		logger.info("Performing wait operation...");
+		logger.info("Performing delay operation...");
 		try {
-			String waitMessage="Please wait for "+ duration + " milliseconds";
+			String waitMessage="Execution will be delayed for "+ duration + " milliseconds";
 			logger.info(waitMessage);
 			TimeUnit.MILLISECONDS.sleep(duration);
 			logger.info("Waking up...");		} 

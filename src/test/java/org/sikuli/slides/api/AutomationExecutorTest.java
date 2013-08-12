@@ -13,6 +13,7 @@ import org.jnativehook.mouse.NativeMouseEvent;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.sikuli.api.API;
 import org.sikuli.api.DefaultLocation;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.slides.api.actions.InputDetector;
@@ -59,5 +60,11 @@ public class AutomationExecutorTest {
 		List<Slide> slides = readSlidesFromResource("fivesteps.pptx");		
 		executor.execute(slides);
 		assertEquals("mouse events", 4, detector.getNumMouseEvents());
+	}
+	
+	@Test
+	public void testExecuteDragDropPPTX() throws IOException, SlideExecutionException{
+		List<Slide> slides = readSlidesFromResource("dragdrop.pptx");		
+		executor.execute(slides);		
 	}
 }

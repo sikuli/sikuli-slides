@@ -2,7 +2,7 @@ package org.sikuli.slides.api.actions;
 
 import org.junit.Test;
 import org.sikuli.slides.api.Context;
-import org.sikuli.slides.api.actions.WaitAction;
+import org.sikuli.slides.api.actions.DelayAction;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -11,7 +11,7 @@ public class ActionTest {
 	
 	@Test
 	public void testWaitAction(){
-		WaitAction waitAction = new WaitAction();
+		DelayAction waitAction = new DelayAction();
 		waitAction.setDuration(1000);
 		
 		Context context = new Context();
