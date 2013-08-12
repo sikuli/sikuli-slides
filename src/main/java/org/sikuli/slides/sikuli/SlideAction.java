@@ -75,6 +75,10 @@ public class SlideAction {
 			performNonSikuliAction();
 			return;
 		}
+		else if(desktopEvent == null && sound !=null){
+			performNonSikuliAction();
+			return;
+		}
 		// if the action is to find a target on the screen
 		// if the action is to interact with a target, find the target and perform the action
 		else{
@@ -161,13 +165,8 @@ public class SlideAction {
 	
 	private void performNonSikuliAction(){ 
 		// if the slide contains a sound, play it in background
-		if(sound!=null){
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					sound.playSound();
-				}
-				}).start();
+		if(sound != null){
+			sound.playSound();
 		}
 		if(slideLabel!=null){
 			ScreenRegion labelScreenRegion = null;
