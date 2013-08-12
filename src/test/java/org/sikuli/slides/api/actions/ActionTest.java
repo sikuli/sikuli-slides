@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.*;
 public class ActionTest {
 	
 	@Test
-	public void testWaitAction(){
+	public void testDelayAction(){
 		DelayAction waitAction = new DelayAction();
 		waitAction.setDuration(1000);
 		

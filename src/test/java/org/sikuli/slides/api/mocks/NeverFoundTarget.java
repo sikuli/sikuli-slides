@@ -7,12 +7,7 @@ import org.sikuli.api.ScreenRegion;
 
 import com.google.common.collect.Lists;
 
-public class NotFoundScreenTarget extends DefaultTarget {
-
-	@Override
-	public List<ScreenRegion> doFindAll(ScreenRegion screenRegion) {
-		return Lists.newArrayList();
-	}
+public class NeverFoundTarget extends DefaultTarget {
 
 	@Override
 	protected List<ScreenRegion> getUnorderedMatches(

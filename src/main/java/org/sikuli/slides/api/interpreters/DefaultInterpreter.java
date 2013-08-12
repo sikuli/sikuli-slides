@@ -20,6 +20,7 @@ import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
 import org.sikuli.slides.api.actions.DelayAction;
+import org.sikuli.slides.api.actions.WaitAction;
 import org.sikuli.slides.api.models.ImageElement;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.models.SlideElement;
@@ -214,21 +215,16 @@ public class DefaultInterpreter implements Interpreter {
 		a.setUrl(url);
 		return a;		
 	}	
-
-	Action interpretAsWait(Slide slide){
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DELAY).first();
-		if (keywordElement == null)
-			return null;
-
+	
+	
+	
+	Long interpretAsDuration(Slide slide){
 		SlideElement textElement = slide.select().hasText().first();
 		if (textElement == null)
 			return null;
 
-
 		String arg = textElement.getText();
 		
-		DelayAction a = new DelayAction();
-
 		// extract the time unit
 		TimeUnit timeUnit = UnitConverter.extractTimeUnitFromString(arg);
 		// TODO: "2 hours" doesn't get extracted correctly
@@ -240,23 +236,54 @@ public class DefaultInterpreter implements Interpreter {
 		String waitTimeString = arg.replaceAll("[^0-9.]", "");
 		if(waitTimeString != null){
 			double duration = Double.parseDouble(waitTimeString);
-			double durationInMilliSeconds = 0;
+			Double durationInMilliSeconds = 0.0;
 			if (timeUnit == TimeUnit.SECONDS){
 				durationInMilliSeconds = duration * 1000;
 			}else if (timeUnit == TimeUnit.MINUTES){
 				durationInMilliSeconds = duration * 1000 * 60;
 			}else if (timeUnit == TimeUnit.HOURS){
 				durationInMilliSeconds = duration * 1000 * 60 * 60;
-			}
-			a.setDuration((long) durationInMilliSeconds);
-			return a;
-		}			
+			}			
+			return durationInMilliSeconds.longValue();
+		}else{			
+			
+			logger.error("Error: Please write a valid time string."
+					+" Valid examples include: 10 milliseconds, 10 seconds, 10 minutes.");
 
-		logger.error("Error: Please enter the wait time value in a shape."
-				+" Valid examples include: 10 seconds, 10 minutes, 10 hours, or even 2 days.");
+			return null;
+		}
+	}
 
+	Action interpretAsDelay(Slide slide){
+		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DELAY).first();
+		if (keywordElement == null)
+			return null;
 
-		return null;
+		Long duration = interpretAsDuration(slide);
+		if (duration == null)
+			return null;		
+
+		DelayAction a = new DelayAction();
+		a.setDuration(duration);
+		return a;
+	}	
+	
+	Action interpretAsWait(Slide slide){
+		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.WAIT).first();
+		if (keywordElement == null)
+			return null;
+
+		Target target = interpretAsTarget(slide);
+		if (target == null)
+			return null;
+
+		Long duration = interpretAsDuration(slide);
+		if (duration == null)
+			return null;		
+
+		WaitAction a = new WaitAction(target);
+		a.setDuration(duration);
+		return a;
 	}	
 
 	@Override
@@ -283,8 +310,10 @@ public class DefaultInterpreter implements Interpreter {
 
 		}else if ((action = interpretAsNotExist(slide)) != null){		
 		
-		}else if ((action = interpretAsWait(slide)) != null){
+		}else if ((action = interpretAsDelay(slide)) != null){
 		
+		}else if ((action = interpretAsWait(slide)) != null){
+			
 		}
 		return action;		
 	}

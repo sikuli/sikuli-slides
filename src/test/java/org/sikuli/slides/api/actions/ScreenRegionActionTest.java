@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.jnativehook.NativeHookException;
 import org.junit.After;
@@ -27,8 +28,11 @@ import org.sikuli.slides.api.actions.NotExistAction;
 import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
-import org.sikuli.slides.api.mocks.IdentiyScreenRegionTarget;
-import org.sikuli.slides.api.mocks.NotFoundScreenTarget;
+import org.sikuli.slides.api.mocks.AppearLaterTarget;
+import org.sikuli.slides.api.mocks.AlwaysFoundTarget;
+import org.sikuli.slides.api.mocks.NeverFoundTarget;
+
+import com.google.common.base.Stopwatch;
 
 
 public class ScreenRegionActionTest {
@@ -63,7 +67,7 @@ public class ScreenRegionActionTest {
 
 	@Test
 	public void testFindDoLeftClick() throws ActionExecutionException {
-		Action action = new TargetAction(new IdentiyScreenRegionTarget(), new LeftClickAction());
+		Action action = new TargetAction(new AlwaysFoundTarget(), new LeftClickAction());
 		action.execute(context);
 		
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -113,10 +117,10 @@ public class ScreenRegionActionTest {
 	}
 	
 	@Test
-	public void testFindDoType() throws ActionExecutionException{
+	public void testTypeOnTarget() throws ActionExecutionException{
 		TypeAction typeAction = new TypeAction();
 		typeAction.setText("abcde");		
-		Action action = new TargetAction(new IdentiyScreenRegionTarget(), typeAction);
+		Action action = new TargetAction(new AlwaysFoundTarget(), typeAction);
 		action.execute(context);
 
 		assertNotNull("last mouse event", detector.getLastMouseEvent());
@@ -138,26 +142,37 @@ public class ScreenRegionActionTest {
 	
 	
 	@Test
+	public void testWaitAction() throws ActionExecutionException {	
+		Stopwatch stopwatch = new Stopwatch().start();
+		Action action = new WaitAction(new AppearLaterTarget(5000));
+		action.execute(context);
+		stopwatch.stop();
+		long actualWaitTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+		assertThat(actualWaitTime, greaterThan(4000L));
+		assertThat(actualWaitTime, lessThan(6000L));
+	}
+	
+	@Test
 	public void testExistAction() throws ActionExecutionException {	
-		Action action = new ExistAction(new IdentiyScreenRegionTarget());
+		Action action = new ExistAction(new AlwaysFoundTarget());
 		action.execute(context);
 	}
 	
 	@Test(expected = ActionExecutionException.class)
 	public void testExistActionFailed() throws ActionExecutionException {		
-		Action action = new ExistAction(new NotFoundScreenTarget());
+		Action action = new ExistAction(new NeverFoundTarget());
 		action.execute(context);
 	}
 	
 	@Test(expected = ActionExecutionException.class)
 	public void testNotExistActionFailed() throws ActionExecutionException {			
-		Action action = new NotExistAction(new IdentiyScreenRegionTarget());
+		Action action = new NotExistAction(new AlwaysFoundTarget());
 		action.execute(context);
 	}
 	
 	@Test	
 	public void testNotExistAction() throws ActionExecutionException {				
-		Action action = new NotExistAction(new NotFoundScreenTarget());
+		Action action = new NotExistAction(new NeverFoundTarget());
 		action.execute(context);
 	}
 }

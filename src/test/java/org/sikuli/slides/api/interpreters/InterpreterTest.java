@@ -29,6 +29,7 @@ import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
 import org.sikuli.slides.api.actions.DelayAction;
+import org.sikuli.slides.api.actions.WaitAction;
 import org.sikuli.slides.api.interpreters.DefaultInterpreter;
 import org.sikuli.slides.api.interpreters.Interpreter;
 import org.sikuli.slides.api.interpreters.Keyword;
@@ -92,7 +93,7 @@ public class InterpreterTest {
 		return slide;
 	}
 	
-	private Slide createWaitSlide(String text){		
+	private Slide createDelaySlide(String text){		
 		Slide slide = new Slide();
 		slide.newKeywordElement().keyword(KeywordDictionary.DELAY).add();
 		slide.newElement().text(text).add();
@@ -212,36 +213,49 @@ public class InterpreterTest {
 		assertThat(action, notNullValue());
 	}
 
-
 	@Test
 	public void testInterpretWaitAction() {
-		Slide slide = createWaitSlide("2 seconds");				
+		Slide slide = new Slide();
+		slide.newKeywordElement().keyword(KeywordDictionary.WAIT).add();
+		slide.newElement().text("2 seconds").add();
+		slide.newImageElement().source(source).bounds(100,100,50,50).add();
+		slide.newElement().bounds(120,120,30,30).add();		
+
+		WaitAction action = (WaitAction) interpreter.interpret(slide);		
+		assertThat(action, notNullValue());
+		assertThat(action.getDuration(), equalTo(2000L));
+		assertThat(action.getTarget(), notNullValue());
+	}
+	
+	@Test
+	public void testInterpretDelayAction() {
+		Slide slide = createDelaySlide("2 seconds");				
 		Action action = interpreter.interpret(slide);
 		
 		assertNotNull(action);
-		assertEquals("wait action", DelayAction.class, action.getClass());
-		DelayAction waitAction = (DelayAction) action;				
-		assertEquals(2000, waitAction.getDuration());
+		assertEquals("delay action", DelayAction.class, action.getClass());
+		DelayAction a = (DelayAction) action;				
+		assertEquals(2000, a.getDuration());
 		
-		slide = createWaitSlide("2");		
-		waitAction = (DelayAction) interpreter.interpret(slide);
-		assertEquals(2000, waitAction.getDuration());
+		slide = createDelaySlide("2");		
+		a = (DelayAction) interpreter.interpret(slide);
+		assertEquals(2000, a.getDuration());
 		
-		slide = createWaitSlide("1 minute");		
-		waitAction = (DelayAction) interpreter.interpret(slide);
-		assertEquals(1000 * 60, waitAction.getDuration());
+		slide = createDelaySlide("1 minute");		
+		a = (DelayAction) interpreter.interpret(slide);
+		assertEquals(1000 * 60, a.getDuration());
 
-		slide = createWaitSlide("0.5 second");		
-		waitAction = (DelayAction) interpreter.interpret(slide);
-		assertEquals(500, waitAction.getDuration());
+		slide = createDelaySlide("0.5 second");		
+		a = (DelayAction) interpreter.interpret(slide);
+		assertEquals(500, a.getDuration());
 
-		slide = createWaitSlide("0.5");		
-		waitAction = (DelayAction) interpreter.interpret(slide);
-		assertEquals(500, waitAction.getDuration());
+		slide = createDelaySlide("0.5");		
+		a = (DelayAction) interpreter.interpret(slide);
+		assertEquals(500, a.getDuration());
 
-		slide = createWaitSlide("0");		
-		waitAction = (DelayAction) interpreter.interpret(slide);
-		assertEquals(0, waitAction.getDuration());
+		slide = createDelaySlide("0");		
+		a = (DelayAction) interpreter.interpret(slide);
+		assertEquals(0, a.getDuration());
 		
 	}
 	
