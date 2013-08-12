@@ -4,13 +4,14 @@ title: Downloads
 ---
 
 ## Requirements
-### Windows and Mac OS X
-Java Runtime Environment (JRE) version 1.6 or newer.
+### Windows
+* Java Runtime Environment (JRE) version 1.6 or newer.
+### Mac OS X
+* Java Runtime Environment (JRE) version 1.6 or newer.
+* Access for assistive devices must be enabled in order to use tutorial mode and help mode.
 ### Linux
-Oracle Java Runtime Environment (JRE) version 1.7.
+* Oracle Java Runtime Environment (JRE) version 1.7.
 
-#### Requirements for running tutorial and help mode
-* Access for assistive devices must be enabled.
 
 ## 1.3.1
 
