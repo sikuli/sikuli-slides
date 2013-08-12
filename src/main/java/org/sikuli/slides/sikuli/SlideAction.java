@@ -47,6 +47,7 @@ public class SlideAction {
 	private SlideTargetRegion slideTargetRegion, slideLabelRegion;
 	private Sound sound;
 	private SlideShape slideLabel;
+	private static final String NEW_LINE = System.getProperty("line.separator");
 	
 	public SlideAction(SlideComponent slideComponent){
 		this.targetFile = slideComponent.getTargetFile();
@@ -82,7 +83,10 @@ public class SlideAction {
 		// if the action is to find a target on the screen
 		// if the action is to interact with a target, find the target and perform the action
 		else{
-			ScreenRegion targetRegion=findTargetRegion(this.targetFile, this.slideTargetRegion);
+			ScreenRegion targetRegion=findTargetRegion(this.targetFile, this.slideTargetRegion, prefsEditor.getPreciseSearchScore());
+			if(targetRegion == null){
+				targetRegion = retryFindTargetRegion(this.targetFile, this.slideTargetRegion);
+			}
 			performNonSikuliAction();
 			
 			
@@ -126,25 +130,26 @@ public class SlideAction {
 	}
 	
 
-	private ScreenRegion findTargetRegion(File targetFile, SlideTargetRegion slideTargetRegion){
+	private ScreenRegion findTargetRegion(File targetFile, SlideTargetRegion slideTargetRegion, double minScore){
 		final ImageTarget imageTarget=new ImageTarget(targetFile);
-		imageTarget.setMinScore(prefsEditor.getPreciseSearchScore());
+		imageTarget.setMinScore(minScore);
 		if(imageTarget!=null){
 			ScreenRegion fullScreenRegion = new DesktopScreenRegion(Constants.ScreenId);
 	    	ScreenRegion targetRegion=fullScreenRegion.wait(imageTarget, prefsEditor.getMaxWaitTime());
 	    	
-	    	if(targetRegion!=null){
+	    	if(targetRegion != null){
 	    		// check if there are more than one occurrence of the target image.
-	    		SearchMultipleTarget searchMultipleTarget=new SearchMultipleTarget();
+	    		SearchMultipleTarget searchMultipleTarget = new SearchMultipleTarget();
 	    		if(searchMultipleTarget.hasMultipleOccurance(imageTarget)){
-	    			ScreenRegion newScreenRegion=searchMultipleTarget.findNewScreenRegion(slideTargetRegion, imageTarget);
-	    			if(newScreenRegion!=null){
-	    				ScreenRegion newtargetRegion=newScreenRegion.find(imageTarget);
+	    			ScreenRegion newScreenRegion = searchMultipleTarget.findNewScreenRegion(slideTargetRegion, imageTarget);
+	    			if(newScreenRegion != null){
+	    				ScreenRegion newtargetRegion = newScreenRegion.find(imageTarget);
 	    				return newtargetRegion;
 	    			}
 	    			else{
 	    				logger.error("Failed to determine the target image among multiple similar targets on the screen."
-	    						+"\nTry to resize the shape in slide number "+slideTargetRegion.getslideNumber() + " or use the precision option to make the search more accurate.");
+	    						+ NEW_LINE + "Try to resize the shape in slide number {} to make the search more accurate.", 
+	    						slideTargetRegion.getslideNumber());
 	    			}
 	    		}
 	    		else{
@@ -152,10 +157,25 @@ public class SlideAction {
 	    		}
 	    	}
 			else{
-				logger.error("Failed to find target on the screen. Slide no. "+slideTargetRegion.getslideNumber());
+				if(minScore <= 0.4){
+					logger.error("Failed to find target on the screen. Slide no. " + slideTargetRegion.getslideNumber());
+					return null;
+				}
 			}
 		}
 		return null;
+	}
+	/**
+	 * Performs retry-until-success strategy. It keeps retrying to find a target on the screen with a lower minScore value.
+	 */
+	private ScreenRegion retryFindTargetRegion(File targetFile, SlideTargetRegion slideTargetRegion){
+		ScreenRegion targetRegion = null;
+		double minScore = 1;
+		while (minScore > 0.4 && targetRegion == null){
+			minScore -= 0.1;
+			targetRegion = findTargetRegion(targetFile, slideTargetRegion, minScore);
+		}
+		return targetRegion;
 	}
 	
 	/**
@@ -171,7 +191,10 @@ public class SlideAction {
 		if(slideLabel!=null){
 			ScreenRegion labelScreenRegion = null;
 			if(this.labelFile !=null && this.slideLabelRegion != null){
-				labelScreenRegion = findTargetRegion(this.labelFile, this.slideLabelRegion);
+				labelScreenRegion = findTargetRegion(this.labelFile, this.slideLabelRegion, prefsEditor.getPreciseSearchScore());
+				if(labelScreenRegion == null){
+					labelScreenRegion = retryFindTargetRegion(this.targetFile, this.slideTargetRegion);
+				}
 			}
 			displayLabel(labelScreenRegion);
 		}
@@ -307,7 +330,7 @@ public class SlideAction {
 				url=new URL(userURL);
 			}
 			else{
-				url=new URL("http://"+userURL);
+				url=new URL("http://" + userURL);
 			}
 			browse(url);
 		} catch (MalformedURLException e) {
