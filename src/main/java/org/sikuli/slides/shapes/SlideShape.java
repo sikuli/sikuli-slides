@@ -24,6 +24,20 @@ public class SlideShape implements Comparable<SlideShape>{
 	private String backgroundColor;
 	private int lineWidth;
 	private String lineColor;
+	public SlideShape(){
+		this.id = "";
+		this.name = "";
+		this.order = 0;
+		this.type = "";
+		this.offx = 0;
+		this.offy = 0;
+		this.cx = 0;
+		this.cy = 0;
+		this.backgroundColor = "";
+		this.lineWidth = 0;
+		this.lineColor = "";
+		this.targetOrder = 0;
+	}
 	public SlideShape(String id, String name, int order, String type, 
 			int offx, int offy, int cx, int cy, String backgroundColor,int lineWidth, String lineColor){
 		this.id = id;
