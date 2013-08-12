@@ -45,17 +45,20 @@ public class Sound {
 	}
 	
 	public void playSound(){
-		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+getFileName();
-		try {
+		logger.info("Playing audio..");
+		String slideMediaLocation = Constants.projectDirectory + Constants.MEDIA_DIRECTORY + File.separator + getFileName();
+		try{
 			JSound sound = new JSound(slideMediaLocation);
 			sound.play();
 		}
 		catch (UnsupportedAudioFileException e) {
 			logger.error("Error in playing the audio file: Unsupported audio file format");
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			logger.error("Error in playing the audio file: Failed I/O operation.");
 		}
 	}
+	
 	public String toString(){
 		return "Sound info:\n" +"name:"+name+"\n file name:"+fileName+
 				"\n relationshipID="+relationshipId;
