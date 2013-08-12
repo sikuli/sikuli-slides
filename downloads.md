@@ -9,6 +9,21 @@ Java Runtime Environment (JRE) version 1.6 or newer.
 ### Linux
 Oracle Java Runtime Environment (JRE) version 1.7.
 
+#### Requirements for running tutorial and help mode
+* Access for assistive devices must be enabled.
+
+## 1.3.1
+
+<a href="/downloads/sikuli-slides-1.3.1.jar" class="btn btn-large btn-primary"
+onClick="_gaq.push(['_trackEvent', 'Downloads', 'Download', 'sikuli-slides-1.3.1.jar'])">
+Download sikuli-slides-1.3.1.jar
+</a>
+
+### Release Notes:
+* Fix playing audio clips in Windows.
+* Support play audio clips in new file formats (.mp3, .aiff, .au), in addition to the already supported .wav file formats.
+* Improve search for targets on the screen.
+
 ## 1.3.0
 
 <a href="/downloads/sikuli-slides-1.3.0.jar" class="btn btn-large btn-primary"
