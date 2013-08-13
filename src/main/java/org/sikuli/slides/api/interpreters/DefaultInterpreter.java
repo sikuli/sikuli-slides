@@ -6,8 +6,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.sikuli.api.Relative;
 import org.sikuli.api.Target;
-import org.sikuli.slides.api.RelativeScreenRegionTarget;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.BrowserAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
@@ -140,8 +140,9 @@ public class DefaultInterpreter implements Interpreter {
 			double ymin = 1.0 * textElement.getOffy() / 6858000;
 			double xmax = 1.0 * (textElement.getOffx()  + textElement.getCx()) / 9144000;
 			double ymax = 1.0 * (textElement.getOffy()  + textElement.getCy()) / 6858000;
-			Target relativeTarget = new RelativeScreenRegionTarget(xmin, ymin, xmax, ymax);
-			return new TargetAction(relativeTarget, action);
+			
+			RelativeAction relativeAction = new RelativeAction(xmin, ymin, xmax, ymax, action);			
+			return relativeAction;
 		}else{			
 			Target imageTarget = interpretAsImageTarget(slide, targetElement);		
 			int offsetX = UnitConverter.emuToPixels(textElement.getOffx() - targetElement.getOffx());
@@ -358,12 +359,14 @@ public class DefaultInterpreter implements Interpreter {
 
 		}else if ((keywordAction = interpretAsWait(slide)) != null){
 		
-		}
+		}else if ((keywordAction = interpretAsType(slide)) != null){
+			
+			}
 		
 		Action labelAction = interpretAsLabel(slide);		
 		if (labelAction != null && keywordAction != null){
 			ParallelAction parallelAction = new ParallelAction();
-			parallelAction.addAction(labelAction);		
+			parallelAction.addAction(labelAction);
 			parallelAction.addAction(keywordAction);
 			return parallelAction; 
 		}else if (labelAction != null){

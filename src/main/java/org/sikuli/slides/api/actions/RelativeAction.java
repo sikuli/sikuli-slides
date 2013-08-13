@@ -1,5 +1,6 @@
 package org.sikuli.slides.api.actions;
 
+import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.api.Context;
 import org.slf4j.Logger;
@@ -21,19 +22,42 @@ public class RelativeAction implements Action {
 	private int height = 0;
 	private Action targetAction;
 	
+	private double xmin = 0;
+	private double xmax = 1;
+	private double ymin = 0;
+	private double ymax = 1;
+	
+	private boolean isPixelUnit;
+	
 	public RelativeAction(int x, int y, int width, int height, Action targetAction){
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.targetAction = targetAction;
+		this.isPixelUnit = true;
+	}
+	
+	public RelativeAction(double xmin, double ymin, double xmax, double ymax, Action targetAction){
+		this.xmin = xmin;
+		this.xmax = xmax;
+		this.ymin = ymin;
+		this.ymax = ymax;
+		this.targetAction = targetAction;
+		this.isPixelUnit = false;
 	}
 	
 	@Override
 	public void execute(Context context) throws ActionExecutionException {
 		logger.info("executing " + this);
 		ScreenRegion screenRegion = context.getScreenRegion();
-		ScreenRegion targetRegion = screenRegion.getRelativeScreenRegion(x, y, width, height);
+		
+		ScreenRegion targetRegion;
+		if (isPixelUnit){
+			targetRegion = Relative.to(screenRegion).region(x,y,width,height).getScreenRegion();
+		}else{
+			targetRegion = Relative.to(screenRegion).region(xmin, ymin, xmax, ymax).getScreenRegion();
+		}
 		Context subConext = context.createCopy();			
 		subConext.setScreenRegion(targetRegion);
 		targetAction.execute(subConext);

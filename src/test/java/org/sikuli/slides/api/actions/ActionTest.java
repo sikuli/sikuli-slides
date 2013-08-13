@@ -2,7 +2,6 @@ package org.sikuli.slides.api.actions;
 
 import org.junit.Test;
 import org.sikuli.api.DefaultRegion;
-import org.sikuli.api.DefaultScreenRegion;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
