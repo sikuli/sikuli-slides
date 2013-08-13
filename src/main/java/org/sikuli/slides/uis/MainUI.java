@@ -30,6 +30,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.text.DefaultCaret;
 import org.sikuli.slides.Main;
+import org.sikuli.slides.core.RunOptions;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyFileFilter;
 import org.sikuli.slides.utils.Utils;
@@ -369,7 +370,9 @@ public class MainUI extends JFrame implements ActionListener {
 		if(file!=null){
 			// Minimize the running JFrame window
 			setState(JFrame.ICONIFIED);
-			main.doSikuliPowerPoint(file.getAbsolutePath());
+			RunOptions options = new RunOptions();
+			options.setSourceName(file.getAbsolutePath());
+			main.doSikuliPowerPoint(options);
 		}
 	}
 	

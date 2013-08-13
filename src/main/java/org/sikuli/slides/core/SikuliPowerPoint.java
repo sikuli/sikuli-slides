@@ -42,20 +42,30 @@ public class SikuliPowerPoint {
 		counter=new AtomicInteger();
 		tasks=new ArrayList<SikuliAction>();
 	}
-	public void runSikuliPowerPoint(){
+	
+	public void runSikuliPowerPoint(int start, int end){
 		// load the .pptx file
 		loadPresentationFile();
 		// parse the general presentation.xml file
 		parsePresentationFile();
+		
+		if (end == -1){
+			end = presentation.getSlidesCount();
+		}		
+		
 		// parse each slide file in the presentation document
-		for(int i=1;i<=presentation.getSlidesCount();i++){
+		for(int i=start;i<=end;i++){
 			parseSlideFile(i);
 		}
 		new Thread(new Runnable() {
-		    @Override 
-		    public void run() {
-		    	executeSikuliActions();
-		    }}).start();
+			@Override 
+			public void run() {
+				executeSikuliActions();
+			}}).start();
+	}
+	
+	public void runSikuliPowerPoint(){
+		runSikuliPowerPoint(1, presentation.getSlidesCount());
 	}
 	
 
