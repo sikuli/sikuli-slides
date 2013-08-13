@@ -63,6 +63,9 @@ public class UnitConverter {
 		else if(timeString.contains("second")){
 			return TimeUnit.SECONDS;
 		}
+		else if(timeString.contains("hour")){
+			return TimeUnit.HOURS;
+		}		
 		else if(timeString.toLowerCase().contains("day")){
 			return TimeUnit.DAYS;
 		}

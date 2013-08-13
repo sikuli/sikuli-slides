@@ -16,6 +16,10 @@ public class ParallelAction implements Action {
 	public void addAction(Action action){
 		actions.add(action);
 	}
+	
+	public List<Action> getActions(){
+		return Lists.newArrayList(actions);
+	}
 		
 	class Worker implements Runnable {
 	     Action action;

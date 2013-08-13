@@ -1,5 +1,6 @@
 package org.sikuli.slides.api.actions;
 
+import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
 import org.sikuli.api.visual.Canvas;
@@ -16,38 +17,29 @@ public class TargetAction implements Action {
 
 	Target target;
 	private Action targetAction;
-	private Action noTargetAction;
 	
 	public TargetAction(Target target, Action targetAction){
 		this.target = target;
 		this.targetAction = targetAction;
 	}
 	
-	public TargetAction(Target target, Action targetAction, Action noTargetAction){
-		this.target = target;
-		this.targetAction = targetAction;
-		this.noTargetAction = noTargetAction;
-	}		
-
 	@Override
 	public void execute(Context context) throws ActionExecutionException {
 		logger.info("executing " + this);
 		target.setMinScore(context.getMinScore());
 		long waitTime = context.getWaitTime();
 		ScreenRegion screenRegion = context.getScreenRegion();
-		ScreenRegion ret = screenRegion.wait(target, (int) waitTime);
-		if (ret != null){			
-			Canvas canvas = new ScreenRegionCanvas(ret);
-			canvas.addBox(ret);
+		ScreenRegion targetRegion = screenRegion.wait(target, (int) waitTime);
+		if (targetRegion != null){			
+			Canvas canvas = new ScreenRegionCanvas(targetRegion);
+			canvas.addBox(targetRegion);
 			//canvas.show();
-			
+						
 			Context subConext = context.createCopy();			
-			subConext.setScreenRegion(ret);
+			subConext.setScreenRegion(targetRegion);
 			targetAction.execute(subConext);
 
 			//canvas.hide();
-		}else if (noTargetAction != null){
-			noTargetAction.execute(context);
 		}else{
 			throw new ActionExecutionException("Unable to locate the target on the screen", this);
 		}
@@ -63,6 +55,7 @@ public class TargetAction implements Action {
 	
 	public String toString(){
 		return Objects.toStringHelper(this)
+
 				.add("action", targetAction)
 				.add("target", target).toString();
 	}

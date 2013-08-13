@@ -2,6 +2,7 @@ package org.sikuli.slides.api.actions;
 
 import java.awt.Color;
 
+import org.sikuli.api.ScreenLocation;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;

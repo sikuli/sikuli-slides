@@ -40,12 +40,13 @@ public class InterpreterMultiElementTest {
 
 	private DefaultInterpreter interpreter;
 	private Slide slide;
+	private URL source;
 
 	@Before
 	public void setUp() throws IOException{
 		interpreter = new DefaultInterpreter();
 		slide = new Slide();
-		//source = getClass().getResource("sikuli_context.png");
+		source = getClass().getResource("sikuli_context.png");
 	}
 
 	@Test
@@ -56,8 +57,21 @@ public class InterpreterMultiElementTest {
 
 		ParallelAction pa = (ParallelAction) interpreter.interpret(slide);
 		assertThat(pa, notNullValue());		
+		assertThat(pa.getActions().size(), equalTo(2));
 	}
 	
-	
+	@Test
+	public void testClickAndTarget() {
+		Slide slide = new Slide();
+		slide.newElement().text("label1").add();
+
+		slide.newKeywordElement().keyword(KeywordDictionary.CLICK).add();
+		slide.newElement().bounds(100,100,50,50).text("label").add();
+		slide.newImageElement().source(source).bounds(0,0,200,200).add();
+
+		ParallelAction pa = (ParallelAction) interpreter.interpret(slide);
+		assertThat(pa, notNullValue());
+		assertThat(pa.getActions().size(), equalTo(2));
+	}
 	
 }

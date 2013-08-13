@@ -15,8 +15,22 @@ public class Slide {
 	private int number; // one-based
 	
 	
+	// Construct a blank slide
+	public Slide(){		
+	}
+	
+	// Construct a new slide by copying the content from a given slide
+	public Slide(Slide slide){
+		elements = Lists.newArrayList(slide.elements);
+		number = slide.number;
+	}
+		
 	public void add(SlideElement element){
 		elements.add(element);
+	}
+	
+	public void remove(SlideElement element){
+		elements.remove(element);
 	}
 	
 	public Collection<SlideElement> getElements(){
@@ -34,8 +48,6 @@ public class Slide {
 	public Selector select(){
 		return Selector.select(this);
 	}
-
-	
 	
 	public SlideElementBuilder newElement() {		
 		return new SlideElementBuilder(this);
@@ -104,9 +116,4 @@ public class Slide {
 			return element;
 		}		
 	}
-	
-//	public Builder text(String text){
-//		
-//	}
-	
 }

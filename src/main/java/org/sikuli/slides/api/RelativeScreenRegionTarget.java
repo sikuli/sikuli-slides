@@ -6,6 +6,7 @@ import org.sikuli.api.DefaultTarget;
 import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 public class RelativeScreenRegionTarget extends DefaultTarget {
@@ -26,6 +27,12 @@ public class RelativeScreenRegionTarget extends DefaultTarget {
 	protected List<ScreenRegion> getUnorderedMatches(ScreenRegion screenRegion) {
 		ScreenRegion targetRegion = Relative.to(screenRegion).region(xmin, ymin, xmax, ymax).getScreenRegion();
 		return Lists.newArrayList(targetRegion);
+	}
+	
+	public String toString(){
+		return Objects.toStringHelper(this)
+		.add("x",String.format("[%.2f,%.2f]", xmin, xmax))
+		.add("y",String.format("[%.2f,%.2f]", ymin, ymax)).toString();
 	}
 
 }

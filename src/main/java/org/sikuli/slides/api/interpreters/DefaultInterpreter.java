@@ -18,6 +18,7 @@ import org.sikuli.slides.api.actions.LabelAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
 import org.sikuli.slides.api.actions.NotExistAction;
 import org.sikuli.slides.api.actions.ParallelAction;
+import org.sikuli.slides.api.actions.RelativeAction;
 import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
@@ -36,11 +37,23 @@ import org.slf4j.LoggerFactory;
 public class DefaultInterpreter implements Interpreter {
 
 	Logger logger = LoggerFactory.getLogger(DefaultInterpreter.class);
+	
+	class ClickInterpreter {
+		
+		Action interpret(Slide slide){
+			SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.CLICK).first();
+			if (keywordElement == null)
+				return null;		
+			Action action = new LeftClickAction();
+			return interpretAsTargetAction(slide, action);
+		}
+	}
 
 	Action interpretAsClick(Slide slide){				
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.CLICK).first();
 		if (keywordElement == null)
 			return null;		
+		slide.remove(keywordElement);
 		Action action = new LeftClickAction();
 		return interpretAsTargetAction(slide, action);
 	}
@@ -88,7 +101,7 @@ public class DefaultInterpreter implements Interpreter {
 		if (keywordElement == null)
 			return null;
 
-		Target target = interpretAsTarget(slide);
+		Target target = interpretAsImageTarget(slide);
 		if (target == null)
 			return null;
 
@@ -100,7 +113,7 @@ public class DefaultInterpreter implements Interpreter {
 		if (keywordElement == null)
 			return null;		
 
-		Target target = interpretAsTarget(slide);
+		Target target = interpretAsImageTarget(slide);
 		if (target == null)
 			return null;
 
@@ -119,20 +132,26 @@ public class DefaultInterpreter implements Interpreter {
 			action.setBackgroundColor(bgColor);
 		}catch(NumberFormatException e){
 			
-		}
-		
-		// check if the text intersects with an image
-		ImageElement image = (ImageElement) slide.select().intersects(textElement).isImage().first();
-		if (image != null){			
-			Target target = createTarget(image, textElement);			
-			return new TargetAction(target, action);						
-		}else{			
+		}		
+		// check if there is an image target nearby
+		SlideElement targetElement = slide.select().isTarget().near(textElement, 200000).first();
+		if (targetElement == null){	
 			double xmin = 1.0 * textElement.getOffx() / 9144000;
 			double ymin = 1.0 * textElement.getOffy() / 6858000;
 			double xmax = 1.0 * (textElement.getOffx()  + textElement.getCx()) / 9144000;
 			double ymax = 1.0 * (textElement.getOffy()  + textElement.getCy()) / 6858000;
-			Target target = new RelativeScreenRegionTarget(xmin, ymin, xmax, ymax);
-			return new TargetAction(target, action);
+			Target relativeTarget = new RelativeScreenRegionTarget(xmin, ymin, xmax, ymax);
+			return new TargetAction(relativeTarget, action);
+		}else{			
+			Target imageTarget = interpretAsImageTarget(slide, targetElement);		
+			int offsetX = UnitConverter.emuToPixels(textElement.getOffx() - targetElement.getOffx());
+			int offsetY = UnitConverter.emuToPixels(textElement.getOffy() - targetElement.getOffy());
+			int width = UnitConverter.emuToPixels(textElement.getCx());
+			int height = UnitConverter.emuToPixels(textElement.getCy());
+						
+			RelativeAction relativeAction = new RelativeAction(offsetX, offsetY, width, height, action);
+			TargetAction targetAction = new TargetAction(imageTarget, relativeAction);
+			return targetAction;
 		}
 	}
 	
@@ -180,22 +199,28 @@ public class DefaultInterpreter implements Interpreter {
 		return new ContextualImageTarget(imageElement.getSource(), xmin, ymin, xmax, ymax); 
 	}
 
-	Target interpretAsTarget(Slide slide){
+	Target interpretAsImageTarget(Slide slide){
 		SlideElement targetElement = slide.select().isTarget().first();
 		if (targetElement == null)
 			return null;
-
+		return interpretAsImageTarget(slide, targetElement);
+	}
+	
+	Target interpretAsImageTarget(Slide slide, SlideElement targetElement){
 		ImageElement imageElement = (ImageElement) slide.select().intersects(targetElement).isImage().first();
 		if (imageElement == null)
 			return null;
 
-		return createTarget(imageElement, targetElement);		
+		Target target = createTarget(imageElement, targetElement);
+		if (target == null)
+			return null;
+		return target;
 	}
 
 	Action interpretAsTargetAction(Slide slide, Action doAction){
-		Target target = interpretAsTarget(slide);			
+		Target target = interpretAsImageTarget(slide);		
 		if (target == null)
-			return doAction;		
+			return doAction;				
 		return new TargetAction(target, doAction);
 	}
 
@@ -246,7 +271,6 @@ public class DefaultInterpreter implements Interpreter {
 		
 		// extract the time unit
 		TimeUnit timeUnit = UnitConverter.extractTimeUnitFromString(arg);
-		// TODO: "2 hours" doesn't get extracted correctly
 		// if the time unit was not specified, default to seconds
 		if(timeUnit==null){
 			timeUnit=TimeUnit.SECONDS;
@@ -292,7 +316,7 @@ public class DefaultInterpreter implements Interpreter {
 		if (keywordElement == null)
 			return null;
 
-		Target target = interpretAsTarget(slide);
+		Target target = interpretAsImageTarget(slide);
 		if (target == null)
 			return null;
 
@@ -306,34 +330,47 @@ public class DefaultInterpreter implements Interpreter {
 	}	
 
 	@Override
-	public Action interpret(Slide slide){
-
-		Action action = null;
-		if ((action = interpretAsClick(slide)) != null){			
-
-		}else if ((action = interpretAsExist(slide)) != null){
-
-		}else if ((action = interpretAsRightClick(slide)) != null){			
-
-		}else if ((action = interpretAsDoubleClick(slide)) != null){			
-
-		}else if ((action = interpretAsDoubleClick(slide)) != null){
-			
-		}else if ((action = interpretAsDrag(slide)) != null){		
-
-		}else if ((action = interpretAsDrop(slide)) != null){		
-
-		}else if ((action = interpretAsBrowser(slide)) != null){		
-
-		}else if ((action = interpretAsLabel(slide)) != null){
-
-		}else if ((action = interpretAsNotExist(slide)) != null){		
+	public Action interpret(Slide inputSlide){
 		
-		}else if ((action = interpretAsDelay(slide)) != null){
+		// make a copy of the slide to work on
+		Slide slide = new Slide(inputSlide);
+
+		Action keywordAction = null;		
+		if ((keywordAction = interpretAsClick(slide)) != null){			
+
+		}else if ((keywordAction = interpretAsExist(slide)) != null){
+
+		}else if ((keywordAction = interpretAsRightClick(slide)) != null){			
+
+		}else if ((keywordAction = interpretAsDoubleClick(slide)) != null){			
+
+		}else if ((keywordAction = interpretAsDoubleClick(slide)) != null){
+
+		}else if ((keywordAction = interpretAsDrag(slide)) != null){		
+
+		}else if ((keywordAction = interpretAsDrop(slide)) != null){		
+
+		}else if ((keywordAction = interpretAsBrowser(slide)) != null){		
+
+		}else if ((keywordAction = interpretAsNotExist(slide)) != null){		
+
+		}else if ((keywordAction = interpretAsDelay(slide)) != null){
+
+		}else if ((keywordAction = interpretAsWait(slide)) != null){
 		
-		}else if ((action = interpretAsWait(slide)) != null){
-			
 		}
-		return action;		
+		
+		Action labelAction = interpretAsLabel(slide);		
+		if (labelAction != null && keywordAction != null){
+			ParallelAction parallelAction = new ParallelAction();
+			parallelAction.addAction(labelAction);		
+			parallelAction.addAction(keywordAction);
+			return parallelAction; 
+		}else if (labelAction != null){
+			return labelAction;
+		}else if (keywordAction != null){
+			return keywordAction;
+		}
+		return null;
 	}
 }

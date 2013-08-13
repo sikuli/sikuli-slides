@@ -63,24 +63,57 @@ public class Selector {
 		});
 		return this;
 	}
-
+	
+	public Selector near(final SlideElement element, int radius){		
+		if (element == null){
+			elements = Lists.newArrayList();
+			return this;
+		}
+		final Rectangle r = element.getBounds();
+		r.x -= radius;
+		r.y -= radius;
+		r.width += (2*radius);
+		r.height += (2*radius);
+		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement e) {			
+				return e != element && r.intersects(e.getBounds());								
+			}		
+		});
+		return this;
+	}
+	
 	public Selector hasText(){
 		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
 			@Override
 			public boolean apply(SlideElement e) {
-				return e.getText() != null && ! e.getText().isEmpty();
+				return hasText(e);
+			}		
+		});
+		return this;
+	}
+	
+	public Selector hasNoText(){
+		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement e) {
+				return !hasText(e);
 			}		
 		});
 		return this;
 	}
 
+	static public boolean hasText(SlideElement e){
+		return e.getText() != null && ! e.getText().isEmpty();
+	}
+	
 	public Selector isTarget(){
 		final List<SlideElement> images = Selector.select(elements).isImage().all();		
 		// find elements that intersect at least one image 
 		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
 			@Override
 			public boolean apply(SlideElement e) {
-				return Selector.select(images).intersects(e).exist();
+				return !hasText(e) && Selector.select(images).intersects(e).exist();
 			}		
 		});
 		return this;
