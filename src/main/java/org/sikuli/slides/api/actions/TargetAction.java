@@ -5,10 +5,14 @@ import org.sikuli.api.Target;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.api.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
 public class TargetAction implements Action {
+	
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	Target target;
 	private Action targetAction;
@@ -27,6 +31,7 @@ public class TargetAction implements Action {
 
 	@Override
 	public void execute(Context context) throws ActionExecutionException {
+		logger.info("executing " + this);
 		target.setMinScore(context.getMinScore());
 		long waitTime = context.getWaitTime();
 		ScreenRegion screenRegion = context.getScreenRegion();

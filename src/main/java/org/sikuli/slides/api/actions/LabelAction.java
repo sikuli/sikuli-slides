@@ -22,13 +22,10 @@ public class LabelAction implements Action {
 
 	@Override
 	public void execute(Context context){
-		logger.info("performing label action on target...");
+		logger.info("executing " + this);
 		ScreenRegion targetRegion = context.getScreenRegion();
 
 		String textToDisplay = context.render(text);
-		
-		
-		//backgroundColor = Color.decodenm)
 		
 		Canvas canvas = new ScreenRegionCanvas(targetRegion);
 		canvas.addLabel(targetRegion, textToDisplay)
