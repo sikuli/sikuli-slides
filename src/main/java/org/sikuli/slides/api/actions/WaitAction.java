@@ -6,7 +6,7 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class WaitAction implements Action {
+public class WaitAction extends DefaultAction {
 	
 	private long duration = 10000;
 	private Target target;

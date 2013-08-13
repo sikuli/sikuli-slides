@@ -172,7 +172,7 @@ public class DefaultInterpreter implements Interpreter {
 			ParallelAction pa = new ParallelAction();
 			for (SlideElement textElement : textElements){
 				Action labelAction = interpretAsLabel(slide, textElement);
-				pa.addAction(labelAction);
+				pa.addChild(labelAction);
 			}
 			return pa;
 		}
@@ -366,8 +366,8 @@ public class DefaultInterpreter implements Interpreter {
 		Action labelAction = interpretAsLabel(slide);		
 		if (labelAction != null && keywordAction != null){
 			ParallelAction parallelAction = new ParallelAction();
-			parallelAction.addAction(labelAction);
-			parallelAction.addAction(keywordAction);
+			parallelAction.addChild(labelAction);
+			parallelAction.addChild(keywordAction);
 			return parallelAction; 
 		}else if (labelAction != null){
 			return labelAction;

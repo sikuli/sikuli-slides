@@ -6,7 +6,7 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class ExistAction implements Action {
+public class ExistAction extends DefaultAction {
 
 	Target target;
 	public ExistAction(Target target){

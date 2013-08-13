@@ -7,7 +7,6 @@ import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
 import org.sikuli.slides.api.Context;
-import org.sikuli.slides.api.RelativeScreenRegionTarget;
 import org.sikuli.slides.api.actions.DelayAction;
 import org.sikuli.slides.api.mocks.AppearLaterTarget;
 import org.sikuli.slides.api.mocks.NeverFoundTarget;
@@ -58,8 +57,8 @@ public class ActionTest {
 		TargetAction targetAction = new TargetAction(target, clickAction);
 		
 		ParallelAction parallelAction = new ParallelAction();
-		parallelAction.addAction(targetAction);
-		parallelAction.addAction(labelAction);
+		parallelAction.addChild(targetAction);
+		parallelAction.addChild(labelAction);
 		parallelAction.execute(context);		
 	}
 	
@@ -85,8 +84,8 @@ public class ActionTest {
 		TargetAction targetAction = new TargetAction(target, labelAction2);
 				
 		ParallelAction parallelAction = new ParallelAction();
-		parallelAction.addAction(targetAction);
-		parallelAction.addAction(labelAction1);
+		parallelAction.addChild(targetAction);
+		parallelAction.addChild(labelAction1);
 		parallelAction.execute(context);		
 	}
 	
@@ -109,8 +108,8 @@ public class ActionTest {
 		TargetAction targetAction = new TargetAction(target, clickAction);
 		
 		ParallelAction parallelAction = new ParallelAction();
-		parallelAction.addAction(targetAction);
-		parallelAction.addAction(labelAction);
+		parallelAction.addChild(targetAction);
+		parallelAction.addChild(labelAction);
 		parallelAction.execute(context);
 	
 	}
@@ -125,21 +124,22 @@ public class ActionTest {
 		labelAction1.setDuration(2000);
 
 		
-		LabelAction labelAction4 = new LabelAction();
-		labelAction4.setText("Forth Quadrant");
-		labelAction4.setFontSize(15);
-		labelAction4.setDuration(2000);
+		LabelAction labelAction2 = new LabelAction();
+		labelAction2.setText("Forth Quadrant");
+		labelAction2.setFontSize(15);
+		labelAction2.setDuration(2000);
 
-		Target target1 = new RelativeScreenRegionTarget(0.5,0.5,0.8,0.8);
-		TargetAction targetAction1 = new TargetAction(target1, labelAction4);
-		
-		Target target4 = new RelativeScreenRegionTarget(0.5,0.2,0.8,0.5);
-		TargetAction targetAction4 = new TargetAction(target4, labelAction1);
+		RelativeAction relativeAction1 = new RelativeAction(0.5,0.5,0.8,0.8, labelAction1);		
+		RelativeAction relativeAction2 = new RelativeAction(0.5,0.2,0.8,0.5, labelAction2);		
 
 		ParallelAction parallelAction = new ParallelAction();
-		parallelAction.addAction(targetAction1);
-		parallelAction.addAction(targetAction4);
+		parallelAction.addChild(relativeAction1);
+		parallelAction.addChild(relativeAction2);		
+		
 		parallelAction.execute(context);
+		
+		assertThat(Actions.select(parallelAction).isInstaceOf(LabelAction.class).all().size(), equalTo(2));
 	}
+	
 
 }

@@ -6,7 +6,7 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class NotExistAction implements Action {
+public class NotExistAction extends DefaultAction {
 	
 	private Target target;
 	public NotExistAction(Target target){

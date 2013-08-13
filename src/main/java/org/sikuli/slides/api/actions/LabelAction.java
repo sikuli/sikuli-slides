@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
-public class LabelAction implements Action {
+public class LabelAction extends DefaultAction {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
-public class BrowserAction implements Action {
+public class BrowserAction extends DefaultAction {
 	
 	Logger logger = LoggerFactory.getLogger(BrowserAction.class);
 	

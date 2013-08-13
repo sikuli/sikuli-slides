@@ -8,18 +8,9 @@ import org.sikuli.slides.api.Context;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
-public class ParallelAction implements Action {
+public class ParallelAction extends DefaultAction {
 	
 	private CountDownLatch doneSignal;
-	private List<Action> actions = Lists.newArrayList();
-	
-	public void addAction(Action action){
-		actions.add(action);
-	}
-	
-	public List<Action> getActions(){
-		return Lists.newArrayList(actions);
-	}
 		
 	class Worker implements Runnable {
 	     Action action;
@@ -46,10 +37,10 @@ public class ParallelAction implements Action {
 	@Override
 	public void execute(Context context) throws ActionExecutionException {
 		
-		int n = actions.size();
+		int n = getChildren().size();
 		doneSignal = new CountDownLatch(n); 
 		List<Worker> workers = Lists.newArrayList();
-		for (Action action : actions){
+		for (Action action : getChildren()){
 			Worker worker = new Worker(action, context);
 			workers.add(worker);
 			new Thread(worker).start();
@@ -71,7 +62,7 @@ public class ParallelAction implements Action {
 	
 	public String toString(){
 		return Objects.toStringHelper(this)
-				.add("actions", actions)
+				.add("actions", getChildren())
 				.toString();
 	}
 

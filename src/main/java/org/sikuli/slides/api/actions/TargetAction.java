@@ -1,6 +1,5 @@
 package org.sikuli.slides.api.actions;
 
-import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
 import org.sikuli.api.visual.Canvas;
@@ -11,16 +10,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
-public class TargetAction implements Action {
+public class TargetAction extends DefaultAction {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	Target target;
-	private Action targetAction;
 	
 	public TargetAction(Target target, Action targetAction){
 		this.target = target;
-		this.targetAction = targetAction;
+		addChild(targetAction);
 	}
 	
 	@Override
@@ -35,9 +33,11 @@ public class TargetAction implements Action {
 			canvas.addBox(targetRegion);
 			//canvas.show();
 						
-			Context subConext = context.createCopy();			
-			subConext.setScreenRegion(targetRegion);
-			targetAction.execute(subConext);
+			Context childConext = context.createCopy();			
+			childConext.setScreenRegion(targetRegion);
+			for (Action child : getChildren()){
+				child.execute(childConext);
+			}
 
 			//canvas.hide();
 		}else{
@@ -45,18 +45,8 @@ public class TargetAction implements Action {
 		}
 	}
 
-	public Action getTargetAction() {
-		return targetAction;
-	}
-
-	public void setTargetAction(Action targetAction) {
-		this.targetAction = targetAction;
-	}
-	
 	public String toString(){
-		return Objects.toStringHelper(this)
-
-				.add("action", targetAction)
+		return Objects.toStringHelper(this)				
 				.add("target", target).toString();
 	}
 

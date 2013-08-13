@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
-public class RightClickAction implements Action {
+public class RightClickAction extends DefaultAction {
 		
 	private Logger logger = LoggerFactory.getLogger(getClass());
 

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
-public class TypeAction implements Action {
+public class TypeAction extends DefaultAction {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	private String text;

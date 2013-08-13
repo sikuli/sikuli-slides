@@ -13,6 +13,7 @@ import java.net.URL;
 import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.actions.Actions;
 import org.sikuli.slides.api.actions.BrowserAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
 import org.sikuli.slides.api.actions.ExistAction;
@@ -101,30 +102,25 @@ public class InterpreterTest {
 	@Test
 	public void testLeftClickAction(){
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.CLICK);		
-		TargetAction action = (TargetAction) interpreter.interpret(slide);
-		
+		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
-		assertThat(action, instanceOf(TargetAction.class));
-		assertThat(action.getTargetAction(), instanceOf(LeftClickAction.class));	
+		assertThat(Actions.select(action).isInstaceOf(LeftClickAction.class).all().size(), equalTo(1));
 	}
 	
 	@Test
 	public void testRightClickAction() {
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.RIGHT_CLICK);		
-		TargetAction action = (TargetAction) interpreter.interpret(slide);
-		
-		assertNotNull(action);
-		assertThat(action, instanceOf(TargetAction.class));
-		assertThat(action.getTargetAction(), instanceOf(RightClickAction.class));
+		Action action = interpreter.interpret(slide);		
+		assertThat(action, notNullValue());
+		assertThat(Actions.select(action).isInstaceOf(RightClickAction.class).all().size(), equalTo(1));
 	}
 	
 	@Test
 	public void testDoubleClickAction() {
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.DOUBLE_CLICK);
-		TargetAction action = (TargetAction) interpreter.interpret(slide);
-		
-		assertNotNull(action);
-		assertThat(action.getTargetAction(), instanceOf(DoubleClickAction.class));
+		Action action = interpreter.interpret(slide);		
+		assertThat(action, notNullValue());
+		assertThat(Actions.select(action).isInstaceOf(DoubleClickAction.class).all().size(), equalTo(1));
 	}
 	
 	@Test
@@ -134,6 +130,7 @@ public class InterpreterTest {
 		
 		Action action = interpreter.interpret(slide);
 		assertThat(action, notNullValue());
+		assertThat(Actions.select(action).isInstaceOf(LabelAction.class).all().size(), equalTo(1));
 	}	
 	
 	@Test
@@ -144,21 +141,23 @@ public class InterpreterTest {
 		
 		Action action = interpreter.interpret(slide);
 		assertThat(action, notNullValue());		
-//		assertThat(action.getTargetAction(), instanceOf(LabelAction.class));
+		assertThat(Actions.select(action).isInstaceOf(LabelAction.class).all().size(), equalTo(1));
 	}	
 	
 	@Test
 	public void testExistAction() {
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.EXIST);
-		ExistAction action = (ExistAction) interpreter.interpret(slide);		
+		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
+		assertThat(Actions.select(action).isInstaceOf(ExistAction.class).all().size(), equalTo(1));
 	}	
 
 	@Test
 	public void testInterpretNotExistAction() {
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.NOT_EXIST);
-		NotExistAction action = (NotExistAction) interpreter.interpret(slide);		
-		assertNotNull(action);
+		Action action = interpreter.interpret(slide);		
+		assertThat(action, notNullValue());
+		assertThat(Actions.select(action).isInstaceOf(NotExistAction.class).all().size(), equalTo(1));
 	}	
 	
 	
@@ -171,10 +170,10 @@ public class InterpreterTest {
 		
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
-		//assertThat(action.getTargetAction(), instanceOf(TypeAction.class));
+		assertThat(Actions.select(action).isInstaceOf(TypeAction.class).all().size(), equalTo(1));
 		
-		//TypeAction typeAction = (TypeAction) action.getTargetAction();
-		//assertThat(typeAction.getText(), equalToIgnoringCase("some text"));
+		TypeAction typeAction = (TypeAction) Actions.select(action).isInstaceOf(TypeAction.class).first();
+		assertThat(typeAction.getText(), equalToIgnoringCase("some text"));
 	}	
 	
 	@Test
@@ -184,6 +183,11 @@ public class InterpreterTest {
 		
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
+		
+		assertThat(Actions.select(action).isInstaceOf(TypeAction.class).all().size(), equalTo(1));
+		
+		TypeAction typeAction = (TypeAction) Actions.select(action).isInstaceOf(TypeAction.class).first();
+		assertThat(typeAction.getText(), equalToIgnoringCase("some text"));
 	}
 	
 	@Test
@@ -194,6 +198,11 @@ public class InterpreterTest {
 		
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
+		
+		assertThat(Actions.select(action).isInstaceOf(TypeAction.class).all().size(), equalTo(1));
+		
+		TypeAction typeAction = (TypeAction) Actions.select(action).isInstaceOf(TypeAction.class).first();
+		assertThat(typeAction.getText(), equalToIgnoringCase("some text"));
 	}
 
 	@Test

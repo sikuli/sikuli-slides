@@ -19,7 +19,6 @@ import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.Target;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.slides.api.Context;
-import org.sikuli.slides.api.RelativeScreenRegionTarget;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.ActionExecutionException;
 import org.sikuli.slides.api.actions.DoubleClickAction;

@@ -12,15 +12,14 @@ import com.google.common.base.Objects;
 // the screen region given in the context. It can be used in conjunction
 // with a TargetAction to execute an action not directly on a target
 // but in another area relative to the target.
-public class RelativeAction implements Action {
+public class RelativeAction extends DefaultAction {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private int x = 0;
 	private int y = 0;
 	private int width = 0;
-	private int height = 0;
-	private Action targetAction;
+	private int height = 0;	
 	
 	private double xmin = 0;
 	private double xmax = 1;
@@ -34,8 +33,8 @@ public class RelativeAction implements Action {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.targetAction = targetAction;
 		this.isPixelUnit = true;
+		addChild(targetAction);
 	}
 	
 	public RelativeAction(double xmin, double ymin, double xmax, double ymax, Action targetAction){
@@ -43,8 +42,8 @@ public class RelativeAction implements Action {
 		this.xmax = xmax;
 		this.ymin = ymin;
 		this.ymax = ymax;
-		this.targetAction = targetAction;
 		this.isPixelUnit = false;
+		addChild(targetAction);
 	}
 	
 	@Override
@@ -58,17 +57,28 @@ public class RelativeAction implements Action {
 		}else{
 			targetRegion = Relative.to(screenRegion).region(xmin, ymin, xmax, ymax).getScreenRegion();
 		}
-		Context subConext = context.createCopy();			
-		subConext.setScreenRegion(targetRegion);
-		targetAction.execute(subConext);
+		
+		Context childConext = context.createCopy();			
+		childConext.setScreenRegion(targetRegion);
+		for (Action child : getChildren()){
+			child.execute(childConext);
+		}
 	}
+	
 	public String toString(){
+		if (isPixelUnit){
 		return Objects.toStringHelper(this)
 				.add("x", x)
 				.add("y", y)
 				.add("width", width)
-				.add("height", height)
-				.add("action", targetAction).toString();
+				.add("height", height).				
+				toString();
+		}else{
+			return Objects.toStringHelper(this)
+					.add("x", String.format("(%.2f,%.2f)", xmin, xmax))
+					.add("y", String.format("(%.2f,%.2f)", ymin, ymax))
+					.toString();			
+		}
 	}
 
 }

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
-public class DragAction implements Action {
+public class DragAction extends DefaultAction {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
