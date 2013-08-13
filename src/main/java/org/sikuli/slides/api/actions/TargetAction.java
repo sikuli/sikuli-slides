@@ -41,9 +41,9 @@ public class TargetAction implements Action {
 			canvas.addBox(ret);
 			canvas.show();
 			
-			context.setScreenRegion(ret);			
-			targetAction.execute(context);
-			context.setScreenRegion(screenRegion);
+			Context subConext = context.createCopy();			
+			subConext.setScreenRegion(ret);		
+			targetAction.execute(subConext);
 
 			canvas.hide();
 		}else if (noTargetAction != null){

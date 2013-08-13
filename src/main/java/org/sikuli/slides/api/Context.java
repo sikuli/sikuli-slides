@@ -30,10 +30,19 @@ public class Context {
 	
 	public Context(ScreenRegion screenRegion) {
 		this.screenRegion = screenRegion;
-	}
+	}	
 	
 	public Context(){
 		screenRegion = new DesktopScreenRegion();
+	}
+	
+	public Context createCopy(){
+		Context copy = new Context();
+		copy.setMinScore(getMinScore());
+		copy.setScreenRegion(getScreenRegion());
+		copy.setSlideSelector(getSlideSelector());
+		copy.setWaitTime(getWaitTime());
+		return copy;
 	}
 
 	public ScreenRegion getScreenRegion() {

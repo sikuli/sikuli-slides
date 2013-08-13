@@ -6,18 +6,12 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.imageio.ImageIO;
-
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.sikuli.api.DesktopScreenRegion;
-import org.sikuli.api.StaticImageScreenRegion;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.BrowserAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
@@ -37,8 +31,6 @@ import org.sikuli.slides.api.interpreters.KeywordDictionary;
 import org.sikuli.slides.api.models.ImageElement;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.models.SlideElement;
-
-
 
 public class InterpreterTest {
 
@@ -143,14 +135,6 @@ public class InterpreterTest {
 		
 		LabelAction action = (LabelAction) interpreter.interpret(slide);
 		assertThat(action, notNullValue());
-		
-//		FindDoAction action = (FindDoAction) interpreter.interpret(slide);		
-//		assertNotNull(action);
-//		
-//		assertThat(action.getTargetAction(), instanceOf(LabelAction.class));
-//		LabelAction label = (LabelAction) action.getTargetAction();
-//		assertEquals(TEST_TEXT, label.getText());
-//		assertEquals(36, label.getFontSize());
 	}	
 	
 	@Test

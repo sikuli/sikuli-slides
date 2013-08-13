@@ -3,6 +3,7 @@ package org.sikuli.slides.api.interpreters;
 import java.awt.Color;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.sikuli.api.API;
@@ -16,6 +17,7 @@ import org.sikuli.slides.api.actions.ExistAction;
 import org.sikuli.slides.api.actions.LabelAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
 import org.sikuli.slides.api.actions.NotExistAction;
+import org.sikuli.slides.api.actions.ParallelAction;
 import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
@@ -106,16 +108,7 @@ public class DefaultInterpreter implements Interpreter {
 		return new NotExistAction(target);
 	}
 
-	Action interpretAsLabel(Slide slide){
-
-		// if there's a keyword on the slide, do not interpret text as labels
-		if (slide.select().isKeyword().exist())
-			return null;
-
-		SlideElement textElement = slide.select().hasText().first();
-		if (textElement == null)
-			return null;
-
+	Action interpretAsLabel(Slide slide, SlideElement textElement){
 		LabelAction action = new LabelAction();
 		action.setText(textElement.getText());
 		double fontSize = UnitConverter.WholePointsToPoints(textElement.getTextSize());
@@ -127,7 +120,7 @@ public class DefaultInterpreter implements Interpreter {
 		}catch(NumberFormatException e){
 			
 		}
-
+		
 		// check if the text intersects with an image
 		ImageElement image = (ImageElement) slide.select().intersects(textElement).isImage().first();
 		if (image != null){			
@@ -137,7 +130,28 @@ public class DefaultInterpreter implements Interpreter {
 			return action;
 		}
 	}
+	
+	Action interpretAsLabel(Slide slide){
 
+		// if there's a keyword on the slide, do not interpret text as labels
+		if (slide.select().isKeyword().exist())
+			return null;
+
+		List<SlideElement> textElements = slide.select().hasText().all();
+		if (textElements.size() == 0)
+			return null;
+
+		if (textElements.size() == 1){
+			return interpretAsLabel(slide, textElements.get(0));
+		}else{
+			ParallelAction pa = new ParallelAction();
+			for (SlideElement textElement : textElements){
+				Action labelAction = interpretAsLabel(slide, textElement);
+				pa.addAction(labelAction);
+			}
+			return pa;
+		}
+	}
 
 	Target createTarget(ImageElement imageElement, SlideElement targetElement){
 		if (imageElement == null || targetElement == null)

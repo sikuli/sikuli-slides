@@ -1,6 +1,11 @@
 package org.sikuli.slides.api.actions;
 
 import org.junit.Test;
+import org.sikuli.api.DefaultRegion;
+import org.sikuli.api.DefaultScreenRegion;
+import org.sikuli.api.DesktopScreenRegion;
+import org.sikuli.api.Relative;
+import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
 import org.sikuli.slides.api.Context;
 import org.sikuli.slides.api.actions.DelayAction;
@@ -47,7 +52,7 @@ public class ActionTest {
 		labelAction.setFontSize(15);
 		labelAction.setDuration(5000);
 		
-		// thread 2: click on a taget that will appear after about 3 seconds
+		// thread 2: click on a target that will appear after about 3 seconds
 		LeftClickAction clickAction = new LeftClickAction();
 		Target target = new AppearLaterTarget(3000);
 		TargetAction targetAction = new TargetAction(target, clickAction);
@@ -55,6 +60,33 @@ public class ActionTest {
 		ParallelAction parallelAction = new ParallelAction();
 		parallelAction.addAction(targetAction);
 		parallelAction.addAction(labelAction);
+		parallelAction.execute(context);		
+	}
+	
+	@Test
+	public void testParallelActionMultiLabels() throws ActionExecutionException{
+		ScreenRegion desktop = new DesktopScreenRegion();
+		Context context = new Context(desktop);
+	
+		// thread 1: display a label for 5 seconds
+		LabelAction labelAction1 = new LabelAction();
+		labelAction1.setText("First label appears in the screen center right away");
+		labelAction1.setFontSize(15);
+		labelAction1.setDuration(5000);
+		
+		
+		// thread 2: display another label for 2 seconds
+		LabelAction labelAction2 = new LabelAction();
+		labelAction2.setText("Second label appears at a targe that appears after 2 seconds");
+		labelAction2.setFontSize(15);
+		labelAction2.setDuration(5000);
+		ScreenRegion targetRegion = Relative.to(desktop).region(new DefaultRegion(500,100,100,100)).getScreenRegion();
+		Target target = new AppearLaterTarget(targetRegion, 2000);
+		TargetAction targetAction = new TargetAction(target, labelAction2);
+				
+		ParallelAction parallelAction = new ParallelAction();
+		parallelAction.addAction(targetAction);
+		parallelAction.addAction(labelAction1);
 		parallelAction.execute(context);		
 	}
 	
