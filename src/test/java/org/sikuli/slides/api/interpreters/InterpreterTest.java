@@ -251,14 +251,4 @@ public class InterpreterTest {
 		
 	}
 	
-	
-	@Test
-	public void testInterpretedElementsShouldBeRemoved(){
-//		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.CLICK);		
-//		TargetAction action = (TargetAction) interpreter.interpret(slide);
-//		
-//		assertThat(action, notNullValue());
-//		assertThat(action, instanceOf(TargetAction.class));
-//		assertThat(action.getTargetAction(), instanceOf(LeftClickAction.class));	
-	}
 }

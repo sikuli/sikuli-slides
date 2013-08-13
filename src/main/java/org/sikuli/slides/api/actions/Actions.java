@@ -1,7 +1,6 @@
 package org.sikuli.slides.api.actions;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Predicate;

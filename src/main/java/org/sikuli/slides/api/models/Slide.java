@@ -7,6 +7,8 @@ import java.util.List;
 import org.sikuli.slides.api.interpreters.Keyword;
 import org.sikuli.slides.api.interpreters.Selector;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 public class Slide {
@@ -38,11 +40,12 @@ public class Slide {
 	}
 
 	public String toString(){
-		String txt = "";
+		List<String> elementNames = Lists.newArrayList();
 		for (SlideElement el : elements){
-			txt = txt + el.toString() + "\n";
+			elementNames.add(el.getClass().getSimpleName());
 		}
-		return txt;
+		String txt = Joiner.on(";").join(elementNames);
+		return Objects.toStringHelper(this).add("number", number).add("elements", txt).toString();		
 	}
 	
 	public Selector select(){

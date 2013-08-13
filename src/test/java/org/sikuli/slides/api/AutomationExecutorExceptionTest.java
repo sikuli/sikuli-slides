@@ -1,7 +1,6 @@
 package org.sikuli.slides.api;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -16,7 +15,6 @@ import org.junit.Test;
 import org.sikuli.api.DefaultLocation;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.slides.api.actions.InputDetector;
-import org.sikuli.slides.api.actions.LeftClickAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.models.Slide;
 
@@ -35,7 +33,7 @@ public class AutomationExecutorExceptionTest {
 		canvas = new DesktopCanvas();
 		BufferedImage image = ImageIO.read(getClass().getResource("sikuli_context.png"));
 		canvas.addImage(new DefaultLocation(150,150), image);
-		canvas.show();		
+	
 	}
 	
 	public List<Slide> readSlidesFromResource(String resourceName) throws IOException{
@@ -50,15 +48,13 @@ public class AutomationExecutorExceptionTest {
 	
 	@Test(expected = SlideExecutionException.class)
 	public void testExecuteTargetNotFoundOnFirstSlide() throws IOException, SlideExecutionException{
-		canvas.hide();
-		List<Slide> slides = readSlidesFromResource("click.pptx");	
+		List<Slide> slides = readSlidesFromResource("badFirstStep.pptx");	
 		executor.execute(slides);		
 	}
 	
 	@Test
 	public void testExecuteTargetNotFoundOnFirstSlideExeptionData() throws IOException {
-		canvas.hide();
-		List<Slide> slides = readSlidesFromResource("click.pptx");	
+		List<Slide> slides = readSlidesFromResource("badFirstStep.pptx");	
 		try {
 			executor.execute(slides);
 		} catch (SlideExecutionException e) {
@@ -69,6 +65,7 @@ public class AutomationExecutorExceptionTest {
 	
 	@Test
 	public void testExecuteTargetNotFoundOnSecondSlide() throws IOException {
+		canvas.show();	
 		List<Slide> slides = readSlidesFromResource("badSecondStep.pptx");
 		SlideExecutionException exception = null;
 		try {
@@ -79,7 +76,7 @@ public class AutomationExecutorExceptionTest {
 		assertNotNull(exception);
 		// check if the 2nd slide is returned as the bad slide
 		assertEquals("slide", exception.getSlide(), slides.get(1));
-
+		canvas.hide();
 	}
 	
 }
