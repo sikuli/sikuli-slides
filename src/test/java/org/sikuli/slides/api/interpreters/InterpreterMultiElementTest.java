@@ -12,7 +12,10 @@ import java.net.URL;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.sikuli.api.Target;
+import org.sikuli.slides.api.RelativeScreenRegionTarget;
 import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.actions.ActionExecutionException;
 import org.sikuli.slides.api.actions.BrowserAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
 import org.sikuli.slides.api.actions.ExistAction;
@@ -54,5 +57,7 @@ public class InterpreterMultiElementTest {
 		ParallelAction pa = (ParallelAction) interpreter.interpret(slide);
 		assertThat(pa, notNullValue());		
 	}
+	
+	
 	
 }

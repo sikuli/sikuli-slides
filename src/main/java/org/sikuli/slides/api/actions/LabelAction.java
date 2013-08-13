@@ -24,7 +24,7 @@ public class LabelAction implements Action {
 	public void execute(Context context){
 		logger.info("executing " + this);
 		ScreenRegion targetRegion = context.getScreenRegion();
-
+		
 		String textToDisplay = context.render(text);
 		
 		Canvas canvas = new ScreenRegionCanvas(targetRegion);

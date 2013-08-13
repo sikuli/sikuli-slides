@@ -6,8 +6,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.sikuli.api.API;
 import org.sikuli.api.Target;
+import org.sikuli.slides.api.RelativeScreenRegionTarget;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.BrowserAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
@@ -125,9 +125,14 @@ public class DefaultInterpreter implements Interpreter {
 		ImageElement image = (ImageElement) slide.select().intersects(textElement).isImage().first();
 		if (image != null){			
 			Target target = createTarget(image, textElement);			
-			return new TargetAction(target, action, null);						
+			return new TargetAction(target, action);						
 		}else{			
-			return action;
+			double xmin = 1.0 * textElement.getOffx() / 9144000;
+			double ymin = 1.0 * textElement.getOffy() / 6858000;
+			double xmax = 1.0 * (textElement.getOffx()  + textElement.getCx()) / 9144000;
+			double ymax = 1.0 * (textElement.getOffy()  + textElement.getCy()) / 6858000;
+			Target target = new RelativeScreenRegionTarget(xmin, ymin, xmax, ymax);
+			return new TargetAction(target, action);
 		}
 	}
 	

@@ -8,6 +8,7 @@ import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
 import org.sikuli.slides.api.Context;
+import org.sikuli.slides.api.RelativeScreenRegionTarget;
 import org.sikuli.slides.api.actions.DelayAction;
 import org.sikuli.slides.api.mocks.AppearLaterTarget;
 import org.sikuli.slides.api.mocks.NeverFoundTarget;
@@ -113,6 +114,33 @@ public class ActionTest {
 		parallelAction.addAction(labelAction);
 		parallelAction.execute(context);
 	
+	}
+	
+	@Test
+	public void testLabelInRelativeLocation() throws ActionExecutionException{
+		Context context = new Context();
+		
+		LabelAction labelAction1 = new LabelAction();
+		labelAction1.setText("First Quadrant");
+		labelAction1.setFontSize(15);
+		labelAction1.setDuration(2000);
+
+		
+		LabelAction labelAction4 = new LabelAction();
+		labelAction4.setText("Forth Quadrant");
+		labelAction4.setFontSize(15);
+		labelAction4.setDuration(2000);
+
+		Target target1 = new RelativeScreenRegionTarget(0.5,0.5,0.8,0.8);
+		TargetAction targetAction1 = new TargetAction(target1, labelAction4);
+		
+		Target target4 = new RelativeScreenRegionTarget(0.5,0.2,0.8,0.5);
+		TargetAction targetAction4 = new TargetAction(target4, labelAction1);
+
+		ParallelAction parallelAction = new ParallelAction();
+		parallelAction.addAction(targetAction1);
+		parallelAction.addAction(targetAction4);
+		parallelAction.execute(context);
 	}
 
 }

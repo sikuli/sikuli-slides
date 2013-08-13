@@ -36,16 +36,16 @@ public class TargetAction implements Action {
 		long waitTime = context.getWaitTime();
 		ScreenRegion screenRegion = context.getScreenRegion();
 		ScreenRegion ret = screenRegion.wait(target, (int) waitTime);
-		if (ret != null){
+		if (ret != null){			
 			Canvas canvas = new ScreenRegionCanvas(ret);
 			canvas.addBox(ret);
-			canvas.show();
+			//canvas.show();
 			
 			Context subConext = context.createCopy();			
-			subConext.setScreenRegion(ret);		
+			subConext.setScreenRegion(ret);
 			targetAction.execute(subConext);
 
-			canvas.hide();
+			//canvas.hide();
 		}else if (noTargetAction != null){
 			noTargetAction.execute(context);
 		}else{
