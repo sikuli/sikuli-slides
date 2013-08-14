@@ -35,7 +35,7 @@ public class CrossSearchStrategy implements SearchStrategy {
 	@Override
 	public ScreenRegion perform(ScreenRegion screenRegion){		
 		List<Hypothesis> hs = generateHypotheses(contextImage, targetRect);
-		logger.info("generated {} hypotheses", hs.size());
+		//logger.info("generated {} hypotheses", hs.size());
 		ScreenRegion ret = testHypotheses(screenRegion, hs);		
 		return ret;		
 	}

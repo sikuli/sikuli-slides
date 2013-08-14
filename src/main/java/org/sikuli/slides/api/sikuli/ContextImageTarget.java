@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 
 public class ContextImageTarget implements Target {
 
@@ -131,8 +132,11 @@ public class ContextImageTarget implements Target {
 	}
 
 	public String toString(){
-		return Objects.toStringHelper(this).add("image", contextImage).add("xmin",xmin).add("xmax",xmax)
-				.add("ymin",ymin).add("ymax",ymax).toString();
+		return Objects.toStringHelper(this)
+				.add("image", contextImageURL)
+				.add("x", String.format("(%.2f,%.2f)", xmin, xmax))
+				.add("y", String.format("(%.2f,%.2f)", ymin, ymax))
+				.toString();
 	}
 
 

@@ -13,7 +13,6 @@ import org.jnativehook.mouse.NativeMouseEvent;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.sikuli.api.API;
 import org.sikuli.api.DefaultLocation;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.slides.api.actions.InputDetector;

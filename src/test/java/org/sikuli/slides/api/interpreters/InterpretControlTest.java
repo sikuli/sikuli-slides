@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.Actions;
+import org.sikuli.slides.api.actions.OptionalAction;
 import org.sikuli.slides.api.actions.SkipAction;
 import org.sikuli.slides.api.models.Slide;
 
@@ -37,6 +38,12 @@ public class InterpretControlTest {
 		assertThat(Actions.select(action).isInstaceOf(SkipAction.class).all().size(), equalTo(1));
 	}
 	
-
+	@Test
+	public void testOptional(){
+		slide.newKeywordElement().keyword(KeywordDictionary.OPTIONAL).geom("hex").add();		
+		Action action = interpreter.interpret(slide);
+		assertThat(action, notNullValue());
+		assertThat(Actions.select(action).isInstaceOf(OptionalAction.class).all().size(), equalTo(1));
+	}
 	
 }

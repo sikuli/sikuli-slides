@@ -18,6 +18,7 @@ import org.sikuli.slides.api.actions.ExistAction;
 import org.sikuli.slides.api.actions.LabelAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
 import org.sikuli.slides.api.actions.NotExistAction;
+import org.sikuli.slides.api.actions.OptionalAction;
 import org.sikuli.slides.api.actions.ParallelAction;
 import org.sikuli.slides.api.actions.RelativeAction;
 import org.sikuli.slides.api.actions.RightClickAction;
@@ -345,6 +346,13 @@ public class DefaultInterpreter implements Interpreter {
 		return new SkipAction();
 	}
 
+	private Action interpretAsOptional(Slide slide) {
+		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.OPTIONAL).first();
+		if (keywordElement == null)
+			return null;		
+		return new OptionalAction();
+	}
+
 
 	@Override
 	public Action interpret(Slide inputSlide){
@@ -391,18 +399,17 @@ public class DefaultInterpreter implements Interpreter {
 			parallelAction.addChild(labelAction);
 		}
 		
-//		action = parallelAction; 
-//		}else if (labelAction != null){
-//			action = labelAction;
-//		}else if (keywordAction != null){
-//			action = keywordAction;
-//		}
 		action = parallelAction;
 		
-		Action controlAction = interpretAsSkip(slide);
-		if (controlAction != null){
-			if (action != null)
-				((DefaultAction) controlAction).addChild(action);
+		Action controlAction = null;		
+		if ((controlAction = interpretAsSkip(slide)) != null){			
+		
+		}else if ((controlAction = interpretAsOptional(slide)) != null){
+			
+		}
+		
+		if (controlAction != null){			
+			((DefaultAction) controlAction).addChild(action);
 			action = controlAction;
 		}
 		
