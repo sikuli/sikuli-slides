@@ -81,10 +81,8 @@ public class CrossSearchStrategy implements SearchStrategy {
 			
 			Target target = hypothesis.getTarget();
 			
-			logger.info("test: {}" , hypothesis);
-			
 			List<ScreenRegion> lookupRegion = screenRegion.findAll(target);
-			logger.info("found {} matches", lookupRegion.size());
+			logger.info("test: {} ... found {} matches", hypothesis, lookupRegion.size());
 			
 			if(lookupRegion.size()>1){
 				continue;

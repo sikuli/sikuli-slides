@@ -11,8 +11,12 @@ import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.api.io.PPTXSlidesReader;
 import org.sikuli.slides.api.io.SlidesReader;
 import org.sikuli.slides.api.models.Slide;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Slides {
+	
+	static Logger logger = LoggerFactory.getLogger(Slides.class);
 
 	static public void execute(URL url) throws SlideExecutionException {		
 		ScreenRegion screenRegion = new DesktopScreenRegion();
@@ -20,7 +24,8 @@ public class Slides {
 		execute(url, context);		
 	}
 
-	static public void execute(URL url, Context context) throws SlideExecutionException {		
+	static public void execute(URL url, Context context) throws SlideExecutionException {	
+		logger.info("execute slides with context {}", context);
 		SlidesReader reader = new PPTXSlidesReader();		
 		List<Slide> slides;
 		try {

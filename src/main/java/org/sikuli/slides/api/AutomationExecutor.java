@@ -40,8 +40,7 @@ public class AutomationExecutor implements SlidesExecutor {
 		
 		for (Slide slide : slides) {
 			if (!context.getSlideSelector().accept(slide))
-				continue;
-			
+				continue;			
 			
 			try {				
 				Action action = slideActionMap.get(slide);

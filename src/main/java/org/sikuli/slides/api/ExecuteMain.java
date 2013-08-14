@@ -7,39 +7,82 @@ import java.util.List;
 
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
+import org.sikuli.slides.api.models.Slide;
 
 import com.google.common.base.Objects;
 import com.sampullara.cli.Args;
 import com.sampullara.cli.Argument;
 
 public class ExecuteMain {
-	
-	static final String EXE = "java -jar sikuli-slides-1.4.0.jar execute";
-	static final String SYNTAX =  "path-to-slides-file [options]";
-	
-	@Argument(value = "help", description = "Print help message", required = false)
-	static private boolean help = false;
-	
-	@Argument(value = "screen_id", description = "The id of the connected screen/monitor (default is 0).", required = false)
-	static private int screenId = 0;
-	
-	@Argument(value = "min_score", description = "The minimum similarity score for a target to be considered as a match. It's on a 0 to 1 scale where 0 is the least precise search and 1.0 is the most precise search (default is 0.7).", required = false)
-	static private Float minScore = 0.7f;
-	
-	@Argument(value = "wait", description = "The maximum time to wait (ms) for a target to appear on the screen to perform an action on it (default is 5000).", required = false)
-	static private long wait = 5000;
 
+	static final String EXE = "java -jar sikuli-slides-1.4.0.jar execute";
+	static final String SYNTAX =  "input [options]";
+
+	@Argument(value = "help", description = "Print help message", required = false)
+	private boolean help = false;
+
+	@Argument(value = "screen_id", description = "The id of the connected screen/monitor (default is 0).", required = false)
+	private Integer screenId = 0;
+
+	@Argument(value = "min_score", description = "The minimum similarity score for a target to be considered as a match. It's on a 0 to 1 scale where 0 is the least precise search and 1.0 is the most precise search (default is 0.7).", required = false)
+	private Float minScore = 0.7f;
+
+	@Argument(value = "wait", description = "The maximum time to wait (ms) for a target to appear on the screen to perform an action on it (default is 5000).", required = false)
+	private Long wait = 5000L;
 
 	@Argument(value = "parameters", description = "Parameters as name=value pairs joined by ;", required = false, delimiter = ";")
-	static private String[] params = new String[]{};		 
+	private String[] params = new String[]{};
 
-	static void exit(String errMessage){
-		System.err.println(errMessage);
-		Args.usage(ExecuteMain.class, EXE + " " + SYNTAX);
-		System.exit(1);
+	@Argument(value = "range", description = "The range of the slide(s) to execute. e.g., \"1\" executes only slide 1, \"2-4\" executes slide 2 to 4, \"2-\" executes slide 2 till the end", required = false)
+	private String range = null;
+	
+	Context context;
+	URL url;
+
+	public SlideSelector parseRange(){
+		if (range != null){
+			String[] toks = range.split("-");		
+			if (toks.length == 1){
+				final int i = Integer.parseInt(toks[0]);
+				
+				// handles "2-"
+				if (range.endsWith("-")){
+					return new SlideSelector(){
+						@Override
+						public boolean accept(Slide slide) {
+							return slide.getNumber() >= i;						
+						}
+					};					
+				}else{
+					return new SlideSelector(){
+						@Override
+						public boolean accept(Slide slide) {
+							return slide.getNumber() == i;						
+						}
+					};
+				}
+			} else if (toks.length == 2) {
+				final int i = Integer.parseInt(toks[0]);
+				final int j = Integer.parseInt(toks[1]);
+
+				return new SlideSelector(){
+					@Override
+					public boolean accept(Slide slide) {
+						return slide.getNumber()  >= i && slide.getNumber()  <= j;						
+					}
+				};
+			}
+		}
+
+		return new SlideSelector(){
+			@Override
+			public boolean accept(Slide slide) {
+				return true;
+			}
+		};
 	}
 
-	static public Context parseContext(){
+	public Context parseContext() {
 		Context context = new Context();
 
 		// set parameter values
@@ -51,59 +94,67 @@ public class ExecuteMain {
 				context.addParameter(name,  value);				
 			}
 		}
-		
+
 		// set min score
 		if (minScore < 0 || minScore > 1){
-			exit("" + minScore + " is not a valid value for min_score. Please specify a score between 0 and 1.");
+			throw new IllegalArgumentException("" + minScore + " is not a valid value for min_score. Please specify a score between 0 and 1.");
 		}		
 		context.setMinScore(minScore);
-		
+
 		// set wait time
 		context.setWaitTime(wait);
-		
+
 		// set screen region
 		ScreenRegion screenRegion = new DesktopScreenRegion(screenId);
 		context.setScreenRegion(screenRegion);
 		
+		// set selector
+		SlideSelector slideSelector = parseRange();
+		context.setSlideSelector(slideSelector);
+
 		return context;
 	}
 	
-	public static void main(String[] args) {	
-
+	void parseArgs(String... args) throws IllegalArgumentException {
 		List<String> rest = null;
-		try {
-			rest = Args.parse(ExecuteMain.class, args);
-		} catch (IllegalArgumentException e) {
-		}
-		
+		rest = Args.parse(this, args);
 		if (rest == null || rest.size() != 1) {
-			exit("Invalid syntax");
-			return;			
+			//exit("Invalid syntax");
+			throw new IllegalArgumentException("missing input");
+		}
+		context = parseContext();		
+		String input = rest.get(0);		
+		url = parseInputAsURL(input);
+	}
+	
+	public void execute(String... args){
+		try{
+			parseArgs(args);
+		}catch(IllegalArgumentException e){
+			System.err.println("Error parsing arguments: " + e.getMessage());
+			Args.usage(ExecuteMain.class, EXE + "" + SYNTAX);
+			return;
 		}
 		
 		if (help){
-			exit("");
+			Args.usage(ExecuteMain.class, EXE + "" + SYNTAX);
+			return;
 		}
 		
-		Context context = parseContext();		
-		System.out.println(context);
-		
-		String input = rest.get(0);		
-		URL url = parseInputAsURL(input);
-		
 		try {
-			
 			Slides.execute(url, context);
-			
 		} catch (SlideExecutionException e) {
 			System.err.println("Execution failed because " + e.getMessage());			
 			if (e.getSlide() != null){
 				System.err.print("On slide no. " + e.getSlide().getNumber());
 				System.err.println(" Failed to execute " + e.getAction());
-			}
-			System.exit(1);			
-		}
+			}			
+		}	
+	}
 
+	public static void main(String... args) {
+		ExecuteMain main = new ExecuteMain();		
+		main.execute(args);
 	}
 
 	private static URL parseInputAsURL(String input) {
@@ -118,7 +169,7 @@ public class ExecuteMain {
 		} catch (MalformedURLException e1) {			
 		}		
 		if (webUrl == null && fileUrl == null){
-			exit("Not a valid input file: " + input);
+			throw new IllegalArgumentException("Not a valid input file: " + input);
 		}
 		return Objects.firstNonNull(webUrl, fileUrl);
 	}
