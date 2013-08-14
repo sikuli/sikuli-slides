@@ -27,6 +27,22 @@ public class SlidesReaderTest {
 		assertEquals("# of slides", 3, slides.size());
 	}
 	
+	@Test
+	public void testCanReadSlidesRemotely() throws IOException{		
+		SlidesReader reader = new PPTXSlidesReader();
+		URL url = new URL("http://slides-dev.sikuli.org/helloworld.pptx");
+		List<Slide> slides = reader.read(url);
+		assertEquals("# of slides", 1, slides.size());		
+	}
+	
+	@Test
+	public void testCanReadGoogleSlidesRemotely() throws IOException{		
+		SlidesReader reader = new PPTXSlidesReader();
+		URL url = new URL("http://slides-dev.sikuli.org/helloworld.pptx");
+		List<Slide> slides = reader.read(url);
+		assertEquals("# of slides", 1, slides.size());		
+	}
+	
 	@Test(expected = IOException.class)
 	public void testCanHandleNoSuchFile() throws IOException{		
 		SlidesReader reader = new PPTXSlidesReader();

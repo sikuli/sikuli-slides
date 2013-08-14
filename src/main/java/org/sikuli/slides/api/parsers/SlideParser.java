@@ -108,6 +108,7 @@ public class SlideParser {
 		Element blip = (Element) ((Element) node).getElementsByTagName("a:blip").item(0);			
 		String relationshipID = blip.getAttribute("r:embed");			
 		String target = map.get(relationshipID);
+		System.out.println(target);
 		e.setFileName(target);
 		return e;
 	}
@@ -179,7 +180,7 @@ public class SlideParser {
 		if (doc == null)
 			return slide;
 
-		Map<String, String> map  = parseRelationships(relDoc, rel);
+		Map<String, String> map  = parseRelationships(relDoc, xml);
 		
 		
 		NodeList shapeNodeList = doc.getElementsByTagName("p:sp");			

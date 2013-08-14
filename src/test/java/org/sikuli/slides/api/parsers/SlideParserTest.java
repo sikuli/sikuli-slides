@@ -1,11 +1,14 @@
 package org.sikuli.slides.api.parsers;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.net.URL;
 
 import org.junit.Test;
+import org.sikuli.slides.api.models.ImageElement;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.parsers.SlideParser;
 
@@ -23,6 +26,9 @@ public class SlideParserTest {
 		System.out.println(slide);	
 		assertEquals("size", 4, slide.getElements().size());
 		
+		assertThat(slide.select().isImage().exist(), equalTo(true));
+		ImageElement image = (ImageElement) slide.select().isImage().first();
+		assertThat(image.getFileName(), containsString("image"));
 	}
 
 	@Test 
@@ -34,8 +40,12 @@ public class SlideParserTest {
 		SlideParser parser = new SlideParser();
 		Slide slide = parser.parse(xml, rel);
 		
-		System.out.println(slide);	
+		
 		assertEquals("size", 3, slide.getElements().size());
+		assertThat(slide.select().isImage().exist(), equalTo(true));
+		ImageElement image = (ImageElement) slide.select().isImage().first();
+		assertThat(image.getFileName(), containsString("image"));
 	}
+	
 
 }
