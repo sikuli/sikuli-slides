@@ -1,4 +1,4 @@
-package org.sikuli.slides.api;
+package org.sikuli.slides.api.io;
 
 import java.io.IOException;
 import java.net.URL;

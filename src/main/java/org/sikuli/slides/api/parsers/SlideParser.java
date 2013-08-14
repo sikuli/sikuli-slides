@@ -32,14 +32,14 @@ import com.google.common.collect.Maps;
 
 public class SlideParser {
 	
-	static Map<String, String> parseRelationships(Document doc, URL xmlUrl){
+	static Map<String, String> parseRelationships(Document doc, File xml){
 		Map<String, String> ret = Maps.newHashMap();
 		NodeList nodeList = doc.getElementsByTagName("Relationship");
 		for (int i = 0; i < nodeList.getLength(); ++i){
 			Element el = (Element) nodeList.item(i);
 			String id = el.getAttribute("Id");
 			String target = el.getAttribute("Target");			
-			String absoluteTarget = new File(xmlUrl.getFile()).getParent() + File.separator + target;
+			String absoluteTarget = xml.getParent() + File.separator + target;
 			ret.put(id,  absoluteTarget);
 		}
 		return ret;
@@ -51,17 +51,23 @@ public class SlideParser {
 			
 			Element spPr = (Element) element.getElementsByTagName("p:spPr").item(0);
 			
-			Element off = (Element) spPr.getElementsByTagName("a:off").item(0);				
-			e.setOffx(Integer.parseInt(off.getAttribute("x")));
-			e.setOffy(Integer.parseInt(off.getAttribute("y")));
+			Element off = (Element) spPr.getElementsByTagName("a:off").item(0);		
+			if (off != null){
+				e.setOffx(Integer.parseInt(off.getAttribute("x")));
+				e.setOffy(Integer.parseInt(off.getAttribute("y")));
+			}
 			
 			Element ext = (Element) spPr.getElementsByTagName("a:ext").item(0);			
-			e.setCx(Integer.parseInt(ext.getAttribute("cx")));
-			e.setCy(Integer.parseInt(ext.getAttribute("cy")));
+			if (ext != null){
+				e.setCx(Integer.parseInt(ext.getAttribute("cx")));
+				e.setCy(Integer.parseInt(ext.getAttribute("cy")));
+			}
 			
-			Element cNvPr = (Element) element.getElementsByTagName("p:cNvPr").item(0);				
-			e.setName(cNvPr.getAttribute("name"));
-			e.setId(cNvPr.getAttribute("id"));
+			Element cNvPr = (Element) element.getElementsByTagName("p:cNvPr").item(0);		
+			if (cNvPr != null){
+				e.setName(cNvPr.getAttribute("name"));
+				e.setId(cNvPr.getAttribute("id"));
+			}
 			
 			String text = parseText(node);
 			e.setText(text);
@@ -155,26 +161,25 @@ public class SlideParser {
 		return keywordElement;
 	}
 	
-	public Slide parse(URL xmlUrl, URL relUrl){
+	public Slide parse(File xml, File rel){
 		Slide slide = new Slide();
-		
 		
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		Document doc = null;
 		Document relDoc = null;
 		try {
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			doc = dBuilder.parse(xmlUrl.getPath());
-			relDoc = dBuilder.parse(relUrl.getPath());
+			doc = dBuilder.parse(xml.getPath());
+			relDoc = dBuilder.parse(rel.getPath());
 		} catch (SAXException e) {
 		} catch (IOException e) {
 		} catch (ParserConfigurationException e) {
 		}
 		
 		if (doc == null)
-			return null;
+			return slide;
 
-		Map<String, String> map  = parseRelationships(relDoc, xmlUrl);
+		Map<String, String> map  = parseRelationships(relDoc, rel);
 		
 		
 		NodeList shapeNodeList = doc.getElementsByTagName("p:sp");			

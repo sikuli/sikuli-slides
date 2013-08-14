@@ -2,6 +2,7 @@ package org.sikuli.slides.api.parsers;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.net.URL;
 
 import org.junit.Test;
@@ -13,8 +14,8 @@ public class SlideParserTest {
 	@Test 
 	// PowerPoint Format
 	public void testParseSlide1(){
-		URL xml = getClass().getResource("slide1.xml");
-		URL rel = getClass().getResource("slide1.xml.rels");
+		File xml = new File(getClass().getResource("slide1.xml").getFile());
+		File rel = new File(getClass().getResource("slide1.xml.rels").getFile());
 		//Files.re
 		SlideParser parser = new SlideParser();
 		Slide slide = parser.parse(xml, rel);
@@ -27,8 +28,8 @@ public class SlideParserTest {
 	@Test 
 	// Google Presentation Format
 	public void testParseSlide2(){
-		URL xml = getClass().getResource("slide2.xml");
-		URL rel = getClass().getResource("slide2.xml.rels");
+		File xml = new File(getClass().getResource("slide2.xml").getFile());
+		File rel = new File(getClass().getResource("slide2.xml.rels").getFile());
 		//Files.re
 		SlideParser parser = new SlideParser();
 		Slide slide = parser.parse(xml, rel);

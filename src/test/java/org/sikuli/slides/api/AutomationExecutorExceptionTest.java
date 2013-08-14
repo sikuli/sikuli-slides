@@ -16,6 +16,7 @@ import org.sikuli.api.DefaultLocation;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.slides.api.actions.InputDetector;
 import org.sikuli.slides.api.actions.TargetAction;
+import org.sikuli.slides.api.io.PPTXSlidesReader;
 import org.sikuli.slides.api.models.Slide;
 
 public class AutomationExecutorExceptionTest {	

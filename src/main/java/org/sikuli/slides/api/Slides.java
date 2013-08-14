@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
+import org.sikuli.slides.api.io.PPTXSlidesReader;
+import org.sikuli.slides.api.io.SlidesReader;
 import org.sikuli.slides.api.models.Slide;
 
 public class Slides {
