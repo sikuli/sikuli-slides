@@ -122,9 +122,9 @@ public class ExecuteMainTest {
 	public void testNoInput(){ 
 		main.parseArgs("-screen_id","1");
 	}
-
+	
 	@Test
-	public void testRun() throws MalformedURLException{
-		main.execute("https://docs.google.com/presentation/d/1RRJuSMFRDc4EnBnqAG6FuJqiafEfGMmXwtFtOwNAKyo/edit?usp=sharing","-range","6");
+	public void testSkip(){ 
+		main.execute("skipping.pptx");
 	}
 }

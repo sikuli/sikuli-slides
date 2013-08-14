@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.sikuli.slides.api.interpreters.Keyword;
 import org.sikuli.slides.api.interpreters.Selector;
+import org.sikuli.slides.api.models.Slide.SlideElementBuilder;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
@@ -82,6 +83,7 @@ public class Slide {
 			((KeywordElement)element).setKeyword(keyword);
 			return this;
 		}
+
 	}
 	
 	public static class ImageElementBuilder extends SlideElementBuilder {
@@ -118,5 +120,11 @@ public class Slide {
 			slide.add(element);
 			return element;
 		}		
+		
+		public SlideElementBuilder geom(String geom) {
+			element.setGeom(geom);
+			return this;
+		}
+
 	}
 }

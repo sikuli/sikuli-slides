@@ -2,6 +2,7 @@ package org.sikuli.slides.api.interpreters;
 
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
@@ -16,7 +17,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.StaticImageScreenRegion;
 import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.actions.Actions;
 import org.sikuli.slides.api.actions.LabelAction;
+import org.sikuli.slides.api.actions.LeftClickAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.interpreters.DefaultInterpreter;
 import org.sikuli.slides.api.interpreters.KeywordDictionary;
@@ -40,8 +43,10 @@ public class InterpreterCornerCaseTest {
 		slide.newElement().bounds(0,0,100,100).add();
 		slide.newKeywordElement().keyword(KeywordDictionary.CLICK).add();
 
-		TargetAction action = (TargetAction) interpreter.interpret(slide);		
+		Action action = interpreter.interpret(slide);		
 		assertNotNull(action);
+		assertThat(Actions.select(action).isInstaceOf(TargetAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstaceOf(LeftClickAction.class).all().size(), equalTo(1));
 	}
 	
 	@Test
@@ -51,15 +56,10 @@ public class InterpreterCornerCaseTest {
 		slide.newElement().bounds(50,50,100,100).add();
 		slide.newKeywordElement().keyword(KeywordDictionary.CLICK).add();
 
-		TargetAction action = (TargetAction) interpreter.interpret(slide);		
-		assertNotNull(action);		
+		Action action = interpreter.interpret(slide);		
+		assertNotNull(action);
+		assertThat(Actions.select(action).isInstaceOf(TargetAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstaceOf(LeftClickAction.class).all().size(), equalTo(1));
 	}	
 	
-	@Test
-	public void testInterpretLabelActionWithoutAnyTarget() throws IOException {
-		Slide slide = new Slide();
-		slide.newElement().text("some label").add();
-		
-		Action action = interpreter.interpret(slide);		
-	}	
 }

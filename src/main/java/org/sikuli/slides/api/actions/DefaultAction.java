@@ -14,6 +14,10 @@ public class DefaultAction implements Action{
 		actions.add(action);
 	}
 	
+	public void removeAllChildren(){
+		actions.clear();
+	}
+	
 	public Action getChild(int index){
 		return actions.get(index);
 	}

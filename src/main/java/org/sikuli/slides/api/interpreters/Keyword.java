@@ -6,17 +6,23 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 public class Keyword {
+	
+	enum Type {
+		ACTION,
+		CONTROL
+	};
 
 	Keyword(String name){
 		this.setName(name);
 
-	}		
+	}
 	private String name;
+	private Type type;
 	private List<String> aliases = Lists.newArrayList();
 
 	boolean isMatched(String textToMatch){
 		return match(textToMatch) != null;
-	}
+	}	
 
 	public String match(String textToMatch){
 				
@@ -53,6 +59,10 @@ public class Keyword {
 			word.aliases.add(alias);
 			return this;
 		}
+		Builder type(Type type){
+			word.type = type;
+			return this;
+		}
 		Keyword build(){
 			return word;
 		}
@@ -64,6 +74,14 @@ public class Keyword {
 	
 	public String toString(){
 		return Objects.toStringHelper("Keyword").add("name", name).add("aliases", aliases).toString();
+	}
+
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 }

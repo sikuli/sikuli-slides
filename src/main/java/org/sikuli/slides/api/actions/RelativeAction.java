@@ -71,12 +71,14 @@ public class RelativeAction extends DefaultAction {
 				.add("x", x)
 				.add("y", y)
 				.add("width", width)
-				.add("height", height).				
-				toString();
+				.add("height", height)
+				.add("children", getChildren())
+				.toString();
 		}else{
 			return Objects.toStringHelper(this)
 					.add("x", String.format("(%.2f,%.2f)", xmin, xmax))
 					.add("y", String.format("(%.2f,%.2f)", ymin, ymax))
+					.add("children", getChildren())
 					.toString();			
 		}
 	}

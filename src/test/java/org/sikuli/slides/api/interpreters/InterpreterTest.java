@@ -51,10 +51,9 @@ public class InterpreterTest {
 		Interpreter interpreter = new DefaultInterpreter();
 		Action action = interpreter.interpret(slide);
 		
-		assertThat(action, notNullValue());
-		assertEquals("browser action", BrowserAction.class, action.getClass());
-		
-		BrowserAction browserAction = (BrowserAction) action;
+		action = interpreter.interpret(slide);		
+		assertThat(Actions.select(action).isInstaceOf(BrowserAction.class).all().size(), equalTo(1));
+		BrowserAction browserAction = (BrowserAction) Actions.select(action).isInstaceOf(BrowserAction.class).first();
 		assertNotNull(browserAction.getUrl());
 		assertEquals("browser url", url, browserAction.getUrl());
 	}
@@ -213,41 +212,54 @@ public class InterpreterTest {
 		slide.newImageElement().source(source).bounds(100,100,50,50).add();
 		slide.newElement().bounds(120,120,30,30).add();		
 
-		WaitAction action = (WaitAction) interpreter.interpret(slide);		
+		Action action = interpreter.interpret(slide);
+		
 		assertThat(action, notNullValue());
-		assertThat(action.getDuration(), equalTo(2000L));
-		assertThat(action.getTarget(), notNullValue());
+		assertThat(Actions.select(action).isInstaceOf(WaitAction.class).all().size(), equalTo(1));
+		WaitAction waitAction = (WaitAction) Actions.select(action).isInstaceOf(WaitAction.class).first();
+		assertThat(waitAction.getDuration(), equalTo(2000L));
+		assertThat(waitAction.getTarget(), notNullValue());
 	}
 	
 	@Test
 	public void testInterpretDelayAction() {
 		Slide slide = createDelaySlide("2 seconds");				
-		Action action = interpreter.interpret(slide);
-		
-		assertNotNull(action);
-		assertEquals("delay action", DelayAction.class, action.getClass());
-		DelayAction a = (DelayAction) action;				
-		assertEquals(2000, a.getDuration());
-		
+		Action action = interpreter.interpret(slide);		
+		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
+		DelayAction delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertEquals(2000, delayAction.getDuration());
+
+
 		slide = createDelaySlide("2");		
-		a = (DelayAction) interpreter.interpret(slide);
-		assertEquals(2000, a.getDuration());
+		action = interpreter.interpret(slide);		
+		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
+		delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertEquals(2000, delayAction.getDuration());
 		
 		slide = createDelaySlide("1 minute");		
-		a = (DelayAction) interpreter.interpret(slide);
-		assertEquals(1000 * 60, a.getDuration());
+		action = interpreter.interpret(slide);		
+		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
+		delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertEquals(1000 * 60, delayAction.getDuration());
 
 		slide = createDelaySlide("0.5 second");		
-		a = (DelayAction) interpreter.interpret(slide);
-		assertEquals(500, a.getDuration());
+		action = interpreter.interpret(slide);		
+		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
+		delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertEquals(500, delayAction.getDuration());
 
 		slide = createDelaySlide("0.5");		
-		a = (DelayAction) interpreter.interpret(slide);
-		assertEquals(500, a.getDuration());
+		action = interpreter.interpret(slide);		
+		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
+		delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertEquals(500, delayAction.getDuration());
 
 		slide = createDelaySlide("0");		
-		a = (DelayAction) interpreter.interpret(slide);
-		assertEquals(0, a.getDuration());
+		action = interpreter.interpret(slide);		
+		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
+		delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertEquals(0, delayAction.getDuration());
+
 		
 	}
 	

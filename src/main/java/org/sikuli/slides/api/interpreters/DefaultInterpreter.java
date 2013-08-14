@@ -10,6 +10,7 @@ import org.sikuli.api.Relative;
 import org.sikuli.api.Target;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.BrowserAction;
+import org.sikuli.slides.api.actions.DefaultAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
 import org.sikuli.slides.api.actions.DragAction;
 import org.sikuli.slides.api.actions.DropAction;
@@ -20,6 +21,7 @@ import org.sikuli.slides.api.actions.NotExistAction;
 import org.sikuli.slides.api.actions.ParallelAction;
 import org.sikuli.slides.api.actions.RelativeAction;
 import org.sikuli.slides.api.actions.RightClickAction;
+import org.sikuli.slides.api.actions.SkipAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
 import org.sikuli.slides.api.actions.DelayAction;
@@ -38,17 +40,6 @@ public class DefaultInterpreter implements Interpreter {
 
 	Logger logger = LoggerFactory.getLogger(DefaultInterpreter.class);
 	
-	class ClickInterpreter {
-		
-		Action interpret(Slide slide){
-			SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.CLICK).first();
-			if (keywordElement == null)
-				return null;		
-			Action action = new LeftClickAction();
-			return interpretAsTargetAction(slide, action);
-		}
-	}
-
 	Action interpretAsClick(Slide slide){				
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.CLICK).first();
 		if (keywordElement == null)
@@ -62,7 +53,7 @@ public class DefaultInterpreter implements Interpreter {
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.RIGHT_CLICK).first();
 		if (keywordElement == null)
 			return null;
-
+		slide.remove(keywordElement);
 		Action action = new RightClickAction();
 		return interpretAsTargetAction(slide, action);
 	}
@@ -72,7 +63,7 @@ public class DefaultInterpreter implements Interpreter {
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DOUBLE_CLICK).first();
 		if (keywordElement == null)
 			return null;
-
+		slide.remove(keywordElement);
 		Action action = new DoubleClickAction();
 		return interpretAsTargetAction(slide, action);
 	}
@@ -81,7 +72,7 @@ public class DefaultInterpreter implements Interpreter {
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DRAG).first();
 		if (keywordElement == null)
 			return null;
-
+		slide.remove(keywordElement);
 		Action action = new DragAction();
 		return interpretAsTargetAction(slide, action);
 	}
@@ -90,7 +81,7 @@ public class DefaultInterpreter implements Interpreter {
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DROP).first();
 		if (keywordElement == null)
 			return null;
-
+		slide.remove(keywordElement);
 		Action action = new DropAction();
 		return interpretAsTargetAction(slide, action);
 	}
@@ -159,8 +150,8 @@ public class DefaultInterpreter implements Interpreter {
 	Action interpretAsLabel(Slide slide){
 
 		// if there's a keyword on the slide, do not interpret text as labels
-		if (slide.select().isKeyword().exist())
-			return null;
+//		if (slide.select().isKeyword().exist())
+//			return null;
 
 		List<SlideElement> textElements = slide.select().hasText().all();
 		if (textElements.size() == 0)
@@ -237,6 +228,9 @@ public class DefaultInterpreter implements Interpreter {
 		TypeAction typeAction = new TypeAction();
 		typeAction.setText(textElement.getText());
 
+		slide.remove(keywordElement);
+		slide.remove(textElement);
+		
 		return interpretAsTargetAction(slide, typeAction);
 	}
 
@@ -255,6 +249,9 @@ public class DefaultInterpreter implements Interpreter {
 		} catch (MalformedURLException e) {
 			return null;
 		}				
+		
+		slide.remove(keywordElement);
+		slide.remove(textElement);
 
 		BrowserAction a = new BrowserAction();
 		a.setUrl(url);
@@ -263,10 +260,7 @@ public class DefaultInterpreter implements Interpreter {
 	
 	
 	
-	Long interpretAsDuration(Slide slide){
-		SlideElement textElement = slide.select().hasText().first();
-		if (textElement == null)
-			return null;
+	Long interpretAsDuration(SlideElement textElement){
 
 		String arg = textElement.getText();
 		
@@ -303,10 +297,17 @@ public class DefaultInterpreter implements Interpreter {
 		if (keywordElement == null)
 			return null;
 
-		Long duration = interpretAsDuration(slide);
-		if (duration == null)
-			return null;		
+		SlideElement textElement = slide.select().hasText().first();
+		if (textElement == null)
+			return null;
 
+		Long duration = interpretAsDuration(textElement);
+		if (duration == null)
+			return null;
+		
+		slide.remove(keywordElement);
+		slide.remove(textElement);
+		
 		DelayAction a = new DelayAction();
 		a.setDuration(duration);
 		return a;
@@ -321,14 +322,29 @@ public class DefaultInterpreter implements Interpreter {
 		if (target == null)
 			return null;
 
-		Long duration = interpretAsDuration(slide);
+		SlideElement textElement = slide.select().hasText().first();
+		if (textElement == null)
+			return null;
+
+		Long duration = interpretAsDuration(textElement);
 		if (duration == null)
-			return null;		
+			return null;
+		
+		slide.remove(keywordElement);
+		slide.remove(textElement);
 
 		WaitAction a = new WaitAction(target);
 		a.setDuration(duration);
 		return a;
-	}	
+	}
+	
+	private Action interpretAsSkip(Slide slide) {
+		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.SKIP).first();
+		if (keywordElement == null)
+			return null;		
+		return new SkipAction();
+	}
+
 
 	@Override
 	public Action interpret(Slide inputSlide){
@@ -361,19 +377,36 @@ public class DefaultInterpreter implements Interpreter {
 		
 		}else if ((keywordAction = interpretAsType(slide)) != null){
 			
-			}
-		
-		Action labelAction = interpretAsLabel(slide);		
-		if (labelAction != null && keywordAction != null){
-			ParallelAction parallelAction = new ParallelAction();
-			parallelAction.addChild(labelAction);
-			parallelAction.addChild(keywordAction);
-			return parallelAction; 
-		}else if (labelAction != null){
-			return labelAction;
-		}else if (keywordAction != null){
-			return keywordAction;
 		}
-		return null;
+		
+		Action action = null;
+		
+		ParallelAction parallelAction = new ParallelAction();
+		if (keywordAction != null){
+			parallelAction.addChild(keywordAction);
+		}
+				
+		Action labelAction = interpretAsLabel(slide);		
+		if (labelAction != null){
+			parallelAction.addChild(labelAction);
+		}
+		
+//		action = parallelAction; 
+//		}else if (labelAction != null){
+//			action = labelAction;
+//		}else if (keywordAction != null){
+//			action = keywordAction;
+//		}
+		action = parallelAction;
+		
+		Action controlAction = interpretAsSkip(slide);
+		if (controlAction != null){
+			if (action != null)
+				((DefaultAction) controlAction).addChild(action);
+			action = controlAction;
+		}
+		
+		return action;
 	}
+
 }
