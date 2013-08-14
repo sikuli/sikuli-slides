@@ -102,13 +102,12 @@ public class SlideParser {
 		}		
 	}
 	
-	ImageElement parseScreenshotElement(Node node, Map<String,String> map){
+	ImageElement parseImageElement(Node node, Map<String,String> map){
 		ImageElement e = new ImageElement();
 		parseSlideElement(node, e);			
 		Element blip = (Element) ((Element) node).getElementsByTagName("a:blip").item(0);			
 		String relationshipID = blip.getAttribute("r:embed");			
 		String target = map.get(relationshipID);
-		System.out.println(target);
 		e.setFileName(target);
 		return e;
 	}
@@ -195,7 +194,7 @@ public class SlideParser {
 			}else{
 									
 				if (((Element) nNode).getElementsByTagName("a:blip").getLength()>0){								
-					e = parseScreenshotElement(nNode, map);	
+					e = parseImageElement(nNode, map);	
 					slide.add(e);				
 				}else{		
 					e = new SlideElement();
@@ -208,7 +207,7 @@ public class SlideParser {
 		NodeList picList = doc.getElementsByTagName("p:pic");			
 		for (int i = 0 ; i < picList.getLength(); ++ i){
 			Node nNode = picList.item(i);
-			SlideElement e = parseScreenshotElement(nNode, map);	
+			SlideElement e = parseImageElement(nNode, map);	
 			slide.add(e);
 		}				
 		return slide;
