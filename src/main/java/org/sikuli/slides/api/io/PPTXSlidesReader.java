@@ -2,6 +2,9 @@ package org.sikuli.slides.api.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -41,7 +44,8 @@ public class PPTXSlidesReader implements SlidesReader {
 	public List<Slide> read(URL url) throws IOException {
 
 		File pptxFile = null;
-		if (url.getProtocol().compareToIgnoreCase("http") == 0){
+		if (url.getProtocol().toLowerCase().startsWith("http")){
+			url = resolveDownloadURL(url);
 			pptxFile = downloadFile(url);
 		}else if (url.getProtocol().compareToIgnoreCase("file") == 0){
 			pptxFile = new File(url.getFile());
@@ -53,11 +57,11 @@ public class PPTXSlidesReader implements SlidesReader {
 	}
 
 	public static File downloadFile(URL downloadURL){
+		logger.info("Download file from {} ... ", downloadURL);
 		File destination;
 		try {
-			String name = downloadURL.getFile();
+			String name = "download";
 			destination = File.createTempFile(name, "");
-			logger.info("Download file from {} ... ", downloadURL);
 			FileUtils.copyURLToFile(downloadURL, destination, 300000, 30000);
 			logger.info("Download complete. Saved as {}", destination);
 		} catch (IOException e) {
@@ -67,7 +71,51 @@ public class PPTXSlidesReader implements SlidesReader {
 		return destination;
 	}
 
-
+	private static URL resolveDownloadURL(URL url){
+    	// Example input: https://docs.google.com/presentation/d/1-qXEu7jYvm1Oql-hBcjgXU5zLQUGWd_uGH6mc8buRkI/export/pptx
+    	//https://docs.google.com/presentation/d/1-qXEu7jYvm1Oql-hBcjgXU5zLQUGWd_uGH6mc8buRkI/export/pptx
+    	if(url != null){
+    		try {
+				URI uri = url.toURI();
+				
+				// check if the domain is Google.com
+				String domain = uri.getHost();
+				if(domain == null){
+					return null;
+				}
+				String domainName = domain.startsWith("www.")? domain.substring(4) : domain;
+				// download the remote .pptx file
+				// 1) The file is hosted on google drive
+				if(domainName.equalsIgnoreCase("docs.google.com")){
+					
+					try{
+						String urlString = url.toString();
+						int startIndex = urlString.indexOf("/d/") + 3;
+						int lastIndex = urlString.indexOf("/edit");
+						String documentId = urlString.substring( startIndex, lastIndex);
+						
+						// construct GoogleDrive download link
+						String gDriveDownloadLink = "https://docs.google.com/presentation/d/" + 
+								documentId + "/export/pptx";
+						return new URL(gDriveDownloadLink);
+					}
+					catch(StringIndexOutOfBoundsException e){
+						logger.error("ERROR: Invalid Google Drive link.");
+					}
+				}
+				// 2) The file is hosted on a remote server.
+				else{
+					return url;
+				}
+			} catch (URISyntaxException e) {
+				logger.error("ERROR: Invalid share link.");
+			}
+    		catch (MalformedURLException e){
+    			logger.error("ERROR: Invalid share link.");
+    		}
+    	}
+    	return null;
+    }
 
 	//	// returns the project directory
 	//	static private boolean loadPresentationFile(String pptxSourceName) {

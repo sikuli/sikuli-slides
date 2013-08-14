@@ -34,7 +34,7 @@ class PPTXBundle {
 
 
 	public static PPTXBundle createFrom(File pptxFile) throws IOException{
-		if (!pptxFile.exists()){
+		if (pptxFile == null || !pptxFile.exists()){
 			logger.error("File does not exist: {}", pptxFile);
 			throw new IOException();
 		}

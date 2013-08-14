@@ -32,15 +32,15 @@ public class SlidesReaderTest {
 		SlidesReader reader = new PPTXSlidesReader();
 		URL url = new URL("http://slides-dev.sikuli.org/helloworld.pptx");
 		List<Slide> slides = reader.read(url);
-		assertEquals("# of slides", 1, slides.size());		
+		assertEquals("# of slides", 1, slides.size());
 	}
 	
 	@Test
 	public void testCanReadGoogleSlidesRemotely() throws IOException{		
 		SlidesReader reader = new PPTXSlidesReader();
-		URL url = new URL("http://slides-dev.sikuli.org/helloworld.pptx");
+		URL url = new URL("https://docs.google.com/presentation/d/1w48gExh5oLIT0J8xYXR1RxpqTrZTXJC8OR4UXxShTQ8/edit?usp=sharing");
 		List<Slide> slides = reader.read(url);
-		assertEquals("# of slides", 1, slides.size());		
+		assertEquals("# of slides", 2, slides.size());		
 	}
 	
 	@Test(expected = IOException.class)
