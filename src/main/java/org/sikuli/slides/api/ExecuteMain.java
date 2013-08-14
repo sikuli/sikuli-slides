@@ -1,11 +1,14 @@
 package org.sikuli.slides.api;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
 
+import com.google.common.base.Objects;
 import com.sampullara.cli.Args;
 import com.sampullara.cli.Argument;
 
@@ -36,23 +39,7 @@ public class ExecuteMain {
 		System.exit(1);
 	}
 
-	public static void main(String[] args) {	
-
-		List<String> rest = null;
-		try {
-			rest = Args.parse(ExecuteMain.class, args);
-		} catch (IllegalArgumentException e) {
-		}
-		
-		if (rest == null || rest.size() != 1) {
-			exit("Invalid syntax");
-			return;			
-		}
-		
-		if (help){
-			exit("");
-		}
-		
+	static public Context parseContext(){
 		Context context = new Context();
 
 		// set parameter values
@@ -78,11 +65,36 @@ public class ExecuteMain {
 		ScreenRegion screenRegion = new DesktopScreenRegion(screenId);
 		context.setScreenRegion(screenRegion);
 		
+		return context;
+	}
+	
+	public static void main(String[] args) {	
+
+		List<String> rest = null;
+		try {
+			rest = Args.parse(ExecuteMain.class, args);
+		} catch (IllegalArgumentException e) {
+		}
+		
+		if (rest == null || rest.size() != 1) {
+			exit("Invalid syntax");
+			return;			
+		}
+		
+		if (help){
+			exit("");
+		}
+		
+		Context context = parseContext();		
 		System.out.println(context);
 		
-		String input = rest.get(0);					
+		String input = rest.get(0);		
+		URL url = parseInputAsURL(input);
+		
 		try {
-			Slides.execute(new File(input), context);
+			
+			Slides.execute(url, context);
+			
 		} catch (SlideExecutionException e) {
 			System.err.println("Execution failed because " + e.getMessage());			
 			if (e.getSlide() != null){
@@ -92,5 +104,22 @@ public class ExecuteMain {
 			System.exit(1);			
 		}
 
+	}
+
+	private static URL parseInputAsURL(String input) {
+		URL webUrl = null;
+		URL fileUrl = null;
+		try {
+			webUrl = new URL(input);
+		} catch (MalformedURLException e1) {			
+		}
+		try{
+			fileUrl = (new File(input)).toURI().toURL();
+		} catch (MalformedURLException e1) {			
+		}		
+		if (webUrl == null && fileUrl == null){
+			exit("Not a valid input file: " + input);
+		}
+		return Objects.firstNonNull(webUrl, fileUrl);
 	}
 }
