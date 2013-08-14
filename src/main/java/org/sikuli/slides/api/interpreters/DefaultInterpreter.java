@@ -27,7 +27,7 @@ import org.sikuli.slides.api.actions.WaitAction;
 import org.sikuli.slides.api.models.ImageElement;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.models.SlideElement;
-import org.sikuli.slides.sikuli.ContextualImageTarget;
+import org.sikuli.slides.api.sikuli.ContextImageTarget;
 import org.sikuli.slides.utils.UnitConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -197,7 +197,7 @@ public class DefaultInterpreter implements Interpreter {
 		xmin = Math.max(0, xmin);
 		ymin = Math.max(0, ymin);
 
-		return new ContextualImageTarget(imageElement.getSource(), xmin, ymin, xmax, ymax); 
+		return new ContextImageTarget(imageElement.getSource(), xmin, ymin, xmax, ymax); 
 	}
 
 	Target interpretAsImageTarget(Slide slide){
