@@ -47,18 +47,27 @@ public class SlidesReaderTest {
 	public void testCanHandleNoSuchFile() throws IOException{		
 		SlidesReader reader = new PPTXSlidesReader();
 		URL url = new URL("file:///none.pptx");
-		//URL url = getClass().getResource("click.pptx");
-		List<Slide> slides = reader.read(url);
-		assertEquals("# of slides", 1, slides.size());
+		reader.read(url);
 	}
 	
 	@Test(expected = IOException.class)
 	public void testCanHnadleBadFileExtension() throws IOException{		
 		SlidesReader reader = new PPTXSlidesReader();
 		URL url = getClass().getResource("sikuli.png");
-		//URL url = getClass().getResource("click.pptx");
-		List<Slide> slides = reader.read(url);
-		assertEquals("# of slides", 1, slides.size());
+		reader.read(url);		
 	}
 
+	@Test(expected = IOException.class)
+	public void testCanHnadleBadURL() throws IOException{		
+		SlidesReader reader = new PPTXSlidesReader();
+		URL url = new URL("http://does.not.exist/");
+		reader.read(url);
+	}
+	
+	@Test(expected = IOException.class)
+	public void testCanHnadleBadGoogleDriveURL() throws IOException{		
+		SlidesReader reader = new PPTXSlidesReader();
+		URL url = new URL("https://docs.google.com/presentation/d/badidbadidaksclaksdacklsldkaclksj/edit?usp=sharing");
+		reader.read(url);
+	}
 }
