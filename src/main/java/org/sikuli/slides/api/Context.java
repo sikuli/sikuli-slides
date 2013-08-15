@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
-import org.sikuli.slides.api.models.Slide;
 import org.stringtemplate.v4.ST;
 
 import com.google.common.base.Objects;
@@ -17,9 +16,9 @@ public class Context {
 	private ScreenRegion screenRegion;
 	
 	// the default slide selector is to accept all
-	private SlideSelector slideSelector = new SlideSelector(){
+	private SlideExecutionEventFilter slideSelector = new SlideExecutionEventFilter(){
 		@Override
-		public boolean accept(Slide slide) {			
+		public boolean accept(SlideExecutionEvent slide) {			
 			return true;
 		}		
 	};
@@ -69,11 +68,11 @@ public class Context {
 		return st.render();
 	}
 
-	public SlideSelector getSlideSelector() {
+	public SlideExecutionEventFilter getSlideSelector() {
 		return slideSelector;
 	}
 
-	public void setSlideSelector(SlideSelector slideSelector) {
+	public void setSlideSelector(SlideExecutionEventFilter slideSelector) {
 		this.slideSelector = slideSelector;
 	}
 	

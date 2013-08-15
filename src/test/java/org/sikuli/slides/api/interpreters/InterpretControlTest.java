@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.Actions;
+import org.sikuli.slides.api.actions.BookmarkAction;
 import org.sikuli.slides.api.actions.OptionalAction;
 import org.sikuli.slides.api.actions.SkipAction;
 import org.sikuli.slides.api.models.Slide;
@@ -45,5 +46,16 @@ public class InterpretControlTest {
 		assertThat(action, notNullValue());
 		assertThat(Actions.select(action).isInstaceOf(OptionalAction.class).all().size(), equalTo(1));
 	}
+	
+	@Test
+	public void testBookmark(){
+		slide.newKeywordElement().keyword(KeywordDictionary.BOOKMARK).geom("hex").text("step5").add();		
+		Action action = interpreter.interpret(slide);
+		assertThat(action, notNullValue());
+		assertThat(Actions.select(action).isInstaceOf(BookmarkAction.class).all().size(), equalTo(1));
+		BookmarkAction bookmark = (BookmarkAction) Actions.select(action).isInstaceOf(BookmarkAction.class).first();
+		assertThat(bookmark.getName(), equalTo("step5"));
+	}
+
 	
 }

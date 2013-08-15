@@ -6,9 +6,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.sikuli.api.Relative;
 import org.sikuli.api.Target;
 import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.actions.BookmarkAction;
 import org.sikuli.slides.api.actions.BrowserAction;
 import org.sikuli.slides.api.actions.DefaultAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
@@ -154,7 +154,7 @@ public class DefaultInterpreter implements Interpreter {
 //		if (slide.select().isKeyword().exist())
 //			return null;
 
-		List<SlideElement> textElements = slide.select().hasText().all();
+		List<SlideElement> textElements = slide.select().isNotKeyword().hasText().all();
 		if (textElements.size() == 0)
 			return null;
 
@@ -343,6 +343,8 @@ public class DefaultInterpreter implements Interpreter {
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.SKIP).first();
 		if (keywordElement == null)
 			return null;		
+		slide.remove(keywordElement);
+		
 		return new SkipAction();
 	}
 
@@ -350,9 +352,27 @@ public class DefaultInterpreter implements Interpreter {
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.OPTIONAL).first();
 		if (keywordElement == null)
 			return null;		
+		slide.remove(keywordElement);
+		
 		return new OptionalAction();
 	}
-
+	
+	private Action interpretAsBookmark(Slide slide) {
+		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.BOOKMARK).first();
+		if (keywordElement == null)
+			return null;		
+				
+		String text = keywordElement.getText(); 
+		if (text.isEmpty()){
+			logger.error("No name is specified for the bookmark keyword");
+			return null;
+		}
+		
+		slide.remove(keywordElement);
+		BookmarkAction action = new BookmarkAction();
+		action.setName(text);				
+		return action;
+	}
 
 	@Override
 	public Action interpret(Slide inputSlide){
@@ -405,6 +425,8 @@ public class DefaultInterpreter implements Interpreter {
 		if ((controlAction = interpretAsSkip(slide)) != null){			
 		
 		}else if ((controlAction = interpretAsOptional(slide)) != null){
+			
+		}else if ((controlAction = interpretAsBookmark(slide)) != null){
 			
 		}
 		

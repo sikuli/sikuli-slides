@@ -24,11 +24,12 @@ public class KeywordDictionary{
 	
 	final static Keyword SKIP = word("Skip").type(CONTROL).build();
 	final static Keyword OPTIONAL = word("Optional").type(CONTROL).build();
+	final static Keyword BOOKMARK = word("Bookmark").type(CONTROL).build();
 		
 	
 	final static Keyword[] WORDS = {
 		CLICK, RIGHT_CLICK, DOUBLE_CLICK, TYPE, DRAG, DROP, BROWSER, NOT_EXIST, EXIST, DELAY, WAIT,
-		SKIP, OPTIONAL};
+		SKIP, OPTIONAL, BOOKMARK};
 	
 	final static public Keyword lookup(String name){
 		for (Keyword word : WORDS){

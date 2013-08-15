@@ -5,14 +5,8 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.junit.Before;
 import org.junit.Test;
-
-
-import org.sikuli.api.API;
 import org.sikuli.api.robot.desktop.DesktopScreen;
 import org.sikuli.slides.api.models.Slide;
 
@@ -23,57 +17,71 @@ public class ExecuteMainTest {
 	private Slide slide3;
 	private Slide slide4;
 	private ExecuteMain main;
+	private SlideExecutionEvent event1;
+	private SlideExecutionEvent event4;
+	private SlideExecutionEvent event3;
+	private SlideExecutionEvent event2;
 
 
 	@Before
 	public void setUp(){
 		slide1 = new Slide();
 		slide1.setNumber(1);
+		event1 = new SlideExecutionEvent(slide1,null,null);
 		slide2 = new Slide();
 		slide2.setNumber(2);
+		event2 = new SlideExecutionEvent(slide1,null,null);
 		slide3= new Slide();
 		slide3.setNumber(3);
+		event3 = new SlideExecutionEvent(slide1,null,null);
 		slide4 = new Slide();
 		slide4.setNumber(4);
+		event4 = new SlideExecutionEvent(slide1,null,null);
 		
 		main = new ExecuteMain();
+		
+		
 	}
+	
+//	SlideExecutionEvent ev(Slide slide){
+//		
+//	}
 
 	@Test
 	public void testRange2to3(){ 
 		main.parseArgs("helloworld.pptx","-range","2-3");
-		assertThat(main.context.getSlideSelector().accept(slide1), equalTo(false));
-		assertThat(main.context.getSlideSelector().accept(slide2), equalTo(true));
-		assertThat(main.context.getSlideSelector().accept(slide3), equalTo(true));
-		assertThat(main.context.getSlideSelector().accept(slide4), equalTo(false));
+		assertThat(main.context.getSlideSelector().accept(event1), equalTo(false));
+		assertThat(main.context.getSlideSelector().accept(event2), equalTo(true));
+		assertThat(main.context.getSlideSelector().accept(event3), equalTo(true));
+		assertThat(main.context.getSlideSelector().accept(event4), equalTo(false));
 	}
 	
 	@Test
 	public void testRange2(){ 
 		main.parseArgs("helloworld.pptx","-range","2");
-		assertThat(main.context.getSlideSelector().accept(slide1), equalTo(false));
-		assertThat(main.context.getSlideSelector().accept(slide2), equalTo(true));
-		assertThat(main.context.getSlideSelector().accept(slide3), equalTo(false));
-		assertThat(main.context.getSlideSelector().accept(slide4), equalTo(false));
+		assertThat(main.context.getSlideSelector().accept(event1), equalTo(false));
+		assertThat(main.context.getSlideSelector().accept(event2), equalTo(true));
+		assertThat(main.context.getSlideSelector().accept(event3), equalTo(false));
+		assertThat(main.context.getSlideSelector().accept(event4), equalTo(false));
 	}
 	
 	@Test
 	public void testRange2andLater(){ 
 		main.parseArgs("helloworld.pptx","-range","2-");
-		assertThat(main.context.getSlideSelector().accept(slide1), equalTo(false));
-		assertThat(main.context.getSlideSelector().accept(slide2), equalTo(true));
-		assertThat(main.context.getSlideSelector().accept(slide3), equalTo(true));
-		assertThat(main.context.getSlideSelector().accept(slide4), equalTo(true));
+		assertThat(main.context.getSlideSelector().accept(event1), equalTo(false));
+		assertThat(main.context.getSlideSelector().accept(event2), equalTo(true));
+		assertThat(main.context.getSlideSelector().accept(event3), equalTo(true));
+		assertThat(main.context.getSlideSelector().accept(event4), equalTo(true));
 	}
 
 	
 	@Test
 	public void testRangeDefaultToAll(){ 
 		main.parseArgs("helloworld.pptx");
-		assertThat(main.context.getSlideSelector().accept(slide1), equalTo(true));
-		assertThat(main.context.getSlideSelector().accept(slide2), equalTo(true));
-		assertThat(main.context.getSlideSelector().accept(slide3), equalTo(true));
-		assertThat(main.context.getSlideSelector().accept(slide4), equalTo(true));		
+		assertThat(main.context.getSlideSelector().accept(event1), equalTo(true));
+		assertThat(main.context.getSlideSelector().accept(event2), equalTo(true));
+		assertThat(main.context.getSlideSelector().accept(event3), equalTo(true));
+		assertThat(main.context.getSlideSelector().accept(event4), equalTo(true));		
 	}
 	
 	@Test
@@ -125,6 +133,6 @@ public class ExecuteMainTest {
 	
 	@Test
 	public void testSkip(){ 
-		main.execute("skipping.pptx");
+		main.execute("skipping.pptx", "-bookmark", "HELLO2");
 	}
 }

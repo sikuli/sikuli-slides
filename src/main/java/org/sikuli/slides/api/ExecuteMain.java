@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
-import org.sikuli.slides.api.models.Slide;
+import org.sikuli.slides.api.SlideExecutionEventFilter.Factory;
 
 import com.google.common.base.Objects;
 import com.sampullara.cli.Args;
@@ -35,51 +35,40 @@ public class ExecuteMain {
 
 	@Argument(value = "range", description = "The range of the slide(s) to execute. e.g., \"1\" executes only slide 1, \"2-4\" executes slide 2 to 4, \"2-\" executes slide 2 till the end", required = false)
 	private String range = null;
-	
+
+	@Argument(value = "bookmark", description = "The bookmark to start executing from.", required = false)
+	private String bookmark = null;
+
 	Context context;
 	URL url;
 
-	public SlideSelector parseRange(){
-		if (range != null){
-			String[] toks = range.split("-");		
-			if (toks.length == 1){
-				final int i = Integer.parseInt(toks[0]);
-				
-				// handles "2-"
-				if (range.endsWith("-")){
-					return new SlideSelector(){
-						@Override
-						public boolean accept(Slide slide) {
-							return slide.getNumber() >= i;						
-						}
-					};					
-				}else{
-					return new SlideSelector(){
-						@Override
-						public boolean accept(Slide slide) {
-							return slide.getNumber() == i;						
-						}
-					};
-				}
-			} else if (toks.length == 2) {
-				final int i = Integer.parseInt(toks[0]);
-				final int j = Integer.parseInt(toks[1]);
+	public SlideExecutionEventFilter parseBookmark(){
+		if (bookmark == null)
+			return null;		
+		return Factory.createStartFromBookmarkFilter(bookmark);
+	}
 
-				return new SlideSelector(){
-					@Override
-					public boolean accept(Slide slide) {
-						return slide.getNumber()  >= i && slide.getNumber()  <= j;						
-					}
-				};
+	public SlideExecutionEventFilter parseRange(){
+		if (range == null)
+			return null;
+
+		String[] toks = range.split("-");		
+		if (toks.length == 1){
+			final int i = Integer.parseInt(toks[0]);				
+			// handles "2-"
+			if (range.endsWith("-")){
+				return Factory.createStartFromSlideFilter(i);				
+			}else{
+				// handles "2"
+				return Factory.createSingleSlideFilter(i);
 			}
+		} else if (toks.length == 2) {
+			final int i = Integer.parseInt(toks[0]);
+			final int j = Integer.parseInt(toks[1]);
+			return Factory.createRangeFilter(i,j);
 		}
-
-		return new SlideSelector(){
-			@Override
-			public boolean accept(Slide slide) {
-				return true;
-			}
-		};
+		
+		return null;
 	}
 
 	public Context parseContext() {
@@ -107,14 +96,20 @@ public class ExecuteMain {
 		// set screen region
 		ScreenRegion screenRegion = new DesktopScreenRegion(screenId);
 		context.setScreenRegion(screenRegion);
-		
+
 		// set selector
-		SlideSelector slideSelector = parseRange();
-		context.setSlideSelector(slideSelector);
+		SlideExecutionEventFilter slideSelector = parseRange();
+		if (slideSelector != null)
+			context.setSlideSelector(slideSelector);
+
+		slideSelector = parseBookmark();
+		if (slideSelector != null)
+			context.setSlideSelector(slideSelector);
+
 
 		return context;
 	}
-	
+
 	void parseArgs(String... args) throws IllegalArgumentException {
 		List<String> rest = null;
 		rest = Args.parse(this, args);
@@ -126,7 +121,7 @@ public class ExecuteMain {
 		String input = rest.get(0);		
 		url = parseInputAsURL(input);
 	}
-	
+
 	public void execute(String... args){
 		try{
 			parseArgs(args);
@@ -135,12 +130,12 @@ public class ExecuteMain {
 			Args.usage(ExecuteMain.class, EXE + "" + SYNTAX);
 			return;
 		}
-		
+
 		if (help){
 			Args.usage(ExecuteMain.class, EXE + "" + SYNTAX);
 			return;
 		}
-		
+
 		try {
 			Slides.execute(url, context);
 		} catch (SlideExecutionException e) {
