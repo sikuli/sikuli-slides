@@ -173,9 +173,38 @@ public class SlideAction {
 		double minScore = 1;
 		while (minScore > 0.4 && targetRegion == null){
 			minScore -= 0.1;
-			targetRegion = findTargetRegion(targetFile, slideTargetRegion, minScore);
+			targetRegion = doRetryFindTargetRegion(targetFile, slideTargetRegion, minScore);
 		}
 		return targetRegion;
+	}
+	private ScreenRegion doRetryFindTargetRegion(File targetFile, SlideTargetRegion slideTargetRegion, double minScore){
+		final ImageTarget imageTarget=new ImageTarget(targetFile);
+		imageTarget.setMinScore(minScore);
+		if(imageTarget != null){
+			ScreenRegion fullScreenRegion = new DesktopScreenRegion(Constants.ScreenId);
+	    	ScreenRegion targetRegion=fullScreenRegion.find(imageTarget);
+	    	
+	    	if(targetRegion != null){
+	    		// check if there are more than one occurrence of the target image.
+	    		SearchMultipleTarget searchMultipleTarget = new SearchMultipleTarget();
+	    		if(searchMultipleTarget.hasMultipleOccurance(imageTarget)){
+	    			ScreenRegion newScreenRegion = searchMultipleTarget.findNewScreenRegion(slideTargetRegion, imageTarget);
+	    			if(newScreenRegion != null){
+	    				ScreenRegion newtargetRegion = newScreenRegion.find(imageTarget);
+	    				return newtargetRegion;
+	    			}
+	    			else{
+	    				logger.error("Failed to determine the target image among multiple similar targets on the screen."
+	    						+ NEW_LINE + "Try to resize the shape in slide number {} to make the search more accurate.", 
+	    						slideTargetRegion.getslideNumber());
+	    			}
+	    		}
+	    		else{
+	    			return targetRegion;
+	    		}
+	    	}
+		}
+		return null;
 	}
 	
 	/**
@@ -325,6 +354,7 @@ public class SlideAction {
 		logger.info("launching the default browser...");
 		try {
 			String userURL=slideShape.getText();
+			userURL = userURL.replaceAll("\n", "");
 			URL url=null;
 			if(userURL.startsWith("http://")){
 				url=new URL(userURL);
