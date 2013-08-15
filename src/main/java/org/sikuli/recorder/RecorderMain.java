@@ -1,32 +1,28 @@
 package org.sikuli.recorder;
 
 import java.io.File;
-import java.util.List;
-
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.recorder.pptx.PPTXGenerator;
-
 import com.sampullara.cli.Args;
 import com.sampullara.cli.Argument;
 
 public class RecorderMain {
 
-	public static void main(String[] args) {	
-		
-		final List<String> parse;
-	    //Args.usage(c);
+	public static void main(String[] args) {
 		try {
-			parse = Args.parse(Command.class, args);
+			Args.parse(Command.class, args);
 		} catch (IllegalArgumentException e) {
-			Args.usage(Command.class, "java -jar sikuli-slides-1.3.0.jar record [options]");
+			Args.usage(Command.class, "java -jar sikuli-slides-" + RecorderMain.class.getPackage().getImplementationVersion() + 
+					".jar record [options]");
 			System.exit(1);
 			return;
 		}
 		
 		if (Command.help){
-			Args.usage(Command.class, "java -jar sikuli-slides-1.3.0.jar record [options]");
+			Args.usage(Command.class, "java -jar sikuli-slides-" + RecorderMain.class.getPackage().getImplementationVersion() +  
+					".jar record [options]");
 			System.exit(1);
-			return;			
+			return;
 		}
 	       
 	    System.out.println("Press [Ctrl-Shift-2] to start recording");
