@@ -2,8 +2,6 @@ package org.sikuli.recorder.examples;
 
 import java.io.File;
 
-import org.sikuli.api.DesktopScreenRegion;
-import org.sikuli.recorder.Recorder;
 import org.sikuli.recorder.pptx.PPTXGenerator;
 
 public class PPTXGeneratorExample {
