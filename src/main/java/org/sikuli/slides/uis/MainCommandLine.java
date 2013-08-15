@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Arrays;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -15,6 +17,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.GnuParser;
 import org.sikuli.api.robot.desktop.DesktopScreen;
+import org.sikuli.recorder.RecorderMain;
 import org.sikuli.slides.core.RunOptions;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.MyFileFilter;
@@ -30,15 +33,18 @@ public class MainCommandLine {
 	private static UserPreferencesEditor prefsEditor = new UserPreferencesEditor();
 	private static final String applicationName = "sikuli-slides";
 	private static final String versionNumber = MainCommandLine.class.getPackage().getImplementationVersion();
-	private static final String commandLineSyntax = "java -jar "+
-			applicationName + "-" + versionNumber+".jar execute " +
-			"Path_to_presentation_file.pptx | URL_to_presentation_file.pptx";
 	private static final String NEW_LINE = System.getProperty("line.separator");
+	private static final String commandLineSyntax = "java -jar "+
+			applicationName + "-" + versionNumber+".jar {execute {Path_to_presentation_file.pptx | URL_to_presentation_file.pptx} [EXECUTE_OPTION]" + 
+			" | record [RECORD_OPTION] | gui}" + NEW_LINE + "EXECUTE_OPTION:" + NEW_LINE
+			+ "RECORD_OPTION" + NEW_LINE;
+	
 	
 	/**
 	* Parse the command-line arguments as GNU-style long option (one word long option).
-	* @param args Command-line arguments
-	* @return the location of the .pptx file
+	* @param args Command-line arguments.
+	* @return RunOptions object that includes the necessary running arguments such as .pptx file path, 
+	* start slide number, and end slide number.
 	*/
 	private static RunOptions useGNUParser(final String[] args) throws Exception 
 	{
@@ -122,39 +128,53 @@ public class MainCommandLine {
 	        
 	        // check arguments
 	        final String[] remainingArguments = cmd.getArgs();
-	        if(remainingArguments==null||remainingArguments.length==0){
+	        if(remainingArguments==null || remainingArguments.length == 0){
 	        	printUsage(applicationName, getGNUCommandLineOptions(), System.out);
 	        	return null;
 	        }
-	        else if(remainingArguments.length>0){
-	        	String argName=remainingArguments[0];
-	        	// check if the file is remotely stored in the cloud
-	        	if(argName.startsWith("http")){
-	        		runOptions.setSourceName(argName);
-	        		return runOptions;
+	        else{
+	        	String argName_command=remainingArguments[0];
+	        	// 1) Execute command
+	        	if(argName_command == "execute" && remainingArguments.length >1){
+	        		String argName_pptx = remainingArguments[1];
+		        	// check if the file is remotely stored in the cloud
+		        	if(argName_pptx.startsWith("http")){
+		        		runOptions.setSourceName(argName_pptx);
+		        		return runOptions;
+		        	}
+		        	else{
+		        		// the file is locally stored
+		        		MyFileFilter myFileFilter=new MyFileFilter();
+		        		File source_file=new File(argName_pptx);
+		        		if(myFileFilter.accept(source_file)){
+		        			if(source_file.exists()){
+		        				showTextHeader(System.out);
+		        				displayBlankLine();
+		        				runOptions.setSourceName(source_file.getAbsolutePath());
+		        				return runOptions;
+		        			}
+		        			else{
+		        				String fileNotFoundError = "No such file." + NEW_LINE;
+		        				System.out.write(fileNotFoundError.getBytes()); 
+		        				displayBlankLine();
+		        				printUsage(applicationName, getGNUCommandLineOptions(), System.out);
+		        			}
+		        		}
+		        	}
+	        	}
+	        	// 2) Record
+	        	else if(argName_command == "record"){
+	        		String [] otherArgs = Arrays.copyOfRange(remainingArguments,1,remainingArguments.length);
+	        		RecorderMain.main(otherArgs);
+	        	}
+	        	// 3) Run GUI tool
+	        	else if(argName_command == "gui"){
+	        		MainUI.runGuiTool();
 	        	}
 	        	else{
-	        		// the file is locally stored
-	        		MyFileFilter myFileFilter=new MyFileFilter();
-	        		File source_file=new File(argName);
-	        		if(myFileFilter.accept(source_file)){
-	        			if(source_file.exists()){
-	        				showTextHeader(System.out);
-	        				displayBlankLine();
-	        				runOptions.setSourceName(source_file.getAbsolutePath());
-	        				return runOptions;
-	        			}
-	        			else{
-	        				String fileNotFoundError = "No such file." + NEW_LINE;
-	        				System.out.write(fileNotFoundError.getBytes()); 
-	        				displayBlankLine();
-	        				printUsage(applicationName, getGNUCommandLineOptions(), System.out);
-	        			}
-	        		}
+	        		printUsage(applicationName, getGNUCommandLineOptions(), System.out);
 	        	}
-	        }
-	        else{
-	        	printUsage(applicationName, getGNUCommandLineOptions(), System.out);
+
 	        }
 		return null;
 	}
