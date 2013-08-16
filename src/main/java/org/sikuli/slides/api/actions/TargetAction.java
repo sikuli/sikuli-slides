@@ -10,20 +10,24 @@ import com.google.common.base.Objects;
 
 public class TargetAction extends DefaultAction {
 	
-	Target target;
+	private Target target;
+	
+	public TargetAction(Target target){
+		this.setTarget(target);
+	}
 	
 	public TargetAction(Target target, Action targetAction){
-		this.target = target;
+		this.setTarget(target);
 		addChild(targetAction);
 	}
 	
 	@Override
 	public void execute(Context context) throws ActionExecutionException {
 		logger.info("executing " + this);
-		target.setMinScore(context.getMinScore());
+		getTarget().setMinScore(context.getMinScore());
 		long waitTime = context.getWaitTime();
 		ScreenRegion screenRegion = context.getScreenRegion();
-		ScreenRegion targetRegion = screenRegion.wait(target, (int) waitTime);
+		ScreenRegion targetRegion = screenRegion.wait(getTarget(), (int) waitTime);
 		if (targetRegion != null){			
 			Canvas canvas = new ScreenRegionCanvas(targetRegion);
 			canvas.addBox(targetRegion);
@@ -43,7 +47,15 @@ public class TargetAction extends DefaultAction {
 
 	public String toString(){
 		return Objects.toStringHelper(this)				
-				.add("target", target).toString();
+				.add("target", getTarget()).toString();
+	}
+
+	public Target getTarget() {
+		return target;
+	}
+
+	public void setTarget(Target target) {
+		this.target = target;
 	}
 
 }

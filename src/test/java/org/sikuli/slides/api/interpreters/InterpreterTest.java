@@ -52,8 +52,8 @@ public class InterpreterTest {
 		Action action = interpreter.interpret(slide);
 		
 		action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstaceOf(BrowserAction.class).all().size(), equalTo(1));
-		BrowserAction browserAction = (BrowserAction) Actions.select(action).isInstaceOf(BrowserAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(BrowserAction.class).all().size(), equalTo(1));
+		BrowserAction browserAction = (BrowserAction) Actions.select(action).isInstanceOf(BrowserAction.class).first();
 		assertNotNull(browserAction.getUrl());
 		assertEquals("browser url", url, browserAction.getUrl());
 	}
@@ -103,7 +103,7 @@ public class InterpreterTest {
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.CLICK);		
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(LeftClickAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(LeftClickAction.class).all().size(), equalTo(1));
 	}
 	
 	@Test
@@ -111,7 +111,7 @@ public class InterpreterTest {
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.RIGHT_CLICK);		
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(RightClickAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(RightClickAction.class).all().size(), equalTo(1));
 	}
 	
 	@Test
@@ -119,7 +119,7 @@ public class InterpreterTest {
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.DOUBLE_CLICK);
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(DoubleClickAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(DoubleClickAction.class).all().size(), equalTo(1));
 	}
 	
 	@Test
@@ -129,7 +129,7 @@ public class InterpreterTest {
 		
 		Action action = interpreter.interpret(slide);
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(LabelAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(LabelAction.class).all().size(), equalTo(1));
 	}	
 	
 	@Test
@@ -140,7 +140,7 @@ public class InterpreterTest {
 		
 		Action action = interpreter.interpret(slide);
 		assertThat(action, notNullValue());		
-		assertThat(Actions.select(action).isInstaceOf(LabelAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(LabelAction.class).all().size(), equalTo(1));
 	}	
 	
 	@Test
@@ -148,7 +148,7 @@ public class InterpreterTest {
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.EXIST);
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(ExistAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(ExistAction.class).all().size(), equalTo(1));
 	}	
 
 	@Test
@@ -156,7 +156,7 @@ public class InterpreterTest {
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.NOT_EXIST);
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(NotExistAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(NotExistAction.class).all().size(), equalTo(1));
 	}	
 	
 	
@@ -169,9 +169,9 @@ public class InterpreterTest {
 		
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(TypeAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(TypeAction.class).all().size(), equalTo(1));
 		
-		TypeAction typeAction = (TypeAction) Actions.select(action).isInstaceOf(TypeAction.class).first();
+		TypeAction typeAction = (TypeAction) Actions.select(action).isInstanceOf(TypeAction.class).first();
 		assertThat(typeAction.getText(), equalToIgnoringCase("some text"));
 	}	
 	
@@ -183,9 +183,9 @@ public class InterpreterTest {
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
 		
-		assertThat(Actions.select(action).isInstaceOf(TypeAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(TypeAction.class).all().size(), equalTo(1));
 		
-		TypeAction typeAction = (TypeAction) Actions.select(action).isInstaceOf(TypeAction.class).first();
+		TypeAction typeAction = (TypeAction) Actions.select(action).isInstanceOf(TypeAction.class).first();
 		assertThat(typeAction.getText(), equalToIgnoringCase("some text"));
 	}
 	
@@ -198,9 +198,9 @@ public class InterpreterTest {
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
 		
-		assertThat(Actions.select(action).isInstaceOf(TypeAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(TypeAction.class).all().size(), equalTo(1));
 		
-		TypeAction typeAction = (TypeAction) Actions.select(action).isInstaceOf(TypeAction.class).first();
+		TypeAction typeAction = (TypeAction) Actions.select(action).isInstanceOf(TypeAction.class).first();
 		assertThat(typeAction.getText(), equalToIgnoringCase("some text"));
 	}
 
@@ -215,8 +215,8 @@ public class InterpreterTest {
 		Action action = interpreter.interpret(slide);
 		
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(WaitAction.class).all().size(), equalTo(1));
-		WaitAction waitAction = (WaitAction) Actions.select(action).isInstaceOf(WaitAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(WaitAction.class).all().size(), equalTo(1));
+		WaitAction waitAction = (WaitAction) Actions.select(action).isInstanceOf(WaitAction.class).first();
 		assertThat(waitAction.getDuration(), equalTo(2000L));
 		assertThat(waitAction.getTarget(), notNullValue());
 	}
@@ -225,39 +225,39 @@ public class InterpreterTest {
 	public void testInterpretDelayAction() {
 		Slide slide = createDelaySlide("2 seconds");				
 		Action action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
-		DelayAction delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
+		DelayAction delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
 		assertEquals(2000, delayAction.getDuration());
 
 
 		slide = createDelaySlide("2");		
 		action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
-		delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
+		delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
 		assertEquals(2000, delayAction.getDuration());
 		
 		slide = createDelaySlide("1 minute");		
 		action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
-		delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
+		delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
 		assertEquals(1000 * 60, delayAction.getDuration());
 
 		slide = createDelaySlide("0.5 second");		
 		action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
-		delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
+		delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
 		assertEquals(500, delayAction.getDuration());
 
 		slide = createDelaySlide("0.5");		
 		action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
-		delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
+		delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
 		assertEquals(500, delayAction.getDuration());
 
 		slide = createDelaySlide("0");		
 		action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstaceOf(DelayAction.class).all().size(), equalTo(1));
-		delayAction = (DelayAction) Actions.select(action).isInstaceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
+		delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
 		assertEquals(0, delayAction.getDuration());
 
 		

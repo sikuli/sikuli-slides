@@ -74,11 +74,24 @@ public class Actions {
 			}
 		}
 		
-		public ActionSelector isInstaceOf(final Class classz){
+		public ActionSelector isInstanceOf(final Class classz){
 			ps.add(new Predicate<Action>(){
 				@Override
 				public boolean apply(Action action) {
-					return action.getClass() == classz;					
+					return classz.isInstance(action);					
+				}				
+			});
+			return this;			
+		}
+		
+		public ActionSelector isLeaf(){
+			ps.add(new Predicate<Action>(){
+				@Override
+				public boolean apply(Action action) {
+					if (action instanceof DefaultAction){
+						return ((DefaultAction) action).getChildren().size() == 0;	
+					}
+					return false;
 				}				
 			});
 			return this;			

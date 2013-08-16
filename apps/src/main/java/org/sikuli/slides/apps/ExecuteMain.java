@@ -26,7 +26,7 @@ public class ExecuteMain {
 	@Argument(value = "help", description = "Print help message", required = false)
 	private boolean help = false;
 
-	@Argument(value = "screen_id", description = "The id of the connected screen/monitor (default is 0).", required = false)
+	@Argument(value = "screen", description = "The id of the connected screen/monitor (default is 0).", required = false)
 	private Integer screenId = 0;
 
 	@Argument(value = "min_score", description = "The minimum similarity score for a target to be considered as a match. It's on a 0 to 1 scale where 0 is the least precise search and 1.0 is the most precise search (default is 0.7).", required = false)

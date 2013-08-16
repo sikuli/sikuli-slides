@@ -45,8 +45,8 @@ public class InterpreterCornerCaseTest {
 
 		Action action = interpreter.interpret(slide);		
 		assertNotNull(action);
-		assertThat(Actions.select(action).isInstaceOf(TargetAction.class).all().size(), equalTo(1));
-		assertThat(Actions.select(action).isInstaceOf(LeftClickAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(TargetAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(LeftClickAction.class).all().size(), equalTo(1));
 	}
 	
 	@Test
@@ -58,8 +58,8 @@ public class InterpreterCornerCaseTest {
 
 		Action action = interpreter.interpret(slide);		
 		assertNotNull(action);
-		assertThat(Actions.select(action).isInstaceOf(TargetAction.class).all().size(), equalTo(1));
-		assertThat(Actions.select(action).isInstaceOf(LeftClickAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(TargetAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(LeftClickAction.class).all().size(), equalTo(1));
 	}	
 	
 }

@@ -8,11 +8,16 @@ import java.util.List;
 
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
+import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.interpreters.DefaultInterpreter;
+import org.sikuli.slides.api.interpreters.Interpreter;
 import org.sikuli.slides.api.io.PPTXSlidesReader;
 import org.sikuli.slides.api.io.SlidesReader;
 import org.sikuli.slides.api.models.Slide;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
 
 public class Slides {
 	
@@ -52,6 +57,22 @@ public class Slides {
 		} catch (MalformedURLException e) {
 			throw new SlideExecutionException(e);
 		}
+	}
+
+	public static List<Action> interpret(File file) throws IOException {
+		Interpreter interpreter = new DefaultInterpreter();
+		SlidesReader reader = new PPTXSlidesReader();		
+		List<Slide> slides;
+		slides = reader.read(file);
+		List<Action> actions = Lists.newArrayList();
+		for (Slide slide : slides){
+			Action action = interpreter.interpret(slide);
+			actions.add(action);
+			logger.info("Action interpreted: {}", action);
+		}
+		return actions;
+
+		
 	}
 
 }

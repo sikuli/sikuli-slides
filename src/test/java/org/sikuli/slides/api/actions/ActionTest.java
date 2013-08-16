@@ -138,7 +138,7 @@ public class ActionTest {
 		
 		parallelAction.execute(context);
 		
-		assertThat(Actions.select(parallelAction).isInstaceOf(LabelAction.class).all().size(), equalTo(2));
+		assertThat(Actions.select(parallelAction).isInstanceOf(LabelAction.class).all().size(), equalTo(2));
 	}
 	
 

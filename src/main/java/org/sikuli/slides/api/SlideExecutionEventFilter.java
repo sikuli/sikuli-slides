@@ -70,7 +70,7 @@ public interface SlideExecutionEventFilter {
 				
 				// see if the current action is a matching bookamark
 				Action action = slide.getAction();
-				BookmarkAction bookmarkAction = (BookmarkAction) Actions.select(action).isInstaceOf(BookmarkAction.class).first();			
+				BookmarkAction bookmarkAction = (BookmarkAction) Actions.select(action).isInstanceOf(BookmarkAction.class).first();			
 				if (bookmarkAction != null && bookmarkAction.getName().compareToIgnoreCase(bookmarkName)==0){
 					isBookmarkFound = true;
 					return true;

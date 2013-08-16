@@ -109,6 +109,12 @@ public class ContextImageTarget implements Target {
 		}
 		return r;
 	}
+	
+	public BufferedImage getTargetImage(){
+		Rectangle bounds = getTargetBounds();
+		BufferedImage image = getContextImage();
+		return image.getSubimage(bounds.x, bounds.y, bounds.width, bounds.height);
+	}
 
 	@Override
 	public List<ScreenRegion> doFindAll(ScreenRegion screenRegion) {
@@ -132,11 +138,21 @@ public class ContextImageTarget implements Target {
 	}
 
 	public String toString(){
+		if (isPixels){
+			return Objects.toStringHelper(this)
+					.add("image", contextImageURL)
+					.add("x", x)
+					.add("y", y)
+					.add("width", width)
+					.add("height", height)
+					.toString();
+			}else{
 		return Objects.toStringHelper(this)
 				.add("image", contextImageURL)
 				.add("x", String.format("(%.2f,%.2f)", xmin, xmax))
 				.add("y", String.format("(%.2f,%.2f)", ymin, ymax))
 				.toString();
+			}
 	}
 
 

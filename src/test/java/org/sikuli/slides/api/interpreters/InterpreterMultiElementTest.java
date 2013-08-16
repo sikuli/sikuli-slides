@@ -38,7 +38,7 @@ public class InterpreterMultiElementTest {
 
 		Action action = interpreter.interpret(slide);
 		assertThat(action, notNullValue());		
-		assertThat(Actions.select(action).isInstaceOf(LabelAction.class).all().size(), equalTo(2));
+		assertThat(Actions.select(action).isInstanceOf(LabelAction.class).all().size(), equalTo(2));
 	}
 	
 	@Test
@@ -52,8 +52,8 @@ public class InterpreterMultiElementTest {
 
 		Action action = interpreter.interpret(slide);
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(LabelAction.class).all().size(), equalTo(2));
-		assertThat(Actions.select(action).isInstaceOf(LeftClickAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(LabelAction.class).all().size(), equalTo(2));
+		assertThat(Actions.select(action).isInstanceOf(LeftClickAction.class).all().size(), equalTo(1));
 
 	}
 	

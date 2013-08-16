@@ -23,8 +23,17 @@ public class DefaultAction implements Action{
 	}
 	
 	public Action getChild(int index){
+		if (index >= 0 && index < actions.size()){
+			return actions.get(index);
+		}else{
+			return null;
+		}
+	}
+	
+	public Action hasChild(int index){
 		return actions.get(index);
 	}
+
 	
 	public List<Action> getChildren(){
 		return Lists.newArrayList(actions);

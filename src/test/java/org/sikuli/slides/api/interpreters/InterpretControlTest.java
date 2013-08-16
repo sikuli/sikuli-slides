@@ -36,7 +36,7 @@ public class InterpretControlTest {
 		slide.newKeywordElement().keyword(KeywordDictionary.SKIP).geom("hex").add();		
 		Action action = interpreter.interpret(slide);
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(SkipAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(SkipAction.class).all().size(), equalTo(1));
 	}
 	
 	@Test
@@ -44,7 +44,7 @@ public class InterpretControlTest {
 		slide.newKeywordElement().keyword(KeywordDictionary.OPTIONAL).geom("hex").add();		
 		Action action = interpreter.interpret(slide);
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(OptionalAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(OptionalAction.class).all().size(), equalTo(1));
 	}
 	
 	@Test
@@ -52,8 +52,8 @@ public class InterpretControlTest {
 		slide.newKeywordElement().keyword(KeywordDictionary.BOOKMARK).geom("hex").text("step5").add();		
 		Action action = interpreter.interpret(slide);
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstaceOf(BookmarkAction.class).all().size(), equalTo(1));
-		BookmarkAction bookmark = (BookmarkAction) Actions.select(action).isInstaceOf(BookmarkAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(BookmarkAction.class).all().size(), equalTo(1));
+		BookmarkAction bookmark = (BookmarkAction) Actions.select(action).isInstanceOf(BookmarkAction.class).first();
 		assertThat(bookmark.getName(), equalTo("step5"));
 	}
 
