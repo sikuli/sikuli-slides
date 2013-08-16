@@ -21,12 +21,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
-import org.sikuli.slides.core.SikuliAction;
-import org.sikuli.slides.listeners.tutorials.Observable;
-import org.sikuli.slides.listeners.tutorials.Observer;
-import org.sikuli.slides.utils.Constants;
-import org.sikuli.slides.utils.MyScreen;
-import org.sikuli.slides.utils.Constants.NavigationStatus;
+import org.sikuli.slides.v1.core.SikuliAction;
+import org.sikuli.slides.v1.listeners.tutorials.Observable;
+import org.sikuli.slides.v1.listeners.tutorials.Observer;
+import org.sikuli.slides.v1.utils.Constants;
+import org.sikuli.slides.v1.utils.MyScreen;
+import org.sikuli.slides.v1.utils.Constants.NavigationStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

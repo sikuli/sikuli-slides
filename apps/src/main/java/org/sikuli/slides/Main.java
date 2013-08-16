@@ -3,14 +3,14 @@ package org.sikuli.slides;
 import java.util.Arrays;
 
 import org.sikuli.api.robot.desktop.DesktopScreen;
-import org.sikuli.slides.core.RunOptions;
-import org.sikuli.slides.core.SikuliPowerPoint;
 import org.sikuli.slides.uis.MainCommandLine;
 import org.sikuli.slides.uis.MainUI;
-import org.sikuli.slides.utils.Constants;
-import org.sikuli.slides.utils.MyScreen;
-import org.sikuli.slides.utils.UserPreferencesEditor;
-import org.sikuli.slides.utils.Utils;
+import org.sikuli.slides.v1.core.RunOptions;
+import org.sikuli.slides.v1.core.SikuliPowerPoint;
+import org.sikuli.slides.v1.utils.Constants;
+import org.sikuli.slides.v1.utils.MyScreen;
+import org.sikuli.slides.v1.utils.UserPreferencesEditor;
+import org.sikuli.slides.v1.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

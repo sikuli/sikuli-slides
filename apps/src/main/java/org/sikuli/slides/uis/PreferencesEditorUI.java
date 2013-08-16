@@ -21,8 +21,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.text.NumberFormatter;
 import org.sikuli.api.robot.desktop.DesktopScreen;
-import org.sikuli.slides.utils.Constants;
-import org.sikuli.slides.utils.UserPreferencesEditor;
+import org.sikuli.slides.v1.utils.Constants;
+import org.sikuli.slides.v1.utils.UserPreferencesEditor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

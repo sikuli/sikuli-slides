@@ -31,7 +31,7 @@ import org.sikuli.slides.api.models.ImageElement;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.models.SlideElement;
 import org.sikuli.slides.api.sikuli.ContextImageTarget;
-import org.sikuli.slides.utils.UnitConverter;
+import org.sikuli.slides.v1.utils.UnitConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

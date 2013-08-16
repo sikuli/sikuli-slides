@@ -15,10 +15,10 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.GnuParser;
 import org.sikuli.api.robot.desktop.DesktopScreen;
-import org.sikuli.slides.core.RunOptions;
-import org.sikuli.slides.utils.Constants;
-import org.sikuli.slides.utils.MyFileFilter;
-import org.sikuli.slides.utils.UserPreferencesEditor;
+import org.sikuli.slides.v1.core.RunOptions;
+import org.sikuli.slides.v1.utils.Constants;
+import org.sikuli.slides.v1.utils.MyFileFilter;
+import org.sikuli.slides.v1.utils.UserPreferencesEditor;
 
 /**
  * sikuli-slides Command Line tool using GNU like options.
