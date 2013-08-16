@@ -15,7 +15,6 @@ public class RecorderMain {
 	public static void main(String[] args) {	
 		
 		final List<String> parse;
-	    //Args.usage(c);
 		try {
 			parse = Args.parse(Command.class, args);
 		} catch (IllegalArgumentException e) {

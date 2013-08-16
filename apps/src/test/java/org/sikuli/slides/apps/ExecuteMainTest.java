@@ -83,9 +83,10 @@ public class ExecuteMainTest {
 	
 	@Test
 	public void testScreenId(){ 
-		main.parseArgs("helloworld.pptx","-screen_id","1");
-		assertThat(((DesktopScreen) main.context.getScreenRegion().getScreen()).getScreenId(), equalTo(1));
+		main.parseArgs("helloworld.pptx","-screen","0");
+		assertThat(((DesktopScreen) main.context.getScreenRegion().getScreen()).getScreenId(), equalTo(0));
 	}
+	// TODO: test case with bad screen ids
 	
 	@Test
 	public void testWaitTime(){ 
@@ -125,7 +126,7 @@ public class ExecuteMainTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testNoInput(){ 
-		main.parseArgs("-screen_id","1");
+		main.parseArgs("-screen","1");
 	}
 	
 }
