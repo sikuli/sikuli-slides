@@ -2,6 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
+
 	<licenses>
 		<license>
 			<name>MIT License</name>
@@ -24,7 +32,7 @@
 	<groupId>org.sikuli</groupId>
 	<artifactId>sikuli-slides</artifactId>
 	<name>sikuli-slides</name>
-	<url>http://www.sikuli.org</url>
+	<url>http://lab.sikuli.org</url>
 	<version>1.4.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<properties>
@@ -32,15 +40,22 @@
 	</properties>
 	<repositories>
 		<repository>
-			<id>repository</id>
-			<url>file://${basedir}/repo</url>
+			<id>freelogger-mvn-repo</id>
+			<url>https://raw.github.com/peytonc/Freelogger-repo/master</url>
 		</repository>
 	</repositories>
+
+	<scm>
+		<connection>scm:git:git@github.com:sikuli/sikuli-slides.git</connection>
+		<developerConnection>scm:git:git@github.com:sikuli/sikuli-slides.git</developerConnection>
+		<url>git@github.com:sikuli/sikuli-slides.git</url>
+	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.sikuli</groupId>
 			<artifactId>sikuli-api</artifactId>
-			<version>1.0.9-SNAPSHOT</version>
+			<version>1.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -53,7 +68,7 @@
 			<version>1.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jnativehook</groupId>
+			<groupId>org</groupId>
 			<artifactId>jnativehook</artifactId>
 			<version>1.1.4</version>
 		</dependency>
@@ -66,17 +81,36 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
 			<version>1.0.13</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.0.13</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
-		</dependency>		
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>14.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

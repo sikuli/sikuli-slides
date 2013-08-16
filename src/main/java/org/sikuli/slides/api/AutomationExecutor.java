@@ -5,7 +5,6 @@ import java.util.List;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.ActionExecutionException;
 import org.sikuli.slides.api.actions.Actions;
-import org.sikuli.slides.api.actions.BookmarkAction;
 import org.sikuli.slides.api.interpreters.DefaultInterpreter;
 import org.sikuli.slides.api.interpreters.Interpreter;
 import org.sikuli.slides.api.models.Slide;
@@ -28,20 +27,11 @@ public class AutomationExecutor implements SlidesExecutor {
 		context = new Context();
 	}
 
-	static int findFirstMatchedBookmarkLocation(String bookmarkName, List<Action> actions){
-		for (int i = 0; i < actions.size(); ++i){
-			Action action = actions.get(i);
-			BookmarkAction bookmarkAction = (BookmarkAction) Actions.select(action).isInstaceOf(BookmarkAction.class).first();			
-			if (bookmarkAction != null && bookmarkAction.getName().compareToIgnoreCase(bookmarkName)==0){
-				return i;
-			}			
-		}
-		return -1;		
-	}
-	
 	@Override
 	public void execute(List<Slide> slides) throws SlideExecutionException {
 				
+		logger.info("Executing {} slide(s)", slides.size());
+		
 		Interpreter interpreter = new DefaultInterpreter();		
 		List<Action> actions = Lists.newArrayList();
 		for (Slide slide : slides){
@@ -56,18 +46,20 @@ public class AutomationExecutor implements SlidesExecutor {
 			Action action = actions.get(i);			
 			SlideExecutionEvent event = new SlideExecutionEvent(slide,action,context);
 			
-			if (!context.getSlideSelector().accept(event)){
-				logger.debug("Slide {} is skipped", slide.getNumber());
+			if (!context.getFilter().accept(event)){
+				logger.info("Slide {} of {} is skipped", slide.getNumber(), slides.size());				
 				continue;			
 				
-			}else{
-				logger.debug("Slide {} is executed", slide.getNumber());
-
+			}else{ 
+				if (action == null){
+					continue;
+				}
+				
+				logger.info("Slide {} of {}", slide.getNumber(), slides.size());
+				logger.info(Actions.toPrettyString(action));
+				
 				try {				
-					//				Action action = slideActionMap.get(slide);
-					if (action != null){
-						action.execute(context);
-					}
+					action.execute(context);
 				} catch (ActionExecutionException e) {
 					SlideExecutionException ex = new SlideExecutionException(e);
 					ex.setAction(e.getAction());

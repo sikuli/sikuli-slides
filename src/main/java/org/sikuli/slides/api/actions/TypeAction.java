@@ -6,16 +6,13 @@ import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopKeyboard;
 import org.sikuli.api.robot.desktop.DesktopMouse;
 import org.sikuli.slides.api.Context;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
 public class TypeAction extends DefaultAction {
 	
-	private Logger logger = LoggerFactory.getLogger(getClass());
 	private String text;
-	
+
 	public String getText() {
 		return text;
 	}
@@ -26,7 +23,7 @@ public class TypeAction extends DefaultAction {
 
 	@Override
 	public void execute(Context context) {
-		logger.info("performing keyboard typing event on target...");
+		logger.info("executing " + this);
 		String textToType = context.render(getText());
 		ScreenRegion screenRegion = context.getScreenRegion();
 		Mouse mouse = new DesktopMouse();

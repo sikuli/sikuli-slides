@@ -25,7 +25,7 @@ public class Slides {
 	}
 
 	static public void execute(URL url, Context context) throws SlideExecutionException {	
-		logger.info("execute slides with context {}", context);
+		logger.debug("execute slides with context {}", context);
 		SlidesReader reader = new PPTXSlidesReader();		
 		List<Slide> slides;
 		try {

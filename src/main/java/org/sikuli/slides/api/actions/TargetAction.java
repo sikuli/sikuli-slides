@@ -5,15 +5,11 @@ import org.sikuli.api.Target;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.api.Context;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
 public class TargetAction extends DefaultAction {
 	
-	private Logger logger = LoggerFactory.getLogger(getClass());
-
 	Target target;
 	
 	public TargetAction(Target target, Action targetAction){

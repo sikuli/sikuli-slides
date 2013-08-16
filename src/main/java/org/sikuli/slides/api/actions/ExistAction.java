@@ -7,7 +7,7 @@ import org.sikuli.slides.api.Context;
 import com.google.common.base.Objects;
 
 public class ExistAction extends DefaultAction {
-
+	
 	Target target;
 	public ExistAction(Target target){
 		this.target = target;
@@ -15,6 +15,7 @@ public class ExistAction extends DefaultAction {
 
 	@Override
 	public void execute(Context context) throws ActionExecutionException {
+		logger.debug("executing {}", this);
 		ScreenRegion screenRegion = context.getScreenRegion();
 		ScreenRegion ret = screenRegion.wait(target, 5000);
 		if (ret == null){

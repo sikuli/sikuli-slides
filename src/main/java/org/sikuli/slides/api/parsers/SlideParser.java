@@ -112,7 +112,7 @@ public class SlideParser {
 		return e;
 	}
 	
-	String parseParagraph(Node paragraphNode){
+	String parseParagraph(Node paragraphNode){	
 		NodeList l = ((Element) paragraphNode).getElementsByTagName("a:t");
 		String combinedText = "";
 		for (int i = 0; i < l.getLength(); ++i){

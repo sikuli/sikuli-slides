@@ -6,8 +6,6 @@ package org.sikuli.slides.media;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.sikuli.api.audio.DesktopSpeaker;
-import org.sikuli.api.audio.Speaker;
 import org.sikuli.slides.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,14 +44,14 @@ public class Sound {
 	}
 	
 	public void playSound(){
-		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+getFileName();
-		Speaker speaker = new DesktopSpeaker();
-		try {
-			speaker.play(new URL("file://"+slideMediaLocation));
-		}
-		catch (MalformedURLException e) {
-			logger.error("Unknown audio location..");
-		}
+//		String slideMediaLocation=Constants.projectDirectory+Constants.MEDIA_DIRECTORY+File.separator+getFileName();
+//		Speaker speaker = new DesktopSpeaker();
+//		try {
+//			speaker.play(new URL("file://"+slideMediaLocation));
+//		}
+//		catch (MalformedURLException e) {
+//			logger.error("Unknown audio location..");
+//		}
 	}
 	public String toString(){
 		return "Sound info:\n" +"name:"+name+"\n file name:"+fileName+

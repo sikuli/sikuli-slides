@@ -36,7 +36,7 @@ public class ParallelAction extends DefaultAction {
 	
 	@Override
 	public void execute(Context context) throws ActionExecutionException {
-		
+		logger.debug("executing {}", this);
 		int n = getChildren().size();
 		doneSignal = new CountDownLatch(n); 
 		List<Worker> workers = Lists.newArrayList();

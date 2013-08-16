@@ -5,20 +5,16 @@ import static org.sikuli.api.API.browse;
 import java.net.URL;
 
 import org.sikuli.slides.api.Context;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
 public class BrowserAction extends DefaultAction {
 	
-	Logger logger = LoggerFactory.getLogger(BrowserAction.class);
-	
 	private URL url;
 
 	@Override
 	public void execute(Context context) {
-		logger.info("launching the default browser...");
+		logger.debug("executing {}", this);
 		if (url != null)
 			browse(url);
 	}

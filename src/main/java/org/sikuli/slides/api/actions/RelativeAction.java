@@ -3,8 +3,6 @@ package org.sikuli.slides.api.actions;
 import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.api.Context;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
@@ -14,8 +12,6 @@ import com.google.common.base.Objects;
 // but in another area relative to the target.
 public class RelativeAction extends DefaultAction {
 	
-	private Logger logger = LoggerFactory.getLogger(getClass());
-
 	private int x = 0;
 	private int y = 0;
 	private int width = 0;
@@ -48,7 +44,7 @@ public class RelativeAction extends DefaultAction {
 	
 	@Override
 	public void execute(Context context) throws ActionExecutionException {
-		logger.info("executing " + this);
+		logger.debug("executing " + this);
 		ScreenRegion screenRegion = context.getScreenRegion();
 		
 		ScreenRegion targetRegion;

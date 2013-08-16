@@ -149,11 +149,6 @@ public class DefaultInterpreter implements Interpreter {
 	}
 	
 	Action interpretAsLabel(Slide slide){
-
-		// if there's a keyword on the slide, do not interpret text as labels
-//		if (slide.select().isKeyword().exist())
-//			return null;
-
 		List<SlideElement> textElements = slide.select().isNotKeyword().hasText().all();
 		if (textElements.size() == 0)
 			return null;

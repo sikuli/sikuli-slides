@@ -17,10 +17,9 @@ import org.sikuli.slides.presentation.Presentation;
 import org.sikuli.slides.processing.ImageProcessing;
 import org.sikuli.slides.processing.Relationship;
 import org.sikuli.slides.processing.SlideProcessing;
-import org.sikuli.slides.screenshots.SlideTargetRegion;
 import org.sikuli.slides.screenshots.Screenshot;
+import org.sikuli.slides.screenshots.SlideTargetRegion;
 import org.sikuli.slides.shapes.SlideShape;
-import org.sikuli.slides.uis.TutorialConrollerUI;
 import org.sikuli.slides.utils.Constants;
 import org.sikuli.slides.utils.Constants.DesktopEvent;
 import org.sikuli.slides.utils.UnitConverter;
@@ -412,7 +411,7 @@ public class SikuliPowerPoint {
 		if(Constants.TUTORIAL_MODE){
 			// display Tutorial Controller UI when tutorial mode is running, which will run the tasks in a new worker thread
 			logger.info("Running in tutorial mode...");
-			TutorialConrollerUI.runTutorialUIAndTasks(tasks);
+			//TutorialConrollerUI.runTutorialUIAndTasks(tasks);
 		}
 		else{
 			for(SikuliAction sikuliAction:tasks){

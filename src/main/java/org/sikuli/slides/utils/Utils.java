@@ -19,7 +19,6 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.media.Log;
 
 public class Utils {
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(Utils.class);
@@ -193,11 +192,11 @@ public class Utils {
 			FileUtils.copyURLToFile(downloadURL, destination, 300000, 30000);
 			logger.info("Download complete.");
 		} catch (IOException e) {
-			Log.error("Error while downloading the file.");
+			logger.error("Error while downloading the file.");
 			destination = null;
 		}
 		catch (NullPointerException npe) {
-			Log.error("Error while downloading the file.");
+			logger.error("Error while downloading the file.");
 			destination = null;
 		}
     	

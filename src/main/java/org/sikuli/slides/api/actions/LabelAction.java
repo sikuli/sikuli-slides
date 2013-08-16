@@ -2,20 +2,15 @@ package org.sikuli.slides.api.actions;
 
 import java.awt.Color;
 
-import org.sikuli.api.ScreenLocation;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.api.Context;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
 public class LabelAction extends DefaultAction {
 	
-	private Logger logger = LoggerFactory.getLogger(getClass());
-
 	private String text = "";
 	private int fontSize = 12;
 	private int duration = 3000;
@@ -23,7 +18,7 @@ public class LabelAction extends DefaultAction {
 
 	@Override
 	public void execute(Context context){
-		logger.info("executing " + this);
+		logger.debug("executing " + this);
 		ScreenRegion targetRegion = context.getScreenRegion();
 		
 		String textToDisplay = context.render(text);

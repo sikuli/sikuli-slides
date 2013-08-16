@@ -15,6 +15,7 @@ public class NotExistAction extends DefaultAction {
 	
 	@Override
 	public void execute(Context context) throws ActionExecutionException{
+		logger.debug("executing {}", this);
 		ScreenRegion screenRegion = context.getScreenRegion();
 		ScreenRegion ret = screenRegion.find(target);
 		if (ret != null){

@@ -1,5 +1,7 @@
 package org.sikuli.slides.api.actions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Collection;
 import java.util.List;
 
@@ -7,21 +9,20 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-
 public class Actions {
 	public static void print(Action action){
-		printHelper(action, 0);
+		printHelper(System.out, action, 0);
 	}
 	
-	private static void printHelper(Action action, int level){
+	private static void printHelper(PrintStream out, Action action, int level){
 		for (int i = 0; i < level; ++i ){
-			System.out.print("   ");
+			out.print("   ");
 		}
-		System.out.println(action);
+		out.println(action);
 		if (action instanceof DefaultAction){
 			DefaultAction defaultAction = (DefaultAction) action;
 			for (Action child : defaultAction.getChildren()){				
-				printHelper(child, level + 1);				
+				printHelper(out, child, level + 1);				
 			}
 		}
 	}
@@ -82,5 +83,12 @@ public class Actions {
 			});
 			return this;			
 		}
+	}
+
+	public static String toPrettyString(Action action) {
+		ByteArrayOutputStream bo = new ByteArrayOutputStream();
+		PrintStream out = new PrintStream(bo);
+		printHelper(out, action, 0);
+		return bo.toString();
 	}
 }

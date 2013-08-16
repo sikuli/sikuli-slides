@@ -16,12 +16,7 @@ public class Context {
 	private ScreenRegion screenRegion;
 	
 	// the default slide selector is to accept all
-	private SlideExecutionEventFilter slideSelector = new SlideExecutionEventFilter(){
-		@Override
-		public boolean accept(SlideExecutionEvent slide) {			
-			return true;
-		}		
-	};
+	private SlideExecutionEventFilter filter = SlideExecutionEventFilter.Factory.createAllFilter();
 	private Map<String, Object> parameters = Maps.newHashMap();	
 	private float minScore = DEFAULT_MIN_SCORE;	
 	// how long to wait for a target in ms
@@ -39,7 +34,7 @@ public class Context {
 		Context copy = new Context();
 		copy.setMinScore(getMinScore());
 		copy.setScreenRegion(getScreenRegion());
-		copy.setSlideSelector(getSlideSelector());
+		copy.setFilter(getFilter());
 		copy.setWaitTime(getWaitTime());
 		return copy;
 	}
@@ -67,13 +62,16 @@ public class Context {
 		}
 		return st.render();
 	}
-
-	public SlideExecutionEventFilter getSlideSelector() {
-		return slideSelector;
+ 
+	public SlideExecutionEventFilter getFilter() {
+		return filter;
 	}
 
-	public void setSlideSelector(SlideExecutionEventFilter slideSelector) {
-		this.slideSelector = slideSelector;
+	// The filter can be used to accept or reject an execution event. 
+	// For instance, accept only those with a slide number > 3
+	// or accept only those whose Action is not a TYPE action
+	public void setFilter(SlideExecutionEventFilter filter) {
+		this.filter = filter;
 	}
 	
 	public String toString(){
