@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
-import org.sikuli.slides.api.listeners.ScreenRegionHighlighter;
+import org.sikuli.slides.api.listeners.ExecutionVisualizer;
 import org.sikuli.slides.api.models.Slide;
 import org.stringtemplate.v4.ST;
 
@@ -17,7 +17,7 @@ public class Context {
 
 	private ScreenRegion screenRegion;
 	private Slide slide;	
-	private ExecutionListener executionListener = new ScreenRegionHighlighter();
+	private ExecutionListener executionListener = new ExecutionVisualizer();
 	
 	// the default slide selector is to accept all
 	private ExecutionFilter filter = ExecutionFilter.Factory.createAllFilter();

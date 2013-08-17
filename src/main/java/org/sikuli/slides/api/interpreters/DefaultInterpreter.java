@@ -24,6 +24,7 @@ import org.sikuli.slides.api.actions.ParallelAction;
 import org.sikuli.slides.api.actions.RelativeAction;
 import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.SkipAction;
+import org.sikuli.slides.api.actions.SlideAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
 import org.sikuli.slides.api.actions.WaitAction;
@@ -430,7 +431,10 @@ public class DefaultInterpreter implements Interpreter {
 			action = controlAction;
 		}
 		
-		return action;
+		SlideAction slideAction = new SlideAction();
+		if (action != null)
+			slideAction.addChild(action);
+		return slideAction;
 	}
 
 }
