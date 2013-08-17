@@ -26,6 +26,8 @@ public class Context {
 	// how long to wait for a target in ms
 	private long waitTime = DEFAULT_WAIT_TIME;
 	
+	private boolean verbose = true;
+	
 	public Context(ScreenRegion screenRegion) {
 		this.screenRegion = screenRegion;
 	}
@@ -144,4 +146,13 @@ public class Context {
 	public void setSlide(Slide slide) {
 		this.slide = slide;
 	}
+
+	public boolean isVerbose() {
+		return verbose;
+	}
+
+	public void setVerbose(boolean verbose) {
+		this.verbose = verbose;
+	}
+
 }

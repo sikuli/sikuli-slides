@@ -54,11 +54,16 @@ abstract public class AbstractAction implements Action{
 		}
 		
 		logger.debug("executing {}", this);
-		doExecute(context);
+		try {
+			doExecute(context);
+		} catch (ActionExecutionException e) {
+			throw e;
+		}finally{
+			if (actionListener != null){
+				actionListener.afterExecution(new ExecutionEvent(this, context));
+			}			
+		}
 		
-		if (actionListener != null){
-			actionListener.afterExecution(new ExecutionEvent(this, context));
-		}		
 	}
 	
 	

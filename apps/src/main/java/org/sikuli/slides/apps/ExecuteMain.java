@@ -13,6 +13,10 @@ import org.sikuli.slides.api.ExecutionFilter;
 import org.sikuli.slides.api.ExecutionFilter.Factory;
 import org.sikuli.slides.api.SlideExecutionException;
 import org.sikuli.slides.api.Slides;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 
 import com.google.common.base.Objects;
 import com.sampullara.cli.Args;
@@ -44,6 +48,10 @@ public class ExecuteMain {
 	@Argument(value = "bookmark", description = "The bookmark to start executing from.", required = false)
 	private String bookmark = null;
 
+	@Argument(value = "quiet", description = "Execute in the quiet mode without any visulization (default: false).", required = false)
+	private boolean quiet = true;
+
+	
 	Context context;
 	URL url;
 
@@ -102,15 +110,17 @@ public class ExecuteMain {
 		ScreenRegion screenRegion = new DesktopScreenRegion(screenId);
 		context.setScreenRegion(screenRegion);
 
-		// set selector
+		// set filter
 		ExecutionFilter slideSelector = parseRange();
 		if (slideSelector != null)
 			context.setExecutionFilter(slideSelector);
 
+		// set bookmark, which overrides filter if specified
 		slideSelector = parseBookmark();
 		if (slideSelector != null)
 			context.setExecutionFilter(slideSelector);
-
+				
+		context.setVerbose(!quiet);
 
 		return context;
 	}
@@ -140,7 +150,7 @@ public class ExecuteMain {
 			Args.usage(ExecuteMain.class, EXE + "" + SYNTAX);
 			return;
 		}
-
+		
 		try {
 			Slides.execute(url, context);
 		} catch (SlideExecutionException e) {

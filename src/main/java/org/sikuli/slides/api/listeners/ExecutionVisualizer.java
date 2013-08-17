@@ -28,6 +28,10 @@ public class ExecutionVisualizer implements ExecutionListener {
 	private Canvas stepCanvas;
 	@Override
 	public void beforeExecution(ExecutionEvent event) {
+		if (!event.getContext().isVerbose()){
+			return;
+		}
+		
 		if (event.getAction() instanceof SlideAction){
 			String msg = "Executing slide " + event.getSlide().getNumber();
 			ScreenRegion r = event.getContext().getScreenRegion();
@@ -48,6 +52,10 @@ public class ExecutionVisualizer implements ExecutionListener {
 
 	@Override
 	public void afterExecution(ExecutionEvent event) {
+		if (!event.getContext().isVerbose()){
+			return;
+		}
+
 		if (event.getAction() instanceof SlideAction){
 			stepCanvas.hide();
 		}
