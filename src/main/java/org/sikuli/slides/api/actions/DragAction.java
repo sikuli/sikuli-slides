@@ -8,11 +8,10 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class DragAction extends DefaultAction {
+public class DragAction extends AbstractAction {
 	
 	@Override
-	public void execute(Context context) {
-		logger.debug("executing {}", this);
+	protected void doExecute(Context context) {
 		ScreenRegion screenRegion = context.getScreenRegion();
 		Mouse mouse = new DesktopMouse();
 		ScreenLocation loc = screenRegion.getCenter();

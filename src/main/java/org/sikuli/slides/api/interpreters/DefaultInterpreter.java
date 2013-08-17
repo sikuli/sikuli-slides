@@ -7,10 +7,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.sikuli.api.Target;
+import org.sikuli.slides.api.actions.AbstractAction;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.BookmarkAction;
 import org.sikuli.slides.api.actions.BrowserAction;
-import org.sikuli.slides.api.actions.DefaultAction;
+import org.sikuli.slides.api.actions.DelayAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
 import org.sikuli.slides.api.actions.DragAction;
 import org.sikuli.slides.api.actions.DropAction;
@@ -25,7 +26,6 @@ import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.SkipAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
-import org.sikuli.slides.api.actions.DelayAction;
 import org.sikuli.slides.api.actions.WaitAction;
 import org.sikuli.slides.api.models.ImageElement;
 import org.sikuli.slides.api.models.Slide;
@@ -426,7 +426,7 @@ public class DefaultInterpreter implements Interpreter {
 		}
 		
 		if (controlAction != null){			
-			((DefaultAction) controlAction).addChild(action);
+			((AbstractAction) controlAction).addChild(action);
 			action = controlAction;
 		}
 		

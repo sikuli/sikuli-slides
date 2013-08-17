@@ -44,9 +44,10 @@ public class AutomationExecutor implements SlidesExecutor {
 			
 			Slide slide = slides.get(i);
 			Action action = actions.get(i);			
-			SlideExecutionEvent event = new SlideExecutionEvent(slide,action,context);
+			Context slideContext = new Context(context, slide);
+			ExecutionEvent event = new ExecutionEvent(action,slideContext);
 			
-			if (!context.getFilter().accept(event)){
+			if (!context.getExecutionFilter().accept(event)){
 				logger.info("Slide {} of {} is skipped", slide.getNumber(), slides.size());				
 				continue;			
 				
@@ -59,7 +60,7 @@ public class AutomationExecutor implements SlidesExecutor {
 				logger.info(Actions.toPrettyString(action));
 				
 				try {				
-					action.execute(context);
+					action.execute(slideContext);
 				} catch (ActionExecutionException e) {
 					SlideExecutionException ex = new SlideExecutionException(e);
 					ex.setAction(e.getAction());

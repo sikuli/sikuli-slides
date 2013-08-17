@@ -6,13 +6,12 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class BookmarkAction extends DefaultAction {
+public class BookmarkAction extends AbstractAction {
 	
 	private String name;
 
 	@Override
-	public void execute(Context context) throws ActionExecutionException {
-		logger.debug("executing " + this);
+	public void doExecute(Context context) throws ActionExecutionException {
 		List<Action> children = getChildren();
 		if (children.size() == 1){
 			Action firstChild = children.get(0);

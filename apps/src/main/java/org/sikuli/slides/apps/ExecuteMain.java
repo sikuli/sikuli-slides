@@ -9,8 +9,8 @@ import java.util.List;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.slides.api.Context;
-import org.sikuli.slides.api.SlideExecutionEventFilter;
-import org.sikuli.slides.api.SlideExecutionEventFilter.Factory;
+import org.sikuli.slides.api.ExecutionFilter;
+import org.sikuli.slides.api.ExecutionFilter.Factory;
 import org.sikuli.slides.api.SlideExecutionException;
 import org.sikuli.slides.api.Slides;
 
@@ -47,13 +47,13 @@ public class ExecuteMain {
 	Context context;
 	URL url;
 
-	public SlideExecutionEventFilter parseBookmark(){
+	public ExecutionFilter parseBookmark(){
 		if (bookmark == null)
 			return null;		
 		return Factory.createStartFromBookmarkFilter(bookmark);
 	}
 
-	public SlideExecutionEventFilter parseRange(){
+	public ExecutionFilter parseRange(){
 		if (range == null)
 			return null;
 
@@ -103,13 +103,13 @@ public class ExecuteMain {
 		context.setScreenRegion(screenRegion);
 
 		// set selector
-		SlideExecutionEventFilter slideSelector = parseRange();
+		ExecutionFilter slideSelector = parseRange();
 		if (slideSelector != null)
-			context.setFilter(slideSelector);
+			context.setExecutionFilter(slideSelector);
 
 		slideSelector = parseBookmark();
 		if (slideSelector != null)
-			context.setFilter(slideSelector);
+			context.setExecutionFilter(slideSelector);
 
 
 		return context;

@@ -79,7 +79,7 @@ public class InputDetector {
 		List<NativeMouseEvent> events = new ArrayList<NativeMouseEvent>();
 
 		public void nativeMouseClicked(NativeMouseEvent e) {
-			System.out.println("Mosue Clicked: x = " + e.getX() + ", y = " + e.getY() + ", button =  " + e.getButton() + ", count = " + e.getClickCount());
+			System.out.println("Mouse Clicked: x = " + e.getX() + ", y = " + e.getY() + ", button =  " + e.getButton() + ", count = " + e.getClickCount());
 			events.add(e);
 		}
 

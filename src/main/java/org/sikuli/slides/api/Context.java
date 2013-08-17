@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
+import org.sikuli.slides.api.listeners.ScreenRegionHighlighter;
+import org.sikuli.slides.api.models.Slide;
 import org.stringtemplate.v4.ST;
 
 import com.google.common.base.Objects;
@@ -14,9 +16,11 @@ public class Context {
 	private static final float DEFAULT_MIN_SCORE = 0.7f;
 
 	private ScreenRegion screenRegion;
+	private Slide slide;	
+	private ExecutionListener executionListener = new ScreenRegionHighlighter();
 	
 	// the default slide selector is to accept all
-	private SlideExecutionEventFilter filter = SlideExecutionEventFilter.Factory.createAllFilter();
+	private ExecutionFilter filter = ExecutionFilter.Factory.createAllFilter();
 	private Map<String, Object> parameters = Maps.newHashMap();	
 	private float minScore = DEFAULT_MIN_SCORE;	
 	// how long to wait for a target in ms
@@ -24,20 +28,48 @@ public class Context {
 	
 	public Context(ScreenRegion screenRegion) {
 		this.screenRegion = screenRegion;
-	}	
+	}
+	
+	// Construct a new context based on the given context
+	// and set it to a new slide.
+	public Context(Context context, Slide slide){
+		copyFrom(context);
+		this.slide = slide;
+	}
+
+	// Construct a new context based on the given context
+	// and set it to a new ScreenRegion.
+	public Context(Context context, ScreenRegion screenRegion){
+		copyFrom(context);
+		this.screenRegion = screenRegion;
+	}
 	
 	public Context(){
 		screenRegion = new DesktopScreenRegion();
 	}
 	
-	public Context createCopy(){
-		Context copy = new Context();
-		copy.setMinScore(getMinScore());
-		copy.setScreenRegion(getScreenRegion());
-		copy.setFilter(getFilter());
-		copy.setWaitTime(getWaitTime());
-		return copy;
+	public Context(Context context) {
+		copyFrom(context);
 	}
+
+	private void copyFrom(Context copy){
+		setMinScore(copy.getMinScore());
+		setScreenRegion(copy.getScreenRegion());
+		setExecutionFilter(copy.getExecutionFilter());
+		setExecutionListener(copy.getExecutionListener());
+		setWaitTime(copy.getWaitTime());
+		setSlide(copy.getSlide());
+	}
+	
+//	public Context createCopy(){
+//		Context copy = new Context();
+//		copy.setMinScore(getMinScore());
+//		copy.setScreenRegion(getScreenRegion());
+//		copy.setExecutionFilter(getExecutionFilter());
+//		copy.setWaitTime(getWaitTime());
+//		copy.setSlide(getSlide());
+//		return copy;
+//	}
 
 	public ScreenRegion getScreenRegion() {
 		return screenRegion;
@@ -63,14 +95,14 @@ public class Context {
 		return st.render();
 	}
  
-	public SlideExecutionEventFilter getFilter() {
+	public ExecutionFilter getExecutionFilter() {
 		return filter;
 	}
 
 	// The filter can be used to accept or reject an execution event. 
 	// For instance, accept only those with a slide number > 3
 	// or accept only those whose Action is not a TYPE action
-	public void setFilter(SlideExecutionEventFilter filter) {
+	public void setExecutionFilter(ExecutionFilter filter) {
 		this.filter = filter;
 	}
 	
@@ -95,5 +127,21 @@ public class Context {
 
 	public void setWaitTime(long waitTime) {
 		this.waitTime = waitTime;
+	}
+
+	public ExecutionListener getExecutionListener() {
+		return executionListener;
+	}
+
+	public void setExecutionListener(ExecutionListener executionListener) {
+		this.executionListener = executionListener;
+	}
+
+	public Slide getSlide() {
+		return slide;
+	}
+
+	public void setSlide(Slide slide) {
+		this.slide = slide;
 	}
 }

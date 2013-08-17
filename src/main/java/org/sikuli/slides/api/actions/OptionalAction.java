@@ -6,11 +6,10 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class OptionalAction extends DefaultAction {
+public class OptionalAction extends AbstractAction {
 	
 	@Override
-	public void execute(Context context) {
-		logger.debug("executing (optional) " + getChildren());
+	public void doExecute(Context context) {
 		List<Action> children = getChildren();
 		if (children.size() == 1){
 			Action firstChild = children.get(0);

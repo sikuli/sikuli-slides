@@ -8,10 +8,9 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class RightClickAction extends DefaultAction {
+public class RightClickAction extends AbstractAction {
 	@Override
-	public void execute(Context context) {
-		logger.info("executing " + this);
+	protected void doExecute(Context context) {
 		ScreenRegion screenRegion = context.getScreenRegion();
 		Mouse mouse = new DesktopMouse();
 		ScreenLocation loc = screenRegion.getCenter();

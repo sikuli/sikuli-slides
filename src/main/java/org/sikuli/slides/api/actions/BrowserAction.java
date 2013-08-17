@@ -8,13 +8,12 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class BrowserAction extends DefaultAction {
+public class BrowserAction extends AbstractAction {
 	
 	private URL url;
 
 	@Override
-	public void execute(Context context) {
-		logger.debug("executing {}", this);
+	protected void doExecute(Context context) {
 		if (url != null)
 			browse(url);
 	}

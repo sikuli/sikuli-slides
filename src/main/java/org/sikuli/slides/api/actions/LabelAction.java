@@ -9,7 +9,7 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class LabelAction extends DefaultAction {
+public class LabelAction extends AbstractAction {
 	
 	private String text = "";
 	private int fontSize = 12;
@@ -17,8 +17,7 @@ public class LabelAction extends DefaultAction {
 	private Color backgroundColor = Color.yellow;
 
 	@Override
-	public void execute(Context context){
-		logger.debug("executing " + this);
+	protected void doExecute(Context context){
 		ScreenRegion targetRegion = context.getScreenRegion();
 		
 		String textToDisplay = context.render(text);

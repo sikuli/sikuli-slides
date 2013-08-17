@@ -9,7 +9,7 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class TypeAction extends DefaultAction {
+public class TypeAction extends AbstractAction {
 	
 	private String text;
 
@@ -22,8 +22,7 @@ public class TypeAction extends DefaultAction {
 	}
 
 	@Override
-	public void execute(Context context) {
-		logger.info("executing " + this);
+	protected void doExecute(Context context) {
 		String textToType = context.render(getText());
 		ScreenRegion screenRegion = context.getScreenRegion();
 		Mouse mouse = new DesktopMouse();

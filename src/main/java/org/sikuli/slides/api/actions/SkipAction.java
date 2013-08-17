@@ -4,11 +4,10 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class SkipAction extends DefaultAction {
+public class SkipAction extends AbstractAction {
 	
 	@Override
-	public void execute(Context context) {
-		logger.info("executing " + this);
+	protected void doExecute(Context context) {
 	}
 	
 	public String toString(){

@@ -3,9 +3,9 @@ package org.sikuli.slides.examples;
 import java.io.IOException;
 
 import org.sikuli.slides.api.Context;
-import org.sikuli.slides.api.SlideExecutionEvent;
+import org.sikuli.slides.api.ExecutionEvent;
 import org.sikuli.slides.api.SlideExecutionException;
-import org.sikuli.slides.api.SlideExecutionEventFilter;
+import org.sikuli.slides.api.ExecutionFilter;
 import org.sikuli.slides.api.Slides;
 import org.sikuli.slides.api.models.Slide;
 
@@ -15,9 +15,9 @@ public class ExecuteSelectedSlidesExample {
 		
 		Context context = new Context();
 		// select the 1st, 3rd, 4th, and 5th slides to execute 
-		context.setFilter(new SlideExecutionEventFilter(){
+		context.setExecutionFilter(new ExecutionFilter(){
 			@Override
-			public boolean accept(SlideExecutionEvent event) {
+			public boolean accept(ExecutionEvent event) {
 				Slide slide = event.getSlide();
 				return slide.getNumber() == 1 || (slide.getNumber() >= 3 && slide.getNumber() <= 5);
 			}			

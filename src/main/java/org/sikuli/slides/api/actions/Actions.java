@@ -19,8 +19,8 @@ public class Actions {
 			out.print("   ");
 		}
 		out.println(action);
-		if (action instanceof DefaultAction){
-			DefaultAction defaultAction = (DefaultAction) action;
+		if (action instanceof AbstractAction){
+			AbstractAction defaultAction = (AbstractAction) action;
 			for (Action child : defaultAction.getChildren()){				
 				printHelper(out, child, level + 1);				
 			}
@@ -31,8 +31,8 @@ public class Actions {
 		List<Action> actions = Lists.newLinkedList();
 		actions.add(action);
 		
-		if (action instanceof DefaultAction){
-			DefaultAction defaultAction = (DefaultAction) action;
+		if (action instanceof AbstractAction){
+			AbstractAction defaultAction = (AbstractAction) action;
 			for (Action child : defaultAction.getChildren()){				
 				actions.addAll(collectAllActions(child));		
 			}
@@ -88,8 +88,8 @@ public class Actions {
 			ps.add(new Predicate<Action>(){
 				@Override
 				public boolean apply(Action action) {
-					if (action instanceof DefaultAction){
-						return ((DefaultAction) action).getChildren().size() == 0;	
+					if (action instanceof AbstractAction){
+						return ((AbstractAction) action).getChildren().size() == 0;	
 					}
 					return false;
 				}				

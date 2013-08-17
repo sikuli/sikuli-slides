@@ -10,7 +10,7 @@ import com.google.common.base.Objects;
 // the screen region given in the context. It can be used in conjunction
 // with a TargetAction to execute an action not directly on a target
 // but in another area relative to the target.
-public class RelativeAction extends DefaultAction {
+public class RelativeAction extends AbstractAction {
 	
 	private int x = 0;
 	private int y = 0;
@@ -43,8 +43,7 @@ public class RelativeAction extends DefaultAction {
 	}
 	
 	@Override
-	public void execute(Context context) throws ActionExecutionException {
-		logger.debug("executing " + this);
+	public void doExecute(Context context) throws ActionExecutionException {
 		ScreenRegion screenRegion = context.getScreenRegion();
 		
 		ScreenRegion targetRegion;
@@ -54,8 +53,8 @@ public class RelativeAction extends DefaultAction {
 			targetRegion = Relative.to(screenRegion).region(xmin, ymin, xmax, ymax).getScreenRegion();
 		}
 		
-		Context childConext = context.createCopy();			
-		childConext.setScreenRegion(targetRegion);
+		Context childConext = new Context(context, targetRegion);			
+//		childConext.setScreenRegion(targetRegion);
 		for (Action child : getChildren()){
 			child.execute(childConext);
 		}

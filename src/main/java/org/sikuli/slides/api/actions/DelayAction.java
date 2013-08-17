@@ -6,13 +6,12 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class DelayAction extends DefaultAction {
+public class DelayAction extends AbstractAction {
 
 	private long duration;
 
 	@Override
-	public void execute(Context context) {
-		logger.debug("executing {}", this);
+	protected void doExecute(Context context) {
 		try {
 			String waitMessage="Execution will be delayed for "+ duration + " milliseconds";
 			logger.info(waitMessage);
@@ -30,7 +29,6 @@ public class DelayAction extends DefaultAction {
 	public void setDuration(long duration) {
 		this.duration = duration;
 	}
-	
 	
 	public String toString(){
 		return Objects.toStringHelper(this).add("duration", duration).toString();

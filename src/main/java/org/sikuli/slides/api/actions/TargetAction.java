@@ -8,7 +8,7 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class TargetAction extends DefaultAction {
+public class TargetAction extends AbstractAction {
 	
 	private Target target;
 	
@@ -22,8 +22,7 @@ public class TargetAction extends DefaultAction {
 	}
 	
 	@Override
-	public void execute(Context context) throws ActionExecutionException {
-		logger.info("executing " + this);
+	protected void doExecute(Context context) throws ActionExecutionException {
 		getTarget().setMinScore(context.getMinScore());
 		long waitTime = context.getWaitTime();
 		ScreenRegion screenRegion = context.getScreenRegion();
@@ -33,8 +32,7 @@ public class TargetAction extends DefaultAction {
 			canvas.addBox(targetRegion);
 			//canvas.show();
 						
-			Context childConext = context.createCopy();			
-			childConext.setScreenRegion(targetRegion);
+			Context childConext = new Context(context, targetRegion);
 			for (Action child : getChildren()){
 				child.execute(childConext);
 			}
