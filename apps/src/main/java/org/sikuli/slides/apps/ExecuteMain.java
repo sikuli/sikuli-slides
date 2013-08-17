@@ -17,6 +17,9 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.core.ConsoleAppender;
 
 import com.google.common.base.Objects;
 import com.sampullara.cli.Args;
@@ -48,8 +51,8 @@ public class ExecuteMain {
 	@Argument(value = "bookmark", description = "The bookmark to start executing from.", required = false)
 	private String bookmark = null;
 
-	@Argument(value = "quiet", description = "Execute in the quiet mode without any visulization (default: false).", required = false)
-	private boolean quiet = true;
+	@Argument(value = "log", description = "The level of log messages to print to the console. Choices are ALL, TRACE, DEBUG, INFO, WARN, ERROR, OFF (default: INFO).", required = false)
+	private String logLevel = "INFO";
 
 	
 	Context context;
@@ -119,11 +122,37 @@ public class ExecuteMain {
 		slideSelector = parseBookmark();
 		if (slideSelector != null)
 			context.setExecutionFilter(slideSelector);
-				
-		context.setVerbose(!quiet);
-
+								
+		configureLogback(logLevel);
+		
 		return context;
 	}
+	
+	void configureLogback(String logLevelString){
+		Level logLevel = Level.toLevel(logLevelString);
+		
+		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+		ConsoleAppender consoleAppender = new ConsoleAppender();
+		consoleAppender.setContext(loggerContext);
+
+		PatternLayoutEncoder encoder = new PatternLayoutEncoder();
+		encoder.setContext(loggerContext);		
+		if (logLevel.isGreaterOrEqual(Level.DEBUG)){
+			encoder.setPattern("%msg%n");
+		}else{
+			encoder.setPattern("[%thread] %-5level %logger{36} %msg%n");
+		}		
+		encoder.start();
+		
+		consoleAppender.setEncoder(encoder);	
+	    consoleAppender.start();
+
+		Logger rootLogger = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+		rootLogger.detachAndStopAllAppenders();
+		rootLogger.addAppender(consoleAppender);
+		rootLogger.setLevel(logLevel);
+	}
+	
 
 	void parseArgs(String... args) throws IllegalArgumentException {
 		List<String> rest = null;
