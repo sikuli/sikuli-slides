@@ -140,15 +140,15 @@ public class PauseAction extends AbstractAction {
 		
 		// set up a canvas to display a button in the middle of the screen
 		ScreenRegion r = context.getScreenRegion();
-		ScreenRegion centerRegion = Relative.to(r).region(0.4,0.45,0.6,0.55).getScreenRegion();		
+		ScreenRegion centerRegion = Relative.to(r).region(0.9,0.9,1,1).getScreenRegion();		
 
 		Canvas canvas = new DesktopCanvas();		
 		canvas.addBox(centerRegion).withColor(Color.black).withTransparency(0.7f);
-		canvas.addLabel(context.getScreenRegion(), "  Continue ")
+		canvas.addLabel(context.getScreenRegion().getLowerRightCorner(), "  Continue ")
 		.withBackgroundColor(Color.black)
 		.withColor(Color.white)
 		.withTransparency(0.7f)
-		.withFontSize(20).withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
+		.withFontSize(20).withHorizontalAlignmentRight().withVerticalAlignmentBottom();
 		canvas.show();
 						
 		// wait for a click event on the button

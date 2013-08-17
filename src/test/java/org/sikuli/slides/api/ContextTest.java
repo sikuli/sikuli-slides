@@ -17,5 +17,5 @@ public class ContextTest {
 		String renderedText = context.render(labelAction.getText());
 		assertThat(renderedText, equalToIgnoringCase("Hello John!"));
 	}
-
+		
 }

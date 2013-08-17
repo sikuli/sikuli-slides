@@ -61,18 +61,9 @@ public class Context {
 		setExecutionListener(copy.getExecutionListener());
 		setWaitTime(copy.getWaitTime());
 		setSlide(copy.getSlide());
+		parameters = Maps.newHashMap(copy.getParameters());
 	}
 	
-//	public Context createCopy(){
-//		Context copy = new Context();
-//		copy.setMinScore(getMinScore());
-//		copy.setScreenRegion(getScreenRegion());
-//		copy.setExecutionFilter(getExecutionFilter());
-//		copy.setWaitTime(getWaitTime());
-//		copy.setSlide(getSlide());
-//		return copy;
-//	}
-
 	public ScreenRegion getScreenRegion() {
 		return screenRegion;
 	}

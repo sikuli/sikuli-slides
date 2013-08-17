@@ -33,7 +33,7 @@ public class ActionTest {
 			@Override
 			public void run() {
 				Mouse mouse = new DesktopMouse();
-				mouse.click(context.getScreenRegion().getCenter());
+				mouse.click(context.getScreenRegion().getLowerRightCorner());
 			}			
 		};
 		timer.schedule(task,  1000);
