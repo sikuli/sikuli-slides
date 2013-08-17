@@ -1,11 +1,18 @@
 package org.sikuli.slides.api.actions;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.junit.Test;
 import org.sikuli.api.DefaultRegion;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
+import org.sikuli.api.robot.Mouse;
+import org.sikuli.api.robot.desktop.DesktopMouse;
 import org.sikuli.slides.api.Context;
 import org.sikuli.slides.api.actions.DelayAction;
 import org.sikuli.slides.api.mocks.AppearLaterTarget;
@@ -15,6 +22,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class ActionTest {
+	
+	@Test(timeout = 2000)
+	public void testPauseActionCanBeUnpausedByClick() throws ActionExecutionException{
+		final Context context = new Context();
+		
+		// this will try to click in the middle of the screen after 1 sec.
+		Timer timer = new Timer();		
+		TimerTask task = new TimerTask(){
+			@Override
+			public void run() {
+				Mouse mouse = new DesktopMouse();
+				mouse.click(context.getScreenRegion().getCenter());
+			}			
+		};
+		timer.schedule(task,  1000);
+		
+		PauseAction pauseAction = new PauseAction();
+		pauseAction.execute(context);		
+	}
 	
 	@Test
 	public void testDelayAction() throws ActionExecutionException{

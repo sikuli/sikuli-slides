@@ -21,6 +21,7 @@ import org.sikuli.slides.api.actions.LeftClickAction;
 import org.sikuli.slides.api.actions.NotExistAction;
 import org.sikuli.slides.api.actions.OptionalAction;
 import org.sikuli.slides.api.actions.ParallelAction;
+import org.sikuli.slides.api.actions.PauseAction;
 import org.sikuli.slides.api.actions.RelativeAction;
 import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.SkipAction;
@@ -353,6 +354,16 @@ public class DefaultInterpreter implements Interpreter {
 		return new OptionalAction();
 	}
 	
+	private Action interpretAsPause(Slide slide) {
+		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.PAUSE).first();
+		if (keywordElement == null)
+			return null;		
+		slide.remove(keywordElement);
+
+		return new PauseAction();
+	}
+
+	
 	private Action interpretAsBookmark(Slide slide) {
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.BOOKMARK).first();
 		if (keywordElement == null)
@@ -421,6 +432,8 @@ public class DefaultInterpreter implements Interpreter {
 		if ((controlAction = interpretAsSkip(slide)) != null){			
 		
 		}else if ((controlAction = interpretAsOptional(slide)) != null){
+			
+		}else if ((controlAction = interpretAsPause(slide)) != null){
 			
 		}else if ((controlAction = interpretAsBookmark(slide)) != null){
 			

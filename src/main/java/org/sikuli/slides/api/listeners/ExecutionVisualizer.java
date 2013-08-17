@@ -37,7 +37,7 @@ public class ExecutionVisualizer implements ExecutionListener {
 			ScreenRegion r = event.getContext().getScreenRegion();
 			stepCanvas = new ScreenRegionCanvas(r);
 			stepCanvas.addLabel(Relative.to(r).bottomCenter().getScreenLocation(), msg)
-			.withFontSize(30)
+			.withFontSize(12)
 			.withVerticalAlignmentBottom().withHorizontalAlignmentCenter();
 			stepCanvas.show();
 		}

@@ -18,18 +18,19 @@ public class KeywordDictionary{
 	final static Keyword NOT_EXIST = word("Not Exist").type(ACTION).build();
 	final static Keyword EXIST = word("Exist").type(ACTION).build();
 	final static Keyword DELAY = word("Delay").type(ACTION)
-			.addAlias("sleep").addAlias("pause").build();
+			.addAlias("sleep").build();
 	final static Keyword WAIT = word("Wait").type(ACTION).build();
+	
 	
 	
 	final static Keyword SKIP = word("Skip").type(CONTROL).build();
 	final static Keyword OPTIONAL = word("Optional").type(CONTROL).build();
 	final static Keyword BOOKMARK = word("Bookmark").type(CONTROL).build();
-		
+	final static Keyword PAUSE = word("pause").type(ACTION).build();
 	
 	final static Keyword[] WORDS = {
 		CLICK, RIGHT_CLICK, DOUBLE_CLICK, TYPE, DRAG, DROP, BROWSER, NOT_EXIST, EXIST, DELAY, WAIT,
-		SKIP, OPTIONAL, BOOKMARK};
+		SKIP, OPTIONAL, BOOKMARK, PAUSE};
 	
 	final static public Keyword lookup(String name){
 		for (Keyword word : WORDS){

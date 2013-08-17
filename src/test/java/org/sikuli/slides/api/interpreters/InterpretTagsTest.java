@@ -14,10 +14,11 @@ import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.Actions;
 import org.sikuli.slides.api.actions.BookmarkAction;
 import org.sikuli.slides.api.actions.OptionalAction;
+import org.sikuli.slides.api.actions.PauseAction;
 import org.sikuli.slides.api.actions.SkipAction;
 import org.sikuli.slides.api.models.Slide;
 
-public class InterpretControlTest {
+public class InterpretTagsTest {
 	
 	private DefaultInterpreter interpreter;
 	private URL source;
@@ -55,6 +56,14 @@ public class InterpretControlTest {
 		assertThat(Actions.select(action).isInstanceOf(BookmarkAction.class).all().size(), equalTo(1));
 		BookmarkAction bookmark = (BookmarkAction) Actions.select(action).isInstanceOf(BookmarkAction.class).first();
 		assertThat(bookmark.getName(), equalTo("step5"));
+	}
+	
+	@Test
+	public void testPause(){
+		slide.newKeywordElement().keyword(KeywordDictionary.PAUSE).geom("hex").add();		
+		Action action = interpreter.interpret(slide);
+		assertThat(action, notNullValue());
+		assertThat(Actions.select(action).isInstanceOf(PauseAction.class).all().size(), equalTo(1));
 	}
 
 	
