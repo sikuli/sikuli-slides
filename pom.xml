@@ -32,7 +32,7 @@
 	<artifactId>sikuli-slides-api</artifactId>
 	<name>Sikuli Slides API</name>
 	<url>http://lab.sikuli.org</url>
-	<version>1.4.0-SNAPSHOT</version>
+	<version>1.4.0</version>
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
