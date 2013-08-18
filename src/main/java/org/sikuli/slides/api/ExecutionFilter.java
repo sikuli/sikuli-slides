@@ -26,6 +26,9 @@ public interface ExecutionFilter {
 	 * @author Sikuli Lab
 	 */
 	static public class Factory {
+		
+		private Factory(){}
+		
 		/**
 		 * Get an instance of the filter that will pick only the slide associated with the given number 
 		 * @param number	the number

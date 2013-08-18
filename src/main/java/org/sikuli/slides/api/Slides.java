@@ -30,6 +30,8 @@ public class Slides {
 	
 	static Logger logger = LoggerFactory.getLogger(Slides.class);
 
+	private Slides(){}		
+	
 	/**
 	 * Execute a presentation file at a given url
 	 * 
