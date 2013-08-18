@@ -19,7 +19,7 @@ import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.robot.desktop.DesktopScreen;
 import org.sikuli.api.visual.Canvas;
-import org.sikuli.api.visual.DesktopCanvas;
+import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.recorder.detector.EventDetector;
 import org.sikuli.slides.api.Context;
 
@@ -38,16 +38,16 @@ class OnScreenRegionClick implements NativeMouseEventFilter{
 
 	public OnScreenRegionClick(ScreenRegion screenRegion){
 		this.screenRegion = checkNotNull(screenRegion);		
-		this.screenOffsetX = 0; 
-		this.screenOffsetY = 0; 
-		// TODO: figure out how to calculate these		
-		// Maybe:
-//		int id =  ((DesktopScreen) screenRegion.getScreen()).getScreenId();
-//		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-//		GraphicsDevice [] devices = ge.getScreenDevices();
-//		Rectangle bounds = devices[id].getDefaultConfiguration().getBounds();
-//		this.screenOffsetX = bounds.x; 
-//		this.screenOffsetY = bounds.y; 
+
+		// calculate the x,y offsets of the target screen, which can be 
+		// the secondary screen. So we can map the x,y given by NativeHook
+		// to the x,y of the ScreenRegion object
+		int id =  ((DesktopScreen) screenRegion.getScreen()).getScreenId();
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice [] devices = ge.getScreenDevices();
+		Rectangle bounds = devices[id].getDefaultConfiguration().getBounds();
+		this.screenOffsetX = bounds.x; 
+		this.screenOffsetY = bounds.y; 
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public class PauseAction extends AbstractAction {
 		ScreenRegion r = context.getScreenRegion();
 		ScreenRegion centerRegion = Relative.to(r).region(0.9,0.9,1,1).getScreenRegion();		
 
-		Canvas canvas = new DesktopCanvas();		
+		Canvas canvas = new ScreenRegionCanvas(r);		
 		canvas.addBox(centerRegion).withColor(Color.black).withTransparency(0.7f);
 		canvas.addLabel(context.getScreenRegion().getLowerRightCorner(), "  Continue ")
 		.withBackgroundColor(Color.black)

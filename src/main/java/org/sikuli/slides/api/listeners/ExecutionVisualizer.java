@@ -1,5 +1,7 @@
 package org.sikuli.slides.api.listeners;
 
+import java.awt.Color;
+
 import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
@@ -28,16 +30,13 @@ public class ExecutionVisualizer implements ExecutionListener {
 	private Canvas stepCanvas;
 	@Override
 	public void beforeExecution(ExecutionEvent event) {
-		if (!event.getContext().isVerbose()){
-			return;
-		}
-		
 		if (event.getAction() instanceof SlideAction){
 			String msg = "Executing slide " + event.getSlide().getNumber();
 			ScreenRegion r = event.getContext().getScreenRegion();
-			stepCanvas = new ScreenRegionCanvas(r);
+			stepCanvas = new ScreenRegionCanvas(r);			
 			stepCanvas.addLabel(Relative.to(r).bottomCenter().getScreenLocation(), msg)
 			.withFontSize(12)
+			.withColor(Color.white).withBackgroundColor(Color.BLACK)
 			.withVerticalAlignmentBottom().withHorizontalAlignmentCenter();
 			stepCanvas.show();
 		}
@@ -52,10 +51,6 @@ public class ExecutionVisualizer implements ExecutionListener {
 
 	@Override
 	public void afterExecution(ExecutionEvent event) {
-		if (!event.getContext().isVerbose()){
-			return;
-		}
-
 		if (event.getAction() instanceof SlideAction){
 			stepCanvas.hide();
 		}
