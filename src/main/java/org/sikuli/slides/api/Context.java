@@ -14,7 +14,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 
 /**
- * A Context object describes the context in which an action is executed.  
+ * Describes the context where an action is executed  
  * <p>
  * Examples of uses:
  * <p>

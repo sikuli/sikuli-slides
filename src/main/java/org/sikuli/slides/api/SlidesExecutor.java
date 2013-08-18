@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.sikuli.slides.api.models.Slide;
 
-public interface SlidesExecutor {
+interface SlidesExecutor {
 			
 	// Execute a list of slides
 	public void execute(List<Slide> slides) throws SlideExecutionException;	

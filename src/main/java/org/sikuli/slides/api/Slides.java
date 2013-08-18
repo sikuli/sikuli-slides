@@ -1,5 +1,7 @@
 package org.sikuli.slides.api;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,17 +21,37 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
+/**
+ * Provides static methods for executing slides. The entry point of Sikuli Slides API.
+ * 
+ * @author Sikuli Lab
+ */
 public class Slides {
 	
 	static Logger logger = LoggerFactory.getLogger(Slides.class);
 
-	static public void execute(URL url) throws SlideExecutionException {		
+	/**
+	 * Execute a presentation file at a given url
+	 * 
+	 * @param url	url to download the file
+	 * @throws SlideExecutionException
+	 */
+	static public void execute(URL url) throws SlideExecutionException {
+		checkNotNull(url);
 		ScreenRegion screenRegion = new DesktopScreenRegion();
 		Context context = new Context(screenRegion);
 		execute(url, context);		
 	}
 
-	static public void execute(URL url, Context context) throws SlideExecutionException {	
+	/**
+	 * Execute a presentation file at an URL using a specific {@link Context}
+	 * @param url	url to download the file
+	 * @param context	context
+	 * @throws SlideExecutionException
+	 */
+	static public void execute(URL url, Context context) throws SlideExecutionException {
+		checkNotNull(url);
+		checkNotNull(context);
 		logger.debug("execute slides with context {}", context);
 		SlidesReader reader = new PPTXSlidesReader();		
 		List<Slide> slides;
@@ -43,7 +65,13 @@ public class Slides {
 		executor.execute(slides);
 	}
 
+	/**
+	 * Execute a presentation file
+	 * @param file	the presentation file
+	 * @throws SlideExecutionException
+	 */
 	static public void execute(File file) throws SlideExecutionException {
+		checkNotNull(file);
 		try {
 			execute(file.toURI().toURL());
 		} catch (MalformedURLException e) {
@@ -51,7 +79,15 @@ public class Slides {
 		}
 	}
 
-	static public void execute(File file, Context context) throws SlideExecutionException {		
+	/**
+	 * Execute a presentation file using a specific {@link Context}
+	 * @param file	the presentation file
+	 * @param context	the context
+	 * @throws SlideExecutionException
+	 */
+	static public void execute(File file, Context context) throws SlideExecutionException {
+		checkNotNull(file);
+		checkNotNull(context);
 		try {
 			execute(file.toURI().toURL(), context);
 		} catch (MalformedURLException e) {
@@ -59,7 +95,14 @@ public class Slides {
 		}
 	}
 
+	/**
+	 * Interpret a presentation file as a list of executable actions
+	 * @param file	the presentation file
+	 * @return	a list of {@link Action}
+	 * @throws IOException
+	 */
 	public static List<Action> interpret(File file) throws IOException {
+		checkNotNull(file);
 		Interpreter interpreter = new DefaultInterpreter();
 		SlidesReader reader = new PPTXSlidesReader();		
 		List<Slide> slides;
@@ -71,8 +114,6 @@ public class Slides {
 			logger.info("Action interpreted: {}", action);
 		}
 		return actions;
-
-		
 	}
 
 }

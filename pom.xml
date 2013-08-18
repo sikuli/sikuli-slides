@@ -53,7 +53,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.sikuli</groupId>	
+			<groupId>org.sikuli</groupId>
 			<artifactId>sikuli-api</artifactId>
 			<version>1.1.0</version>
 		</dependency>
@@ -142,6 +142,18 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<stylesheetfile>${basedir}/src/main/javadoc/stylesheet.css</stylesheetfile>
+					<show>public</show>
+					<excludePackageNames>
+						com.*:org.sikuli.slides.v1.*:org.sikuli.recorder.*:org.sikuli.recorder
+					</excludePackageNames>						
 				</configuration>
 			</plugin>
 			<plugin>

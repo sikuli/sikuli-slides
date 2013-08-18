@@ -171,12 +171,12 @@ public class ExecuteMain {
 			parseArgs(args);
 		}catch(IllegalArgumentException e){
 			System.err.println("Error parsing arguments: " + e.getMessage());
-			Args.usage(ExecuteMain.class, EXE + "" + SYNTAX);
+			Args.usage(this, EXE + "" + SYNTAX);
 			return;
 		}
 
 		if (help){
-			Args.usage(ExecuteMain.class, EXE + "" + SYNTAX);
+			Args.usage(this, EXE + "" + SYNTAX);
 			return;
 		}
 		

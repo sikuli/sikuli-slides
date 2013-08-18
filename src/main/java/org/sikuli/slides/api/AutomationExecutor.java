@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
-public class AutomationExecutor implements SlidesExecutor {
+class AutomationExecutor implements SlidesExecutor {
 	
 	static Logger logger = LoggerFactory.getLogger(AutomationExecutor.class);
 	
