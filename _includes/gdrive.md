@@ -31,9 +31,25 @@
    <img src="/img/gdrive_link_to_share.png" class="img-polaroid" />
 
 
-6. Open the slides from the URL in sikuli-slides and execute them.
+6. Open the slides from the URL in sikuli-slides and execute them. There are two ways to run sikuli-slides: from the GUI and from the command line.
 
+#####  A) Using the Graphical User Interface (GUI)
+1. Double click on the jar file. <br/>
+2. Click on open URL. <br/>
+<img src="/img/sikuli-slides_openURL.png"/>
+3. Copy the following link: https://docs.google.com/presentation/d/1bODdu4SOD49Z_i9Sq7qJpwmxbnnMx6ULvgNc3wQGYfw/edit?usp=sharing and paste it in the open remote presentation dialog. <br/>
+<img src="/img/sikuli-slides_openURL_Dialog.png" class="img-polaroid" />	
+4. Click OK and wait until the file is downloaded.<br/>
+5. Click Run.<br/>
+<img src="/img/sikuli-slides_runURL.png" class="img-polaroid" />
+6. sikuli-slides will minimize the window, so it can see what's on the screen and execute the slides.<br/>
+
+#####  B) Using the command line tool:
+	
+1. Open the terminal app or the command prompt.
+2. cd to the location of sikuli-slides jar file.
+3. Type the following command and hit enter.
 {% highlight bash %}
 $ java -jar sikuli-slides-1.3.0.jar https://docs.google.com/presentation/d/1bODdu4SOD49Z_i9Sq7qJpwmxbnnMx6ULvgNc3wQGYfw/edit?usp=sharing
 {% endhighlight %}
-
+4. Minimize the terminal/command prompt window or any other window, so sikuli-slides can see what's on the screen and execute the slides.
