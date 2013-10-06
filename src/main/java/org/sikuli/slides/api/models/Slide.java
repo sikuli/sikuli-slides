@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.sikuli.slides.api.interpreters.Keyword;
 import org.sikuli.slides.api.interpreters.Selector;
-import org.sikuli.slides.api.models.Slide.SlideElementBuilder;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
@@ -15,8 +14,9 @@ import com.google.common.collect.Lists;
 public class Slide {
 	
 	List<SlideElement> elements = Lists.newArrayList();
-	private int number; // one-based
-	
+	private int width = 9144000;
+	private int height = 6858000;
+	private int number; // one-based	
 	
 	// Construct a blank slide
 	public Slide(){		
@@ -71,6 +71,22 @@ public class Slide {
 
 	public void setNumber(int number) {
 		this.number = number;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 	public static class KeywordElementBuilder extends SlideElementBuilder {

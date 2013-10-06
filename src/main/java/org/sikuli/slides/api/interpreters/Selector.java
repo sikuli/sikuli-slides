@@ -1,7 +1,14 @@
 package org.sikuli.slides.api.interpreters;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.awt.Rectangle;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.sikuli.slides.api.models.ImageElement;
@@ -48,12 +55,33 @@ public class Selector {
 		return new Selector(elements);
 	}
 
+	
+	public Selector below(final SlideElement element){	
+		checkNotNull(element);
+		final Rectangle r = element.getBounds();
+		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement e) {				
+				return e != element && e.getBounds().y >= r.y;								
+			}		
+		});
+		return this;
+	}
+	
+	public Selector toRightOf(final SlideElement element){	
+		checkNotNull(element);
+		final Rectangle r = element.getBounds();
+		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement e) {				
+				return e != element && e.getBounds().x >= r.x;								
+			}		
+		});
+		return this;
+	}
 
 	public Selector intersects(final SlideElement element){		
-		if (element == null){
-			elements = Lists.newArrayList();
-			return this;
-		}
+		checkNotNull(element);
 		final Rectangle r = element.getBounds();
 		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
 			@Override
@@ -64,11 +92,8 @@ public class Selector {
 		return this;
 	}
 	
-	public Selector near(final SlideElement element, int radius){		
-		if (element == null){
-			elements = Lists.newArrayList();
-			return this;
-		}
+	public Selector near(final SlideElement element, int radius){	
+		checkNotNull(element);
 		final Rectangle r = element.getBounds();
 		r.x -= radius;
 		r.y -= radius;
@@ -82,6 +107,70 @@ public class Selector {
 		});
 		return this;
 	}
+	
+	// vertical center line is within each other's y range
+	// namely, if they have the same x range, they would intersect
+	public Selector overlapVerticallyWith(final SlideElement element, final float minOverlapRatio){	
+		checkNotNull(element);
+		final Rectangle r1 = element.getBounds();
+		r1.x = 0; r1.width = 1;		
+		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement e) {
+				if (e == element){
+					return false;
+				}				
+				if (r1.height == 0){
+					return false;
+				}
+				Rectangle r2 =e.getBounds();
+				r2.x = 0; r2.width = 1;
+				Rectangle intersection = r1.intersection(r2);
+				float yOverlapRatio = 1f * intersection.height / r1.height;			
+				return yOverlapRatio > minOverlapRatio;
+			}		
+		});		
+		return this;
+	}
+	
+	public Selector orderByY(){
+		List<SlideElement> list = Lists.newArrayList(elements);
+		Collections.sort(list, new Comparator<SlideElement>(){
+			@Override
+			public int compare(SlideElement a, SlideElement b) {				
+				return a.getOffy() - b.getOffy();
+			}			
+		});
+		elements = list;
+		return this;
+	}
+	
+	public Selector orderByX(){
+		List<SlideElement> list = Lists.newArrayList(elements);
+		Collections.sort(list, new Comparator<SlideElement>(){
+			@Override
+			public int compare(SlideElement a, SlideElement b) {				
+				return a.getOffx() - b.getOffx();
+			}			
+		});
+		elements = list;
+		return this;
+	}
+	
+	public Selector print(PrintStream out){
+		for (SlideElement element : elements){
+			out.println(element);
+		}
+		return this;
+	}
+	
+	public Selector print(){
+		for (SlideElement element : elements){
+			System.out.println(element);
+		}
+		return this;
+	}
+	
 	
 	public Selector hasText(){
 		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
@@ -98,6 +187,26 @@ public class Selector {
 			@Override
 			public boolean apply(SlideElement e) {
 				return !hasText(e);
+			}		
+		});
+		return this;
+	}
+	
+	public Selector textContains(final String str){
+		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement e) {
+				return e.getText().contains(str);
+			}		
+		});
+		return this;
+	}
+	
+	public Selector nameStartsWith(final String prefix){
+		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement e) {
+				return e.getName().startsWith(prefix);
 			}		
 		});
 		return this;

@@ -180,6 +180,12 @@ public class SlideParser {
 
 		Map<String, String> map  = parseRelationships(relDoc, xml);
 		
+		NodeList picList = doc.getElementsByTagName("p:pic");			
+		for (int i = 0 ; i < picList.getLength(); ++ i){
+			Node nNode = picList.item(i);
+			SlideElement e = parseImageElement(nNode, map);	
+			slide.add(e);
+		}	
 		
 		NodeList shapeNodeList = doc.getElementsByTagName("p:sp");			
 		for (int i = 0 ; i < shapeNodeList.getLength(); ++ i){
@@ -203,12 +209,7 @@ public class SlideParser {
 			}
 		}
 		
-		NodeList picList = doc.getElementsByTagName("p:pic");			
-		for (int i = 0 ; i < picList.getLength(); ++ i){
-			Node nNode = picList.item(i);
-			SlideElement e = parseImageElement(nNode, map);	
-			slide.add(e);
-		}				
+			
 		return slide;
 	}
 	
