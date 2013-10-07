@@ -32,9 +32,6 @@ public class ParallelActionNode extends ActionNode {
 				success = false;
 				// Saves the exception so it can be re-thrown
 				exception = e;
-			} catch (InterruptedException e) {
-				
-
 			}
 			doneSignal.countDown();
 		}
