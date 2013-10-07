@@ -8,6 +8,9 @@ import org.sikuli.slides.api.Context;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
+// execute all children actions in parallel
+// execution returns when all the children have finished execution
+// 
 public class ParallelAction extends AbstractAction {
 	
 	private CountDownLatch doneSignal;

@@ -17,6 +17,15 @@ public class ActionNode {
 	
 	private ActionNode parent;
 	private List<ActionNode> actions = Lists.newArrayList();
+	private boolean background = false;
+	
+	public boolean isBackground(){
+		return background;
+	}
+	
+	public void setBackground(boolean background) {
+		this.background = background;
+	}
 	
 	public void addChild(ActionNode child){
 		actions.add(child);
@@ -68,7 +77,8 @@ public class ActionNode {
 	 * Execute and wait for execution to complete
 	 */
 	public void execute(Context context) throws ActionExecutionException{};
-	public void stop(){};
+	public void stop(){}
+
 
 }
 

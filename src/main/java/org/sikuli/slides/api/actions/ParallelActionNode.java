@@ -12,9 +12,9 @@ import com.google.common.collect.Lists;
 // execution returns when all the children have finished execution
 // 
 public class ParallelActionNode extends ActionNode {
-		
+
 	private CountDownLatch doneSignal;
-	
+
 	class Worker implements Runnable {
 		ActionNode action;
 		Context context;
@@ -36,26 +36,54 @@ public class ParallelActionNode extends ActionNode {
 			doneSignal.countDown();
 		}
 	}
-	
-	
+
+	class BackgroundWorker extends Worker {
+		BackgroundWorker(ActionNode action, Context context) {
+			super(action, context);
+		}
+
+		public void run() {
+			try {
+				action.execute(context);
+			} catch (ActionExecutionException e) {
+			}
+		}
+	}
+
+
 	/**
 	 * Execute and wait for execution to finish
 	 */
 	public void execute(Context context) throws ActionExecutionException{
-		int n = getChildren().size();
-		doneSignal = new CountDownLatch(n); 
+		int count = 0;
+		for (ActionNode action : getChildren()){
+			if (!action.isBackground()){
+				count += 1;			
+			}
+		}
+
+		doneSignal = new CountDownLatch(count);
+
 		List<Worker> workers = Lists.newArrayList();
 		for (ActionNode action : getChildren()){
-			Context workerContxt = new Context(context);
-			Worker worker = new Worker(action, workerContxt);
-			workers.add(worker);
-			new Thread(worker).start();
+			final Context workerContxt = new Context(context);
+
+			if (!action.isBackground()){			
+				Worker worker = new Worker(action, workerContxt);
+				workers.add(worker);
+				new Thread(worker).start();
+			}else{
+				Worker worker = new BackgroundWorker(action, workerContxt);
+				new Thread(worker).start();
+			}
 		}
 		try {
 			doneSignal.await();
 		} catch (InterruptedException e) {
 
 		}
+		System.out.println("done");
+		stop();
 
 		// if any of the worker did not succeed, 
 		// rethrow the associated ActionExecutionException
@@ -65,7 +93,7 @@ public class ParallelActionNode extends ActionNode {
 			}
 		}
 	}
-	
+
 	public void stop(){
 		for (ActionNode action : getChildren()){
 			action.stop();

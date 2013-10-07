@@ -9,6 +9,7 @@ import org.sikuli.slides.api.Context;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThan;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class ParallelActionNodeTest {
@@ -53,6 +54,53 @@ public class ParallelActionNodeTest {
 		assertThat(elapsedTime,  lessThan(2100L));
 		
 		verify(action).execute(any(Context.class));
+	}
+	
+	@Test(timeout = 2000)
+	public void testCanStopBackgroundActionWhenFinishedNormally() throws ActionExecutionException {
+		Context context = new Context();
+		
+		final ParallelActionNode parallel = new ParallelActionNode();		
+		parallel.addChild(new WaitActionNode(1000));
+		parallel.addChild(new WaitActionNode(500));
+		
+		ActionNode background = new WaitActionNode(10000);
+		background.setBackground(true);
+	
+		ActionNode spy = spy(background);		
+		parallel.addChild(spy);
+		
+		parallel.execute(context);
+				
+		verify(spy).execute(any(Context.class));
+		verify(spy).stop();
+	}
+	
+	@Test(timeout = 2000)
+	public void testCanStopBackgroundActionOnException() throws ActionExecutionException {
+		Context context = new Context();
+		Action badAction = mock(Action.class);
+		ActionExecutionException exception = mock(ActionExecutionException.class);
+		doThrow(exception).when(badAction).execute(any(Context.class));
+
+		
+		final ParallelActionNode parallel = new ParallelActionNode();		
+		parallel.addChild(new SingleActionNode(badAction));
+		
+		ActionNode background = new WaitActionNode(10000);
+		background.setBackground(true);
+	
+		ActionNode backgroundSpy = spy(background);		
+		parallel.addChild(backgroundSpy);
+		
+		try{
+			parallel.execute(context);
+		}catch(ActionExecutionException e){
+			
+		}
+				
+		verify(backgroundSpy).execute(any(Context.class));
+		verify(backgroundSpy).stop();
 	}
 	
 	@Test
