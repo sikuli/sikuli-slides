@@ -87,7 +87,7 @@ public class JavaAPICodeGenerator implements CodeGenerator{
 
 		File imageFile = images.addImage(targetImage, number);
 			
-		Action child = targetAction.getChild(0);
+		Action child = targetAction.getChild();
 		if (child != null){
 
 			String actionName = "";

@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.sikuli.api.Target;
-import org.sikuli.slides.api.actions.AbstractAction;
+import org.sikuli.slides.api.actions.RobotAction;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.BookmarkAction;
 import org.sikuli.slides.api.actions.BrowserAction;
-import org.sikuli.slides.api.actions.DelayAction;
+import org.sikuli.slides.api.actions.CompoundAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
 import org.sikuli.slides.api.actions.DragAction;
 import org.sikuli.slides.api.actions.DropAction;
@@ -24,7 +24,8 @@ import org.sikuli.slides.api.actions.ParallelAction;
 import org.sikuli.slides.api.actions.PauseAction;
 import org.sikuli.slides.api.actions.RelativeAction;
 import org.sikuli.slides.api.actions.RightClickAction;
-import org.sikuli.slides.api.actions.SkipAction;
+import org.sikuli.slides.api.actions.EmptyAction;
+import org.sikuli.slides.api.actions.SleepAction;
 import org.sikuli.slides.api.actions.SlideAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
@@ -306,8 +307,7 @@ public class DefaultInterpreter implements Interpreter {
 		slide.remove(keywordElement);
 		slide.remove(textElement);
 		
-		DelayAction a = new DelayAction();
-		a.setDuration(duration);
+		SleepAction a = new SleepAction(duration);
 		return a;
 	}	
 	
@@ -342,7 +342,7 @@ public class DefaultInterpreter implements Interpreter {
 			return null;		
 		slide.remove(keywordElement);
 		
-		return new SkipAction();
+		return new EmptyAction();
 	}
 
 	private Action interpretAsOptional(Slide slide) {
@@ -440,13 +440,13 @@ public class DefaultInterpreter implements Interpreter {
 		}
 		
 		if (controlAction != null){			
-			((AbstractAction) controlAction).addChild(action);
+			((CompoundAction) controlAction).addChild(action);
 			action = controlAction;
 		}
 		
 		SlideAction slideAction = new SlideAction();
 		if (action != null)
-			slideAction.addChild(action);
+			slideAction.setChild(action);
 		return slideAction;
 	}
 

@@ -9,7 +9,7 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class TypeAction extends AbstractAction {
+public class TypeAction extends RobotAction {
 	
 	private String text;
 

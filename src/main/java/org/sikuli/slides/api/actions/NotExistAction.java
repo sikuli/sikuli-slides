@@ -13,7 +13,8 @@ public class NotExistAction extends TargetAction {
 	}
 	
 	@Override
-	protected void doExecute(Context context) throws ActionExecutionException{
+	public void execute(Context context) throws ActionExecutionException{
+		logger.debug("executing {}", this);
 		ScreenRegion screenRegion = context.getScreenRegion();
 		ScreenRegion ret = screenRegion.find(getTarget());
 		if (ret != null){

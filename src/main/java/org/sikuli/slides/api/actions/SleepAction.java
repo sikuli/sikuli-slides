@@ -2,13 +2,13 @@ package org.sikuli.slides.api.actions;
 
 import org.sikuli.slides.api.Context;
 
-public class SleepAction extends CompoundAction {
+public class SleepAction implements Action {
 		
-	private int waitDuration;
+	private long duration;
 	
-	public SleepAction(int waitDuration) {
+	public SleepAction(long waitDuration) {
 		super();
-		this.waitDuration = waitDuration;
+		this.duration = waitDuration;
 	}
 
 	/**
@@ -17,7 +17,7 @@ public class SleepAction extends CompoundAction {
 	public void execute(Context context) throws ActionExecutionException{
 		synchronized (this){
 			try {
-				this.wait(waitDuration);
+				this.wait(duration);
 			} catch (InterruptedException e) {
 			}
 		}
@@ -27,6 +27,10 @@ public class SleepAction extends CompoundAction {
 		synchronized(this){
 			this.notify();
 		}
+	}
+
+	public long getDuration() {		
+		return duration;
 	}
 
 }

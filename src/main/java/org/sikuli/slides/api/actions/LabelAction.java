@@ -9,25 +9,30 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class LabelAction extends AbstractAction {
+public class LabelAction implements Action {
 	
 	private String text = "";
 	private int fontSize = 12;
 	private int duration = 3000;
 	private Color backgroundColor = Color.yellow;
+	private Canvas canvas;
 
 	@Override
-	protected void doExecute(Context context){
-		ScreenRegion targetRegion = context.getScreenRegion();
-		
+	public void execute(Context context){
+		ScreenRegion targetRegion = context.getScreenRegion();		
 		String textToDisplay = context.render(text);
 		
-		Canvas canvas = new ScreenRegionCanvas(targetRegion);
+		canvas = new ScreenRegionCanvas(targetRegion);
 		canvas.addLabel(targetRegion, textToDisplay)
 		.withColor(Color.black).withFontSize((int)fontSize).withLineWidth(2)
 		.withBackgroundColor(backgroundColor)
-		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();
-		canvas.display(1.0*duration/1000);		
+		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();		
+		canvas.show();		
+	}
+	
+	@Override
+	public void stop(){
+		canvas.hide();
 	}
 	
 	public String getText() {

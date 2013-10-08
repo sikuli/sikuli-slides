@@ -51,7 +51,7 @@ public class RetryActionTest {
 	}
 	
 	
-	class DelayedSuccessAction extends QuickAction {
+	class DelayedSuccessAction extends SimpleAction {
 		long startTime;
 		long delayTime;
 		DelayedSuccessAction(long delayTime){

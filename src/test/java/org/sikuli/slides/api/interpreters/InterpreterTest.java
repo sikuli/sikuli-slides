@@ -21,9 +21,9 @@ import org.sikuli.slides.api.actions.LabelAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
 import org.sikuli.slides.api.actions.NotExistAction;
 import org.sikuli.slides.api.actions.RightClickAction;
+import org.sikuli.slides.api.actions.SleepAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
-import org.sikuli.slides.api.actions.DelayAction;
 import org.sikuli.slides.api.actions.WaitAction;
 import org.sikuli.slides.api.interpreters.DefaultInterpreter;
 import org.sikuli.slides.api.interpreters.Interpreter;
@@ -225,39 +225,39 @@ public class InterpreterTest {
 	public void testInterpretDelayAction() {
 		Slide slide = createDelaySlide("2 seconds");				
 		Action action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
-		DelayAction delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(SleepAction.class).all().size(), equalTo(1));
+		SleepAction delayAction = (SleepAction) Actions.select(action).isInstanceOf(SleepAction.class).first();
 		assertEquals(2000, delayAction.getDuration());
 
 
 		slide = createDelaySlide("2");		
 		action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
-		delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(SleepAction.class).all().size(), equalTo(1));
+		delayAction = (SleepAction) Actions.select(action).isInstanceOf(SleepAction.class).first();
 		assertEquals(2000, delayAction.getDuration());
 		
 		slide = createDelaySlide("1 minute");		
 		action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
-		delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(SleepAction.class).all().size(), equalTo(1));
+		delayAction = (SleepAction) Actions.select(action).isInstanceOf(SleepAction.class).first();
 		assertEquals(1000 * 60, delayAction.getDuration());
 
 		slide = createDelaySlide("0.5 second");		
 		action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
-		delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(SleepAction.class).all().size(), equalTo(1));
+		delayAction = (SleepAction) Actions.select(action).isInstanceOf(SleepAction.class).first();
 		assertEquals(500, delayAction.getDuration());
 
 		slide = createDelaySlide("0.5");		
 		action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
-		delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(SleepAction.class).all().size(), equalTo(1));
+		delayAction = (SleepAction) Actions.select(action).isInstanceOf(SleepAction.class).first();
 		assertEquals(500, delayAction.getDuration());
 
 		slide = createDelaySlide("0");		
 		action = interpreter.interpret(slide);		
-		assertThat(Actions.select(action).isInstanceOf(DelayAction.class).all().size(), equalTo(1));
-		delayAction = (DelayAction) Actions.select(action).isInstanceOf(DelayAction.class).first();
+		assertThat(Actions.select(action).isInstanceOf(SleepAction.class).all().size(), equalTo(1));
+		delayAction = (SleepAction) Actions.select(action).isInstanceOf(SleepAction.class).first();
 		assertEquals(0, delayAction.getDuration());
 
 		

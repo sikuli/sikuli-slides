@@ -5,7 +5,7 @@ import org.sikuli.slides.api.Context;
  * @author tomyeh
  *
  */
-public class QuickAction implements Action{
+public class SimpleAction implements Action{
 	public void execute(Context context) throws ActionExecutionException{
 		
 	}

@@ -16,8 +16,8 @@ public class ExistAction extends TargetAction {
 	public void execute(Context context) throws ActionExecutionException {
 		logger.debug("executing {}", this);
 		ScreenRegion screenRegion = context.getScreenRegion();
-		ScreenRegion ret = screenRegion.wait(getTarget(), 5000);
-		if (ret == null){
+		ScreenRegion ret = screenRegion.find(getTarget());
+		if (ret  == null){
 			throw new ActionExecutionException("Unable to find the target expected to exist", this);
 		}
 	}

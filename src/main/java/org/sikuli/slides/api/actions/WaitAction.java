@@ -8,17 +8,18 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
-public class WaitAction extends AbstractAction {
+public class WaitAction extends TargetAction {
 	
 	private long duration = 10000;
 	private Target target;
 	
 	public WaitAction(Target target){
-		this.setTarget(target);
+		super(target);
+		//this.setTarget(target);
 	}		
 
 	@Override
-	protected void doExecute(Context context) throws ActionExecutionException {
+	public void execute(Context context) throws ActionExecutionException {
 		ScreenRegion screenRegion = context.getScreenRegion();
 		ScreenRegion ret = screenRegion.wait(getTarget(), (int) duration);
 		if (ret == null){

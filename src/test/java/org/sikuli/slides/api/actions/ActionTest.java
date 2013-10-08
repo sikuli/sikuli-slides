@@ -1,20 +1,18 @@
 package org.sikuli.slides.api.actions;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.junit.Test;
 import org.sikuli.api.DefaultRegion;
 import org.sikuli.api.DesktopScreenRegion;
+import org.sikuli.api.Region;
 import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopMouse;
 import org.sikuli.slides.api.Context;
-import org.sikuli.slides.api.actions.DelayAction;
 import org.sikuli.slides.api.mocks.AppearLaterTarget;
 import org.sikuli.slides.api.mocks.NeverFoundTarget;
 
@@ -23,8 +21,35 @@ import static org.hamcrest.Matchers.*;
 
 public class ActionTest {
 	
+//	@Test(timeout = 2000)
+//	public void testWaitForClickActionCanAdvanceByClick() throws ActionExecutionException{
+//		final Context context = new Context();
+//		
+//		
+//		final ScreenRegion s = context.getScreenRegion();
+//		final ScreenRegion r = Relative.to(s).region(0.4,0.4,0.5,0.5).getScreenRegion();
+//		
+//		//final Region region = new DefaultRegion(100,100,100,50);
+//		//Final ScreenLocation center = 
+////				Relative.to(context.getScreenRegion()).region(region).getScreenRegion().getCenter();
+//		
+//		// this will try to click in the middle of the screen after 1 sec.
+//		Timer timer = new Timer();		
+//		TimerTask task = new TimerTask(){
+//			@Override
+//			public void run() {				
+//				Mouse mouse = new DesktopMouse();
+//				mouse.click(r.getCenter());
+//			}			
+//		};
+//		timer.schedule(task,  1000);
+//		
+//		WaitForClickAction waitAction = new WaitForClickAction(r);
+//		waitAction.execute(context);		
+//	}
+	
 	@Test(timeout = 2000)
-	public void testPauseActionCanBeUnpausedByClick() throws ActionExecutionException{
+	public void testPauseActionCanBeUnpausedByHover() throws ActionExecutionException{
 		final Context context = new Context();
 		
 		// this will try to click in the middle of the screen after 1 sec.
@@ -33,37 +58,13 @@ public class ActionTest {
 			@Override
 			public void run() {
 				Mouse mouse = new DesktopMouse();
-				mouse.click(context.getScreenRegion().getLowerRightCorner());
+				mouse.hover(context.getScreenRegion().getLowerRightCorner());
 			}			
 		};
 		timer.schedule(task,  1000);
 		
 		PauseAction pauseAction = new PauseAction();
 		pauseAction.execute(context);		
-	}
-	
-	@Test
-	public void testDelayAction() throws ActionExecutionException{
-		DelayAction waitAction = new DelayAction();
-		waitAction.setDuration(1000);
-		
-		Context context = new Context();
-				
-		long startTime = System.currentTimeMillis();
-		waitAction.execute(context);
-		long elapsedTime = System.currentTimeMillis() - startTime;
-		
-		assertThat(elapsedTime,  greaterThanOrEqualTo(1000L));
-		assertThat(elapsedTime,  lessThan(1100L));
-		
-		waitAction.setDuration(500);
-		
-		startTime = System.currentTimeMillis();
-		waitAction.execute(context);
-		elapsedTime = System.currentTimeMillis() - startTime;
-		
-		assertThat(elapsedTime,  greaterThanOrEqualTo(500L));
-		assertThat(elapsedTime,  lessThan(600L));
 	}
 	
 	@Test
@@ -107,7 +108,7 @@ public class ActionTest {
 		labelAction2.setDuration(5000);
 		ScreenRegion targetRegion = Relative.to(desktop).region(new DefaultRegion(500,100,100,100)).getScreenRegion();
 		Target target = new AppearLaterTarget(targetRegion, 2000);
-		TargetAction targetAction = new TargetAction(target, labelAction2);
+		Action targetAction = new RetryAction(new TargetAction(target, labelAction2), 5000, 500);
 				
 		ParallelAction parallelAction = new ParallelAction();
 		parallelAction.addChild(targetAction);

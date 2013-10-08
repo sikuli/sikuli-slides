@@ -15,7 +15,7 @@ import org.sikuli.slides.api.actions.Actions;
 import org.sikuli.slides.api.actions.BookmarkAction;
 import org.sikuli.slides.api.actions.OptionalAction;
 import org.sikuli.slides.api.actions.PauseAction;
-import org.sikuli.slides.api.actions.SkipAction;
+import org.sikuli.slides.api.actions.EmptyAction;
 import org.sikuli.slides.api.models.Slide;
 
 public class InterpretTagsTest {
@@ -37,7 +37,7 @@ public class InterpretTagsTest {
 		slide.newKeywordElement().keyword(KeywordDictionary.SKIP).geom("hex").add();		
 		Action action = interpreter.interpret(slide);
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstanceOf(SkipAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(EmptyAction.class).all().size(), equalTo(1));
 	}
 	
 	@Test

@@ -11,10 +11,10 @@ import com.google.common.base.Objects;
 // execute all children actions in parallel
 // execution returns when all the children have finished execution
 // 
-public class RetryAction extends CompoundAction {
+public class RetryAction extends ChainedAction {
 	
 	public RetryAction(Action action, long timeout, long interval){
-		addChild(checkNotNull(action));
+		setChild(checkNotNull(action));
 		this.timeout = timeout;
 		this.interval = interval;
 	}
@@ -28,7 +28,7 @@ public class RetryAction extends CompoundAction {
 	 * Execute and wait for execution to finish
 	 */
 	public void execute(Context context) throws ActionExecutionException{
-		Action action = checkNotNull(getChild(0));
+		Action action = checkNotNull(getChild());
 		
 		// start a timer that will set the timesup flag to true
 		Timer timer = new Timer();
@@ -68,6 +68,7 @@ public class RetryAction extends CompoundAction {
 			
 	}
 	
+	@Override
 	public void stop(){
 		stopFlag = true;
 		synchronized(this){
@@ -77,7 +78,7 @@ public class RetryAction extends CompoundAction {
 
 	public String toString(){
 		return Objects.toStringHelper(this)
-				.add("actions", getChildren())
+				.add("child", getChild())
 				.toString();
 	}
 
