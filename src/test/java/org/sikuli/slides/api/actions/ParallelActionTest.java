@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-public class ParallelActionNodeTest {
+public class ParallelActionTest {
 	
 	@Test(timeout = 2000)
 	public void testCanStopEarlier() throws ActionExecutionException {
@@ -20,8 +20,8 @@ public class ParallelActionNodeTest {
 		Action action = mock(Action.class);
 		
 		final ParallelActionNode parallel = new ParallelActionNode();
-		parallel.addChild(new SingleActionNode(action));
-		parallel.addChild(new WaitActionNode(5000));
+		parallel.addChild(action);
+		parallel.addChild(new SleepAction(5000));
 		
 		// invoke stop after 1 second
 		Timer timer = new Timer();		
@@ -41,9 +41,9 @@ public class ParallelActionNodeTest {
 		Action action = mock(Action.class);
 		
 		final ParallelActionNode parallel = new ParallelActionNode();
-		parallel.addChild(new SingleActionNode(action));
-		parallel.addChild(new WaitActionNode(2000));
-		parallel.addChild(new WaitActionNode(1000));
+		parallel.addChild(action);
+		parallel.addChild(new SleepAction(2000));
+		parallel.addChild(new SleepAction(1000));
 		
 		
 		long startTime = System.currentTimeMillis();
@@ -61,14 +61,12 @@ public class ParallelActionNodeTest {
 		Context context = new Context();
 		
 		final ParallelActionNode parallel = new ParallelActionNode();		
-		parallel.addChild(new WaitActionNode(1000));
-		parallel.addChild(new WaitActionNode(500));
+		parallel.addChild(new SleepAction(1000));
+		parallel.addChild(new SleepAction(500));
 		
-		ActionNode background = new WaitActionNode(10000);
-		background.setBackground(true);
-	
-		ActionNode spy = spy(background);		
-		parallel.addChild(spy);
+		CompoundAction background = new SleepAction(10000);
+		CompoundAction spy = spy(background);		
+		parallel.addChildAsBackground(spy);
 		
 		parallel.execute(context);
 				
@@ -85,13 +83,11 @@ public class ParallelActionNodeTest {
 
 		
 		final ParallelActionNode parallel = new ParallelActionNode();		
-		parallel.addChild(new SingleActionNode(badAction));
+		parallel.addChild(badAction);
 		
-		ActionNode background = new WaitActionNode(10000);
-		background.setBackground(true);
-	
-		ActionNode backgroundSpy = spy(background);		
-		parallel.addChild(backgroundSpy);
+		CompoundAction background = new SleepAction(10000);
+		CompoundAction backgroundSpy = spy(background);		
+		parallel.addChildAsBackground(backgroundSpy);
 		
 		try{
 			parallel.execute(context);
@@ -111,9 +107,9 @@ public class ParallelActionNodeTest {
 		Action action3 = mock(Action.class);
 		
 		final ParallelActionNode parallel = new ParallelActionNode();
-		parallel.addChild(new SingleActionNode(action1));
-		parallel.addChild(new SingleActionNode(action2));
-		parallel.addChild(new SingleActionNode(action3));
+		parallel.addChild(action1);
+		parallel.addChild(action2);
+		parallel.addChild(action3);
 		
 		parallel.execute(context);		
 		
@@ -132,8 +128,8 @@ public class ParallelActionNodeTest {
 		
 		
 		final ParallelActionNode parallel = new ParallelActionNode();
-		parallel.addChild(new SingleActionNode(badAction));
-		parallel.addChild(new SingleActionNode(goodAction));
+		parallel.addChild(badAction);
+		parallel.addChild(goodAction);
 		
 		parallel.execute(context);
 	}

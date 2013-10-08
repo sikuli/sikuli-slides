@@ -66,6 +66,10 @@ abstract public class AbstractAction implements Action{
 		
 	}
 	
+	public void stop(){
+		
+	}
+	
 	
 	abstract protected void doExecute(Context context) throws ActionExecutionException;
 

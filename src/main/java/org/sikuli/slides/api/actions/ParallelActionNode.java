@@ -1,26 +1,28 @@
 package org.sikuli.slides.api.actions;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 // execute all children actions in parallel
 // execution returns when all the children have finished execution
 // 
-public class ParallelActionNode extends ActionNode {
+public class ParallelActionNode extends CompoundAction {
 
 	private CountDownLatch doneSignal;
 
 	class Worker implements Runnable {
-		ActionNode action;
+		Action action;
 		Context context;
 		boolean success = true;
 		ActionExecutionException exception = null;
-		Worker(ActionNode action, Context context) { 
+		Worker(Action action, Context context) { 
 			this.action = action; 
 			this.context = context;
 		}
@@ -38,7 +40,7 @@ public class ParallelActionNode extends ActionNode {
 	}
 
 	class BackgroundWorker extends Worker {
-		BackgroundWorker(ActionNode action, Context context) {
+		BackgroundWorker(Action action, Context context) {
 			super(action, context);
 		}
 
@@ -50,14 +52,24 @@ public class ParallelActionNode extends ActionNode {
 		}
 	}
 
-
+	private Set<Action> backgroundSet = Sets.newHashSet();
+	public void addChildAsBackground(Action child){
+		backgroundSet.add(child);
+		addChild(child);
+	}
+	
+	private boolean isBackground(Action action){
+		return backgroundSet.contains(action);
+	}
+	
+	
 	/**
 	 * Execute and wait for execution to finish
 	 */
 	public void execute(Context context) throws ActionExecutionException{
 		int count = 0;
-		for (ActionNode action : getChildren()){
-			if (!action.isBackground()){
+		for (Action action : getChildren()){
+			if (!isBackground(action)){
 				count += 1;			
 			}
 		}
@@ -65,10 +77,10 @@ public class ParallelActionNode extends ActionNode {
 		doneSignal = new CountDownLatch(count);
 
 		List<Worker> workers = Lists.newArrayList();
-		for (ActionNode action : getChildren()){
+		for (Action action : getChildren()){
 			final Context workerContxt = new Context(context);
 
-			if (!action.isBackground()){			
+			if (!isBackground(action)){			
 				Worker worker = new Worker(action, workerContxt);
 				workers.add(worker);
 				new Thread(worker).start();
@@ -95,7 +107,7 @@ public class ParallelActionNode extends ActionNode {
 	}
 
 	public void stop(){
-		for (ActionNode action : getChildren()){
+		for (Action action : getChildren()){
 			action.stop();
 		}
 	}

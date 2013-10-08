@@ -2,11 +2,11 @@ package org.sikuli.slides.api.actions;
 
 import org.sikuli.slides.api.Context;
 
-public class WaitActionNode extends ActionNode {
+public class SleepAction extends CompoundAction {
 		
 	private int waitDuration;
 	
-	public WaitActionNode(int waitDuration) {
+	public SleepAction(int waitDuration) {
 		super();
 		this.waitDuration = waitDuration;
 	}

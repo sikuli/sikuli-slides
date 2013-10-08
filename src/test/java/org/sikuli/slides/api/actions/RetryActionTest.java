@@ -9,7 +9,7 @@ import org.sikuli.slides.api.Context;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-public class RetryActionNodeTest {
+public class RetryActionTest {
 	
 	
 	@Test
@@ -17,7 +17,7 @@ public class RetryActionNodeTest {
 		Context context = new Context();
 		Action action = mock(Action.class);
 		
-		final RetryActionNode retry = new RetryActionNode(action, 2000, 500);
+		final RetryAction retry = new RetryAction(action, 2000, 500);
 		retry.execute(context);	
 		
 		verify(action).execute(any(Context.class));
@@ -30,7 +30,7 @@ public class RetryActionNodeTest {
 		ActionExecutionException exception = mock(ActionExecutionException.class);
 		doThrow(exception).when(action).execute(any(Context.class));
 		
-		final RetryActionNode retry = new RetryActionNode(action, 2000, 500);
+		final RetryAction retry = new RetryAction(action, 2000, 500);
 		try {
 			retry.execute(context);
 		} catch (ActionExecutionException e) {
@@ -46,12 +46,12 @@ public class RetryActionNodeTest {
 		ActionExecutionException exception = mock(ActionExecutionException.class);
 		doThrow(exception).when(action).execute(any(Context.class));
 		
-		final RetryActionNode retry = new RetryActionNode(action, 1000, 500);
+		final RetryAction retry = new RetryAction(action, 1000, 500);
 		retry.execute(context);
 	}
 	
 	
-	class DelayedSuccessAction implements Action {
+	class DelayedSuccessAction extends QuickAction {
 		long startTime;
 		long delayTime;
 		DelayedSuccessAction(long delayTime){
@@ -63,7 +63,7 @@ public class RetryActionNodeTest {
 			if ((System.currentTimeMillis() - startTime) < delayTime){
 				throw new ActionExecutionException("", this);
 			}
-		} 
+		} 		
 	}
 	
 	@Test
@@ -72,7 +72,7 @@ public class RetryActionNodeTest {
 		Action action = new DelayedSuccessAction(500);
 		Action spy = spy(action);
 		
-		final RetryActionNode retry = new RetryActionNode(spy, 5000, 500);
+		final RetryAction retry = new RetryAction(spy, 5000, 500);
 		try {
 			retry.execute(context);
 		} catch (ActionExecutionException e) {
@@ -89,7 +89,7 @@ public class RetryActionNodeTest {
 		ActionExecutionException exception = mock(ActionExecutionException.class);
 		doThrow(exception).when(action).execute(any(Context.class));
 		
-		final RetryActionNode retry = new RetryActionNode(action, 10000, 500);
+		final RetryAction retry = new RetryAction(action, 10000, 500);
 		
 		TimerTask task = new TimerTask(){
 			@Override

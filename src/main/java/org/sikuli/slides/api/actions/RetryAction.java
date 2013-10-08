@@ -11,10 +11,10 @@ import com.google.common.base.Objects;
 // execute all children actions in parallel
 // execution returns when all the children have finished execution
 // 
-public class RetryActionNode extends ActionNode {
+public class RetryAction extends CompoundAction {
 	
-	public RetryActionNode(Action action, long timeout, long interval){
-		setAction(checkNotNull(action));
+	public RetryAction(Action action, long timeout, long interval){
+		addChild(checkNotNull(action));
 		this.timeout = timeout;
 		this.interval = interval;
 	}
@@ -28,7 +28,7 @@ public class RetryActionNode extends ActionNode {
 	 * Execute and wait for execution to finish
 	 */
 	public void execute(Context context) throws ActionExecutionException{
-		Action action = checkNotNull(getAction());
+		Action action = checkNotNull(getChild(0));
 		
 		// start a timer that will set the timesup flag to true
 		Timer timer = new Timer();
