@@ -3,6 +3,7 @@ package org.sikuli.slides.api;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class AutomationExecutorTest {
 		NativeMouseEvent ev = detector.getLastMouseEvent();
 		assertEquals("x", 330, ev.getX());
 	}
+	
 	
 	@Test
 	public void testExecuteFiveStepsPPTX() throws IOException, SlideExecutionException{

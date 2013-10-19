@@ -7,7 +7,7 @@ import org.sikuli.slides.api.models.SlideElement;
 
 import edu.umd.cs.piccolo.PNode;
 
-class PSlide extends PNode {
+public class PSlide extends PNode {
 		
 	public PSlide(Slide slide){
 		for (SlideElement element : slide.select().all()){

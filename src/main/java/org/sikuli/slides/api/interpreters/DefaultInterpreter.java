@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.sikuli.api.Target;
+import org.sikuli.slides.api.actions.RetryAction;
 import org.sikuli.slides.api.actions.RobotAction;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.BookmarkAction;
@@ -212,7 +213,7 @@ public class DefaultInterpreter implements Interpreter {
 		Target target = interpretAsImageTarget(slide);		
 		if (target == null)
 			return doAction;				
-		return new TargetAction(target, doAction);
+		return new RetryAction(new TargetAction(target, doAction),5000, 500);
 	}
 
 	Action interpretAsType(Slide slide){
@@ -444,10 +445,7 @@ public class DefaultInterpreter implements Interpreter {
 			action = controlAction;
 		}
 		
-		SlideAction slideAction = new SlideAction();
-		if (action != null)
-			slideAction.setChild(action);
-		return slideAction;
+		return action;
 	}
 
 }

@@ -24,17 +24,16 @@ public class CompoundAction implements Action {
 	}
 
 	public Action getChild(int index){
-		if (index >= 0 && index < actions.size()){
+		if (hasChild(index)){
 			return actions.get(index);
 		}else{
 			return null;
 		}
 	}
 
-	public Action hasChild(int index){
-		return actions.get(index);
+	public boolean hasChild(int index){
+		return index >= 0 && index < actions.size();
 	}
-
 
 	public List<Action> getChildren(){
 		return Lists.newArrayList(actions);

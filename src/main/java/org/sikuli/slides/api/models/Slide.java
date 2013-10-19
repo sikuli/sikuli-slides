@@ -4,6 +4,11 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
+import org.sikuli.slides.api.Context;
+import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.actions.ActionExecutionException;
+import org.sikuli.slides.api.interpreters.DefaultInterpreter;
+import org.sikuli.slides.api.interpreters.Interpreter;
 import org.sikuli.slides.api.interpreters.Keyword;
 import org.sikuli.slides.api.interpreters.Selector;
 
@@ -11,12 +16,13 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
-public class Slide {
+public class Slide implements Action {
 	
 	List<SlideElement> elements = Lists.newArrayList();
 	private int width = 9144000;
 	private int height = 6858000;
 	private int number; // one-based	
+
 	
 	// Construct a blank slide
 	public Slide(){		
@@ -142,5 +148,22 @@ public class Slide {
 			return this;
 		}
 
+	}
+	
+	private Action action;
+	
+	@Override
+	public void execute(Context context) throws ActionExecutionException {
+		Interpreter interpreter = new DefaultInterpreter();		
+		action = interpreter.interpret(this);
+		if (action != null){
+			action.execute(context);
+		}
+	}
+
+	@Override
+	public void stop() {
+		if (action != null)
+			action.stop();		
 	}
 }

@@ -1,8 +1,10 @@
 package org.sikuli.slides.api.slideshow;
 
+import java.util.EventListener;
 import java.util.List;
 
 import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.models.Slide;
 
 interface SlideShowController {	
 	public void start();
@@ -13,5 +15,13 @@ interface SlideShowController {
 	public void setAutoAdvance(boolean autoAdvance);
 	public boolean isAutoAdvance(); 
 	public Action getCurrent();
-	public void setContent(List<Action> actions);
+	public void setContent(List<Slide> slides);
+	public List<Slide> getContent();
+	public void addListener(SlideShowListener listener);
+	public void removeListener(SlideShowListener listener);
+}
+
+interface SlideShowListener extends EventListener {	
+	public void slideStarted(Slide slide);
+	public void slideFinished(Slide slide);
 }

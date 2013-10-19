@@ -15,7 +15,7 @@ public class ChainedAction extends CompoundAction {
 	}
 	
 	public Action getChild(){
-		if (hasChild(0) != null)
+		if (hasChild(0))
 			return getChild(0);
 		else
 			return null;

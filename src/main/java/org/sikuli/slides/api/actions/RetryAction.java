@@ -30,6 +30,8 @@ public class RetryAction extends ChainedAction {
 	public void execute(Context context) throws ActionExecutionException{
 		Action action = checkNotNull(getChild());
 		
+		timeout = context.getWaitTime();
+		
 		// start a timer that will set the timesup flag to true
 		Timer timer = new Timer();
 		TimerTask task = new TimerTask(){
@@ -43,6 +45,7 @@ public class RetryAction extends ChainedAction {
 		ActionExecutionException exception = null;
 		
 		timesupFlag = false;
+		stopFlag = false;
 		while(!timesupFlag && !stopFlag){
 			try{
 				action.execute(context);

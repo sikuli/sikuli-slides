@@ -2,9 +2,12 @@ package org.sikuli.slides.api.slideshow;
 
 import java.util.List;
 
+import javax.swing.event.EventListenerList;
+
 import org.sikuli.slides.api.Context;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.ActionExecutionException;
+import org.sikuli.slides.api.models.Slide;
 
 class DefaultSlideShowController implements SlideShowController{
 
@@ -13,7 +16,7 @@ class DefaultSlideShowController implements SlideShowController{
 		this.context = context;
 	}
 
-	private List<Action> actions;
+	private List<Slide> slides;
 	int index = 0;
 	int n = 0;
 	private boolean quit;
@@ -21,7 +24,7 @@ class DefaultSlideShowController implements SlideShowController{
 	Thread executingThread;
 	private boolean skip;
 	private boolean pending;
-	private Action currentAction;
+	private Slide currentSlide;
 
 	@Override
 	public void start() {
@@ -29,16 +32,16 @@ class DefaultSlideShowController implements SlideShowController{
 		executingThread = new Thread(){
 
 			public void run(){
-				n = actions.size();
+				n = slides.size();
 				index = 0;
 				pending = true;
 
 				while (!quit){
 
-					Action action;
+					Slide action;
 					synchronized (this){
 						if (pending){
-							action = actions.get(index);
+							action = slides.get(index);
 							skip = false;
 							pending = false;
 						}else{
@@ -48,10 +51,7 @@ class DefaultSlideShowController implements SlideShowController{
 
 					try {
 						if (action != null){
-							System.out.println(index);
-							currentAction = action;
-							action.execute(context);
-							currentAction = null;
+							executeSlide(action);
 						}
 						if (!skip){
 							next();
@@ -99,9 +99,9 @@ class DefaultSlideShowController implements SlideShowController{
 	}
 
 	synchronized void stopCurrentAction(){
-		if (currentAction != null){			
-			currentAction.stop();
-			currentAction = null;
+		if (currentSlide != null){			
+			currentSlide.stop();
+			currentSlide = null;
 			skip = true;
 		}
 	}
@@ -155,9 +155,51 @@ class DefaultSlideShowController implements SlideShowController{
 		return null;
 	}
 
+	EventListenerList listenerList = new EventListenerList();	
 	@Override
-	public void setContent(List<Action> actions) {
-		this.actions = actions;
+	public void addListener(SlideShowListener listener) {
+		listenerList.add(SlideShowListener.class, listener);		
+	}
+
+	@Override
+	public void removeListener(SlideShowListener listener) {
+		listenerList.remove(SlideShowListener.class, listener);
+	}
+	
+	void fireSlideStarted(Slide slide){
+	     Object[] listeners = listenerList.getListenerList();
+	     for (int i = listeners.length-2; i>=0; i-=2) {
+	         if (listeners[i]==SlideShowListener.class) {
+	             ((SlideShowListener)listeners[i+1]).slideStarted(slide);
+	         }
+	     }
+	}
+	
+	void fireSlideFinished(Slide slide){
+	     Object[] listeners = listenerList.getListenerList();
+	     for (int i = listeners.length-2; i>=0; i-=2) {
+	         if (listeners[i]==SlideShowListener.class) {
+	             ((SlideShowListener)listeners[i+1]).slideFinished(slide);
+	         }
+	     }
+	}
+
+	private void executeSlide(Slide slide) throws ActionExecutionException {
+		fireSlideStarted(slide);
+		currentSlide = slide;							
+		slide.execute(context);
+		currentSlide = null;
+		fireSlideFinished(slide);
+	}
+
+	@Override
+	public void setContent(List<Slide> slides) {
+		this.slides = slides;		
+	}
+
+	@Override
+	public List<Slide> getContent() {
+		return slides;
 	}
 
 

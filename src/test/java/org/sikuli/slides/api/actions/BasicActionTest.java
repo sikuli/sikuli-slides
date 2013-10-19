@@ -66,7 +66,7 @@ public class BasicActionTest {
 	}
 
 	@Test
-	public void testFindDoLeftClick() throws ActionExecutionException {
+	public void testCanLeftClickOnTarget() throws ActionExecutionException {
 		Action action = new TargetAction(new AlwaysFoundTarget(), new LeftClickAction());
 		action.execute(context);
 		
