@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.slides.api.Context;
+import org.sikuli.slides.api.actions.ActionExecutionException;
 import org.sikuli.slides.api.models.Slide;
 
 import com.google.common.collect.Lists;
@@ -16,6 +17,9 @@ public class DefaultSlideShowControllerEventTest {
 
 	SlideShowController slideshow;
 	private SlideShowListener listener;
+	private Slide slide1;
+	private Slide slide2;
+	private Slide slide3;
 		
 	void pause(long msecs){
 		try {
@@ -27,12 +31,12 @@ public class DefaultSlideShowControllerEventTest {
 	@Before
 	public void setUp(){
 		Context context = mock(Context.class);
-		Slide action1 = mock(Slide.class);
-		Slide action2 = mock(Slide.class);
-		Slide action3 = mock(Slide.class);
+	    slide1 = mock(Slide.class);
+		slide2 = mock(Slide.class);
+		slide3 = mock(Slide.class);
 		
 		slideshow = new DefaultSlideShowController(context);
-		List<Slide> actions = Lists.newArrayList(action1, action2, action3);
+		List<Slide> actions = Lists.newArrayList(slide1, slide2, slide3);
 		slideshow.setContent(actions);
 		
 		listener = mock(SlideShowListener.class);
@@ -40,11 +44,32 @@ public class DefaultSlideShowControllerEventTest {
 	}
 	
 	@Test
-	public void testCanTriggerSlideStartedAndFinished() throws InterruptedException {		
+	public void testSlideSelected() throws InterruptedException {		
 		slideshow.start();
 		pause(100);
-		verify(listener, times(3)).slideStarted(any(Slide.class));
-		verify(listener, times(3)).slideFinished(any(Slide.class));
+		verify(listener).slideSelected(slide1);
+		verify(listener).slideSelected(slide2);
+		verify(listener).slideSelected(slide3);
+	}
+	
+	@Test
+	public void testDuringSlide1_NextNext() throws ActionExecutionException {
+		slideshow.start();
+		
+		new Thread(){
+			public void run(){
+				slideshow.next();
+				pause(100);
+				slideshow.next();
+				pause(100);
+			}
+		}.start();
+		
+		pause(800);
+				
+		verify(listener).slideSelected(slide1);
+		verify(listener).slideSelected(slide2);
+		verify(listener).slideSelected(slide3);
 	}
 
 }

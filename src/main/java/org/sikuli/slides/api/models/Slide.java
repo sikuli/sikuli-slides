@@ -154,7 +154,7 @@ public class Slide implements Action {
 	
 	@Override
 	public void execute(Context context) throws ActionExecutionException {
-		Interpreter interpreter = new DefaultInterpreter();		
+		Interpreter interpreter = new DefaultInterpreter();
 		action = interpreter.interpret(this);
 		if (action != null){
 			action.execute(context);

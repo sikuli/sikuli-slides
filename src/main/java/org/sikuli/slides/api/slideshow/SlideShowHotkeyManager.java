@@ -6,23 +6,30 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 
 class SlideShowHotkeyManager extends GlobalHotkeyManager<SlideShowController>{
 
+	private SlideShowController slideshow;
+
 	public SlideShowHotkeyManager(SlideShowController target) {
 		super(target);
+		slideshow = target;
 	}
 	
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent e) {
 		if (isAltPressed(e) && isCtrlPressed(e)){
 			if (e.getKeyCode() == KeyEvent.VK_RIGHT){
-				getTarget().next();
+				slideshow.next();
 			}else if (e.getKeyCode() == KeyEvent.VK_LEFT){			
-				getTarget().previous();
+				slideshow.previous();
 			}else if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
-				getTarget().quit();
-			}else if (e.getKeyCode() == KeyEvent.VK_A){
-//				toggleAutoAdvance();
+				slideshow.quit();
+			}else if (e.getKeyCode() == KeyEvent.VK_P){
+			 
+				if (slideshow.isPaused()){
+					slideshow.play();
+				}else{
+					slideshow.pause();
+				}
 			}
 		}
-
 	}
 }

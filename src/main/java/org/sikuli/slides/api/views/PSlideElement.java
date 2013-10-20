@@ -19,8 +19,6 @@ class PSlideElement extends PNode {
 	
 	public PSlideElement(SlideElement element){
 		
-		System.out.println(element);
-		
 		int x = element.getOffx();
 		int y = element.getOffy();
 		int w = element.getCx();
@@ -36,14 +34,10 @@ class PSlideElement extends PNode {
 		
 		else if (element.getText() != null && element.getText().length() > 0 
 				|| (element instanceof KeywordElement)){
-		System.out.println("here");
 			String text = element.getText();
 			if (element instanceof KeywordElement){
 				text = ((KeywordElement)element).getKeyword().getName() + " " + text;				
-			}			
-			
-			System.out.println(text);
-			
+			}					
 			PNode node = new PNode();
 			PText txt = new PText(text);
 			node.addChild(txt);

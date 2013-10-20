@@ -443,8 +443,7 @@ public class DefaultInterpreter implements Interpreter {
 		if (controlAction != null){			
 			((CompoundAction) controlAction).addChild(action);
 			action = controlAction;
-		}
-		
+		}		
 		return action;
 	}
 

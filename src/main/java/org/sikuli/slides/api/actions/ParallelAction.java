@@ -94,7 +94,6 @@ public class ParallelAction extends CompoundAction {
 		} catch (InterruptedException e) {
 
 		}
-		System.out.println("done");
 		stop();
 
 		// if any of the worker did not succeed, 

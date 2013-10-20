@@ -1,160 +1,165 @@
 package org.sikuli.slides.api.slideshow;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import javax.swing.event.EventListenerList;
 
 import org.sikuli.slides.api.Context;
-import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.ActionExecutionException;
 import org.sikuli.slides.api.models.Slide;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class DefaultSlideShowController implements SlideShowController{
+
+	static private Logger logger = LoggerFactory.getLogger(DefaultSlideShowController.class);
 
 	private Context context;
 	public DefaultSlideShowController(Context context){
 		this.context = context;
-	}
+		this.playSignal = new CountDownLatch(0);
+	}	
 
 	private List<Slide> slides;
-	int index = 0;
+	volatile int index = 0;
 	int n = 0;
-	private boolean quit;
+	volatile private boolean quit;
+	volatile private boolean paused;
 
 	Thread executingThread;
-	private boolean skip;
-	private boolean pending;
 	private Slide currentSlide;
 
+	private CountDownLatch  playSignal;
+	
+	class WorkerThread extends Thread {
+		
+		Slide slide;			
+		Context context;
+		public WorkerThread(Slide slide, Context context) {		
+			this.slide = slide;
+			this.context = context;
+		}
+
+		public void run(){
+			try {
+				slide.execute(context);
+			} catch (ActionExecutionException e) {
+			}
+		}
+		
+		public void terminate(){
+			slide.stop();
+		}		
+	}
+	
+	
 	@Override
 	public void start() {
-		
+
 		executingThread = new Thread(){
 
 			public void run(){
 				n = slides.size();
-				index = 0;
-				pending = true;
-
-				while (!quit){
-
-					Slide action;
-					synchronized (this){
-						if (pending){
-							action = slides.get(index);
-							skip = false;
-							pending = false;
-						}else{
-							action = null;							
-						}
-					}
-
+				
+				fireSlideSelected(slides.get(index));
+				
+				while (!quit){					
 					try {
-						if (action != null){
-							executeSlide(action);
-						}
-						if (!skip){
+						playSignal.await();
+						currentSlide = slides.get(index);		
+						Result result = execute(currentSlide);						
+						if (result == Result.SUCCESS && index == n - 1){						
+							pause();
+						}else if (result == Result.SUCCESS && !isPaused()){
 							next();
+						}else if (result == Result.EXCEPTION){
+							pause();
 						}
+						
+					} catch (InterruptedException e1) {
 
-					} catch (ActionExecutionException e) {
-
-					}
-
-					if (index == n){
-						quit = true;
-					}				
+					} 
 				}
 			};
 
 		};
 		executingThread.start();
-		//.start();
-
-		//			Action action;
-		//			Slide slide;
-
-		//			synchronized (this){
-		//				action = actions.get(index);
-		//				slide = slides.get(index);
-		//				last = index == n - 1;
-		//			}			
-		//			if (pending){
-		//				skipped = false;
-		//				executeSlideAction(slide, action, last);				
-		//			}
-		//
-		//			if (!skipped && autoAdvance){
-		//				nextSlide();
-		//			}
-		//			
-		//			while(!pending && !quit){
-		//				try{
-		//					Thread.sleep(1000);
-		//				} catch (InterruptedException e) {
-		//				}
-		//			}		
-		//		}
-
-	}
-
-	synchronized void stopCurrentAction(){
-		if (currentSlide != null){			
-			currentSlide.stop();
-			currentSlide = null;
-			skip = true;
-		}
 	}
 
 	@Override
 	synchronized public void next() {
+		logger.debug("[next]");
+		//int i = slides.indexOf(currentSlide);
 		if (index == n - 1)
-			return;		
-		stopCurrentAction();
-		index = index + 1;		
-		pending = true;
+			return;
+		
+//		List<Slide> sub = slides.subList(i+1, slides.size());
+//		queue.clear();
+//		queue.addAll(sub);
+		index = index + 1;
+		fireSlideSelected(slides.get(index));
+		if (executing)
+			stop();	
 	}
 
 	@Override
 	synchronized public void previous() {
+		logger.debug("[previous]");
 		if (index == 0)
-			return;			
-		stopCurrentAction();		
+			return;
 		index = index - 1;
-		pending = true;
+		fireSlideSelected(slides.get(index));
+		if (executing)
+			stop();
+	}
+
+	@Override
+	synchronized public void jumpTo(int index) {
+		logger.debug("[jumpTo] " + this.index + " -> " + index);
+		if (index >= 0 && index < n && this.index != index){			
+			this.index = index;
+			fireSlideSelected(slides.get(index));
+			if (executing)
+				stop();
+		}
 	}
 
 	@Override
 	public void quit() {
-		stopCurrentAction();
+		stop();
 		quit = true;
 
 	}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
+	synchronized public void pause(){	
+		logger.debug("[pause] ");
+		
+		// do nothing if it is already paused or there is no more slide to execute 
+		if (paused)
+			return;		
+		paused = true;		
+		playSignal = new CountDownLatch(1);				
+		if (executing)
+			stop();
 	}
-
+	
 	@Override
-	public void setAutoAdvance(boolean autoAdvance) {
-		// TODO Auto-generated method stub
-
+	synchronized public void play() {	
+		logger.debug("[play] ");
+		if (!paused)
+			return;
+		paused = false;
+		playSignal.countDown();		
 	}
-
+	
 	@Override
-	public boolean isAutoAdvance() {
-		// TODO Auto-generated method stub
-		return false;
+	synchronized public boolean isPaused() {
+		return paused;
 	}
-
-	@Override
-	public Action getCurrent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
+	
 	EventListenerList listenerList = new EventListenerList();	
 	@Override
 	public void addListener(SlideShowListener listener) {
@@ -165,33 +170,73 @@ class DefaultSlideShowController implements SlideShowController{
 	public void removeListener(SlideShowListener listener) {
 		listenerList.remove(SlideShowListener.class, listener);
 	}
-	
+
 	void fireSlideStarted(Slide slide){
-	     Object[] listeners = listenerList.getListenerList();
-	     for (int i = listeners.length-2; i>=0; i-=2) {
-	         if (listeners[i]==SlideShowListener.class) {
-	             ((SlideShowListener)listeners[i+1]).slideStarted(slide);
-	         }
-	     }
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = listeners.length-2; i>=0; i-=2) {
+			if (listeners[i]==SlideShowListener.class) {
+				((SlideShowListener)listeners[i+1]).slideExecuted(slide);
+			}
+		}
+	}
+
+	void fireSlideFinished(Slide slide){
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = listeners.length-2; i>=0; i-=2) {
+			if (listeners[i]==SlideShowListener.class) {
+				((SlideShowListener)listeners[i+1]).slideFinished(slide);
+			}
+		}
 	}
 	
-	void fireSlideFinished(Slide slide){
-	     Object[] listeners = listenerList.getListenerList();
-	     for (int i = listeners.length-2; i>=0; i-=2) {
-	         if (listeners[i]==SlideShowListener.class) {
-	             ((SlideShowListener)listeners[i+1]).slideFinished(slide);
-	         }
-	     }
+	void fireSlideSelected(Slide slide){
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = listeners.length-2; i>=0; i-=2) {
+			if (listeners[i]==SlideShowListener.class) {
+				((SlideShowListener)listeners[i+1]).slideSelected(slide);
+			}
+		}
 	}
-
-	private void executeSlide(Slide slide) throws ActionExecutionException {
+	
+	enum Result {
+		SUCCESS,
+		STOPPED,
+		EXCEPTION
+	};
+	
+	volatile boolean stopped = false;
+	volatile boolean executing = true;
+	private Result execute(Slide slide) {
+		logger.debug("[execute] " + slide);
 		fireSlideStarted(slide);
-		currentSlide = slide;							
-		slide.execute(context);
-		currentSlide = null;
-		fireSlideFinished(slide);
+		executing = true;
+		stopped = false;
+		try {
+			slide.execute(context);		
+			executing = false;
+			fireSlideFinished(slide);
+			if (stopped){
+				stopped = false;
+				return Result.STOPPED;
+			}else{			
+				return Result.SUCCESS;
+			}
+		
+		} catch (ActionExecutionException e) {
+			executing = false;
+			return Result.EXCEPTION;
+		}		
 	}
 
+	synchronized private void stop(){
+		if (currentSlide != null && executing){
+			logger.debug("[stop] " + currentSlide);
+			currentSlide.stop();
+			stopped = true;
+		}
+	}
+
+	
 	@Override
 	public void setContent(List<Slide> slides) {
 		this.slides = slides;		
@@ -201,6 +246,8 @@ class DefaultSlideShowController implements SlideShowController{
 	public List<Slide> getContent() {
 		return slides;
 	}
+
+
 
 
 
