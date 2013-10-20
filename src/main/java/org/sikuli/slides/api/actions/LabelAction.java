@@ -13,7 +13,6 @@ public class LabelAction implements Action {
 	
 	private String text = "";
 	private int fontSize = 12;
-	private int duration = 3000;
 	private Color backgroundColor = Color.yellow;
 	private Canvas canvas;
 
@@ -51,15 +50,7 @@ public class LabelAction implements Action {
 	public void setFontSize(int fontSize) {
 		this.fontSize = fontSize;
 	}
-
-	public int getDuration() {
-		return duration;
-	}
-
-	public void setDuration(int duration) {
-		this.duration = duration;
-	}
-
+	
 	public Color getBackgroundColor() {
 		return backgroundColor;
 	}

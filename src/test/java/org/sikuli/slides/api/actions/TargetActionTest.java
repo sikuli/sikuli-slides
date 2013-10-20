@@ -12,69 +12,45 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.DesktopScreenRegion;
+import org.sikuli.api.Target;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.slides.api.Context;
 import org.sikuli.slides.api.mocks.AlwaysFoundTarget;
+import org.sikuli.slides.api.mocks.MockTargetFactory;
 
+import static org.mockito.Mockito.*;
 
 public class TargetActionTest {
 
-	private InputDetector detector;
 	private Context context;
-	private DesktopCanvas canvas;
-	private DesktopScreenRegion screenRegion;
 
 	@Before
 	public void setUp() throws NativeHookException{
-		detector = new InputDetector();
-		detector.start();
-		screenRegion = new DesktopScreenRegion(100,100,500,500);
-
 		context = new Context();
-		context.setScreenRegion(screenRegion);
-		
-		canvas = new DesktopCanvas();		
-		canvas.addLabel(screenRegion, "here")
-		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();;
-		canvas.addBox(screenRegion);
-		canvas.show();
-
-	}
-
-	@After
-	public void tearDown(){
-		detector.stop();
-		canvas.hide();
 	}
 
 	@Test
-	public void testCanLeftClickOnTarget() throws ActionExecutionException {
-		Action action = new TargetAction(new AlwaysFoundTarget(), new LeftClickAction());
+	public void testTargetIsFoundImmediately() throws ActionExecutionException {
+				
+		Action childAction = mock(Action.class);
+		Target target = MockTargetFactory.canBeFound();
+		Action action = new TargetAction(target, childAction);
 		action.execute(context);
-		
-		assertNotNull("last mouse event", detector.getLastMouseEvent());
-		assertEquals("mouse button", MouseEvent.BUTTON1, detector.getLastMouseEvent().getButton());
-		assertEquals("click count", 1, detector.getLastMouseEvent().getClickCount());		
-		int x = detector.getLastMouseEvent().getX();
-		int y = detector.getLastMouseEvent().getY();
-		assertEquals("x", screenRegion.getCenter().getX(), x);
-		assertEquals("y", screenRegion.getCenter().getY(), y);
-
+				
+		verify(childAction).execute(any(Context.class));
 	}
 	
-	@Test
-	public void testCanTypeOnTarget() throws ActionExecutionException{
-		TypeAction typeAction = new TypeAction();
-		typeAction.setText("abcde");		
-		Action action = new TargetAction(new AlwaysFoundTarget(), typeAction);
+	@Test(expected = ActionExecutionException.class)
+	public void testTargetIsNotFoundImmediately() throws ActionExecutionException {
+				
+		Action childAction = mock(Action.class);
+		Target target = MockTargetFactory.canNotBeFound();
+		Action action = new TargetAction(target, childAction);
 		action.execute(context);
-
-		assertNotNull("last mouse event", detector.getLastMouseEvent());
-		assertEquals("mouse button", MouseEvent.BUTTON1, detector.getLastMouseEvent().getButton());
-		assertEquals("click count", 1, detector.getLastMouseEvent().getClickCount());
-		
-		assertEquals("last key typed", 'e', detector.getLastKeyEvent().getKeyChar());
-		assertEquals("num keys typed", 5, detector.getNumKeyEvents());
+				
+		verify(childAction, never()).execute(any(Context.class));
 	}
 	
+	
+
 }

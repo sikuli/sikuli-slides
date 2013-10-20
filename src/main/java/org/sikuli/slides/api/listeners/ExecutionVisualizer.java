@@ -10,7 +10,7 @@ import org.sikuli.slides.api.ExecutionEvent;
 import org.sikuli.slides.api.ExecutionListener;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.DoubleClickAction;
-import org.sikuli.slides.api.actions.ExistAction;
+import org.sikuli.slides.api.actions.AssertExistAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
 import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.SlideAction;
@@ -22,7 +22,7 @@ public class ExecutionVisualizer implements ExecutionListener {
 		return action instanceof LeftClickAction ||
 				action instanceof RightClickAction ||
 				action instanceof DoubleClickAction ||
-				action instanceof ExistAction ||
+				action instanceof AssertExistAction ||
 				action instanceof TypeAction;
 	}
 	

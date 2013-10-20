@@ -79,10 +79,7 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 		GettingStartedView(){
 			final PText txt = new PText("Drag a PPTX file here to open");
 			txt.setTextPaint(Color.black);
-//			txt.setPaint(element.getBackgroundColor());
-//			txt.setTextPaint(element.getColor());
 			txt.setScale(2);
-//			/txt.setFont(txt.getFont().deriveFont(20));
 			addChild(txt);
 		}
 	}

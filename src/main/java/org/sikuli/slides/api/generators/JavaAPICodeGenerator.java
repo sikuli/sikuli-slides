@@ -11,9 +11,9 @@ import javax.imageio.ImageIO;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.Actions;
 import org.sikuli.slides.api.actions.DoubleClickAction;
-import org.sikuli.slides.api.actions.ExistAction;
+import org.sikuli.slides.api.actions.AssertExistAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
-import org.sikuli.slides.api.actions.NotExistAction;
+import org.sikuli.slides.api.actions.AssertNotExistAction;
 import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
@@ -114,9 +114,9 @@ public class JavaAPICodeGenerator implements CodeGenerator{
 		}else{
 			
 			String type ="";
-			if (targetAction instanceof ExistAction){
+			if (targetAction instanceof AssertExistAction){
 				type = "exist";
-			}else if (targetAction instanceof NotExistAction){
+			}else if (targetAction instanceof AssertNotExistAction){
 				type = "notExist";
 			}
 			

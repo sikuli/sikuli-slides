@@ -16,10 +16,10 @@ import org.sikuli.slides.api.actions.CompoundAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
 import org.sikuli.slides.api.actions.DragAction;
 import org.sikuli.slides.api.actions.DropAction;
-import org.sikuli.slides.api.actions.ExistAction;
+import org.sikuli.slides.api.actions.AssertExistAction;
 import org.sikuli.slides.api.actions.LabelAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
-import org.sikuli.slides.api.actions.NotExistAction;
+import org.sikuli.slides.api.actions.AssertNotExistAction;
 import org.sikuli.slides.api.actions.OptionalAction;
 import org.sikuli.slides.api.actions.ParallelAction;
 import org.sikuli.slides.api.actions.PauseAction;
@@ -101,7 +101,7 @@ public class DefaultInterpreter implements Interpreter {
 		if (target == null)
 			return null;
 
-		return new ExistAction(target);
+		return new AssertExistAction(target);
 	}
 
 	Action interpretAsNotExist(Slide slide){
@@ -114,7 +114,7 @@ public class DefaultInterpreter implements Interpreter {
 			return null;
 
 		
-		return new NotExistAction(target);
+		return new AssertNotExistAction(target);
 	}
 
 	Action interpretAsLabel(Slide slide, SlideElement textElement){

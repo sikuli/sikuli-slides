@@ -16,10 +16,10 @@ import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.Actions;
 import org.sikuli.slides.api.actions.BrowserAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
-import org.sikuli.slides.api.actions.ExistAction;
+import org.sikuli.slides.api.actions.AssertExistAction;
 import org.sikuli.slides.api.actions.LabelAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
-import org.sikuli.slides.api.actions.NotExistAction;
+import org.sikuli.slides.api.actions.AssertNotExistAction;
 import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.SleepAction;
 import org.sikuli.slides.api.actions.TargetAction;
@@ -148,7 +148,7 @@ public class InterpreterTest {
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.EXIST);
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstanceOf(ExistAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(AssertExistAction.class).all().size(), equalTo(1));
 	}	
 
 	@Test
@@ -156,7 +156,7 @@ public class InterpreterTest {
 		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.NOT_EXIST);
 		Action action = interpreter.interpret(slide);		
 		assertThat(action, notNullValue());
-		assertThat(Actions.select(action).isInstanceOf(NotExistAction.class).all().size(), equalTo(1));
+		assertThat(Actions.select(action).isInstanceOf(AssertNotExistAction.class).all().size(), equalTo(1));
 	}	
 	
 	

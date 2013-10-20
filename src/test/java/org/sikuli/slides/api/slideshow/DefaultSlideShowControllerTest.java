@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InOrder;
 import org.sikuli.slides.api.Context;
 import org.sikuli.slides.api.actions.ActionExecutionException;
 import org.sikuli.slides.api.models.Slide;
@@ -73,56 +72,7 @@ public class DefaultSlideShowControllerTest {
 			return Objects.toStringHelper(getClass()).add("number", number).toString();
 		}
 	}
-	
-//	static class BadSlide extends SleepSlide {
-//	
-//		public BadSlide(long waitDuration, int number) {
-//			super(waitDuration, number);
-//			// TODO Auto-generated constructor stub
-//		}
-//
-//		@Override	
-//		public void execute(Context context) throws ActionExecutionException{
-//			super.execute(context);
-//			throw new ActionExecutionException("bad", this);
-//		}
-//	}
-	
-//	static class BadSlide extends Slide {
-//		private long duration;
-//		
-//		public BadSlide(long waitDuration, int number) {
-//			this.duration = waitDuration;
-//		}
-//
-//		/**
-//		 * Execute and wait for execution to finish
-//		 */
-//		public void execute(Context context) throws ActionExecutionException{
-//			synchronized (this){
-//				try {
-//					this.wait(duration);
-//				} catch (InterruptedException e) {
-//				}
-//			}
-//			throw new ActionExecutionException(null, null);
-//		}
-//		
-//		public void stop(){
-//			synchronized(this){
-//				this.notify();
-//			}
-//		}
-//
-//		public long getDuration() {		
-//			return duration;
-//		}
-//		
-//		public String toString(){
-//			return Objects.toStringHelper(getClass()).add("number", number).toString();
-//		}
-//	}
-	
+
 	@Before
 	public void setUp(){
 		Context context = new Context();
