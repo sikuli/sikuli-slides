@@ -5,17 +5,8 @@ import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-abstract class GlobalHotkeyManager<T> implements NativeKeyListener {
+abstract class GlobalHotkeyManager implements NativeKeyListener {
 	
-	private T target;
-	public GlobalHotkeyManager(T target){
-		this.target = target;
-	}
-	
-	public T getTarget(){
-		return target;
-	}
-
 	boolean isMetaPressed(NativeKeyEvent e){
 		return (e.getModifiers() & NativeKeyEvent.META_MASK) > 0;
 	}	

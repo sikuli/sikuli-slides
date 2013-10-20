@@ -130,8 +130,7 @@ public class DefaultSlideShowControllerTest {
 		slide2 = spy(new TestSlide(500,2));
 		slide3 = spy(new TestSlide(500,3));
 		slides = Lists.newArrayList(slide1, slide2, slide3);
-		slideshow = new DefaultSlideShowController(context);
-		slideshow.setContent(slides);		
+		slideshow = new DefaultSlideShowController(context, slides);
 	}
 	
 	@Test

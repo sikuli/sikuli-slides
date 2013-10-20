@@ -15,10 +15,13 @@ interface SlideShowController {
 	public void pause();
 	public void play();
 
+	
+	boolean hasNext();
+	boolean hasPrevious();
+	
 	public boolean isPaused();
 	
 	public void jumpTo(int index);
-	public void setContent(List<Slide> slides);
 	public List<Slide> getContent();
 	public void addListener(SlideShowListener listener);
 	public void removeListener(SlideShowListener listener);
@@ -29,4 +32,5 @@ interface SlideShowListener extends EventListener {
 	public void slideExecuted(Slide slide);
 	public void slideFinished(Slide slide);
 	public void slideSelected(Slide slide);
+	public void slideFailed(Slide slide);
 }

@@ -4,32 +4,41 @@ import java.awt.event.KeyEvent;
 
 import org.jnativehook.keyboard.NativeKeyEvent;
 
-class SlideShowHotkeyManager extends GlobalHotkeyManager<SlideShowController>{
+class SlideShowHotkeyManager extends GlobalHotkeyManager{
 
-	private SlideShowController slideshow;
+	private SlideShowController slideShow;
 
 	public SlideShowHotkeyManager(SlideShowController target) {
-		super(target);
-		slideshow = target;
+		slideShow = target;
+	}
+	
+	public SlideShowHotkeyManager() {
 	}
 	
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent e) {
+		if (slideShow == null)
+			return;
+		
 		if (isAltPressed(e) && isCtrlPressed(e)){
 			if (e.getKeyCode() == KeyEvent.VK_RIGHT){
-				slideshow.next();
+				slideShow.next();
 			}else if (e.getKeyCode() == KeyEvent.VK_LEFT){			
-				slideshow.previous();
+				slideShow.previous();
 			}else if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
-				slideshow.quit();
+				slideShow.quit();
 			}else if (e.getKeyCode() == KeyEvent.VK_P){
 			 
-				if (slideshow.isPaused()){
-					slideshow.play();
+				if (slideShow.isPaused()){
+					slideShow.play();
 				}else{
-					slideshow.pause();
+					slideShow.pause();
 				}
 			}
 		}
+	}
+
+	public void setSlideShow(SlideShowController slideShow) {
+		this.slideShow = slideShow;
 	}
 }

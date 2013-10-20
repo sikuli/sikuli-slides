@@ -32,7 +32,8 @@ public class LabelAction implements Action {
 	
 	@Override
 	public void stop(){
-		canvas.hide();
+		if (canvas != null)
+			canvas.hide();
 	}
 	
 	public String getText() {
