@@ -49,19 +49,7 @@ public class ConfigInterpreterTest {
 		action.execute(context);
 		assertThat((double) context.getMinScore(), closeTo(0.5,0.01));
 
-	}
-	
-	@Test
-	public void testConfigRange() throws IOException, ActionExecutionException{
-		
-		slide = readSlide("ConfigRange.pptx",0);		
-		Action action = interpreter.interpret(slide);
-		
-		assertThat(action, notNullValue());
-		
-//		action.execute(context);
-//		assertThat((double) context.getMinScore(), closeTo(0.5,0.01));
-	}
+	}	
 	
 	@Test
 	public void testConfigMinScore() throws IOException, ActionExecutionException{
@@ -96,7 +84,7 @@ public class ConfigInterpreterTest {
 		action.execute(context);
 		
 		int id = ((DesktopScreen) context.getScreenRegion().getScreen()).getId();
-		assertThat(id, equalTo(1));
+		assertThat(id, equalTo(0));
 
 	}
 

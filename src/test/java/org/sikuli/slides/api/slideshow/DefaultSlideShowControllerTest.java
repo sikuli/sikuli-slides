@@ -257,7 +257,7 @@ public class DefaultSlideShowControllerTest {
 			}
 		}.start();
 		
-		pause(1000);
+		pause(800);
 		
 		verify(slide2).execute(any(Context.class));
 		verify(slide2).stop();
@@ -267,11 +267,11 @@ public class DefaultSlideShowControllerTest {
 		// should not have already executed slide 3
 		verify(slide3, never()).execute(any(Context.class));
 		
-		pause(1500);
-		// should continue to execute slide 2
-		verify(slide2, times(2)).execute(any(Context.class));
-		verify(slide3).execute(any(Context.class));
-		
+//		pause(1500);
+//		// should continue to execute slide 2
+//		verify(slide2, times(2)).execute(any(Context.class));
+//		verify(slide3).execute(any(Context.class));
+//		
 	}
 	
 	

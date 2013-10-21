@@ -23,7 +23,7 @@ import com.google.common.base.Objects;
 
 import static com.google.common.base.Preconditions.*;
 
-public class PauseAction implements Action {
+public class PauseAction extends CompoundAction {
 
 	private Latch latch;
 

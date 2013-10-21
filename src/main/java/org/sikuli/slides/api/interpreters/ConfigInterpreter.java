@@ -5,12 +5,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.sikuli.api.DesktopScreenRegion;
+import org.sikuli.api.robot.desktop.DesktopScreen;
 import org.sikuli.slides.api.Context;
 import org.sikuli.slides.api.actions.RobotAction;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.ActionExecutionException;
 import org.sikuli.slides.api.actions.SequentialAction;
-import org.sikuli.slides.api.actions.SimpleAction;
+import org.sikuli.slides.api.actions.ConfigAction;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.models.SlideElement;
 
@@ -19,6 +20,22 @@ import com.google.common.collect.Lists;
 
 public class ConfigInterpreter implements Interpreter {
 
+	class SequentialConfigAction extends ConfigAction {
+		List<Action> configs = Lists.newArrayList();
+
+		public void addChild(Action action) {
+			configs.add(action);	
+		}
+		
+		@Override
+		public void execute(Context context) throws ActionExecutionException{
+			for (Action config : configs){
+				config.execute(context);
+			}
+		}
+		
+	}
+	
 	@Override
 	public Action interpret(Slide slide) {
 		// TODO Auto-generated method stub
@@ -29,7 +46,7 @@ public class ConfigInterpreter implements Interpreter {
 				configRangeInterpreter
 				);
 
-		SequentialAction seqAction = new SequentialAction();
+		SequentialConfigAction seqAction = new SequentialConfigAction();
 		for (Interpreter interpreter : interpreters){			
 			Action action = interpreter.interpret(slide);
 			if (action != null){
@@ -71,20 +88,8 @@ public class ConfigInterpreter implements Interpreter {
 			
 			
 			System.out.println(startValue.getText() + "=>" + endValue.getText());
-//
-//			Pattern pattern = Pattern.compile("Monitor (\\d)");
-//			Matcher matcher = pattern.matcher(value.getText());
-//			int id = 0;
-//			if (matcher.find()){
-//				try {
-//					id = Integer.parseInt(matcher.group(1));
-//				}catch (NumberFormatException e) {
-//					return null;
-//				}
-//			}
-//			final int idToSet = id;
 
-			Action action = new SimpleAction(){
+			Action action = new ConfigAction(){
 				@Override
 				public void execute(Context context)
 						throws ActionExecutionException {
@@ -124,11 +129,13 @@ public class ConfigInterpreter implements Interpreter {
 			}
 			final int idToSet = id;
 
-			Action action = new SimpleAction(){
+			Action action = new ConfigAction(){
 				@Override
 				public void execute(Context context)
 						throws ActionExecutionException {
-					context.setScreenRegion(new DesktopScreenRegion(idToSet));			
+					if (idToSet < DesktopScreen.getNumberScreens()){
+						context.setScreenRegion(new DesktopScreenRegion(idToSet));
+					}
 				}			
 			};
 			return action;
@@ -160,9 +167,8 @@ public class ConfigInterpreter implements Interpreter {
 				return null;
 			}
 
-			final float scoreToSet = score;			
-
-			Action action = new SimpleAction(){
+			final float scoreToSet = score;						
+			Action action = new ConfigAction(){
 				@Override
 				public void execute(Context context)
 						throws ActionExecutionException {
