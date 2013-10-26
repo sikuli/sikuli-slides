@@ -38,7 +38,10 @@ public class ConfigInterpreter implements Interpreter {
 	
 	@Override
 	public Action interpret(Slide slide) {
-		// TODO Auto-generated method stub
+		
+		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.CONFIG).first();
+		if (keywordElement == null)
+			return null;
 
 		List<Interpreter> interpreters = Lists.newArrayList(
 				configMinScoreInterpreter,
@@ -87,8 +90,6 @@ public class ConfigInterpreter implements Interpreter {
 				return null;
 			
 			
-			System.out.println(startValue.getText() + "=>" + endValue.getText());
-
 			Action action = new ConfigAction(){
 				@Override
 				public void execute(Context context)
@@ -116,8 +117,8 @@ public class ConfigInterpreter implements Interpreter {
 			SlideElement value = slide.select().intersects(selection).hasText().first();
 			if (value == null)
 				return null;
-
-			Pattern pattern = Pattern.compile("Monitor (\\d)");
+			
+			Pattern pattern = Pattern.compile("(\\d)");
 			Matcher matcher = pattern.matcher(value.getText());
 			int id = 0;
 			if (matcher.find()){

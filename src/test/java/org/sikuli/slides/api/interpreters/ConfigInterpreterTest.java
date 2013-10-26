@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.api.robot.desktop.DesktopScreen;
 import org.sikuli.slides.api.Context;
+import org.sikuli.slides.api.TestResources;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.ActionExecutionException;
 import org.sikuli.slides.api.io.PPTXSlidesReader;
@@ -31,17 +32,10 @@ public class ConfigInterpreterTest {
 		context = new Context();
 	}
 	
-	private Slide readSlide(String fileName, int index) throws IOException{
-		SlidesReader reader = new PPTXSlidesReader();		
-		List<Slide> slides;		
-		slides = reader.read(getClass().getResource(fileName));					
-		return slides.get(index);
-	}
-
 	@Test
 	public void testCanConfigTwoOptions() throws IOException, ActionExecutionException{
 		
-		slide = readSlide("ConfigTwoOptions.pptx",0);
+		slide = TestResources.readSlide("ConfigTwoOptions.pptx",0);
 		Action action = interpreter.interpret(slide);
 		
 		assertThat(action, notNullValue());
@@ -54,13 +48,7 @@ public class ConfigInterpreterTest {
 	@Test
 	public void testConfigMinScore() throws IOException, ActionExecutionException{
 		
-		SlidesReader reader = new PPTXSlidesReader();		
-		List<Slide> slides;		
-		slides = reader.read(getClass().getResource("ConfigMinScore.pptx"));	
-		
-		System.out.println(slides.get(0));
-		
-		slide = slides.get(0);
+		slide = TestResources.readSlide("ConfigMinScore.pptx",0);			
 		Action action = interpreter.interpret(slide);
 		
 		assertThat(action, notNullValue());
@@ -73,11 +61,7 @@ public class ConfigInterpreterTest {
 	@Test
 	public void testConfigScreen() throws IOException, ActionExecutionException{
 		
-		SlidesReader reader = new PPTXSlidesReader();		
-		List<Slide> slides;		
-		slides = reader.read(getClass().getResource("ConfigScreen.pptx"));				
-		slide = slides.get(0);
-		
+		slide = TestResources.readSlide("ConfigScreen.pptx",0);			
 		Action action = interpreter.interpret(slide);
 		
 		assertThat(action, notNullValue());		

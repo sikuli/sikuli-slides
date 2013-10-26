@@ -380,14 +380,14 @@ public class DefaultInterpreter implements Interpreter {
 		BookmarkAction action = new BookmarkAction();
 		action.setName(text);				
 		return action;
-	}
+	}	
 
 	@Override
 	public Action interpret(Slide inputSlide){
 		
 		// make a copy of the slide to work on
-		Slide slide = new Slide(inputSlide);
-
+		Slide slide = new Slide(inputSlide);		
+		
 		Action keywordAction = null;		
 		if ((keywordAction = interpretAsClick(slide)) != null){			
 

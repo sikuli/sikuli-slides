@@ -7,6 +7,7 @@ import java.util.List;
 import org.sikuli.slides.api.Context;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.ActionExecutionException;
+import org.sikuli.slides.api.interpreters.ConfigInterpreter;
 import org.sikuli.slides.api.interpreters.DefaultInterpreter;
 import org.sikuli.slides.api.interpreters.Interpreter;
 import org.sikuli.slides.api.interpreters.Keyword;
@@ -152,13 +153,23 @@ public class Slide implements Action {
 	
 	private Action action;
 	
+	
 	@Override
 	public void execute(Context context) throws ActionExecutionException {
-		Interpreter interpreter = new DefaultInterpreter();
-		action = interpreter.interpret(this);
-		if (action != null){
-			action.execute(context);
-		}
+		
+		List<Interpreter> interpreters = Lists.newArrayList(
+				new ConfigInterpreter(),
+				new DefaultInterpreter()
+		);
+		
+		for (Interpreter interpreter : interpreters){
+			action = interpreter.interpret(this);
+			if (action != null){
+				action.execute(context);
+				return;
+			}
+		}		
+		throw new ActionExecutionException("Unable to interpret this slide", this); 
 	}
 
 	@Override

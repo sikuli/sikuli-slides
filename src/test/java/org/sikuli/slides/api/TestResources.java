@@ -16,4 +16,8 @@ public class TestResources {
 		return (new PPTXSlidesReader()).read(TestResources.class.getResource(resourceName));
 	}
 
+	static public Slide readSlide(String resourceName, int index) throws IOException {
+		return readSlides(resourceName).get(index);
+	}
+
 }

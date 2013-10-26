@@ -20,12 +20,14 @@ import java.net.URL;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SpringLayout;
 import javax.swing.SwingUtilities;
 
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -274,8 +276,11 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 		private ResizeButton resizeButton;
 
 		public ControlBar(){
-			setLayout(new FlowLayout());
-
+//			setLayout(new FlowLayout(FlowLayout.LEADING, 3, 3));
+//			SpringLayout layout = new SpringLayout();
+			BoxLayout layout = new BoxLayout(this, BoxLayout.LINE_AXIS);
+			setLayout(layout);
+			 
 			previousButton = new CustomButton();
 			previousButton.addActionListener(new ActionListener(){
 				@Override
@@ -354,7 +359,6 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 			nextButton.setEnabled(enabled);
 			slideList.setEnabled(enabled);		
 			refreshButton.setEnabled(enabled);	
-//			resizeButton.setEnabled(enabled);
 		}
 
 		public void refresh(){
@@ -412,20 +416,6 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 		};
 		hotkeys.start();
 	}
-
-	//	public SlideShowViewer(final SlideShowController slideshow) {		
-	//		this.slideshow = checkNotNull(slideshow);
-	//		init();
-	//
-	//		
-	////		addWindowListener(new WindowAdapter(){  
-	////			public void windowClosing(WindowEvent e) {  
-	////				slideshow.quit();
-	////			}
-	////		});
-	//	}
-	
-	
 
 	public void setSlide(Slide slide){
 		currentSlide = checkNotNull(slide);		
