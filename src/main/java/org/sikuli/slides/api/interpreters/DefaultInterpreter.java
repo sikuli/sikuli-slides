@@ -312,7 +312,7 @@ public class DefaultInterpreter implements Interpreter {
 
 			return interpret(slide, targetElement);
 		}		
-		
+
 		Target createTarget(ImageElement imageElement, SlideElement targetElement){
 			if (imageElement == null || targetElement == null)
 				return null;
@@ -373,7 +373,7 @@ public class DefaultInterpreter implements Interpreter {
 			final int y = UnitConverter.emuToPixels(element.getOffy() - targetElement.getOffy());
 			final int width = UnitConverter.emuToPixels(element.getCx());
 			final int height = UnitConverter.emuToPixels(element.getCy());
-			
+
 			return new SpatialRelationship(){
 				@Override
 				public ScreenRegion apply(Context context) {
@@ -423,7 +423,56 @@ public class DefaultInterpreter implements Interpreter {
 		}
 	}
 
+	static class SkipActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {
+			SlideElement keywordElement = slide.select().textMatches("(?i)skip").first();
+			if (keywordElement == null)
+				return null;		
+			slide.remove(keywordElement);
+			return new EmptyAction();
+		}		
+	}
+
+	static class OptionalActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {
+			SlideElement keywordElement = slide.select().textMatches("(?i)optional").first();
+			if (keywordElement == null)
+				return null;		
+			slide.remove(keywordElement);
+			return new OptionalAction();
+		}		
+	}
+
+	static class PauseActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {			
+			SlideElement keywordElement = slide.select().textMatches("(?i)pause").first();
+			if (keywordElement == null)
+				return null;		
+			slide.remove(keywordElement);			
+			return new PauseAction();
+		}		
+	}
 	
+	static class BookmarkActionInterpreter extends RegexActionInterpreter {
+
+		BookmarkActionInterpreter(){
+			super("(?i)bookmark ([\\S]+)");
+		}
+
+		@Override
+		protected Action interpret(Slide slide, SlideElement element, String[] arguments){	
+			if (arguments.length != 1)
+				return null;
+
+			BookmarkAction action = new BookmarkAction();
+			action.setName(arguments[0]);
+			return action;
+		}		
+	}
+
 
 	//	Action interpretAsLabel(Slide slide){
 	//		List<SlideElement> textElements = slide.select().isNotKeyword().hasText().all();
@@ -622,34 +671,6 @@ public class DefaultInterpreter implements Interpreter {
 	//		return a;
 	//	}
 
-	private Action interpretAsSkip(Slide slide) {
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.SKIP).first();
-		if (keywordElement == null)
-			return null;		
-		slide.remove(keywordElement);
-
-		return new EmptyAction();
-	}
-
-	private Action interpretAsOptional(Slide slide) {
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.OPTIONAL).first();
-		if (keywordElement == null)
-			return null;		
-		slide.remove(keywordElement);
-
-		return new OptionalAction();
-	}
-
-	private Action interpretAsPause(Slide slide) {
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.PAUSE).first();
-		if (keywordElement == null)
-			return null;		
-		slide.remove(keywordElement);
-
-		return new PauseAction();
-	}
-
-
 	private Action interpretAsBookmark(Slide slide) {
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.BOOKMARK).first();
 		if (keywordElement == null)
@@ -671,7 +692,7 @@ public class DefaultInterpreter implements Interpreter {
 	public Action interpret(Slide inputSlide){
 
 		ParallelAction parallelAction = new ParallelAction();
-		
+
 		// make a copy of the slide to work on
 		Slide slide = new Slide(inputSlide);		
 
@@ -683,6 +704,14 @@ public class DefaultInterpreter implements Interpreter {
 				new SleepActionInterpreter()				
 				);
 
+		List<Interpreter> controlActionInterpreters = Lists.newArrayList(
+				new SkipActionInterpreter(),
+				new OptionalActionInterpreter(),
+				new PauseActionInterpreter(),
+				new BookmarkActionInterpreter()
+				);
+
+
 		Action keywordAction = null;
 		Iterator<Interpreter> iter = interpreters.iterator();
 		while (keywordAction == null && iter.hasNext()){
@@ -693,9 +722,14 @@ public class DefaultInterpreter implements Interpreter {
 			keywordAction = new RetryAction(keywordAction, 10000, 500);
 		}
 
-		Action action = null;
 		if (keywordAction != null){
 			parallelAction.addChild(keywordAction);
+		}
+
+		Action controlAction = null;
+		iter = controlActionInterpreters.iterator();
+		while (controlAction == null && iter.hasNext()){
+			controlAction = iter.next().interpret(slide);
 		}
 
 		Interpreter labelInterpreter = new LabelInterpreter();
@@ -705,18 +739,20 @@ public class DefaultInterpreter implements Interpreter {
 			parallelAction.addChildAsBackground(labelAction);
 		}
 
-		action = parallelAction;
+		
+		Action action = parallelAction;
 
-		Action controlAction = null;		
-		if ((controlAction = interpretAsSkip(slide)) != null){			
 
-		}else if ((controlAction = interpretAsOptional(slide)) != null){
-
-		}else if ((controlAction = interpretAsPause(slide)) != null){
-
-		}else if ((controlAction = interpretAsBookmark(slide)) != null){
-
-		}
+		//		Action controlAction = null;		
+		//		if ((controlAction = interpretAsSkip(slide)) != null){			
+		//
+		//		}else if ((controlAction = interpretAsOptional(slide)) != null){
+		//
+		//		}else if ((controlAction = interpretAsPause(slide)) != null){
+		//
+		//		}else if ((controlAction = interpretAsBookmark(slide)) != null){
+		//
+		//		}
 
 		if (controlAction != null){			
 			((CompoundAction) controlAction).addChild(action);

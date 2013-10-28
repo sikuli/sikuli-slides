@@ -17,12 +17,15 @@ import org.sikuli.api.Target;
 import org.sikuli.slides.api.TestResources;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.Actions;
+import org.sikuli.slides.api.actions.BookmarkAction;
 import org.sikuli.slides.api.actions.BrowserAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
 import org.sikuli.slides.api.actions.AssertExistAction;
+import org.sikuli.slides.api.actions.EmptyAction;
 import org.sikuli.slides.api.actions.LabelAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
 import org.sikuli.slides.api.actions.AssertNotExistAction;
+import org.sikuli.slides.api.actions.PauseAction;
 import org.sikuli.slides.api.actions.RelativeAction;
 import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.SleepAction;
@@ -41,198 +44,12 @@ import org.sikuli.slides.api.models.SlideElement;
 import org.sikuli.slides.api.sikuli.ContextImageTarget;
 
 public class InterpreterTest {
-
-	private static final String TEST_TEXT = "some text";
 	private Interpreter interpreter;
-	private URL source;
-	private Slide slide;
-
-//	@Test
-//	public void testInterpretBrowserAction() throws MalformedURLException{
-//		URL url = new URL("http://slides.sikuli.org");
-//		
-//		Slide slide = new Slide();
-//		slide.newKeywordElement().keyword(KeywordDictionary.BROWSER).add();
-//		slide.newElement().text(url.toString()).add();
-//		
-//		Interpreter interpreter = new DefaultInterpreter();
-//		Action action = interpreter.interpret(slide);
-//		
-//		action = interpreter.interpret(slide);		
-//		assertThat(Actions.select(action).isInstanceOf(BrowserAction.class).all().size(), equalTo(1));
-//		BrowserAction browserAction = (BrowserAction) Actions.select(action).isInstanceOf(BrowserAction.class).first();
-//		assertNotNull(browserAction.getUrl());
-//		assertEquals("browser url", url, browserAction.getUrl());
-//	}
-//	
-//	
-//	private void addTarget(Slide slide){
-//		ImageElement screenshotElement = new ImageElement();
-//		screenshotElement.setSource(getClass().getResource("sikuli_context.png"));
-//		screenshotElement.setOffx(100);
-//		screenshotElement.setOffy(100);
-//		screenshotElement.setCx(1000);
-//		screenshotElement.setCy(1000);
-//		slide.add(screenshotElement);
-//		
-//		SlideElement targetElement = new SlideElement(); 
-//		targetElement.setOffx(348);
-//		targetElement.setOffy(223);
-//		targetElement.setCx(200);
-//		targetElement.setCy(200);		
-//		targetElement.setTextSize(3600);
-//		slide.add(targetElement);
-//	}
-//	
-//	private Slide createKeywordWithTargetSlide(Keyword keyword){		
-//		Slide slide = new Slide();
-//		slide.newKeywordElement().keyword(keyword).add();		
-//		addTarget(slide);
-//		return slide;
-//	}
-//	
-//	private Slide createDelaySlide(String text){		
-//		Slide slide = new Slide();
-//		slide.newKeywordElement().keyword(KeywordDictionary.DELAY).add();
-//		slide.newElement().text(text).add();
-//		return slide;
-//	}
-//	
-//	@Before
-//	public void setUp() throws IOException{
-//		interpreter = new DefaultInterpreter();
-//		slide = new Slide();
-//		source = getClass().getResource("sikuli_context.png");
-//	}
-//	
-//	@Test
-//	public void testLeftClickAction(){
-//		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.CLICK);		
-//		Action action = interpreter.interpret(slide);		
-//		assertThat(action, notNullValue());
-//		assertThat(Actions.select(action).isInstanceOf(LeftClickAction.class).all().size(), equalTo(1));
-//	}
-//	
-//	@Test
-//	public void testRightClickAction() {
-//		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.RIGHT_CLICK);		
-//		Action action = interpreter.interpret(slide);		
-//		assertThat(action, notNullValue());
-//		assertThat(Actions.select(action).isInstanceOf(RightClickAction.class).all().size(), equalTo(1));
-//	}
-//	
-//	@Test
-//	public void testDoubleClickAction() {
-//		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.DOUBLE_CLICK);
-//		Action action = interpreter.interpret(slide);		
-//		assertThat(action, notNullValue());
-//		assertThat(Actions.select(action).isInstanceOf(DoubleClickAction.class).all().size(), equalTo(1));
-//	}
-//	
-//	@Test
-//	public void testLabelActionFromOnlyText() {
-//		Slide slide = new Slide();
-//		slide.newElement().text("label").add();
-//		
-//		Action action = interpreter.interpret(slide);
-//		assertThat(action, notNullValue());
-//		assertThat(Actions.select(action).isInstanceOf(LabelAction.class).all().size(), equalTo(1));
-//	}	
-//	
-//	@Test
-//	public void testLabelActionFromOnlyTextTarget() {
-//		Slide slide = new Slide();
-//		slide.newElement().bounds(100,100,50,50).text("label").add();
-//		slide.newImageElement().source(source).bounds(0,0,200,200).add();
-//		
-//		Action action = interpreter.interpret(slide);
-//		assertThat(action, notNullValue());		
-//		assertThat(Actions.select(action).isInstanceOf(LabelAction.class).all().size(), equalTo(1));
-//	}	
-//	
-//	@Test
-//	public void testExistAction() {
-//		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.EXIST);
-//		Action action = interpreter.interpret(slide);		
-//		assertThat(action, notNullValue());
-//		assertThat(Actions.select(action).isInstanceOf(AssertExistAction.class).all().size(), equalTo(1));
-//	}	
-//
-//	@Test
-//	public void testInterpretNotExistAction() {
-//		Slide slide = createKeywordWithTargetSlide(KeywordDictionary.NOT_EXIST);
-//		Action action = interpreter.interpret(slide);		
-//		assertThat(action, notNullValue());
-//		assertThat(Actions.select(action).isInstanceOf(AssertNotExistAction.class).all().size(), equalTo(1));
-//	}	
-//	
-//	
-//	@Test
-//	public void testTypeActionOnTarget() {
-//		slide = new Slide();
-//		slide.newKeywordElement().keyword(KeywordDictionary.TYPE).add();		
-//		slide.newImageElement().source(source).bounds(100,100,50,50).add();
-//		slide.newElement().text("some text").bounds(120,120,30,30).add();		
-//		
-//		Action action = interpreter.interpret(slide);		
-//		assertThat(action, notNullValue());
-//		assertThat(Actions.select(action).isInstanceOf(TypeAction.class).all().size(), equalTo(1));
-//		
-//		TypeAction typeAction = (TypeAction) Actions.select(action).isInstanceOf(TypeAction.class).first();
-//		assertThat(typeAction.getText(), equalToIgnoringCase("some text"));
-//	}	
-//	
-//	@Test
-//	public void testTypeActionWithTextInKeywordElement() {
-//		slide = new Slide();
-//		slide.newKeywordElement().keyword(KeywordDictionary.TYPE).text("some text").add();		
-//		
-//		Action action = interpreter.interpret(slide);		
-//		assertThat(action, notNullValue());
-//		
-//		assertThat(Actions.select(action).isInstanceOf(TypeAction.class).all().size(), equalTo(1));
-//		
-//		TypeAction typeAction = (TypeAction) Actions.select(action).isInstanceOf(TypeAction.class).first();
-//		assertThat(typeAction.getText(), equalToIgnoringCase("some text"));
-//	}
-//	
-//	@Test
-//	public void testTypeActionWithTextInAnotherElement() {
-//		slide = new Slide();
-//		slide.newKeywordElement().keyword(KeywordDictionary.TYPE).add();
-//		slide.newElement().text("some text").add();
-//		
-//		Action action = interpreter.interpret(slide);		
-//		assertThat(action, notNullValue());
-//		
-//		assertThat(Actions.select(action).isInstanceOf(TypeAction.class).all().size(), equalTo(1));
-//		
-//		TypeAction typeAction = (TypeAction) Actions.select(action).isInstanceOf(TypeAction.class).first();
-//		assertThat(typeAction.getText(), equalToIgnoringCase("some text"));
-//	}
-//
-//	@Test
-//	public void testInterpretWaitAction() {
-//		Slide slide = new Slide();
-//		slide.newKeywordElement().keyword(KeywordDictionary.WAIT).add();
-//		slide.newElement().text("2 seconds").add();
-//		slide.newImageElement().source(source).bounds(100,100,50,50).add();
-//		slide.newElement().bounds(120,120,30,30).add();		
-//
-//		Action action = interpreter.interpret(slide);
-//		
-//		assertThat(action, notNullValue());
-//		assertThat(Actions.select(action).isInstanceOf(WaitAction.class).all().size(), equalTo(1));
-//		WaitAction waitAction = (WaitAction) Actions.select(action).isInstanceOf(WaitAction.class).first();
-//		assertThat(waitAction.getDuration(), equalTo(2000L));
-//		assertThat(waitAction.getTarget(), notNullValue());
-//	}
-//	
 	
 	@Test
-	public void testCanInterpretBrowseAction(){
+	public void browse_http(){
 		Slide slide = new Slide();
-		on(slide).insert().element().text("Browse http://slides.sikuli.org");
+		on(slide).insert().element().text("browse http://slides.sikuli.org");
 		
 		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter();
 		Action action = interpreter.interpret(slide);
@@ -242,7 +59,29 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testCanInterpretTargetActionWithLeftClick(){
+	public void browse(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("browse");
+		
+		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter();
+		Action action = interpreter.interpret(slide);
+		
+		assertThat(action, nullValue());		
+	}
+	
+	@Test
+	public void browse_garbage(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("browse garbage");
+		
+		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter();
+		Action action = interpreter.interpret(slide);
+		
+		assertThat(action, nullValue());		
+	}
+	
+	@Test
+	public void click_on_target(){
 		Slide slide = new Slide();
 		on(slide).insert().element().text("Click");
 		on(slide).insert().image().source(TestResources.get("sikuli_context.png")).bounds(100,100,1000,1000);
@@ -256,7 +95,7 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testCanInterpretContextImageTarget(){
+	public void ContextImageTarget(){
 		Slide slide = new Slide();
 		on(slide).insert().image().source(TestResources.get("sikuli_context.png")).bounds(100,100,1000,1000);
 		on(slide).insert().element().bounds(348,223,200,200);
@@ -268,7 +107,7 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testCanInterpretLeftClickAction(){
+	public void click(){
 		Slide slide = new Slide();
 		on(slide).insert().element().text("Click");		
 		interpreter = new DefaultInterpreter.LeftClickActionInterpreter();
@@ -278,7 +117,7 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testCanInterpretDoubleClickAction(){
+	public void doubleclick(){
 		Slide slide = new Slide();
 		on(slide).insert().element().text("DoubleClick");		
 		interpreter = new DefaultInterpreter.DoubleClickActionInterpreter();
@@ -288,7 +127,7 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testCanInterpretRightClickAction(){
+	public void rightclick(){
 		Slide slide = new Slide();
 		on(slide).insert().element().text("RightClick");		
 		interpreter = new DefaultInterpreter.RightClickActionInterpreter();
@@ -299,7 +138,7 @@ public class InterpreterTest {
 
 
 	@Test
-	public void testCanInterpretSleepAction_2(){
+	public void sleep_2(){
 		Slide slide = new Slide();
 		on(slide).insert().element().text("Sleep 2");
 		
@@ -312,7 +151,30 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testCanInterpretExistAction(){
+	public void sleep_20(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("Sleep 20");
+		
+		interpreter = new DefaultInterpreter.SleepActionInterpreter();  
+		
+		SleepAction action = (SleepAction) interpreter.interpret(slide);		
+		assertThat(action, notNullValue());
+		assertThat(action.getDuration(), equalTo(20000L));
+	}
+	
+	@Test
+	public void sleep(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("Sleep");
+		
+		interpreter = new DefaultInterpreter.SleepActionInterpreter();  
+		
+		SleepAction action = (SleepAction) interpreter.interpret(slide);		
+		assertThat(action, nullValue());
+	}
+	
+	@Test
+	public void exist(){
 		Slide slide = new Slide();
 		on(slide).insert().element().text("Exist");
 		on(slide).insert().image().source(TestResources.get("sikuli_context.png")).bounds(100,100,1000,1000);
@@ -326,7 +188,7 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testCanInterpretNotExistAction(){
+	public void not_exist(){
 		Slide slide = new Slide();
 		on(slide).insert().element().text("not exist");
 		on(slide).insert().image().source(TestResources.get("sikuli_context.png")).bounds(100,100,1000,1000);
@@ -340,20 +202,88 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testCanInterpretTypeAction(){
+	public void skip(){
 		Slide slide = new Slide();
-		on(slide).insert().element().text("type something to type");
+		on(slide).insert().element().text("skip");
+		
+		interpreter = new DefaultInterpreter.SkipActionInterpreter();  
+		
+		Action action = interpreter.interpret(slide);	
+		assertThat(action, instanceOf(EmptyAction.class));
+	}
+	
+	@Test
+	public void pause(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("pause");
+		
+		interpreter = new DefaultInterpreter.PauseActionInterpreter();  
+		
+		Action action = interpreter.interpret(slide);	
+		assertThat(action, instanceOf(PauseAction.class));
+	}
+	
+	@Test
+	public void bookmark_001(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("bookmark 001");
+		
+		interpreter = new DefaultInterpreter.BookmarkActionInterpreter();  
+		
+		Action action = interpreter.interpret(slide);	
+		assertThat(action, instanceOf(BookmarkAction.class));
+		assertThat(((BookmarkAction) action).getName(), equalTo("001"));
+	}
+	
+	@Test
+	public void bookmark_abc(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("bookmark abc");
+
+		interpreter = new DefaultInterpreter.BookmarkActionInterpreter();  
+		
+		Action action = interpreter.interpret(slide);
+		assertThat(((BookmarkAction) action).getName(), equalTo("abc"));	
+	}
+	
+	@Test
+	public void bookmark(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("bookmark");
+
+		interpreter = new DefaultInterpreter.BookmarkActionInterpreter();  
+		
+		Action action = interpreter.interpret(slide);
+		assertThat(action, nullValue());	
+	}
+
+	
+	@Test
+	public void type_something(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("type something");
 		
 		interpreter = new DefaultInterpreter.TypeActionInterpreter();  
 		
 		Action action = interpreter.interpret(slide);	
 		assertThat(action, instanceOf(TypeAction.class));
-		assertThat(((TypeAction) action).getText(), equalTo("something to type"));
-		
+		assertThat(((TypeAction) action).getText(), equalTo("something"));		
 	}
 	
 	@Test
-	public void testCanInterpretLabelAction(){
+	public void type_two_words(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("type two words");
+		
+		interpreter = new DefaultInterpreter.TypeActionInterpreter();  
+		
+		Action action = interpreter.interpret(slide);	
+		assertThat(action, instanceOf(TypeAction.class));
+		assertThat(((TypeAction) action).getText(), equalTo("two words"));		
+	}
+	
+	@Test
+	public void label_single(){
 		Slide slide = new Slide();
 		on(slide).insert().element().text("this is a label");
 		
@@ -366,7 +296,7 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testCanInterpretLabelActionBounds(){
+	public void label_bounds(){
 		Slide slide = new Slide();
 		on(slide).insert().element().text("this is a label").bounds(0,0,4572000,3429000);
 		
@@ -378,7 +308,7 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testCanInterpretMultipleLabels(){
+	public void label_two(){
 		Slide slide = new Slide();
 		on(slide).insert().element().text("this is the first label");
 		on(slide).insert().element().text("this is the second label");
@@ -397,31 +327,9 @@ public class InterpreterTest {
 		assertThat(((LabelAction) action2).getText(), equalTo("this is the second label"));		
 	}
 	
-//	@Test
-//	public void testCanInterpretLabel_ScreenRelativeLocation(){
-//		Slide slide = new Slide();
-//		SlideElement element = on(slide).insert().element().bounds(0,0,4572000,3429000).get();		
-//		
-//		SpatialRelationshipInterpreter interpreter = new DefaultInterpreter.ScreenLocationInterpreter();
-//		
-//		Action action = interpreter.interpret(slide, element);
-//		assertThat(action, instanceOf(RelativeAction.class));
-//		
-//		assertThat(((RelativeAction) action).getMinX(), closeTo(0, 0.01));
-//		assertThat(((RelativeAction) action).getMaxX(), closeTo(0.5, 0.01));
-//		
-//		
-//		
-////		assertThat(action1, instanceOf(LabelAction.class));
-////		assertThat(action2, instanceOf(LabelAction.class));
-////		assertThat(action3, nullValue());
-//		
-////		assertThat(((LabelAction) action1).getText(), equalTo("this is the first label"));
-////		assertThat(((LabelAction) action2).getText(), equalTo("this is the second label"));		
-//	}
 	
 //	@Test
-//	public void testInterpretDelayAction() {
+//	public void InterpretDelayAction() {
 //		Slide slide = createDelaySlide("2 seconds");				
 //		Action action = interpreter.interpret(slide);		
 //		assertThat(Actions.select(action).isInstanceOf(SleepAction.class).all().size(), equalTo(1));

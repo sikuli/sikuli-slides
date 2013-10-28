@@ -316,13 +316,18 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 
 			slideList = new JComboBox(new String[]{"N/A"});			
 			slideList.setSelectedIndex(0);
-			slideList.addItemListener(new ItemListener(){
+			slideList.addActionListener(new ActionListener(){
+
 				@Override
-				public void itemStateChanged(ItemEvent event) {
-					if (event.getStateChange() == ItemEvent.SELECTED) {
-						//invokeJumpTo(slideList.getSelectedIndex());
-					}
-				}  
+				public void actionPerformed(ActionEvent event) {
+					JComboBox source = (JComboBox) event.getSource();
+					// if the popup is visible, it means the user is manually
+					// changing the combobox selection
+					if(source.isPopupVisible()){
+						invokeJumpTo(slideList.getSelectedIndex());
+			        }					
+				}
+				
 			});
 			
 			refreshButton = new CustomButton();
@@ -445,7 +450,11 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 				canvas.repaint();	
 				previousButton.setEnabled(slideshow.hasPrevious());
 				nextButton.setEnabled(slideshow.hasNext());
-				slideList.setSelectedIndex(currentSlide.getNumber()-1);
+				
+				int newIndex = currentSlide.getNumber()-1;
+				if (newIndex != slideList.getSelectedIndex())
+					slideList.setSelectedIndex(newIndex);
+//				slideList.setS
 			}			
 		});
 	}

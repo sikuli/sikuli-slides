@@ -23,7 +23,7 @@ import com.google.common.base.Objects;
 
 import static com.google.common.base.Preconditions.*;
 
-public class PauseAction extends CompoundAction {
+public class PauseAction extends ChainedAction {
 
 	private Latch latch;
 
@@ -32,28 +32,34 @@ public class PauseAction extends CompoundAction {
 
 		// set up a canvas to display a button in the middle of the screen
 		ScreenRegion r = context.getScreenRegion();
-		ScreenRegion centerRegion = Relative.to(r).region(0.9,0.9,1,1).getScreenRegion();		
+		ScreenRegion centerRegion = Relative.to(r).region(0.4,0.4,0.6,0.6).getScreenRegion();		
 
 		Canvas canvas = new ScreenRegionCanvas(r);		
 		canvas.addBox(centerRegion).withColor(Color.black).withTransparency(0.7f);
-		canvas.addLabel(context.getScreenRegion().getLowerRightCorner(), "  Continue ")
+		canvas.addLabel(context.getScreenRegion().getCenter(), "  Mouse over to Continue ")
 		.withBackgroundColor(Color.black)
 		.withColor(Color.white)
 		.withTransparency(0.7f)
-		.withFontSize(20).withHorizontalAlignmentRight().withVerticalAlignmentBottom();
+		.withFontSize(20)
+		.withHorizontalAlignmentCenter()		
+		.withVerticalAlignmentMiddle();
 		canvas.show();
 
 		// wait for a click event on the button
 		latch = new ScreenRegionHoverLatch(centerRegion);
 		latch.await();
-
+				
 		// hide the button
 		canvas.hide();
+		
+		if (getChild() != null)
+			getChild().execute(context);
 	}
 	
 	public void stop(){
 		if (latch != null)
 			latch.release();
+		super.stop();
 	}
 
 }

@@ -42,7 +42,7 @@ public class ConfigInterpreter implements Interpreter {
 	@Override
 	public Action interpret(Slide slide) {
 		
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.CONFIG).first();
+		SlideElement keywordElement = slide.select().textMatches("(?i)config").first();
 		if (keywordElement == null)
 			return null;
 
@@ -156,8 +156,7 @@ public class ConfigInterpreter implements Interpreter {
 				return null;
 			slide.remove(heading);
 			
-			List<SlideElement> strings = slide.select()
-					.hasText().orderByY().all();
+			List<SlideElement> strings = slide.select().hasText().below(heading).orderByY().all();
 
 			final Map<String,String> map = Maps.newHashMap();
 			
