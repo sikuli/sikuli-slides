@@ -174,9 +174,13 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 	}
 
 	public void invokeOpen(File file){
+		PPTXSlidesReader reader = new PPTXSlidesReader();		
+		List<Slide> slides;
 		try {
-			invokeOpen(file.toURI().toURL());
-		} catch (MalformedURLException e) {
+			slides = reader.read(file);
+			setTitle(file.toString());
+			onSlidesLoaded(slides);
+		} catch (IOException e) {
 		}
 	}
 	
