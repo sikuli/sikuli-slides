@@ -10,7 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.sikuli.slides.api.interpreters.KeywordDictionary;
-import org.sikuli.slides.api.interpreters.Selector;
+import org.sikuli.slides.api.models.Selector;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.models.SlideElement;
 

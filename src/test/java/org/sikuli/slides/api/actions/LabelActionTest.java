@@ -6,7 +6,7 @@ import org.sikuli.slides.api.Context;
 public class LabelActionTest {
 		
 	@Test
-	public void testCanDisplayAndStop() throws InterruptedException {
+	public void testCanDisplayAndStop() throws InterruptedException, ActionExecutionException {
 		final Context context = new Context();		
 		LabelAction labelAction = new LabelAction();
 		labelAction.setText("This label should display for 2 seconds");

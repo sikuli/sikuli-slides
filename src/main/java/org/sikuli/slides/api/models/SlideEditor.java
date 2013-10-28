@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.sikuli.slides.api.interpreters.Keyword;
-import org.sikuli.slides.api.interpreters.Selector;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
@@ -131,6 +130,10 @@ public class SlideEditor {
 			element.setCx(w);
 			element.setCy(h);
 			return this;
+		}
+		
+		public SlideElement get(){
+			return element;
 		}
 //		public SlideElement add(){
 //			slide.add(element);

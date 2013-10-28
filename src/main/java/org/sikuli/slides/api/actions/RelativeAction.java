@@ -79,4 +79,16 @@ public class RelativeAction extends ChainedAction {
 		}
 	}
 
+	public double getMinX() {
+		return xmin;
+	}
+	
+	public double getMaxX() {
+		return xmax;
+	}
+
+	public void setMinX(double minX) {
+		this.xmin = minX;
+	}
+
 }

@@ -74,6 +74,12 @@ public class Actions {
 			}
 		}
 		
+		
+		public boolean exist(){
+			List<Action> all = all();
+			return !all.isEmpty();
+		}
+		
 		public ActionSelector isInstanceOf(final Class classz){
 			ps.add(new Predicate<Action>(){
 				@Override

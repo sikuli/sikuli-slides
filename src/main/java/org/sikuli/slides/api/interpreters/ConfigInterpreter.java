@@ -1,6 +1,8 @@
 package org.sikuli.slides.api.interpreters;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +19,7 @@ import org.sikuli.slides.api.models.SlideElement;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class ConfigInterpreter implements Interpreter {
 
@@ -46,7 +49,7 @@ public class ConfigInterpreter implements Interpreter {
 		List<Interpreter> interpreters = Lists.newArrayList(
 				configMinScoreInterpreter,
 				configScreenRegionInterpreter,
-				configRangeInterpreter
+				configParamsInterpreter
 				);
 
 		SequentialConfigAction seqAction = new SequentialConfigAction();
@@ -142,6 +145,43 @@ public class ConfigInterpreter implements Interpreter {
 			return action;
 		}
 
+	};
+	
+	static Interpreter configParamsInterpreter = new Interpreter(){
+
+		@Override
+		public Action interpret(Slide slide) {
+			SlideElement heading = slide.select().hasText().textContains("PARAMETERS").first();
+			if (heading == null)
+				return null;
+			slide.remove(heading);
+			
+			List<SlideElement> strings = slide.select()
+					.hasText().orderByY().all();
+
+			final Map<String,String> map = Maps.newHashMap();
+			
+			
+			for (int i = 0; i < strings.size(); i = i + 2){																
+				String key = strings.get(i).getText();				
+				SlideElement valElement = strings.get(i+1);
+				if (valElement.getLineColor() != null){
+					String val = strings.get(i+1).getText();
+					map.put(key, val);
+				}				
+			}
+			
+			Action action = new ConfigAction(){
+				@Override
+				public void execute(Context context)
+						throws ActionExecutionException {					
+					for (Entry<String,String> entry : map.entrySet())
+						context.addParameter(entry.getKey(),entry.getValue());
+				}			
+			};
+			
+			return action;
+		}
 	};
 
 	static Interpreter configMinScoreInterpreter = new Interpreter(){

@@ -3,6 +3,8 @@ package org.sikuli.slides.api.interpreters;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.IOException;
@@ -70,6 +72,21 @@ public class ConfigInterpreterTest {
 		int id = ((DesktopScreen) context.getScreenRegion().getScreen()).getId();
 		assertThat(id, equalTo(0));
 
+	}
+	
+	@Test
+	public void testConfigParams() throws IOException, ActionExecutionException{
+		
+		slide = TestResources.readSlide("ConfigParams.pptx",0);			
+		Action action = interpreter.interpret(slide);
+		
+		assertThat(action, notNullValue());		
+		action.execute(context);
+		
+		assertThat(context.getParameters().containsKey("username"), is(true));
+		assertThat(context.getParameters().containsKey("password"), is(true));
+		assertThat((String) context.getParameters().get("username"), equalToIgnoringCase("Sikuli Slides"));
+		assertThat((String) context.getParameters().get("password"), equalToIgnoringCase("mypassword"));
 	}
 
 }

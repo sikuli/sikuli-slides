@@ -11,7 +11,6 @@ import org.sikuli.slides.api.interpreters.ConfigInterpreter;
 import org.sikuli.slides.api.interpreters.DefaultInterpreter;
 import org.sikuli.slides.api.interpreters.Interpreter;
 import org.sikuli.slides.api.interpreters.Keyword;
-import org.sikuli.slides.api.interpreters.Selector;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Objects;

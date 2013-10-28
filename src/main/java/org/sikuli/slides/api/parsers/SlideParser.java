@@ -57,6 +57,14 @@ public class SlideParser {
 				e.setOffy(Integer.parseInt(off.getAttribute("y")));
 			}
 			
+			Element ln = (Element) spPr.getElementsByTagName("a:ln").item(0);
+			if (ln != null){
+				Node schemeClr = ln.getElementsByTagName("a:schemeClr").item(0);
+				if (schemeClr != null){
+					e.setLineColor(((Element) schemeClr).getAttribute("val"));
+				}				
+			}
+			
 			Element ext = (Element) spPr.getElementsByTagName("a:ext").item(0);			
 			if (ext != null){
 				e.setCx(Integer.parseInt(ext.getAttribute("cx")));
@@ -192,11 +200,11 @@ public class SlideParser {
 			
 			Node nNode = shapeNodeList.item(i);	
 			SlideElement e;
-			if ((e = parseKeywordElement(nNode)) != null){
-							
-				slide.add(e);
-				
-			}else{
+//			if ((e = parseKeywordElement(nNode)) != null){
+//							
+//				slide.add(e);
+//				
+//			}else{
 									
 				if (((Element) nNode).getElementsByTagName("a:blip").getLength()>0){								
 					e = parseImageElement(nNode, map);	
@@ -206,7 +214,7 @@ public class SlideParser {
 					parseSlideElement(nNode, e);		
 					slide.add(e);
 				}
-			}
+//			}
 		}
 		
 			

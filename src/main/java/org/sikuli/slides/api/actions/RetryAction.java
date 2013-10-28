@@ -64,14 +64,13 @@ public class RetryAction extends ChainedAction {
 			// rethrow the exception
 			if (exception != null)
 				throw exception;
-		}
-			
-			
+		}				
 	}
 	
 	@Override
 	public void stop(){
 		stopFlag = true;
+		getChild().stop();
 		synchronized(this){
 			this.notify();
 		}

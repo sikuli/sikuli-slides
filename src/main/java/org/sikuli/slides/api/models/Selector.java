@@ -1,4 +1,4 @@
-package org.sikuli.slides.api.interpreters;
+package org.sikuli.slides.api.models;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -10,11 +10,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.sikuli.slides.api.models.ImageElement;
-import org.sikuli.slides.api.models.KeywordElement;
-import org.sikuli.slides.api.models.Slide;
-import org.sikuli.slides.api.models.SlideElement;
+import org.sikuli.slides.api.interpreters.Keyword;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +25,7 @@ import com.google.common.collect.Lists;
 public class Selector {
 	static Logger logger = LoggerFactory.getLogger(Selector.class);
 	private Collection<SlideElement> elements;
+	private boolean ignoreCase = false;
 
 	Selector(Collection<SlideElement> elements){
 		this.elements = elements;
@@ -196,9 +196,42 @@ public class Selector {
 		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
 			@Override
 			public boolean apply(SlideElement e) {
-				return e.getText().contains(str);
+				if (!ignoreCase){
+					return e.getText() != null && e.getText().contains(str);
+				}else{
+					return e.getText() != null && e.getText().toLowerCase().contains(str.toLowerCase());
+				}
 			}		
 		});
+		return this;
+	}
+	
+	public Selector textStartsWith(final String str){
+		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement e) {
+				if (!ignoreCase){
+					return e.getText() != null && e.getText().startsWith(str);
+				}else{
+					return e.getText() != null && e.getText().toLowerCase().startsWith(str.toLowerCase());
+				}
+			}		
+		});
+		return this;
+	}
+	
+	public Selector textMatches(final String regex){		
+		elements = Collections2.filter(elements, new Predicate<SlideElement>(){
+			@Override
+			public boolean apply(SlideElement e) {				
+				return e.getText() != null && e.getText().matches(regex);
+			}	
+		});
+		return this;
+	}
+	
+	public Selector ignoreCase(){
+		ignoreCase = true;
 		return this;
 	}
 	
