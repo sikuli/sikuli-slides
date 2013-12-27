@@ -34,7 +34,7 @@ public class PPTXSlidesReader implements SlidesReader {
 			if (slide != null){
 				slide.setNumber(i);
 				slides.add(slide);
-				logger.debug("Slide {} of {} parsed: {}", i, n, slide);
+//				logger.debug("Slide {} of {} parsed: {}", i, n, slide);
 			}
 		}		
 		return slides;

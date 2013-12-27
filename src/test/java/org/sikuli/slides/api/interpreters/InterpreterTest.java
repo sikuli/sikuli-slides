@@ -59,6 +59,18 @@ public class InterpreterTest {
 	}
 	
 	@Test
+	public void open_http(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("open http://slides.sikuli.org");
+		
+		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter();
+		Action action = interpreter.interpret(slide);
+		
+		assertThat(action, instanceOf(BrowserAction.class));
+		assertThat(((BrowserAction) action).getUrl().toString(), equalToIgnoringCase("http://slides.sikuli.org"));		
+	}
+	
+	@Test
 	public void browse(){
 		Slide slide = new Slide();
 		on(slide).insert().element().text("browse");

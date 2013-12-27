@@ -128,15 +128,15 @@ public class DefaultInterpreter implements Interpreter {
 	static class BrowseActionInterpreter extends RegexActionInterpreter {
 
 		BrowseActionInterpreter(){
-			super("(?i)browse (.+)");
+			super("(?i)(browse|open) (.+)");
 		}
 
 		@Override
 		protected Action interpret(Slide slide, SlideElement element, String[] arguments){	
-			if (arguments.length != 1)
+			if (arguments.length != 2)
 				return null;
 
-			String urlString = arguments[0];
+			String urlString = arguments[1];
 			URL url = null;
 			try {
 				url = new URL(urlString);

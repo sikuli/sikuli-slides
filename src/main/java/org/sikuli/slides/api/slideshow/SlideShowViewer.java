@@ -59,7 +59,7 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 	private SlideShowController slideshow;
 
 	private ControlBar controlBar;
-	private URL sourceUrl;
+	private String sourcePath;
 
 	private PPath statusRectangle;
 	
@@ -94,7 +94,7 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 		canvas.getLayer().addChild(new GettingStartedView());
 		controlBar = new ControlBar();
 		getContentPane().add(controlBar, BorderLayout.SOUTH);
-		setLocation(100,200);
+		setLocation(50,500);
 		maximize();
 		setTitle("Sikuli Slides");
 		setResizable(false);
@@ -154,9 +154,9 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 
 	void invokeRefresh(){
 		logger.debug("[invokeRefresh]");
-		if (sourceUrl != null){
+		if (sourcePath != null){
 			int currentSlideNumber = currentSlide.getNumber();
-			invokeOpen(sourceUrl);
+			invokeOpen(new File(sourcePath));
 			slideshow.jumpTo(currentSlideNumber - 1);
 		}
 	}
@@ -166,7 +166,7 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 		List<Slide> slides;
 		try {
 			slides = reader.read(url);
-			sourceUrl = url;
+			sourcePath = url.getPath();
 			setTitle(url.toString());
 			onSlidesLoaded(slides);
 		} catch (IOException e) {
@@ -178,6 +178,7 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 		List<Slide> slides;
 		try {
 			slides = reader.read(file);
+			sourcePath = file.getPath();
 			setTitle(file.toString());
 			onSlidesLoaded(slides);
 		} catch (IOException e) {

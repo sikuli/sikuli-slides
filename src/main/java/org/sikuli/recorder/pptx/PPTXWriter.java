@@ -214,6 +214,8 @@ public class PPTXWriter {
 			  value = value.replaceAll("&"," and ");
 			  items.add(new Item("Advisor", value));
 			  
+			  items.add(new Item("Committee Members", "{Please enter the names of your committee members, if applicable}"));
+			  
 			  field  = (JSONObject)  row.get("gsx$currentfunding");
 			  value = (String) field.get("$t");			  
 			  items.add(new Item("Current Funding", value));
