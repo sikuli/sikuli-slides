@@ -44,7 +44,7 @@ public class DefaultSlideShowControllerEventTest {
 	@Test
 	public void testSlideSelected() throws InterruptedException {		
 		slideshow.start();
-		pause(100);
+		pause(1000);
 		verify(listener).slideSelected(slide1);
 		verify(listener).slideSelected(slide2);
 		verify(listener).slideSelected(slide3);

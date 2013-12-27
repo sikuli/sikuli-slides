@@ -1,5 +1,6 @@
 package org.sikuli.slides.api.slideshow;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -10,6 +11,9 @@ import org.sikuli.slides.api.models.Slide;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
 
 public class DefaultSlideShowControllerTest {
@@ -20,6 +24,7 @@ public class DefaultSlideShowControllerTest {
 	private Slide slide1;
 	private Slide slide2;
 	private Slide slide3;
+	private Context context;
 		
 	void pause(long msecs){
 		try {
@@ -75,7 +80,7 @@ public class DefaultSlideShowControllerTest {
 
 	@Before
 	public void setUp(){
-		Context context = new Context();
+		context = new Context();
 		slide1 = spy(new TestSlide(500,1));
 		slide2 = spy(new TestSlide(500,2));
 		slide3 = spy(new TestSlide(500,3));
@@ -425,5 +430,13 @@ public class DefaultSlideShowControllerTest {
 		verify(slide1).execute(any(Context.class));
 		verify(slide2).execute(any(Context.class));
 		verify(slide3, never()).execute(any(Context.class));
+	}
+	
+	@Test
+	public void testStartWithNoSlides(){
+		slideshow = new DefaultSlideShowController(context, new ArrayList<Slide>());
+		assertThat(slideshow.hasNext(), equalTo(false));
+		assertThat(slideshow.hasPrevious(), equalTo(false));
+		assertThat(slideshow.isPaused(), equalTo(false));
 	}
 }

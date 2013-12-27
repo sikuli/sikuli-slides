@@ -62,6 +62,13 @@ class DefaultSlideShowController implements SlideShowController{
 		executingThread = new Thread(){
 
 			public void run(){
+				
+				index = 0;
+				if (slides.isEmpty()){
+					return;
+				}else{
+					fireSlideSelected(slides.get(0));
+				}
 
 				while (true){					
 					try {
