@@ -107,7 +107,7 @@ public class DefaultInterpreter implements Interpreter {
 	static class SleepActionInterpreter extends RegexActionInterpreter {
 
 		SleepActionInterpreter(){
-			super("(?i)sleep (\\d+)");
+			super("(?i)sleep\\s+(\\d+)");
 		}
 
 		@Override
@@ -127,7 +127,7 @@ public class DefaultInterpreter implements Interpreter {
 	static class BrowseActionInterpreter extends RegexActionInterpreter {
 
 		BrowseActionInterpreter(){
-			super("(?i)(browse|open) (.+)");
+			super("(?i)(browse|open)\\s+(.+)");
 		}
 
 		@Override
@@ -152,7 +152,7 @@ public class DefaultInterpreter implements Interpreter {
 	static class TypeActionInterpreter extends RegexActionInterpreter {
 
 		TypeActionInterpreter(){
-			super("(?i)type (.+)");
+			super("(?i)type\\s+(.+)");
 		}
 
 		@Override
@@ -165,6 +165,36 @@ public class DefaultInterpreter implements Interpreter {
 			return action;
 		}		
 	}
+
+	static class WaitActionInterpreter extends RegexActionInterpreter {
+
+		WaitActionInterpreter(){
+			super("(?i)wait\\s*(\\d*)");
+		}
+
+		@Override
+		protected Action interpret(Slide slide, SlideElement element, String[] arguments){
+			Long duration;
+
+			String durationString = arguments[0];
+			if (durationString.length() == 0){
+				duration = Long.MAX_VALUE;
+			}else{
+				duration = parseDuration(durationString);					
+			}
+
+			if (duration == null)
+				return null;		
+
+
+			Target target = (new ContextImageTargetInterpreter()).interpret(slide);
+			if (target == null)
+				return null;
+			WaitAction action = new WaitAction(target);
+			action.setDuration(duration);
+			return action;
+		}		
+	}	
 
 	static class LeftClickActionInterpreter implements Interpreter {
 		@Override
@@ -454,11 +484,11 @@ public class DefaultInterpreter implements Interpreter {
 			return new PauseAction();
 		}		
 	}
-	
+
 	static class BookmarkActionInterpreter extends RegexActionInterpreter {
 
 		BookmarkActionInterpreter(){
-			super("(?i)bookmark ([\\S]+)");
+			super("(?i)bookmark\\s+([\\S]+)");
 		}
 
 		@Override
@@ -700,7 +730,8 @@ public class DefaultInterpreter implements Interpreter {
 				new ExistActionInterpreter(),
 				new NotExistActionInterpreter(),
 				new BrowseActionInterpreter(),
-				new SleepActionInterpreter()				
+				new SleepActionInterpreter(),
+				new WaitActionInterpreter()
 				);
 
 		List<Interpreter> controlActionInterpreters = Lists.newArrayList(
@@ -738,7 +769,7 @@ public class DefaultInterpreter implements Interpreter {
 			parallelAction.addChildAsBackground(labelAction);
 		}
 
-		
+
 		Action action = parallelAction;
 
 

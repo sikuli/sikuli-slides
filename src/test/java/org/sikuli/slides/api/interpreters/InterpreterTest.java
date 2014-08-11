@@ -61,7 +61,7 @@ public class InterpreterTest {
 	@Test
 	public void open_http(){
 		Slide slide = new Slide();
-		on(slide).insert().element().text("open http://slides.sikuli.org");
+		on(slide).insert().element().text("open  http://slides.sikuli.org");
 		
 		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter();
 		Action action = interpreter.interpret(slide);
@@ -84,7 +84,7 @@ public class InterpreterTest {
 	@Test
 	public void browse_garbage(){
 		Slide slide = new Slide();
-		on(slide).insert().element().text("browse garbage");
+		on(slide).insert().element().text("browse  garbage");
 		
 		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter();
 		Action action = interpreter.interpret(slide);
@@ -105,6 +105,34 @@ public class InterpreterTest {
 		assertThat(action, instanceOf(TargetAction.class));
 		assertThat(((TargetAction) action).getChild(), instanceOf(LeftClickAction.class));		
 	}
+	
+	@Test
+	public void wait_3_for_target(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("Wait    3");
+		on(slide).insert().image().source(TestResources.get("sikuli_context.png")).bounds(100,100,1000,1000);
+		on(slide).insert().element().bounds(348,223,200,200);
+
+		Interpreter interpreter = new DefaultInterpreter.WaitActionInterpreter();
+		Action action = interpreter.interpret(slide);
+		
+		assertThat(action, instanceOf(WaitAction.class));
+		assertThat(((WaitAction)action).getDuration(), equalTo(3000L));		
+	}
+	
+	@Test
+	public void wait_forever_for_target(){
+		Slide slide = new Slide();
+		on(slide).insert().element().text("Wait");
+		on(slide).insert().image().source(TestResources.get("sikuli_context.png")).bounds(100,100,1000,1000);
+		on(slide).insert().element().bounds(348,223,200,200);
+
+		Interpreter interpreter = new DefaultInterpreter.WaitActionInterpreter();
+		Action action = interpreter.interpret(slide);
+		
+		assertThat(action, instanceOf(WaitAction.class));
+		assertThat(((WaitAction)action).getDuration(), equalTo(Long.MAX_VALUE));		
+	}	
 	
 	@Test
 	public void ContextImageTarget(){
@@ -238,7 +266,7 @@ public class InterpreterTest {
 	@Test
 	public void bookmark_001(){
 		Slide slide = new Slide();
-		on(slide).insert().element().text("bookmark 001");
+		on(slide).insert().element().text("bookmark  001");
 		
 		interpreter = new DefaultInterpreter.BookmarkActionInterpreter();  
 		

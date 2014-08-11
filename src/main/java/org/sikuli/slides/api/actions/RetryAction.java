@@ -38,7 +38,9 @@ public class RetryAction extends ChainedAction {
 				timesupFlag = true;
 			}
 		};
-		timer.schedule(task, timeout);		
+		if (timeout < Long.MAX_VALUE){
+			timer.schedule(task, timeout);
+		}
 		
 		ActionExecutionException exception = null;
 		
