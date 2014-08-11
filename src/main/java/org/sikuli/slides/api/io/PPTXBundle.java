@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -92,54 +95,16 @@ class PPTXBundle {
 		return new File(getSlidesDirectory(), filename);
 	}
 
-	static void doUnZipFile(File file, File dest){
-		byte[] buffer = new byte[1024];
-		try{
-
-			//create output directory
-			File folder = dest;
-			// if the directory doesn't exist, create it
-			if(!folder.exists()){
-				folder.mkdir();
-			}
-			// if the directory already exists, delete it and recreate it.
-			else{
-				FileUtils.deleteDirectory(folder);
-				folder.mkdir();
-			}
-
-			// Next, unzip it.
-			//get the zip file content
-			ZipInputStream zis = new ZipInputStream(new FileInputStream(file.getAbsoluteFile()));
-			//get the zipped file list entry
-			ZipEntry ze = zis.getNextEntry();
-
-			while(ze!=null){
-
-				String fileName = ze.getName();
-				File newFile = new File(folder + File.separator + fileName);
-
-				//create all non exists folders
-				//else you will hit FileNotFoundException for compressed folder
-				new File(newFile.getParent()).mkdirs();
-
-				FileOutputStream fos = new FileOutputStream(newFile);             
-
-				int len;
-				while ((len = zis.read(buffer)) > 0) {
-					fos.write(buffer, 0, len);
-				}
-
-				fos.close();   
-				ze = zis.getNextEntry();
-			}
-
-			zis.closeEntry();
-			zis.close();
-		}
-		catch(IOException ex){
-			ex.printStackTrace(); 
-		}
+	static void doUnZipFile(File file, File dest){		
+		try {
+	         ZipFile zipFile = new ZipFile(file);
+	         if (zipFile.isEncrypted()) {
+//	            zipFile.setPassword(password);
+	         }
+	         zipFile.extractAll(dest.getAbsolutePath());
+	    } catch (ZipException e) {
+	        e.printStackTrace();
+	    }
 	}
 
 }
