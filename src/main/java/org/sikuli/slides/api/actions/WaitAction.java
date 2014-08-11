@@ -20,24 +20,23 @@ public class WaitAction extends TargetAction {
 
 	@Override
 	public void execute(Context context) throws ActionExecutionException {			
-		Action action = new Action(){
-
-			@Override
-			public void execute(Context context) throws ActionExecutionException {
-				ScreenRegion screenRegion = context.getScreenRegion();
-				ScreenRegion ret = screenRegion.find(getTarget());
-				if (ret == null){
-					throw new ActionExecutionException("", this);
-				}
-			}
-
-			@Override
-			public void stop() {				
-			}
-			
-		};
-		
-		retry = new RetryAction(action, duration, 200);
+//		Action action = new Action(){
+//
+//			@Override
+//			public void execute(Context context) throws ActionExecutionException {
+//				ScreenRegion screenRegion = context.getScreenRegion();
+//				ScreenRegion ret = screenRegion.find(getTarget());
+//				if (ret == null){
+//					throw new ActionExecutionException("", this);
+//				}
+//			}
+//
+//			@Override
+//			public void stop() {				
+//			}
+//			
+//		};
+		retry = new RetryAction(new TargetAction(target, new EmptyAction()), duration, 1000);		
 		retry.execute(context);
 	}
 	
@@ -45,6 +44,7 @@ public class WaitAction extends TargetAction {
 	public void stop(){
 		if (retry != null)
 			retry.stop();
+		retry = null;
 	}
 	
 	public String toString(){

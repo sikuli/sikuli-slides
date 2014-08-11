@@ -311,7 +311,7 @@
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.finish.ShowURLAction">
                       <void property="urlSpec">
-                        <string>http://slides.sikuli.org/docs/gui/</string>
+                        <string>http://slides.sikuli.org/docs/usage/</string>
                       </void>
                     </object>
                   </java>
@@ -455,10 +455,24 @@
       <excludedComponents />
       <includedDownloadableComponents />
     </macos>
+    <windows name="Windows 32bit" id="172" customizedId="" mediaFileName="" installDir="Sikuli Slides" overridePrincipalLanguage="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude />
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
+    </windows>
   </mediaSets>
-  <buildIds buildAll="false">
+  <buildIds buildAll="true">
     <mediaSet refId="31" />
     <mediaSet refId="66" />
+    <mediaSet refId="172" />
   </buildIds>
   <buildOptions verbose="false" faster="false" disableSigning="false" debug="false" />
 </install4j>

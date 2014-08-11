@@ -40,10 +40,12 @@ public class LabelAction implements Action {
 		String textToDisplay = context.render(text);
 		
 		canvas = new ScreenRegionCanvas(targetRegion);
-		canvas.addLabel(targetRegion, textToDisplay)
-		.withColor(Color.black).withFontSize((int)fontSize).withLineWidth(2)
-		.withBackgroundColor(backgroundColor)
-		.withHorizontalAlignmentCenter().withVerticalAlignmentMiddle();		
+		canvas.add().label(textToDisplay).inside(targetRegion)
+		.styleWith()
+			.color(Color.black)
+			.fontSize((int)fontSize)
+			.lineWidth(2)
+			.backgroundColor(backgroundColor);		
 		canvas.show();		
 	}
 	

@@ -37,28 +37,28 @@ public class SlideShowViewerTest {
 //		canvas.show();		
 	}
 	
-	@Test
-	public void test() throws IOException{
-				
-//		List<Slide> slides = TestResources.readSlides("fivesteps.pptx");
-		
-		
-//		Context context = new Context();
-//		SlideShowController slideshow = new DefaultSlideShowController(context, slides);
-////		slideshow.setContent(slides);
-		
-		SlideShowViewer viewer = new SlideShowViewer();
-		viewer.setVisible(true);
-//		viewer.open(TestResources.get("fivesteps.pptx"));
-		viewer.invokeOpen(new File("/Users/tomyeh/Desktop/Testtest.pptx"));
-		
-//		slideshow.start();
-		
-//		SlideShowHotkeyManager hotkeys = new SlideShowHotkeyManager(slideshow);
-//		hotkeys.start();
-		
-		pause(100000);
-		
-	}
+//	@Test
+//	public void test() throws IOException{
+//				
+////		List<Slide> slides = TestResources.readSlides("fivesteps.pptx");
+//		
+//		
+////		Context context = new Context();
+////		SlideShowController slideshow = new DefaultSlideShowController(context, slides);
+//////		slideshow.setContent(slides);
+//		
+//		SlideShowViewer viewer = new SlideShowViewer();
+//		viewer.setVisible(true);
+////		viewer.open(TestResources.get("fivesteps.pptx"));
+//		viewer.invokeOpen(new File("/Users/tomyeh/Desktop/Testtest.pptx"));
+//		
+////		slideshow.start();
+//		
+////		SlideShowHotkeyManager hotkeys = new SlideShowHotkeyManager(slideshow);
+////		hotkeys.start();
+//		
+//		pause(100000);
+//		
+//	}
 
 }

@@ -58,6 +58,10 @@ class DefaultSlideShowController implements SlideShowController{
 
 	@Override
 	public void start() {
+		
+		if (slides.isEmpty())
+			return;
+		
 
 		executingThread = new Thread(){
 
@@ -69,7 +73,6 @@ class DefaultSlideShowController implements SlideShowController{
 				}else{
 					fireSlideSelected(slides.get(0));
 				}
-
 				while (true){					
 					try {
 						playSignal.await();
