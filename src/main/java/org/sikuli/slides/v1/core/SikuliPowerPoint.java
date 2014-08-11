@@ -160,10 +160,10 @@ public class SikuliPowerPoint {
 					targetShapes.add(slideShapes.get(1));
 				}
 				else{
-					logger.error("Error. Slide {} contains multiple shapes.{}" +
-							"The slide must contain only one input action using the predefined shapes.{}"+
-							"You may use the new syntax to enable multiple targets per slide."
-							, slideNumber, NEW_LINE, NEW_LINE);
+//					logger.error("Error. Slide {} contains multiple shapes.{}" +
+//							"The slide must contain only one input action using the predefined shapes.{}"+
+//							"You may use the new syntax to enable multiple targets per slide."
+//							, slideNumber, NEW_LINE, NEW_LINE);
 					System.exit(1);
 				}
 			}
@@ -177,10 +177,10 @@ public class SikuliPowerPoint {
 
 			// if the slide doesn't contain a shape.
 			if((labels == null && desktopEvent == null && sound == null) || slideShapes == null){
-				logger.error("Failed to process slide {}." +
-				"The slide must contain a shape and textbox that contains the action to be executed.{}" +
-				"The text box that descripes the action must contain one of the following actions:{}" +
-				"Click, Right Click, Double Click, Type, Drag, Browser, Exist, Not Exist, Wait", slideNumber, NEW_LINE, NEW_LINE);
+//				logger.error("Failed to process slide {}." +
+//				"The slide must contain a shape and textbox that contains the action to be executed.{}" +
+//				"The text box that descripes the action must contain one of the following actions:{}" +
+//				"Click, Right Click, Double Click, Type, Drag, Browser, Exist, Not Exist, Wait", slideNumber, NEW_LINE, NEW_LINE);
 				return;
 			}
 		}

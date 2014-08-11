@@ -3,6 +3,7 @@ package org.sikuli.slides.api;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -55,11 +56,12 @@ public class AutomationExecutorTest {
 		assertEquals("x", 330, ev.getX());
 	}
 	
+	
 	@Test
 	public void testExecuteFiveStepsPPTX() throws IOException, SlideExecutionException{
 		List<Slide> slides = readSlidesFromResource("fivesteps.pptx");		
 		executor.execute(slides);
-		assertEquals("mouse events", 4, detector.getNumMouseEvents());
+		assertEquals("mouse events", 6, detector.getNumMouseEvents());
 	}
 	
 	@Test

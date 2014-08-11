@@ -1,27 +1,18 @@
 package org.sikuli.slides.api.actions;
 
-import java.util.List;
-
 import org.sikuli.slides.api.Context;
 
-import com.google.common.base.Objects;
+public class OptionalAction extends ChainedAction {
 
-public class OptionalAction extends AbstractAction {
-	
 	@Override
-	public void doExecute(Context context) {
-		List<Action> children = getChildren();
-		if (children.size() == 1){
-			Action firstChild = children.get(0);
+	public void execute(Context context) {
+		Action action = getChild();
+		if (action != null){			
 			try {
-				firstChild.execute(context);
+				action.execute(context);
 			} catch (ActionExecutionException e) {
-				logger.info("An optinoal action failed: {}, action={}", e.getMessage(), firstChild);
+				logger.info("An optinoal action failed: {}, action={}", e.getMessage(), action);
 			}
 		}
-	}
-	
-	public String toString(){
-		return Objects.toStringHelper(this).add("children",getChildren()).toString();
 	}
 }

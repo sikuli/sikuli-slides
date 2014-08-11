@@ -142,6 +142,7 @@ public class SlideElement {
 				.add("text",text)
 				.add("fontSize", textSize)
 				.add("order", order)
+				.add("lineColor", lineColor)
 				.add("backgroundColor", backgroundColor).toString();
 	}
 	public String getGeom() {

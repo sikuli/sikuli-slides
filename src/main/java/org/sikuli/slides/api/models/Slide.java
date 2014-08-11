@@ -4,19 +4,25 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
+import org.sikuli.slides.api.Context;
+import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.actions.ActionExecutionException;
+import org.sikuli.slides.api.interpreters.ConfigInterpreter;
+import org.sikuli.slides.api.interpreters.DefaultInterpreter;
+import org.sikuli.slides.api.interpreters.Interpreter;
 import org.sikuli.slides.api.interpreters.Keyword;
-import org.sikuli.slides.api.interpreters.Selector;
-import org.sikuli.slides.api.models.Slide.SlideElementBuilder;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
-public class Slide {
+public class Slide implements Action {
 	
 	List<SlideElement> elements = Lists.newArrayList();
-	private int number; // one-based
-	
+	private int width = 9144000;
+	private int height = 6858000;
+	private int number; // one-based	
+
 	
 	// Construct a blank slide
 	public Slide(){		
@@ -73,6 +79,22 @@ public class Slide {
 		this.number = number;
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
 	public static class KeywordElementBuilder extends SlideElementBuilder {
 		KeywordElementBuilder(Slide slide){
 			super(slide);
@@ -126,5 +148,32 @@ public class Slide {
 			return this;
 		}
 
+	}
+	
+	private Action action;
+	
+	
+	@Override
+	public void execute(Context context) throws ActionExecutionException {
+		
+		List<Interpreter> interpreters = Lists.newArrayList(
+				new ConfigInterpreter(),
+				new DefaultInterpreter()
+		);
+		
+		for (Interpreter interpreter : interpreters){
+			action = interpreter.interpret(this);
+			if (action != null){
+				action.execute(context);
+				return;
+			}
+		}		
+		throw new ActionExecutionException("Unable to interpret this slide", this); 
+	}
+
+	@Override
+	public void stop() {
+		if (action != null)
+			action.stop();		
 	}
 }

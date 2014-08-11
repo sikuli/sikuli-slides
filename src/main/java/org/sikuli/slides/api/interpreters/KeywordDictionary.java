@@ -27,10 +27,11 @@ public class KeywordDictionary{
 	final static Keyword OPTIONAL = word("Optional").type(CONTROL).build();
 	final static Keyword BOOKMARK = word("Bookmark").type(CONTROL).build();
 	final static Keyword PAUSE = word("pause").type(ACTION).build();
+	final static Keyword CONFIG = word("config").type(CONTROL).build();
 	
 	final static Keyword[] WORDS = {
 		CLICK, RIGHT_CLICK, DOUBLE_CLICK, TYPE, DRAG, DROP, BROWSER, NOT_EXIST, EXIST, DELAY, WAIT,
-		SKIP, OPTIONAL, BOOKMARK, PAUSE};
+		SKIP, OPTIONAL, BOOKMARK, PAUSE, CONFIG};
 	
 	final static public Keyword lookup(String name){
 		for (Keyword word : WORDS){

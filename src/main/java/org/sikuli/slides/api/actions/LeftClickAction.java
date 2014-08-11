@@ -8,7 +8,7 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class LeftClickAction extends AbstractAction {
+public class LeftClickAction extends RobotAction {
 	
 	@Override
 	protected void doExecute(Context context) {

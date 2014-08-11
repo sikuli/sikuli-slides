@@ -3,32 +3,44 @@ package org.sikuli.slides.api.interpreters;
 import java.awt.Color;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.sikuli.api.Relative;
+import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
-import org.sikuli.slides.api.actions.AbstractAction;
+import org.sikuli.slides.api.Context;
+import org.sikuli.slides.api.actions.ActionExecutionException;
+import org.sikuli.slides.api.actions.RetryAction;
+import org.sikuli.slides.api.actions.RobotAction;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.BookmarkAction;
 import org.sikuli.slides.api.actions.BrowserAction;
-import org.sikuli.slides.api.actions.DelayAction;
+import org.sikuli.slides.api.actions.CompoundAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
 import org.sikuli.slides.api.actions.DragAction;
 import org.sikuli.slides.api.actions.DropAction;
-import org.sikuli.slides.api.actions.ExistAction;
+import org.sikuli.slides.api.actions.AssertExistAction;
 import org.sikuli.slides.api.actions.LabelAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
-import org.sikuli.slides.api.actions.NotExistAction;
+import org.sikuli.slides.api.actions.AssertNotExistAction;
 import org.sikuli.slides.api.actions.OptionalAction;
 import org.sikuli.slides.api.actions.ParallelAction;
 import org.sikuli.slides.api.actions.PauseAction;
 import org.sikuli.slides.api.actions.RelativeAction;
 import org.sikuli.slides.api.actions.RightClickAction;
-import org.sikuli.slides.api.actions.SkipAction;
+import org.sikuli.slides.api.actions.EmptyAction;
+import org.sikuli.slides.api.actions.SleepAction;
 import org.sikuli.slides.api.actions.SlideAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
 import org.sikuli.slides.api.actions.WaitAction;
+import org.sikuli.slides.api.interpreters.DefaultInterpreter.LabelInterpreter;
+import org.sikuli.slides.api.interpreters.DefaultInterpreter.SleepActionInterpreter;
 import org.sikuli.slides.api.models.ImageElement;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.models.SlideElement;
@@ -37,231 +49,523 @@ import org.sikuli.slides.v1.utils.UnitConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
+
 
 
 public class DefaultInterpreter implements Interpreter {
 
-	Logger logger = LoggerFactory.getLogger(DefaultInterpreter.class);
-	
-	Action interpretAsClick(Slide slide){				
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.CLICK).first();
-		if (keywordElement == null)
-			return null;		
-		slide.remove(keywordElement);
-		Action action = new LeftClickAction();
-		return interpretAsTargetAction(slide, action);
-	}
+	static Logger logger = LoggerFactory.getLogger(DefaultInterpreter.class);
 
-	Action interpretAsRightClick(Slide slide){				
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.RIGHT_CLICK).first();
-		if (keywordElement == null)
-			return null;
-		slide.remove(keywordElement);
-		Action action = new RightClickAction();
-		return interpretAsTargetAction(slide, action);
-	}
+	static class RegexActionInterpreter implements Interpreter {
 
-
-	Action interpretAsDoubleClick(Slide slide){
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DOUBLE_CLICK).first();
-		if (keywordElement == null)
-			return null;
-		slide.remove(keywordElement);
-		Action action = new DoubleClickAction();
-		return interpretAsTargetAction(slide, action);
-	}
-
-	Action interpretAsDrag(Slide slide){
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DRAG).first();
-		if (keywordElement == null)
-			return null;
-		slide.remove(keywordElement);
-		Action action = new DragAction();
-		return interpretAsTargetAction(slide, action);
-	}
-
-	Action interpretAsDrop(Slide slide){
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DROP).first();
-		if (keywordElement == null)
-			return null;
-		slide.remove(keywordElement);
-		Action action = new DropAction();
-		return interpretAsTargetAction(slide, action);
-	}
-
-	
-	Action interpretAsExist(Slide slide){
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.EXIST).first();
-		if (keywordElement == null)
-			return null;
-
-		Target target = interpretAsImageTarget(slide);
-		if (target == null)
-			return null;
-
-		return new ExistAction(target);
-	}
-
-	Action interpretAsNotExist(Slide slide){
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.NOT_EXIST).first();
-		if (keywordElement == null)
-			return null;		
-
-		Target target = interpretAsImageTarget(slide);
-		if (target == null)
-			return null;
-
-		
-		return new NotExistAction(target);
-	}
-
-	Action interpretAsLabel(Slide slide, SlideElement textElement){
-		LabelAction action = new LabelAction();
-		action.setText(textElement.getText());
-		double fontSize = UnitConverter.WholePointsToPoints(textElement.getTextSize());
-		action.setFontSize((int)fontSize);
-		
-		try {
-			Color bgColor = Color.decode("#" + textElement.getBackgroundColor());		
-			action.setBackgroundColor(bgColor);
-		}catch(NumberFormatException e){
-			
-		}		
-		// check if there is an image target nearby
-		SlideElement targetElement = slide.select().isTarget().near(textElement, 200000).first();
-		if (targetElement == null){	
-			double xmin = 1.0 * textElement.getOffx() / 9144000;
-			double ymin = 1.0 * textElement.getOffy() / 6858000;
-			double xmax = 1.0 * (textElement.getOffx()  + textElement.getCx()) / 9144000;
-			double ymax = 1.0 * (textElement.getOffy()  + textElement.getCy()) / 6858000;
-			
-			RelativeAction relativeAction = new RelativeAction(xmin, ymin, xmax, ymax, action);			
-			return relativeAction;
-		}else{			
-			Target imageTarget = interpretAsImageTarget(slide, targetElement);		
-			int offsetX = UnitConverter.emuToPixels(textElement.getOffx() - targetElement.getOffx());
-			int offsetY = UnitConverter.emuToPixels(textElement.getOffy() - targetElement.getOffy());
-			int width = UnitConverter.emuToPixels(textElement.getCx());
-			int height = UnitConverter.emuToPixels(textElement.getCy());
-						
-			RelativeAction relativeAction = new RelativeAction(offsetX, offsetY, width, height, action);
-			TargetAction targetAction = new TargetAction(imageTarget, relativeAction);
-			return targetAction;
+		RegexActionInterpreter(String regex){
+			this.regex = regex;
 		}
-	}
-	
-	Action interpretAsLabel(Slide slide){
-		List<SlideElement> textElements = slide.select().isNotKeyword().hasText().all();
-		if (textElements.size() == 0)
-			return null;
 
-		if (textElements.size() == 1){
-			return interpretAsLabel(slide, textElements.get(0));
-		}else{
-			ParallelAction pa = new ParallelAction();
-			for (SlideElement textElement : textElements){
-				Action labelAction = interpretAsLabel(slide, textElement);
-				pa.addChild(labelAction);
+		String regex;			
+		String[] arguments;
+		SlideElement element;		
+
+		boolean parse(Slide slide){
+			element = slide.select().textMatches(regex).first();
+			if (element == null)
+				return false;
+
+			String text = element.getText();
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = pattern.matcher(text);
+			if (!matcher.find())
+				return false;
+
+			arguments = new String[matcher.groupCount()];
+			for (int i = 0 ; i < matcher.groupCount(); i++){
+				// note: groups are 1-indexed
+				arguments[i] = matcher.group(i+1);
 			}
-			return pa;
+
+			return true;
+		}			
+
+		@Override
+		final public Action interpret(Slide slide) {			
+			if (!parse(slide))
+				return null;
+
+			Action action = interpret(slide, element, arguments);		
+			if (action == null)
+				return null;
+
+			slide.remove(element);
+			return action;
+		}
+
+		protected Action interpret(Slide slide, SlideElement element, String[] arguments){
+			return null;
 		}
 	}
 
-	Target createTarget(ImageElement imageElement, SlideElement targetElement){
-		if (imageElement == null || targetElement == null)
-			return null;
+	static class SleepActionInterpreter extends RegexActionInterpreter {
 
-		int w = imageElement.getCx();
-		int h = imageElement.getCy();
-		if (w <= 0 || h <= 0)
-			return null;
+		SleepActionInterpreter(){
+			super("(?i)sleep (\\d+)");
+		}
 
-		double xmax = 1.0 * (targetElement.getOffx() + targetElement.getCx() - imageElement.getOffx()) / w;
-		double ymax = 1.0 * (targetElement.getOffy() + targetElement.getCy() - imageElement.getOffy()) / h;
-		double xmin = 1.0 * (targetElement.getOffx() - imageElement.getOffx()) / w;
-		double ymin = 1.0 * (targetElement.getOffy() - imageElement.getOffy()) / h;
+		@Override
+		protected Action interpret(Slide slide, SlideElement element, String[] arguments){	
+			if (arguments.length != 1)
+				return null;
 
-		xmax = Math.min(1.0, xmax);
-		ymax = Math.min(1.0, ymax);
-		xmin = Math.max(0, xmin);
-		ymin = Math.max(0, ymin);
+			String durationString = arguments[0];
+			Long duration = parseDuration(durationString);		
+			if (duration == null)
+				return null;			
+			return new SleepAction(duration);
+		}
+	};
 
-		return new ContextImageTarget(imageElement.getSource(), xmin, ymin, xmax, ymax); 
+
+	static class BrowseActionInterpreter extends RegexActionInterpreter {
+
+		BrowseActionInterpreter(){
+			super("(?i)(browse|open) (.+)");
+		}
+
+		@Override
+		protected Action interpret(Slide slide, SlideElement element, String[] arguments){	
+			if (arguments.length != 2)
+				return null;
+
+			String urlString = arguments[1];
+			URL url = null;
+			try {
+				url = new URL(urlString);
+			} catch (MalformedURLException e) {
+				return null;
+			}				
+
+			BrowserAction action = new BrowserAction();
+			action.setUrl(url);
+			return action;
+		}		
 	}
 
-	Target interpretAsImageTarget(Slide slide){
-		SlideElement targetElement = slide.select().isTarget().first();
-		if (targetElement == null)
-			return null;
-		return interpretAsImageTarget(slide, targetElement);
+	static class TypeActionInterpreter extends RegexActionInterpreter {
+
+		TypeActionInterpreter(){
+			super("(?i)type (.+)");
+		}
+
+		@Override
+		protected Action interpret(Slide slide, SlideElement element, String[] arguments){	
+			if (arguments.length != 1)
+				return null;
+
+			TypeAction action = new TypeAction();
+			action.setText(arguments[0]);
+			return action;
+		}		
+	}
+
+	static class LeftClickActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {
+			SlideElement keywordElement = slide.select().ignoreCase().textStartsWith("click").first();
+			if (keywordElement == null)
+				return null;		
+			slide.remove(keywordElement);
+			Action action = new LeftClickAction();
+			return action;
+		}		
+	}
+
+	static class RightClickActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {
+			SlideElement keywordElement = slide.select().ignoreCase().textStartsWith("rightclick").first();
+			if (keywordElement == null)
+				return null;		
+			slide.remove(keywordElement);
+			Action action = new RightClickAction();
+			return action;
+		}		
+	}
+
+	static class DoubleClickActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {
+			SlideElement keywordElement = slide.select().ignoreCase().textStartsWith("doubleclick").first();
+			if (keywordElement == null)
+				return null;		
+			slide.remove(keywordElement);
+			Action action = new DoubleClickAction();
+			return action;
+		}		
+	}
+
+	static class DragActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {
+			SlideElement keywordElement = slide.select().ignoreCase().textStartsWith("drag").first();
+			if (keywordElement == null)
+				return null;		
+			slide.remove(keywordElement);
+			Action action = new DragAction();
+			return action;
+		}		
+	}
+
+	static class DropActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {
+			SlideElement keywordElement = slide.select().ignoreCase().textStartsWith("drop").first();
+			if (keywordElement == null)
+				return null;		
+			slide.remove(keywordElement);
+			Action action = new DropAction();
+			return action;
+		}		
+	}
+
+	static class ExistActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {			
+			SlideElement keywordElement = slide.select().ignoreCase().textStartsWith("exist").first();
+			if (keywordElement == null)
+				return null;		
+
+			Target target = (new ContextImageTargetInterpreter()).interpret(slide);
+			if (target == null)
+				return null;
+			return new AssertExistAction(target);
+		}
+	}
+
+	static class NotExistActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {			
+
+			SlideElement keywordElement = slide.select().ignoreCase().textStartsWith("not exist").first();
+			if (keywordElement == null)
+				return null;		
+
+			Target target = (new ContextImageTargetInterpreter()).interpret(slide);
+			if (target == null)
+				return null;
+			return new AssertNotExistAction(target);
+		}
+	}
+
+	static class TargetActionInterpreter implements Interpreter {
+
+		private List<Interpreter> actionInterpreters;
+
+		TargetActionInterpreter(){
+			actionInterpreters = Lists.newArrayList();
+			actionInterpreters.add(new LeftClickActionInterpreter());	
+			actionInterpreters.add(new DoubleClickActionInterpreter());	
+			actionInterpreters.add(new RightClickActionInterpreter());
+			actionInterpreters.add(new DragActionInterpreter());
+			actionInterpreters.add(new DropActionInterpreter());		
+			actionInterpreters.add(new TypeActionInterpreter());
+		}
+
+		@Override
+		public Action interpret(Slide slide) {			
+
+			Action action = null;
+			Iterator<Interpreter> iter = actionInterpreters.iterator();
+			while (action == null && iter.hasNext()){
+				action = iter.next().interpret(slide);		
+			}
+
+			if (action == null)
+				return null;
+
+			Target target = (new ContextImageTargetInterpreter()).interpret(slide);
+			if (target == null)
+				return null;
+			return new TargetAction(target, action);
+		}
+	}
+
+	static class ContextImageTargetInterpreter implements TargetInterpreter {
+
+		public Target interpret(Slide slide, SlideElement targetElement) {
+
+			ImageElement imageElement = (ImageElement) slide.select().intersects(targetElement).isImage().first();
+			if (imageElement == null)
+				return null;
+
+			Target target = createTarget(imageElement, targetElement);
+			if (target == null)
+				return null;
+			return target;
+		}	
+
+		@Override
+		public Target interpret(Slide slide) {
+
+			SlideElement targetElement = slide.select().isTarget().first();
+			if (targetElement == null)
+				return null;
+
+			return interpret(slide, targetElement);
+		}		
+
+		Target createTarget(ImageElement imageElement, SlideElement targetElement){
+			if (imageElement == null || targetElement == null)
+				return null;
+
+			int w = imageElement.getCx();
+			int h = imageElement.getCy();
+			if (w <= 0 || h <= 0)
+				return null;
+
+			double xmax = 1.0 * (targetElement.getOffx() + targetElement.getCx() - imageElement.getOffx()) / w;
+			double ymax = 1.0 * (targetElement.getOffy() + targetElement.getCy() - imageElement.getOffy()) / h;
+			double xmin = 1.0 * (targetElement.getOffx() - imageElement.getOffx()) / w;
+			double ymin = 1.0 * (targetElement.getOffy() - imageElement.getOffy()) / h;
+
+			xmax = Math.min(1.0, xmax);
+			ymax = Math.min(1.0, ymax);
+			xmin = Math.max(0, xmin);
+			ymin = Math.max(0, ymin);
+
+			return new ContextImageTarget(imageElement.getSource(), xmin, ymin, xmax, ymax); 
+		}
+	}
+
+
+
+	static class ScreenLocationInterpreter implements SpatialRelationshipInterpreter{
+
+		@Override
+		public SpatialRelationship interpret(Slide slide, SlideElement element) {			
+			final double xmin = 1.0 * element.getOffx() / 9144000;
+			final double ymin = 1.0 * element.getOffy() / 6858000;
+			final double xmax = 1.0 * (element.getOffx()  + element.getCx()) / 9144000;
+			final double ymax = 1.0 * (element.getOffy()  + element.getCy()) / 6858000;			
+			return new SpatialRelationship(){
+				@Override
+				public ScreenRegion apply(Context input) {
+					ScreenRegion screenRegion = input.getScreenRegion();
+					return Relative.to(screenRegion).region(xmin, ymin, xmax, ymax).getScreenRegion();						
+				}				
+			};
+		}
+	}
+
+	static class TargetLocationInterpreter implements SpatialRelationshipInterpreter{
+
+		@Override
+		public SpatialRelationship interpret(Slide slide, SlideElement element) {		
+
+			SlideElement targetElement = slide.select().isTarget().near(element, 200000).first();
+			if (targetElement == null)
+				return null;
+
+			final Target target = (new ContextImageTargetInterpreter()).interpret(slide, targetElement);
+			if (target == null)
+				return null;
+
+			final int x = UnitConverter.emuToPixels(element.getOffx() - targetElement.getOffx());
+			final int y = UnitConverter.emuToPixels(element.getOffy() - targetElement.getOffy());
+			final int width = UnitConverter.emuToPixels(element.getCx());
+			final int height = UnitConverter.emuToPixels(element.getCy());
+
+			return new SpatialRelationship(){
+				@Override
+				public ScreenRegion apply(Context context) {
+					ScreenRegion region = context.getScreenRegion().find(target);
+					if (region != null)
+						return Relative.to(region).region(x,y,width,height).getScreenRegion();
+					else
+						return null;
+				}
+			};
+		}
+	}
+
+	static class LabelInterpreter implements Interpreter{
+		@Override
+		public Action interpret(Slide slide) {
+			SlideElement textElement = slide.select().isNotKeyword().hasText().first();
+			if (textElement == null)
+				return null;
+
+			LabelAction action = new LabelAction();
+			action.setSlideElement(textElement);
+			action.setText(textElement.getText());
+			double fontSize = UnitConverter.WholePointsToPoints(textElement.getTextSize());
+			action.setFontSize((int)fontSize);
+
+			try {
+				Color bgColor = Color.decode("#" + textElement.getBackgroundColor());		
+				action.setBackgroundColor(bgColor);
+			}catch(NumberFormatException e){
+
+			}
+
+			List<SpatialRelationshipInterpreter> locations =
+					Lists.newArrayList(new TargetLocationInterpreter(), new ScreenLocationInterpreter());
+
+			SpatialRelationship spatial = null;
+			Iterator<SpatialRelationshipInterpreter> iter = locations.iterator();
+			while (iter.hasNext() && spatial == null){
+				spatial = iter.next().interpret(slide, textElement);
+			}
+
+			if (spatial != null)
+				action.setSpatialRelationship(spatial);
+			slide.remove(textElement);			
+			return action;
+		}
+	}
+
+	static class SkipActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {
+			SlideElement keywordElement = slide.select().textMatches("(?i)skip").first();
+			if (keywordElement == null)
+				return null;		
+			slide.remove(keywordElement);
+			return new EmptyAction();
+		}		
+	}
+
+	static class OptionalActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {
+			SlideElement keywordElement = slide.select().textMatches("(?i)optional").first();
+			if (keywordElement == null)
+				return null;		
+			slide.remove(keywordElement);
+			return new OptionalAction();
+		}		
+	}
+
+	static class PauseActionInterpreter implements Interpreter {
+		@Override
+		public Action interpret(Slide slide) {			
+			SlideElement keywordElement = slide.select().textMatches("(?i)pause").first();
+			if (keywordElement == null)
+				return null;		
+			slide.remove(keywordElement);			
+			return new PauseAction();
+		}		
 	}
 	
-	Target interpretAsImageTarget(Slide slide, SlideElement targetElement){
-		ImageElement imageElement = (ImageElement) slide.select().intersects(targetElement).isImage().first();
-		if (imageElement == null)
-			return null;
+	static class BookmarkActionInterpreter extends RegexActionInterpreter {
 
-		Target target = createTarget(imageElement, targetElement);
-		if (target == null)
-			return null;
-		return target;
+		BookmarkActionInterpreter(){
+			super("(?i)bookmark ([\\S]+)");
+		}
+
+		@Override
+		protected Action interpret(Slide slide, SlideElement element, String[] arguments){	
+			if (arguments.length != 1)
+				return null;
+
+			BookmarkAction action = new BookmarkAction();
+			action.setName(arguments[0]);
+			return action;
+		}		
 	}
 
-	Action interpretAsTargetAction(Slide slide, Action doAction){
-		Target target = interpretAsImageTarget(slide);		
-		if (target == null)
-			return doAction;				
-		return new TargetAction(target, doAction);
-	}
 
-	Action interpretAsType(Slide slide){
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.TYPE).first();
-		if (keywordElement == null)
-			return null;
+	//	Action interpretAsLabel(Slide slide){
+	//		List<SlideElement> textElements = slide.select().isNotKeyword().hasText().all();
+	//		if (textElements.size() == 0)
+	//			return null;
+	//
+	//		if (textElements.size() == 1){
+	//			return interpretAsLabel(slide, textElements.get(0));
+	//		}else{
+	//			ParallelAction pa = new ParallelAction();
+	//			for (SlideElement textElement : textElements){
+	//				Action labelAction = interpretAsLabel(slide, textElement);
+	//				pa.addChild(labelAction);
+	//			}
+	//			return pa;
+	//		}
+	//	}
 
-		SlideElement textElement = slide.select().hasText().first();
-		if (textElement == null)
-			return null;
 
-		TypeAction typeAction = new TypeAction();
-		typeAction.setText(textElement.getText());
 
-		slide.remove(keywordElement);
-		slide.remove(textElement);
-		
-		return interpretAsTargetAction(slide, typeAction);
-	}
+	//	Target interpretAsImageTarget(Slide slide){
+	//		SlideElement targetElement = slide.select().isTarget().first();
+	//		if (targetElement == null)
+	//			return null;
+	//		return interpretAsImageTarget(slide, targetElement);
+	//	}
 
-	Action interpretAsBrowser(Slide slide){
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.BROWSER).first();
-		if (keywordElement == null)
-			return null;
+	//	Target interpretAsImageTarget(Slide slide, SlideElement targetElement){
+	//		ImageElement imageElement = (ImageElement) slide.select().intersects(targetElement).isImage().first();
+	//		if (imageElement == null)
+	//			return null;
+	//
+	//		Target target = createTarget(imageElement, targetElement);
+	//		if (target == null)
+	//			return null;
+	//		return target;
+	//	}
 
-		SlideElement textElement = slide.select().hasText().first();
-		if (textElement == null)
-			return null;
+	//	Action interpretAsTargetAction(Slide slide, Action doAction){
+	//		Target target = interpretAsImageTarget(slide);		
+	//		if (target == null)
+	//			return doAction;				
+	//		return new RetryAction(new TargetAction(target, doAction),5000, 500);
+	//	}
 
-		URL url = null;
-		try {
-			url = new URL(textElement.getText());
-		} catch (MalformedURLException e) {
-			return null;
-		}				
-		
-		slide.remove(keywordElement);
-		slide.remove(textElement);
+	//	Action interpretAsType(Slide slide){
+	//		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.TYPE).first();
+	//		if (keywordElement == null)
+	//			return null;
+	//
+	//		SlideElement textElement = slide.select().hasText().first();
+	//		if (textElement == null)
+	//			return null;
+	//
+	//		TypeAction typeAction = new TypeAction();
+	//		typeAction.setText(textElement.getText());
+	//
+	//		slide.remove(keywordElement);
+	//		slide.remove(textElement);
+	//
+	//		return interpretAsTargetAction(slide, typeAction);
+	//	}
+	//
+	//	Action interpretAsBrowser(Slide slide){
+	//		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.BROWSER).first();
+	//		if (keywordElement == null)
+	//			return null;
+	//
+	//		SlideElement textElement = slide.select().hasText().first();
+	//		if (textElement == null)
+	//			return null;
+	//
+	//		URL url = null;
+	//		try {
+	//			url = new URL(textElement.getText());
+	//		} catch (MalformedURLException e) {
+	//			return null;
+	//		}				
+	//
+	//		slide.remove(keywordElement);
+	//		slide.remove(textElement);
+	//
+	//		BrowserAction a = new BrowserAction();
+	//		a.setUrl(url);
+	//		return a;		
+	//	}	
+	//
 
-		BrowserAction a = new BrowserAction();
-		a.setUrl(url);
-		return a;		
-	}	
-	
-	
-	
+
 	Long interpretAsDuration(SlideElement textElement){
 
 		String arg = textElement.getText();
-		
+
 		// extract the time unit
 		TimeUnit timeUnit = UnitConverter.extractTimeUnitFromString(arg);
 		// if the time unit was not specified, default to seconds
@@ -282,7 +586,7 @@ public class DefaultInterpreter implements Interpreter {
 			}			
 			return durationInMilliSeconds.longValue();
 		}else{			
-			
+
 			logger.error("Error: Please write a valid time string."
 					+" Valid examples include: 10 milliseconds, 10 seconds, 10 minutes.");
 
@@ -290,164 +594,171 @@ public class DefaultInterpreter implements Interpreter {
 		}
 	}
 
-	Action interpretAsDelay(Slide slide){
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.DELAY).first();
-		if (keywordElement == null)
-			return null;
+	static Long parseDuration(String inputString){
 
-		SlideElement textElement = slide.select().hasText().first();
-		if (textElement == null)
-			return null;
+		// extract the time unit
+		TimeUnit timeUnit = UnitConverter.extractTimeUnitFromString(inputString);
+		// if the time unit was not specified, default to seconds
+		if(timeUnit==null){
+			timeUnit=TimeUnit.SECONDS;
+		}
+		// extract the wait time string value, replace all non digits with blank
+		String waitTimeString = inputString.replaceAll("[^0-9.]", "");
+		if(waitTimeString != null){
+			double duration = Double.parseDouble(waitTimeString);
+			Double durationInMilliSeconds = 0.0;
+			if (timeUnit == TimeUnit.SECONDS){
+				durationInMilliSeconds = duration * 1000;
+			}else if (timeUnit == TimeUnit.MINUTES){
+				durationInMilliSeconds = duration * 1000 * 60;
+			}else if (timeUnit == TimeUnit.HOURS){
+				durationInMilliSeconds = duration * 1000 * 60 * 60;
+			}			
+			return durationInMilliSeconds.longValue();
+		}else{			
 
-		Long duration = interpretAsDuration(textElement);
-		if (duration == null)
-			return null;
-		
-		slide.remove(keywordElement);
-		slide.remove(textElement);
-		
-		DelayAction a = new DelayAction();
-		a.setDuration(duration);
-		return a;
-	}	
-	
-	Action interpretAsWait(Slide slide){
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.WAIT).first();
-		if (keywordElement == null)
-			return null;
+			logger.error("Error: Please write a valid time string."
+					+" Valid examples include: 10 milliseconds, 10 seconds, 10 minutes.");
 
-		Target target = interpretAsImageTarget(slide);
-		if (target == null)
 			return null;
-
-		SlideElement textElement = slide.select().hasText().first();
-		if (textElement == null)
-			return null;
-
-		Long duration = interpretAsDuration(textElement);
-		if (duration == null)
-			return null;
-		
-		slide.remove(keywordElement);
-		slide.remove(textElement);
-
-		WaitAction a = new WaitAction(target);
-		a.setDuration(duration);
-		return a;
-	}
-	
-	private Action interpretAsSkip(Slide slide) {
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.SKIP).first();
-		if (keywordElement == null)
-			return null;		
-		slide.remove(keywordElement);
-		
-		return new SkipAction();
+		}
 	}
 
-	private Action interpretAsOptional(Slide slide) {
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.OPTIONAL).first();
-		if (keywordElement == null)
-			return null;		
-		slide.remove(keywordElement);
-		
-		return new OptionalAction();
-	}
-	
-	private Action interpretAsPause(Slide slide) {
-		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.PAUSE).first();
-		if (keywordElement == null)
-			return null;		
-		slide.remove(keywordElement);
 
-		return new PauseAction();
-	}
 
-	
+	//	Action interpretAsSleep(Slide slide){
+	//		SlideElement keywordElement = slide.select().ignoreCase().textStartsWith("sleep").first();
+	//		if (keywordElement == null)
+	//			return null;
+	//		
+	//		String[] toks = keywordElement.getText().split(" ");
+	//		if (toks.length != 2)
+	//			return null;
+	//		
+	//		String durationString = toks[1];
+	//		Long duration = parseDuration(durationString);		
+	//		if (duration == null)
+	//			return null;
+	//		
+	//		slide.remove(keywordElement);
+	//		
+	//		SleepAction a = new SleepAction(duration);
+	//		return a;
+	//	}	
+
+	//	Action interpretAsWait(Slide slide){
+	//		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.WAIT).first();
+	//		if (keywordElement == null)
+	//			return null;
+	//
+	//		Target target = interpretAsImageTarget(slide);
+	//		if (target == null)
+	//			return null;
+	//
+	//		SlideElement textElement = slide.select().hasText().first();
+	//		if (textElement == null)
+	//			return null;
+	//
+	//		Long duration = interpretAsDuration(textElement);
+	//		if (duration == null)
+	//			return null;
+	//
+	//		slide.remove(keywordElement);
+	//		slide.remove(textElement);
+	//
+	//		WaitAction a = new WaitAction(target);
+	//		a.setDuration(duration);
+	//		return a;
+	//	}
+
 	private Action interpretAsBookmark(Slide slide) {
 		SlideElement keywordElement = slide.select().isKeyword(KeywordDictionary.BOOKMARK).first();
 		if (keywordElement == null)
 			return null;		
-				
+
 		String text = keywordElement.getText(); 
 		if (text.isEmpty()){
 			logger.error("No name is specified for the bookmark keyword");
 			return null;
 		}
-		
+
 		slide.remove(keywordElement);
 		BookmarkAction action = new BookmarkAction();
 		action.setName(text);				
 		return action;
-	}
+	}	
 
 	@Override
 	public Action interpret(Slide inputSlide){
-		
-		// make a copy of the slide to work on
-		Slide slide = new Slide(inputSlide);
 
-		Action keywordAction = null;		
-		if ((keywordAction = interpretAsClick(slide)) != null){			
-
-		}else if ((keywordAction = interpretAsExist(slide)) != null){
-
-		}else if ((keywordAction = interpretAsRightClick(slide)) != null){			
-
-		}else if ((keywordAction = interpretAsDoubleClick(slide)) != null){			
-
-		}else if ((keywordAction = interpretAsDoubleClick(slide)) != null){
-
-		}else if ((keywordAction = interpretAsDrag(slide)) != null){		
-
-		}else if ((keywordAction = interpretAsDrop(slide)) != null){		
-
-		}else if ((keywordAction = interpretAsBrowser(slide)) != null){		
-
-		}else if ((keywordAction = interpretAsNotExist(slide)) != null){		
-
-		}else if ((keywordAction = interpretAsDelay(slide)) != null){
-
-		}else if ((keywordAction = interpretAsWait(slide)) != null){
-		
-		}else if ((keywordAction = interpretAsType(slide)) != null){
-			
-		}
-		
-		Action action = null;
-		
 		ParallelAction parallelAction = new ParallelAction();
+
+		// make a copy of the slide to work on
+		Slide slide = new Slide(inputSlide);		
+
+		List<Interpreter> interpreters = Lists.newArrayList(
+				new TargetActionInterpreter(),
+				new ExistActionInterpreter(),
+				new NotExistActionInterpreter(),
+				new BrowseActionInterpreter(),
+				new SleepActionInterpreter()				
+				);
+
+		List<Interpreter> controlActionInterpreters = Lists.newArrayList(
+				new SkipActionInterpreter(),
+				new OptionalActionInterpreter(),
+				new PauseActionInterpreter(),
+				new BookmarkActionInterpreter()
+				);
+
+
+		Action keywordAction = null;
+		Iterator<Interpreter> iter = interpreters.iterator();
+		while (keywordAction == null && iter.hasNext()){
+			keywordAction = iter.next().interpret(slide);		
+		}
+
+		if (keywordAction instanceof TargetAction){
+			keywordAction = new RetryAction(keywordAction, 10000, 500);
+		}
+
 		if (keywordAction != null){
 			parallelAction.addChild(keywordAction);
 		}
-				
-		Action labelAction = interpretAsLabel(slide);		
-		if (labelAction != null){
-			parallelAction.addChild(labelAction);
+
+		Action controlAction = null;
+		iter = controlActionInterpreters.iterator();
+		while (controlAction == null && iter.hasNext()){
+			controlAction = iter.next().interpret(slide);
 		}
-		
-		action = parallelAction;
-		
-		Action controlAction = null;		
-		if ((controlAction = interpretAsSkip(slide)) != null){			
-		
-		}else if ((controlAction = interpretAsOptional(slide)) != null){
-			
-		}else if ((controlAction = interpretAsPause(slide)) != null){
-			
-		}else if ((controlAction = interpretAsBookmark(slide)) != null){
-			
+
+		Interpreter labelInterpreter = new LabelInterpreter();
+		Action labelAction;
+		while ((labelAction = labelInterpreter.interpret(slide)) != null){
+			labelAction = new RetryAction(labelAction, 10000, 500);
+			parallelAction.addChildAsBackground(labelAction);
 		}
+
 		
+		Action action = parallelAction;
+
+
+		//		Action controlAction = null;		
+		//		if ((controlAction = interpretAsSkip(slide)) != null){			
+		//
+		//		}else if ((controlAction = interpretAsOptional(slide)) != null){
+		//
+		//		}else if ((controlAction = interpretAsPause(slide)) != null){
+		//
+		//		}else if ((controlAction = interpretAsBookmark(slide)) != null){
+		//
+		//		}
+
 		if (controlAction != null){			
-			((AbstractAction) controlAction).addChild(action);
+			((CompoundAction) controlAction).addChild(action);
 			action = controlAction;
-		}
-		
-		SlideAction slideAction = new SlideAction();
-		if (action != null)
-			slideAction.addChild(action);
-		return slideAction;
+		}		
+		return action;
 	}
 
 }

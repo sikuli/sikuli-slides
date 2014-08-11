@@ -8,22 +8,43 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
-public class WaitAction extends AbstractAction {
+public class WaitAction extends TargetAction {
 	
 	private long duration = 10000;
 	private Target target;
+	private Action retry;
 	
 	public WaitAction(Target target){
-		this.setTarget(target);
+		super(target);
 	}		
 
 	@Override
-	protected void doExecute(Context context) throws ActionExecutionException {
-		ScreenRegion screenRegion = context.getScreenRegion();
-		ScreenRegion ret = screenRegion.wait(getTarget(), (int) duration);
-		if (ret == null){
-			throw new ActionExecutionException("Unable to find the target after waiting for " + duration + " ms", this);
-		}
+	public void execute(Context context) throws ActionExecutionException {			
+		Action action = new Action(){
+
+			@Override
+			public void execute(Context context) throws ActionExecutionException {
+				ScreenRegion screenRegion = context.getScreenRegion();
+				ScreenRegion ret = screenRegion.find(getTarget());
+				if (ret == null){
+					throw new ActionExecutionException("", this);
+				}
+			}
+
+			@Override
+			public void stop() {				
+			}
+			
+		};
+		
+		retry = new RetryAction(action, duration, 200);
+		retry.execute(context);
+	}
+	
+	@Override
+	public void stop(){
+		if (retry != null)
+			retry.stop();
 	}
 	
 	public String toString(){
