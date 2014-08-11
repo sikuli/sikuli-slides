@@ -35,8 +35,7 @@ public class DefaultSlideShowControllerEventTest {
 		slide2 = mock(Slide.class);
 		slide3 = mock(Slide.class);
 		List<Slide> slides = Lists.newArrayList(slide1, slide2, slide3);
-		slideshow = new DefaultSlideShowController(context, slides);
-		
+		slideshow = new DefaultSlideShowController(context, slides);		
 		listener = mock(SlideShowListener.class);
 		slideshow.addListener(listener);
 	}

@@ -1,7 +1,7 @@
 /**
 Khalid
 */
-package org.sikuli.slides.v1.utils;
+package org.sikuli.slides.api.interpreters;
 
 import java.util.concurrent.TimeUnit;
 
