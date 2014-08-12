@@ -18,21 +18,20 @@ public class RecorderMain {
 		try {
 			parse = Args.parse(Command.class, args);
 		} catch (IllegalArgumentException e) {
-			Args.usage(Command.class, "java -jar sikuli-slides-1.3.0.jar record [options]");
+			Args.usage(Command.class, "java -jar sikuli-slides-1.5.0.jar record [options]");
 			System.exit(1);
 			return;
 		}
 		
 		if (Command.help){
-			Args.usage(Command.class, "java -jar sikuli-slides-1.3.0.jar record [options]");
+			Args.usage(Command.class, "java -jar sikuli-slides-1.5.0.jar record [options]");
 			System.exit(1);
 			return;			
 		}
 	       
-	    System.out.println("Press [Ctrl-Shift-2] to start recording");
-	    System.out.println("Press [Ctrl-Shift-ESC] to stop recording");
 
 		Recorder rec = new Recorder();
+		rec.printHelp();
 		
 		if (Command.bounds != null){
 			int x = Command.bounds[0];
