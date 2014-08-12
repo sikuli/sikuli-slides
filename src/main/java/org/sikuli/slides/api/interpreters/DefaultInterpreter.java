@@ -317,8 +317,10 @@ public class DefaultInterpreter implements Interpreter {
 			return new TargetAction(target, action);
 		}
 	}
+	
 
-	static class ContextImageTargetInterpreter implements TargetInterpreter {
+
+	public static class ContextImageTargetInterpreter implements TargetInterpreter {
 
 		public Target interpret(Slide slide, SlideElement targetElement) {
 

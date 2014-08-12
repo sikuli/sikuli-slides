@@ -1,5 +1,7 @@
 package org.sikuli.slides.api.interpreters;
 
+import java.util.List;
+
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
 import org.sikuli.slides.api.actions.Action;
@@ -13,6 +15,7 @@ public interface Interpreter {
 interface TargetInterpreter {
 	Target interpret(Slide slide);
 }
+
 
 interface SpatialRelationshipInterpreter {
 	SpatialRelationship interpret(Slide slide, SlideElement element);

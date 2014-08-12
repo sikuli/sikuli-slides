@@ -17,7 +17,6 @@ import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.recorder.detector.EventDetector;
 import org.sikuli.recorder.detector.MouseEventDetector;
 import org.sikuli.recorder.detector.ScreenshotEventDetector;
-import org.sikuli.recorder.pptx.PPTXGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
