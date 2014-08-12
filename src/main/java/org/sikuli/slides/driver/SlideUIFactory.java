@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.util.List;
 
 import org.sikuli.slides.api.io.PPTXSlidesReader;
@@ -29,13 +30,23 @@ public class SlideUIFactory {
 					"to read slides");
 
 		Source source = pageClassToProxy.getAnnotation(Source.class);
-		source.value();		
+		source.value();
+		
+//		if (source.url().isEmpty() > 0){
 		SlidesReader reader = new PPTXSlidesReader();
 
 		List<Slide> slides;
-		File file = new File(source.value());
-		try {			
-			slides = reader.read(file);
+//		File file = new File(source.value());
+		try {
+			
+			if (!source.value().isEmpty()){
+				slides = reader.read(new File(source.value()));	
+			}else if (!source.url().isEmpty()){
+				slides = reader.read(new URL(source.url()));
+			}else{
+				throw new RuntimeException("@Source is not specified correctly");
+			}
+			
 		} catch (IOException e) {
 			// error in reading the slides from the given source 
 			throw new RuntimeException(e);

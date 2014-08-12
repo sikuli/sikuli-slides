@@ -11,4 +11,5 @@ import java.lang.annotation.RetentionPolicy;
 @Target(ElementType.TYPE)
 public @interface Source {
   String value() default "";
+  String url() default "";
 }
