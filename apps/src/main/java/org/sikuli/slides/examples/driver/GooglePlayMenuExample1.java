@@ -8,7 +8,7 @@ import org.sikuli.slides.driver.SlideUIFactory;
 import org.sikuli.slides.driver.UIElement;
 import org.sikuli.slides.driver.annotations.Source;
 
-public class GooglePlayMenuExample {
+public class GooglePlayMenuExample1 {
 	
 	@Source(url = "http://slides.sikuli.org/examples/driver/googleplay/menu.pptx")
 	public static class Menu {
