@@ -11,13 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class DefaultUISpecInterpreter implements UISpecInterpreter { 
+public class DefaultUISpecInterpreter implements SlideSpecInterpreter { 
 	
 	static Logger log = LoggerFactory.getLogger(DefaultUISpecInterpreter.class);
 
 	@Override
-	public UISpec interpret(Slide slide) {
-		UISpec page = new UISpec();
+	public SlideSpec interpret(Slide slide) {
+		SlideSpec page = new SlideSpec();
 
 		// find all targets
 		List<SlideElement> targetElements = slide.select().isTarget().all();
@@ -37,7 +37,7 @@ public class DefaultUISpecInterpreter implements UISpecInterpreter {
 			if (labelElement == null)
 				continue;
 			
-			SlideUIElement element = new SlideUIElement(target, labelElement.getText());
+			DefaultWidget element = new DefaultWidget(target, labelElement.getText());
 			page.add(element);
 			
 			log.trace("added to spec: " + element);
