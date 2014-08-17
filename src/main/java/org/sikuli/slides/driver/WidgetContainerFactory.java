@@ -11,7 +11,7 @@ import java.util.List;
 import org.sikuli.slides.api.io.PPTXSlidesReader;
 import org.sikuli.slides.api.io.SlidesReader;
 import org.sikuli.slides.api.models.Slide;
-import org.sikuli.slides.driver.annotations.Source;
+import org.sikuli.slides.driver.annotations.WidgetSlide;
 
 public class WidgetContainerFactory {
 
@@ -24,12 +24,12 @@ public class WidgetContainerFactory {
 	 */
 	public static <T> T create(Class<T> classToProxy) {
 
-		if (!classToProxy.isAnnotationPresent(Source.class))
+		if (!classToProxy.isAnnotationPresent(WidgetSlide.class))
 			// path to pptx file is not specified
 			throw new RuntimeException("@Source annotation is missing in " + classToProxy + ". Need this to know where" +
 					"to read slides");
 
-		Source source = classToProxy.getAnnotation(Source.class);
+		WidgetSlide source = classToProxy.getAnnotation(WidgetSlide.class);
 		source.value();
 		
 //		if (source.url().isEmpty() > 0){

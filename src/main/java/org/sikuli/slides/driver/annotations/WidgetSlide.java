@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Source {
+public @interface WidgetSlide {
   String value() default "";
   String url() default "";
 }
