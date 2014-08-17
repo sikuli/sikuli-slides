@@ -62,6 +62,15 @@ class DefaultWidget implements Widget {
 		}	
 	}	
 	
+	@Override
+	public void paste(String text) {
+		ScreenRegion r = getScreenRegion();
+		if (r != null){
+			mouse.click(r.getCenter());
+			keyboard.paste(text);
+		}	
+	}		
+	
 	public String toString(){
 		return Objects.toStringHelper(getClass().getSimpleName())
 				.add("label", label)
@@ -87,6 +96,14 @@ class DefaultWidget implements Widget {
 			canvas.add().box().around(r);
 			canvas.display(1);
 		}
+	}
+
+	@Override
+	public void rightClick() {
+		ScreenRegion r = getScreenRegion();
+		if (r != null){
+			mouse.rightClick(r.getCenter());
+		}		
 	}	
 	
 }

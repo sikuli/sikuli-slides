@@ -11,14 +11,28 @@ public interface Widget {
 	public void click();	
 	
 	/** 
-	 * Execute a click operation on this widget
+	 * Execute a double click operation on this widget
 	 */
 	public void doubeClick();
 	
 	/** 
-	 * Type the given text in this widget
+	 * Execute a right click operation on this widget
+	 */
+	public void rightClick();
+		
+	/** 
+	 * Type the given text at this widget
+	 * 
+	 * @param text text to type
 	 */	
 	public void type(String text);	
+	
+	/**
+	 * Paste the given text at this widget
+	 * 
+	 * @param text text to paste
+	 */
+	void paste(String text);
 	
 	/** 
 	 * Highlight the widget briefly
@@ -51,4 +65,6 @@ public interface Widget {
 	 * 
 	 */	
 	public ScreenRegion getScreenRegion();
+
+	
 }
