@@ -104,6 +104,30 @@ class DefaultWidget implements Widget {
 		if (r != null){
 			mouse.rightClick(r.getCenter());
 		}		
+	}
+
+	@Override
+	public void hover() {
+		ScreenRegion r = getScreenRegion();
+		if (r != null){
+			mouse.hover(r.getCenter());
+		}	
+	}
+
+	@Override
+	public void drag() {
+		ScreenRegion r = getScreenRegion();
+		if (r != null){
+			mouse.drag(r.getCenter());
+		}			
+	}
+
+	@Override
+	public void drop() {
+		ScreenRegion r = getScreenRegion();
+		if (r != null){
+			mouse.drop(r.getCenter());
+		}			
 	}	
 	
 }

@@ -19,6 +19,11 @@ public interface Widget {
 	 * Execute a right click operation on this widget
 	 */
 	public void rightClick();
+	
+	/** 
+	 * Hover/move the mouse to this widget
+	 */
+	public void hover();	
 		
 	/** 
 	 * Type the given text at this widget
@@ -38,6 +43,17 @@ public interface Widget {
 	 * Highlight the widget briefly
 	 */	
 	public void highlight();	
+	
+	
+	/**
+	 * Drag this widget
+	 */	
+	public void drag();
+
+	/**
+	 * Drop at this widget 
+	 */	
+	public void drop();
 	
 	
 	/**
