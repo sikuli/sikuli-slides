@@ -2,7 +2,9 @@ package org.sikuli.slides.driver;
 
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
+import org.sikuli.api.robot.Keyboard;
 import org.sikuli.api.robot.Mouse;
+import org.sikuli.api.robot.desktop.DesktopKeyboard;
 import org.sikuli.api.robot.desktop.DesktopMouse;
 
 import com.google.common.base.Objects;
@@ -14,6 +16,7 @@ class SlideUIElement implements UIElement {
 	private ScreenRegion screenRegion = null;
 	
 	private Mouse mouse = new DesktopMouse();
+	private Keyboard keyboard = new DesktopKeyboard();
 	
 	public SlideUIElement(){
 		
@@ -47,6 +50,15 @@ class SlideUIElement implements UIElement {
 		}		
 	}
 	
+	@Override
+	public void type(String text) {
+		ScreenRegion r = getScreenRegion();
+		if (r != null){
+			mouse.click(r.getCenter());
+			keyboard.type(text);
+		}	
+	}	
+	
 	public String toString(){
 		return Objects.toStringHelper(getClass().getSimpleName())
 				.add("label", label)
@@ -63,6 +75,8 @@ class SlideUIElement implements UIElement {
 	public ScreenRegion getScreenRegion(){
 		return screenRegion;
 	}
+
+
 
 
 	

@@ -8,26 +8,29 @@ public interface UIElement {
 	/** 
 	 * Execute a click operation on this element
 	 */
-	void click();
+	public void click();
+	
+	
+	public void type(String text);
 	
 	/** 
 	 * Execute a click operation on this element
 	 */
-	void doubeClick();
+	public void doubeClick();
 	
 
-	Target getTarget();
-	String getLabel();
+	public Target getTarget();
+	public String getLabel();
 
 	/** 
 	 * Set the @ScreenRegion where element is found
 	 * 
 	 */
-	void setScreenRegion(ScreenRegion found);
+	public void setScreenRegion(ScreenRegion found);
 	
 	/** 
 	 * Get the @ScreenRegion where this element can be found
 	 * 
 	 */	
-	ScreenRegion getScreenRegion();
+	public ScreenRegion getScreenRegion();
 }
