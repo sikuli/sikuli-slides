@@ -36,6 +36,10 @@ public class TypeStringParser {
 		public Type getType() {
 			return type;
 		}		
+		
+		public String toString(){
+			return text;
+		}
 	}
 	
 	public List<TypeStringPart> parse(String input){
@@ -47,9 +51,9 @@ public class TypeStringParser {
 		
 		log.trace("input: " + input);
 		
-		String rest = "";
+		String rest = input;
 		while (matcher.find()) {			
-			log.trace("group 1: " + matcher.group(1) + ", group 2: " + matcher.group(2));
+			log.trace("groups: 1: [{}], 2: [{}]", matcher.group(1), matcher.group(2));
 			String substring = matcher.group(1);				
 			String key = matcher.group(2);
 			if (!substring.isEmpty()){
@@ -66,6 +70,7 @@ public class TypeStringParser {
 			results.add(new TypeStringPart(Type.Text, rest));
 		}
 
+		log.debug("results: {}", results);
 		return results;
 	}
 }

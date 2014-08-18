@@ -164,7 +164,6 @@ public class Slide implements Action {
 		for (Interpreter interpreter : interpreters){
 			action = interpreter.interpret(this);
 			if (action != null){
-				System.out.println("action:" + action);
 				action.execute(context);
 				return;
 			}

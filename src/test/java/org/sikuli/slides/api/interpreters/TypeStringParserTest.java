@@ -91,5 +91,14 @@ public class TypeStringParserTest {
 		assertThat(parts.get(2).getText(), equalTo("ESC"));
 	}
 
+	@Test
+	public void sikuli(){
+		String text = "sikuli";
+	
+		List<TypeStringPart> parts = p.parse(text);
+
+		assertThat(parts.size(), equalTo(1));
+		assertThat(parts.get(0).getText(), equalTo("sikuli"));
+	}
 
 }

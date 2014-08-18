@@ -92,6 +92,14 @@ public class DefaultInterpreter implements Interpreter {
 			return action;
 		}
 
+		/**		 
+		 * 
+		 * 
+		 * @param slide the source slide
+		 * @param element the element whose text content matches the regular expression
+		 * @param arguments array of string arguments (not including the keyword)
+		 * @return
+		 */
 		protected Action interpret(Slide slide, SlideElement element, String[] arguments){
 			return null;
 		}
@@ -255,7 +263,8 @@ public class DefaultInterpreter implements Interpreter {
 			SlideElement keywordElement = slide.select().ignoreCase().textStartsWith("exist").first();
 			if (keywordElement == null)
 				return null;		
-
+			slide.remove(keywordElement);
+			
 			Target target = (new ContextImageTargetInterpreter()).interpret(slide);
 			if (target == null)
 				return null;
@@ -269,7 +278,8 @@ public class DefaultInterpreter implements Interpreter {
 
 			SlideElement keywordElement = slide.select().ignoreCase().textStartsWith("not exist").first();
 			if (keywordElement == null)
-				return null;		
+				return null;
+			slide.remove(keywordElement);
 
 			Target target = (new ContextImageTargetInterpreter()).interpret(slide);
 			if (target == null)
@@ -791,6 +801,9 @@ public class DefaultInterpreter implements Interpreter {
 			((CompoundAction) controlAction).addChild(action);
 			action = controlAction;
 		}		
+		
+		
+		logger.debug("result:" + action);		
 		return action;
 	}
 

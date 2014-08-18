@@ -78,7 +78,7 @@ public class ParallelActionTest {
 	public void testCanStopBackgroundActionOnException() throws ActionExecutionException {
 		Context context = new Context();
 		Action badAction = mock(Action.class);
-		ActionExecutionException exception = mock(ActionExecutionException.class);
+		ActionExecutionException exception = mock(ActionExecutionException.class);		
 		doThrow(exception).when(badAction).execute(any(Context.class));
 
 		
