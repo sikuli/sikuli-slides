@@ -13,7 +13,7 @@ import org.sikuli.slides.api.io.SlidesReader;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.driver.annotations.WidgetSlide;
 
-public class WidgetContainerFactory {
+public class WidgetSlideFactory {
 
 	/**
 	 * Create an object where each field represents an {@link Widget} that can be found and interacted with

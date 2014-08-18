@@ -3,7 +3,7 @@ package org.sikuli.slides.driver;
 import java.io.IOException;
 
 import org.junit.Test;
-import org.sikuli.slides.driver.WidgetContainerFactory;
+import org.sikuli.slides.driver.WidgetSlideFactory;
 import org.sikuli.slides.driver.Widget;
 import org.sikuli.slides.driver.annotations.Label;
 import org.sikuli.slides.driver.annotations.WidgetSlide;
@@ -24,7 +24,7 @@ public class SlideUIFactoryTest {
 	@Test
 	public void initElements() throws IOException{
 		
-		Header header = WidgetContainerFactory.create(Header.class);		
+		Header header = WidgetSlideFactory.create(Header.class);		
 
 		header.help.click();		
 		header.download.click();
