@@ -58,6 +58,15 @@ public class ParallelAction extends CompoundAction {
 		addChild(child);
 	}
 	
+	public boolean hasForegroundAction(){
+		for (Action action : getChildren()){
+			if (!isBackground(action)){
+				return true;			
+			}
+		}
+		return false;
+	}
+	
 	private boolean isBackground(Action action){
 		return backgroundSet.contains(action);
 	}

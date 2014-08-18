@@ -3,7 +3,6 @@ package org.sikuli.slides.api.interpreters;
 import java.awt.Color;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -14,33 +13,27 @@ import org.sikuli.api.Relative;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.Target;
 import org.sikuli.slides.api.Context;
-import org.sikuli.slides.api.actions.ActionExecutionException;
-import org.sikuli.slides.api.actions.RetryAction;
-import org.sikuli.slides.api.actions.RobotAction;
 import org.sikuli.slides.api.actions.Action;
+import org.sikuli.slides.api.actions.AssertExistAction;
+import org.sikuli.slides.api.actions.AssertNotExistAction;
 import org.sikuli.slides.api.actions.BookmarkAction;
 import org.sikuli.slides.api.actions.BrowserAction;
 import org.sikuli.slides.api.actions.CompoundAction;
 import org.sikuli.slides.api.actions.DoubleClickAction;
 import org.sikuli.slides.api.actions.DragAction;
 import org.sikuli.slides.api.actions.DropAction;
-import org.sikuli.slides.api.actions.AssertExistAction;
+import org.sikuli.slides.api.actions.EmptyAction;
 import org.sikuli.slides.api.actions.LabelAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
-import org.sikuli.slides.api.actions.AssertNotExistAction;
 import org.sikuli.slides.api.actions.OptionalAction;
 import org.sikuli.slides.api.actions.ParallelAction;
 import org.sikuli.slides.api.actions.PauseAction;
-import org.sikuli.slides.api.actions.RelativeAction;
+import org.sikuli.slides.api.actions.RetryAction;
 import org.sikuli.slides.api.actions.RightClickAction;
-import org.sikuli.slides.api.actions.EmptyAction;
 import org.sikuli.slides.api.actions.SleepAction;
-import org.sikuli.slides.api.actions.SlideAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
 import org.sikuli.slides.api.actions.WaitAction;
-import org.sikuli.slides.api.interpreters.DefaultInterpreter.LabelInterpreter;
-import org.sikuli.slides.api.interpreters.DefaultInterpreter.SleepActionInterpreter;
 import org.sikuli.slides.api.models.ImageElement;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.models.SlideElement;
@@ -767,6 +760,14 @@ public class DefaultInterpreter implements Interpreter {
 		Interpreter labelInterpreter = new LabelInterpreter();
 		Action labelAction;
 		while ((labelAction = labelInterpreter.interpret(slide)) != null){
+			
+			// if there is no foreground action, create a sleep action as the foreground action,
+			// this way, the label actions can stop on when the sleep action terminates
+			if (!parallelAction.hasForegroundAction()){				
+				// TODO: makes the sleep duration customizable
+				parallelAction.addChild(new SleepAction(5000));
+			}			
+			
 			labelAction = new RetryAction(labelAction, 10000, 500);
 			parallelAction.addChildAsBackground(labelAction);
 		}
