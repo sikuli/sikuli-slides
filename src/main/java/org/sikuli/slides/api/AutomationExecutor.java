@@ -30,37 +30,21 @@ class AutomationExecutor implements SlidesExecutor {
 	@Override
 	public void execute(List<Slide> slides) throws SlideExecutionException {
 				
-		logger.info("Executing {} slide(s)", slides.size());
+		logger.trace("Execute {} slide(s)", slides.size());
 		
-		Interpreter interpreter = new DefaultInterpreter();		
-		List<Action> actions = Lists.newArrayList();
-		for (Slide slide : slides){
-			Action action = interpreter.interpret(slide);
-			actions.add(action);
-			logger.debug("Action interpreted: {}", action);
-		}
-
 		for (int i = 0; i < slides.size(); ++i){
 			
 			Slide slide = slides.get(i);
-			Action action = actions.get(i);			
-			Context slideContext = new Context(context, slide);
-			ExecutionEvent event = new ExecutionEvent(action,slideContext);
+			ExecutionEvent event = new ExecutionEvent(slide ,context);
+			
 			
 			if (!context.getExecutionFilter().accept(event)){
 				logger.info("Slide {} of {} is skipped", slide.getNumber(), slides.size());				
-				continue;			
-				
+				continue;							
 			}else{ 
-				if (action == null){
-					continue;
-				}
-				
-				logger.info("Slide {} of {}", slide.getNumber(), slides.size());
-				logger.info(Actions.toPrettyString(action));
-				
+				logger.info("Execute slide {} of {}", slide.getNumber(), slides.size());				
 				try {				
-					action.execute(slideContext);
+					slide.execute(context);
 				} catch (ActionExecutionException e) {
 					SlideExecutionException ex = new SlideExecutionException(e);
 					ex.setAction(e.getAction());

@@ -25,6 +25,14 @@ public class ExecutionEvent {
 		this.context = checkNotNull(context);
 		this.slide = context.getSlide();
 	}
+	
+	public ExecutionEvent(Slide slide, Context context) {
+//		this.action = checkNotNull(action);
+		this.context = checkNotNull(context);
+		this.slide = checkNotNull(slide);
+	}	
+	
+	
 	/**Get the action associated with this event
 	 * @return	action
 	 */
