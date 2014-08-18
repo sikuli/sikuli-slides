@@ -16,13 +16,18 @@ import org.sikuli.slides.api.actions.SequentialAction;
 import org.sikuli.slides.api.actions.ConfigAction;
 import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.models.SlideElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class ConfigInterpreter implements Interpreter {
 
+	static Logger log = LoggerFactory.getLogger(ConfigInterpreter.class);
+	
 	class SequentialConfigAction extends ConfigAction {
 		List<Action> configs = Lists.newArrayList();
 
@@ -37,6 +42,9 @@ public class ConfigInterpreter implements Interpreter {
 			}
 		}
 		
+		public String toString(){
+			return configs.toString();
+		}
 	}
 	
 	@Override
@@ -59,6 +67,8 @@ public class ConfigInterpreter implements Interpreter {
 				seqAction.addChild(action);
 			}			
 		}
+		
+		log.debug("result: {}", seqAction);
 		return seqAction;
 	}
 
@@ -147,8 +157,50 @@ public class ConfigInterpreter implements Interpreter {
 
 	};
 	
-	static Interpreter configParamsInterpreter = new Interpreter(){
+	
+	static class ConfigParamsAction extends ConfigAction {
+		
+		private Map<String, String> map;
 
+		public ConfigParamsAction(Map<String, String> params){
+			this.map = params;
+		}
+		
+		@Override
+		public void execute(Context context)
+				throws ActionExecutionException {					
+			for (Entry<String,String> entry : map.entrySet())
+				context.addParameter(entry.getKey(),entry.getValue());
+		}		
+		
+		public String toString(){
+			List<String> params = Lists.newArrayList();
+			for (Entry<String,String> entry : map.entrySet()){
+				params.add(entry.getKey() + "=" + entry.getValue());						
+			}
+			return "ConfigParamsAction{" + Joiner.on(",").join(params) + "}";					
+		}
+	}
+	
+	static class ConfigMinScoreAction extends ConfigAction {		
+		private float scoreToSet;
+		public ConfigMinScoreAction(float minScore){
+			this.scoreToSet = minScore;
+		}
+		
+		@Override
+		public void execute(Context context)
+				throws ActionExecutionException {
+			context.setMinScore(scoreToSet);			
+		}
+		
+		public String toString(){
+			return "ConfigMinScoreAction{" + scoreToSet + "}";					
+		}		
+	}
+	
+	static class ConfigParamsInterpreter implements Interpreter {
+		
 		@Override
 		public Action interpret(Slide slide) {
 			SlideElement heading = slide.select().hasText().textContains("PARAMETERS").first();
@@ -170,20 +222,15 @@ public class ConfigInterpreter implements Interpreter {
 				}				
 			}
 			
-			Action action = new ConfigAction(){
-				@Override
-				public void execute(Context context)
-						throws ActionExecutionException {					
-					for (Entry<String,String> entry : map.entrySet())
-						context.addParameter(entry.getKey(),entry.getValue());
-				}			
-			};
-			
+			Action action = new ConfigParamsAction(map);			
 			return action;
 		}
-	};
-
-	static Interpreter configMinScoreInterpreter = new Interpreter(){
+	}
+	
+	static Interpreter configParamsInterpreter = new ConfigParamsInterpreter();
+	static Interpreter configMinScoreInterpreter = new MinScoreInterpreter();			
+			
+	static class MinScoreInterpreter implements Interpreter{
 		@Override
 		public Action interpret(Slide slide) {
 			SlideElement heading = slide.select().hasText().textContains("MIN SCORE").first();
@@ -206,15 +253,8 @@ public class ConfigInterpreter implements Interpreter {
 			}catch (NumberFormatException e) {
 				return null;
 			}
-
-			final float scoreToSet = score;						
-			Action action = new ConfigAction(){
-				@Override
-				public void execute(Context context)
-						throws ActionExecutionException {
-					context.setMinScore(scoreToSet);			
-				}			
-			};
+	
+			Action action = new ConfigMinScoreAction(score);
 			return action;
 		}
 

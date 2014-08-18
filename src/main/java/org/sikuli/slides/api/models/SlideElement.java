@@ -134,12 +134,13 @@ public class SlideElement {
 	@Override
 	public String toString(){
 		return Objects.toStringHelper(SlideElement.class)
-				.add("id", id).add("name",name)
+				.add("id", id)
+				.add("text",text)				
 				.add("offx",offx).add("offy",offy)
 				.add("cx",cx).add("cy",cy)
-				.add("width",width).add("height",height)
+				.add("width",width).add("height",height)				
+				.add("name",name)				
 				.add("geom",geom)
-				.add("text",text)
 				.add("fontSize", textSize)
 				.add("order", order)
 				.add("lineColor", lineColor)
@@ -150,5 +151,13 @@ public class SlideElement {
 	}
 	public void setGeom(String geom) {
 		this.geom = geom;
+	}
+	public String toStringSimple() {
+		return Objects.
+				toStringHelper("")
+					.add("text",text)
+					.add("offx",offx).add("offy",offy)
+					.add("cx",cx).add("cy",cy)					
+					.toString();
 	}
 }

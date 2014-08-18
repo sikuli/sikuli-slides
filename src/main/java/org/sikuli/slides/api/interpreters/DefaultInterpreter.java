@@ -778,7 +778,7 @@ public class DefaultInterpreter implements Interpreter {
 				parallelAction.addChild(new SleepAction(5000));
 			}			
 			
-			labelAction = new RetryAction(labelAction, 10000, 500);
+			labelAction = new RetryAction(labelAction, Long.MAX_VALUE, 500);
 			parallelAction.addChildAsBackground(labelAction);
 		}
 

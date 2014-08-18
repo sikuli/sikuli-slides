@@ -9,10 +9,14 @@ import org.sikuli.api.visual.ScreenRegionCanvas;
 import org.sikuli.slides.api.Context;
 import org.sikuli.slides.api.interpreters.SpatialRelationship;
 import org.sikuli.slides.api.models.SlideElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
 public class LabelAction implements Action {
+	
+	static Logger log = LoggerFactory.getLogger(LabelAction.class); 
 	
 	private String text = "";
 	private int fontSize = 12;
@@ -29,10 +33,13 @@ public class LabelAction implements Action {
 
 	@Override
 	public void execute(Context context) throws ActionExecutionException{
+		log.trace("executed.");
+		
 		ScreenRegion targetRegion = context.getScreenRegion();		
 		if (spatial != null){
 			targetRegion = spatial.apply(context);
 			if (targetRegion == null){
+				log.trace("failed. Target is not found.");
 				throw new ActionExecutionException("",this);
 			}
 		}
@@ -51,6 +58,7 @@ public class LabelAction implements Action {
 	
 	@Override
 	public void stop(){
+		log.trace("stopped.");
 		if (canvas != null)
 			canvas.hide();
 	}
