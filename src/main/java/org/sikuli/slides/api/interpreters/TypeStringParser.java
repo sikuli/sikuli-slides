@@ -13,24 +13,32 @@ import com.google.common.collect.Lists;
 
 public class TypeStringParser {
 	
-	Logger log = LoggerFactory.getLogger(TypeStringParser.class);
+	static Logger log = LoggerFactory.getLogger(TypeStringParser.class);
 	
-	static class TypeStringPart {
+	static public class TypeStringPart {
 		
 		public TypeStringPart(Type type, String text) {
 			this.type = type;
 			this.text = text;
 		}
-		enum Type {
+		public enum Type {
 			Key,
 			Text
 		};
 		
-		String text;
-		Type type;		
+		private String text;
+		private Type type;
+
+		public String getText() {
+			return text;
+		}
+		
+		public Type getType() {
+			return type;
+		}		
 	}
 	
-	List<TypeStringPart> parse(String input){
+	public List<TypeStringPart> parse(String input){
 
 		List<TypeStringPart> results = Lists.newArrayList();
 
@@ -40,9 +48,7 @@ public class TypeStringParser {
 		log.trace("input: " + input);
 		
 		String rest = "";
-		while (matcher.find()) {
-			
-			System.out.println("group 1: " + matcher.group(1));
+		while (matcher.find()) {			
 			log.trace("group 1: " + matcher.group(1) + ", group 2: " + matcher.group(2));
 			String substring = matcher.group(1);				
 			String key = matcher.group(2);

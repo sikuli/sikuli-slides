@@ -29,10 +29,10 @@ public class TypeStringParserTest {
 		List<TypeStringPart> parts = p.parse(text);
 
 		assertThat(parts.size(), equalTo(4));
-		assertThat(parts.get(0).text, equalTo("sikuli"));
-		assertThat(parts.get(1).text, equalTo("ENTER"));
-		assertThat(parts.get(2).text, equalTo("pig"));
-		assertThat(parts.get(3).text, equalTo("ESC"));
+		assertThat(parts.get(0).getText(), equalTo("sikuli"));
+		assertThat(parts.get(1).getText(), equalTo("ENTER"));
+		assertThat(parts.get(2).getText(), equalTo("pig"));
+		assertThat(parts.get(3).getText(), equalTo("ESC"));
 	}
 
 	@Test
@@ -42,8 +42,8 @@ public class TypeStringParserTest {
 		List<TypeStringPart> parts = p.parse(text);
 
 		assertThat(parts.size(), equalTo(1));
-		assertThat(parts.get(0).text, equalTo("ENTER"));
-		assertThat(parts.get(0).type, equalTo(Type.Key));
+		assertThat(parts.get(0).getText(), equalTo("ENTER"));
+		assertThat(parts.get(0).getType(), equalTo(Type.Key));
 	}
 
 	@Test
@@ -53,14 +53,14 @@ public class TypeStringParserTest {
 		List<TypeStringPart> parts = p.parse(text);
 
 		assertThat(parts.size(), equalTo(3));
-		assertThat(parts.get(0).text, equalTo("ENTER"));
-		assertThat(parts.get(0).type, equalTo(Type.Key));
+		assertThat(parts.get(0).getText(), equalTo("ENTER"));
+		assertThat(parts.get(0).getType(), equalTo(Type.Key));
 
-		assertThat(parts.get(1).text, equalTo("ESC"));
-		assertThat(parts.get(1).type, equalTo(Type.Key));
+		assertThat(parts.get(1).getText(), equalTo("ESC"));
+		assertThat(parts.get(1).getType(), equalTo(Type.Key));
 
-		assertThat(parts.get(2).text, equalTo("pp"));
-		assertThat(parts.get(2).type, equalTo(Type.Text));
+		assertThat(parts.get(2).getText(), equalTo("pp"));
+		assertThat(parts.get(2).getType(), equalTo(Type.Text));
 
 	}	
 	
@@ -71,11 +71,11 @@ public class TypeStringParserTest {
 		List<TypeStringPart> parts = p.parse(text);
 
 		assertThat(parts.size(), equalTo(2));
-		assertThat(parts.get(0).text, equalTo("ENTER"));
-		assertThat(parts.get(0).type, equalTo(Type.Key));
+		assertThat(parts.get(0).getText(), equalTo("ENTER"));
+		assertThat(parts.get(0).getType(), equalTo(Type.Key));
 
-		assertThat(parts.get(1).text, equalTo("how are you"));
-		assertThat(parts.get(1).type, equalTo(Type.Text));
+		assertThat(parts.get(1).getText(), equalTo("how are you"));
+		assertThat(parts.get(1).getType(), equalTo(Type.Text));
 
 	}		
 
@@ -86,9 +86,9 @@ public class TypeStringParserTest {
 		List<TypeStringPart> parts = p.parse(text);
 
 		assertThat(parts.size(), equalTo(3));
-		assertThat(parts.get(0).text, equalTo("sikuli"));
-		assertThat(parts.get(1).text, equalTo("ENTER"));
-		assertThat(parts.get(2).text, equalTo("ESC"));
+		assertThat(parts.get(0).getText(), equalTo("sikuli"));
+		assertThat(parts.get(1).getText(), equalTo("ENTER"));
+		assertThat(parts.get(2).getText(), equalTo("ESC"));
 	}
 
 
