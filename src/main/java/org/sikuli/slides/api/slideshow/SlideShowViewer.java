@@ -96,7 +96,7 @@ public class SlideShowViewer extends JFrame implements SlideShowListener {
 		getContentPane().add(controlBar, BorderLayout.SOUTH);
 		setLocation(50,500);
 		maximize();
-		setTitle("Sikuli Slides");
+		setTitle("Sikuli Slides 1.5");
 		setResizable(false);
 		setAlwaysOnTop(true);
 
