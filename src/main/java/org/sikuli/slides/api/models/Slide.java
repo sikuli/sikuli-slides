@@ -46,13 +46,23 @@ public class Slide implements Action {
 		return Lists.newArrayList(elements);		
 	}
 
-	public String toString(){
+	public String getText(){
 		List<String> elementNames = Lists.newArrayList();
-		for (SlideElement el : elements){
-			elementNames.add(el.getClass().getSimpleName());
-		}
-		String txt = Joiner.on(";").join(elementNames);
-		return Objects.toStringHelper(this).add("number", number).add("elements", txt).toString();		
+		for (SlideElement el : elements){		
+			String text = el.getText();
+			if (text != null && !text.isEmpty()){
+				elementNames.add(text);
+			}
+		}		
+		String txt = Joiner.on(",").join(elementNames);
+		return txt;
+	}
+	
+	public String toString(){		
+		return Objects.toStringHelper(this)
+				.add("number", number)
+				.add("text", getText())
+				.add("elements", elements).toString();		
 	}
 	
 	public Selector select(){
@@ -164,7 +174,6 @@ public class Slide implements Action {
 		for (Interpreter interpreter : interpreters){
 			action = interpreter.interpret(this);
 			if (action != null){
-				System.out.println("action:" + action);
 				action.execute(context);
 				return;
 			}

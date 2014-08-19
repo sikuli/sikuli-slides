@@ -2,6 +2,8 @@ package org.sikuli.slides.api.actions;
 
 import org.sikuli.slides.api.Context;
 
+import com.google.common.base.Objects;
+
 public class SleepAction implements Action {
 		
 	private long duration;
@@ -31,6 +33,10 @@ public class SleepAction implements Action {
 
 	public long getDuration() {		
 		return duration;
+	}
+	
+	public String toString(){
+		return Objects.toStringHelper(getClass().getSimpleName()).add("duration",duration).toString();
 	}
 
 }

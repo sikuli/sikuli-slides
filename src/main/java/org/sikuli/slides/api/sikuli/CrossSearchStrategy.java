@@ -80,6 +80,7 @@ public class CrossSearchStrategy implements SearchStrategy {
 		for(Hypothesis hypothesis : hypotheses){
 			
 			Target target = hypothesis.getTarget();
+			target.setMinScore(0.8f);
 			
 			List<ScreenRegion> lookupRegion = screenRegion.findAll(target);
 			logger.trace("test: {} ... found {} matches", hypothesis, lookupRegion.size());

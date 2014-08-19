@@ -27,8 +27,8 @@ public class InterpreterTest {
 		on(slide).insert().element().text("button3").bounds(400,190,60,20);
 		on(slide).insert().element().bounds(400,200,50,50);
 
-		UISpecInterpreter interpreter = new DefaultUISpecInterpreter();
-		UISpec page = interpreter.interpret(slide);
+		SlideSpecInterpreter interpreter = new DefaultUISpecInterpreter();
+		SlideSpec page = interpreter.interpret(slide);
 				
 		assertThat(page.getElementCount(), equalTo(3));
 		

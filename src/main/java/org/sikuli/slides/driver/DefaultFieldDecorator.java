@@ -16,25 +16,25 @@ import org.sikuli.slides.driver.annotations.Label;
  */
 public class DefaultFieldDecorator implements FieldDecorator {
 
-  protected UIElementLocatorFactory factory;
+  protected WidgetLocatorFactory factory;
 
-  public DefaultFieldDecorator(UIElementLocatorFactory factory) {
+  public DefaultFieldDecorator(WidgetLocatorFactory factory) {
     this.factory = factory;
   }
 
   public Object decorate(ClassLoader loader, Field field) {
-    if (!(UIElement.class.isAssignableFrom(field.getType())
+    if (!(Widget.class.isAssignableFrom(field.getType())
           || isDecoratableList(field))) {
       return null;
     }
 
-    UIElementLocator locator = factory.createLocator(field);
+    WidgetLocator locator = factory.createLocator(field);
     
     if (locator == null) {
       return null;
     }
 
-    if (UIElement.class.isAssignableFrom(field.getType())) {
+    if (Widget.class.isAssignableFrom(field.getType())) {
       return proxyForLocator(loader, locator);
     }else{ 
       return null;
@@ -55,7 +55,7 @@ public class DefaultFieldDecorator implements FieldDecorator {
 
     Type listType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 
-    if (!UIElement.class.equals(listType)) {
+    if (!Widget.class.equals(listType)) {
       return false;
     }
 
@@ -66,11 +66,11 @@ public class DefaultFieldDecorator implements FieldDecorator {
     return true;
   }
 
-  protected UIElement proxyForLocator(ClassLoader loader, UIElementLocator locator) {
-    InvocationHandler handler = new LocatingUIElementHandler(locator);
-    UIElement proxy;
-	proxy = (UIElement) Proxy.newProxyInstance(
-			loader, new Class[] {UIElement.class}, handler);
+  protected Widget proxyForLocator(ClassLoader loader, WidgetLocator locator) {
+    InvocationHandler handler = new LocatingWidgetHandler(locator);
+    Widget proxy;
+	proxy = (Widget) Proxy.newProxyInstance(
+			loader, new Class[] {Widget.class}, handler);
     return proxy;
   }
 

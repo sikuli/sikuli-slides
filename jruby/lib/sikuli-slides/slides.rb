@@ -1,4 +1,10 @@
 module Sikuli
+  class API    
+    def self.browse(url)
+          org.sikuli.api.API.browse java.net.URL.new(url)
+    end
+  end
+  
   class Slides        
     
     def self.jars_root
@@ -15,7 +21,11 @@ module Sikuli
     
     def self.execute(filename)
       begin
-        org.sikuli.slides.api.Slides.execute(java.io.File.new(filename))
+        if filename.start_with? "http"
+          org.sikuli.slides.api.Slides.execute(java.net.URL.new(filename), context)
+        else
+          org.sikuli.slides.api.Slides.execute(java.io.File.new(filename), context)
+        end
       rescue org.sikuli.slides.api.SlideExecutionException => e
         if e.message.match "target"
           raise TargetNotFound
@@ -62,7 +72,12 @@ module Sikuli
     def self.execute(filename, params = {} )
       begin
         context = createContext(params)
-        org.sikuli.slides.api.Slides.execute(java.io.File.new(filename), context)
+        if filename.start_with? "http"
+          org.sikuli.slides.api.Slides.execute(java.net.URL.new(filename), context)
+        else
+          org.sikuli.slides.api.Slides.execute(java.io.File.new(filename), context)
+        end
+        
       rescue org.sikuli.slides.api.SlideExecutionException => e
         if e.message.match "target"
           raise TargetNotFound

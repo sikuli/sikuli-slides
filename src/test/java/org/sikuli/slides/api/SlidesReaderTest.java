@@ -17,25 +17,23 @@ public class SlidesReaderTest {
 	@Test
 	public void testCanReadSlidesNormally() throws IOException{		
 		SlidesReader reader = new PPTXSlidesReader();
-//		URL url = getClass().getResource("click.pptx");
-//		List<Slide> slides = reader.read(url);
-//		assertEquals("# of slides", 1, slides.size());
-//		
-//		slides = reader.read(getClass().getResource("fivesteps.pptx"));
-//		assertEquals("# of slides", 5, slides.size());
-//
-//		slides = reader.read(getClass().getResource("3blankslides.pptx"));
-//		assertEquals("# of slides", 3, slides.size());
+		URL url = getClass().getResource("click.pptx");
+		List<Slide> slides = reader.read(url);
+		assertEquals("# of slides", 1, slides.size());
 		
-		List<Slide> slides = reader.read(new File("apps/2014-08-12-00-38-33.pptx"));
+		slides = reader.read(getClass().getResource("fivesteps.pptx"));
+		assertEquals("# of slides", 5, slides.size());
+
+		slides = reader.read(getClass().getResource("3blankslides.pptx"));
+		assertEquals("# of slides", 3, slides.size());
 	}
 	
 	@Test
 	public void testCanReadSlidesRemotely() throws IOException{		
-//		SlidesReader reader = new PPTXSlidesReader();
-//		URL url = new URL("http://slides-dev.sikuli.org/helloworld.pptx");
-//		List<Slide> slides = reader.read(url);
-//		assertEquals("# of slides", 1, slides.size());
+		SlidesReader reader = new PPTXSlidesReader();
+		URL url = new URL("http://slides.sikuli.org/pptx/helloworld.pptx");
+		List<Slide> slides = reader.read(url);
+		assertEquals("# of slides", 1, slides.size());
 	}
 	
 	@Test

@@ -1,11 +1,16 @@
 package org.sikuli.slides.api.actions;
 
+import java.util.List;
+
 import org.sikuli.api.ScreenRegion;
+import org.sikuli.api.robot.Key;
 import org.sikuli.api.robot.Keyboard;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopKeyboard;
 import org.sikuli.api.robot.desktop.DesktopMouse;
 import org.sikuli.slides.api.Context;
+import org.sikuli.slides.api.interpreters.TypeStringParser;
+import org.sikuli.slides.api.interpreters.TypeStringParser.TypeStringPart;
 
 import com.google.common.base.Objects;
 
@@ -20,15 +25,59 @@ public class TypeAction extends RobotAction {
 	public void setText(String text) {
 		this.text = text;
 	}
+	
+	String interpretAsKeyString(String name){
+		if (name.equals("ENTER")){
+			return Key.ENTER;
+		}else if (name.equals("ESC")){
+			return Key.ESC;
+		}else if (name.equals("LEFT")){
+			return Key.LEFT;
+		}else if (name.equals("UP")){
+			return Key.UP;
+		}else if (name.equals("RIGHT")){
+			return Key.RIGHT;
+		}else if (name.equals("DOWN")){
+			return Key.DOWN;
+		}else if (name.equals("TAB")){
+			return Key.TAB;
+		}else if (name.equals("BACKSPACE")){
+			return Key.BACKSPACE;
+		}else if (name.equals("PAGEUP")){
+			return Key.PAGE_UP;
+		}else if (name.equals("PAGEDOAN")){
+			return Key.PAGE_DOWN;
+		}
+		return null;
+	}
 
 	@Override
 	protected void doExecute(Context context) {
 		String textToType = context.render(getText());
+				
+		
 		ScreenRegion screenRegion = context.getScreenRegion();
 		Mouse mouse = new DesktopMouse();
 		Keyboard keyboard=new DesktopKeyboard();
 		mouse.click(screenRegion.getCenter());
-		keyboard.type(textToType);		
+		
+		TypeStringParser p = new TypeStringParser();
+		List<TypeStringPart> parts = p.parse(textToType);		
+		for (TypeStringPart part : parts){
+		
+			if (part.getType() == TypeStringPart.Type.Key){
+				String keyText = part.getText();							
+				String key = interpretAsKeyString(keyText);
+				if (key != null){
+					keyboard.keyDown(key);				
+					keyboard.keyUp();			
+				}
+			}else if (part.getType() == TypeStringPart.Type.Text){			
+				keyboard.type(part.getText());
+			}			
+		}
+			
+				
 	}
 	
 	public String toString(){

@@ -3,7 +3,6 @@ package org.sikuli.slides.api;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 

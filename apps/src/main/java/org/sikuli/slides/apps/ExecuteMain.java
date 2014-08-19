@@ -15,12 +15,6 @@ import org.sikuli.slides.api.SlideExecutionException;
 import org.sikuli.slides.api.Slides;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
-import ch.qos.logback.core.ConsoleAppender;
-
 import com.google.common.base.Objects;
 import com.sampullara.cli.Args;
 import com.sampullara.cli.Argument;
@@ -129,28 +123,28 @@ public class ExecuteMain {
 	}
 	
 	void configureLogback(String logLevelString){
-		Level logLevel = Level.toLevel(logLevelString);
-		
-		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-		ConsoleAppender consoleAppender = new ConsoleAppender();
-		consoleAppender.setContext(loggerContext);
-
-		PatternLayoutEncoder encoder = new PatternLayoutEncoder();
-		encoder.setContext(loggerContext);		
-		if (logLevel.isGreaterOrEqual(Level.DEBUG)){
-			encoder.setPattern("%msg%n");
-		}else{
-			encoder.setPattern("[%thread] %-5level %logger{36} %msg%n");
-		}		
-		encoder.start();
-		
-		consoleAppender.setEncoder(encoder);	
-	    consoleAppender.start();
-
-		Logger rootLogger = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		rootLogger.detachAndStopAllAppenders();
-		rootLogger.addAppender(consoleAppender);
-		rootLogger.setLevel(logLevel);
+//		Level logLevel = Level.toLevel(logLevelString);
+//		
+//		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+//		ConsoleAppender consoleAppender = new ConsoleAppender();
+//		consoleAppender.setContext(loggerContext);
+//
+//		PatternLayoutEncoder encoder = new PatternLayoutEncoder();
+//		encoder.setContext(loggerContext);		
+//		if (logLevel.isGreaterOrEqual(Level.DEBUG)){
+//			encoder.setPattern("%msg%n");
+//		}else{
+//			encoder.setPattern("[%thread] %-5level %logger{36} %msg%n");
+//		}		
+//		encoder.start();
+//		
+//		consoleAppender.setEncoder(encoder);	
+//	    consoleAppender.start();
+//
+//		Logger rootLogger = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+//		rootLogger.detachAndStopAllAppenders();
+//		rootLogger.addAppender(consoleAppender);
+//		rootLogger.setLevel(logLevel);
 	}
 	
 

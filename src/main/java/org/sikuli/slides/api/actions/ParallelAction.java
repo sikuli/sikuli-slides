@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 import org.sikuli.slides.api.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
@@ -14,6 +16,8 @@ import com.google.common.collect.Sets;
 // execution returns when all the children have finished execution
 // 
 public class ParallelAction extends CompoundAction {
+	
+	static Logger logger = LoggerFactory.getLogger(ParallelAction.class);
 
 	private CountDownLatch doneSignal;
 
@@ -30,7 +34,8 @@ public class ParallelAction extends CompoundAction {
 			try {
 				action.execute(context);
 				success = true;
-			} catch (ActionExecutionException e) {
+			} catch (ActionExecutionException e) {				
+				logger.debug("exception thrown by {} because {} ", e.getAction(), e.getMessage());
 				success = false;
 				// Saves the exception so it can be re-thrown
 				exception = e;
@@ -56,6 +61,15 @@ public class ParallelAction extends CompoundAction {
 	public void addChildAsBackground(Action child){
 		backgroundSet.add(child);
 		addChild(child);
+	}
+	
+	public boolean hasForegroundAction(){
+		for (Action action : getChildren()){
+			if (!isBackground(action)){
+				return true;			
+			}
+		}
+		return false;
 	}
 	
 	private boolean isBackground(Action action){

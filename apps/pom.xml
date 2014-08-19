@@ -25,10 +25,11 @@
 	<artifactId>sikuli-slides</artifactId>
 	<name>Sikuli Slides Apps</name>
 	<url>http://lab.sikuli.org</url>
-	<version>1.4.0	</version>
+	<version>1.5.0</version>
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<platform.dependency>macosx-x86_64</platform.dependency>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -37,17 +38,17 @@
 			<version>1.5.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.0.13</version>
-		</dependency>
-		<dependency>
 			<groupId>com.install4j</groupId>
 			<artifactId>api</artifactId>
-			<version>5.1.6</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/i4jruntime.jar</systemPath>
-		</dependency>	
+			<version>5.1.12</version>
+<!-- 			<scope>system</scope> -->
+<!-- 			<systemPath>${project.basedir}/lib/i4jruntime.jar</systemPath> -->
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.6</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -69,6 +70,10 @@
 	</dependencies>
 	<build>
 		<plugins>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.8</version>
+			</plugin>		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -104,7 +109,7 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<inherited>true</inherited>
@@ -116,7 +121,7 @@
 						</manifest>
 					</archive>
 				</configuration>
-			</plugin>
+			</plugin> -->
 		</plugins>
 	</build>
 </project>
