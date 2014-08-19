@@ -103,7 +103,7 @@ class PPTXBundle {
 	         }
 	         zipFile.extractAll(dest.getAbsolutePath());
 	    } catch (ZipException e) {
-	        e.printStackTrace();
+	    	logger.error(e.getMessage());
 	    }
 	}
 

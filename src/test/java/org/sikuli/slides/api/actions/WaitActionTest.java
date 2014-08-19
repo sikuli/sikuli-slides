@@ -19,7 +19,7 @@ public class WaitActionTest {
 		context = new Context();
 	}
 
-	@Test(timeout = 2500)
+	@Test(timeout = 3000)
 	public void testCanFinishWhenTargetAppearsAfter2Seconds() throws ActionExecutionException {	
 		Target target = MockTargetFactory.canBeFoundAfter(2000);
 		Action action = new WaitAction(target);
@@ -34,17 +34,17 @@ public class WaitActionTest {
 		action.execute(context);
 	}
 	
-	@Test(timeout = 1500)
+	@Test(timeout = 5000)
 	public void testCanStopEarlierBeforeTimeout() throws ActionExecutionException {		
 
 		Target target = MockTargetFactory.canBeFoundAfter(10000);
 		final WaitAction action = new WaitAction(target);
-		action.setDuration(5000);		
+		action.setDuration(10000);		
 		
 		new Thread(){
 			public void run(){
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 				} catch (InterruptedException e) {
 				}
 				action.stop();
