@@ -22,10 +22,8 @@ public class SlideParserTest {
 		//Files.re
 		SlideParser parser = new SlideParser();
 		Slide slide = parser.parse(xml, rel);
-		
-		System.out.println(slide);	
-		assertEquals("size", 4, slide.getElements().size());
-		
+			
+		assertEquals("size", 4, slide.getElements().size());		
 		assertThat(slide.select().isImage().exist(), equalTo(true));
 		ImageElement image = (ImageElement) slide.select().isImage().first();
 		assertThat(image.getFileName(), containsString("image"));

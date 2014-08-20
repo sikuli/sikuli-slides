@@ -8,7 +8,7 @@ import org.sikuli.slides.api.Context;
 
 import com.google.common.base.Objects;
 
-public class BrowserAction extends AbstractAction {
+public class BrowserAction extends RobotAction {
 	
 	private URL url;
 

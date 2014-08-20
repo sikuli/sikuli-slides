@@ -1,23 +1,29 @@
 package org.sikuli.slides.api.actions;
 
-import java.util.List;
-
 import org.sikuli.slides.api.Context;
+import org.sikuli.slides.api.models.Slide;
 
-import com.google.common.base.Objects;
-
-public class SlideAction extends AbstractAction {
+public class SlideAction extends ChainedAction {
 	
+	private Slide slide;
+	public SlideAction(Slide slide){
+		this.setSlide(slide);
+	}
+		
 	@Override
-	public void doExecute(Context context) throws ActionExecutionException {
-		List<Action> children = getChildren();
-		if (children.size() == 1){
-			Action firstChild = children.get(0);
-			firstChild.execute(context);
+	public void execute(Context context) throws ActionExecutionException {
+		Action child = getChild();
+		if (child != null){
+			child.execute(context);
 		}
 	}
-	
-	public String toString(){
-		return Objects.toStringHelper(this).add("children",getChildren()).toString();
+
+	public Slide getSlide() {
+		return slide;
 	}
+
+	public void setSlide(Slide slide) {
+		this.slide = slide;
+	}
+	
 }

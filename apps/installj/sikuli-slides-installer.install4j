@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="5.1.6" transformSequenceNumber="4">
-  <directoryPresets config="/Users/tomyeh/github/sikuli-slides/apps/installj" />
-  <application name="Sikuli Slides" distributionSourceDir="" applicationId="9119-4830-3669-3468" mediaDir="target" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="sikuli-slides" publisher="Sikuli Lab" publisherWeb="http://lab.sikuli.org" version="1.4.0" allPathsRelative="false" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+<install4j version="5.1.12" transformSequenceNumber="4">
+  <directoryPresets config="/Users/tomyeh/github/sikuli-slides/apps/target/sikuli-slides-1.5.0_windows-x86.jar" />
+  <application name="Sikuli Slides" distributionSourceDir="" applicationId="9119-4830-3669-3468" mediaDir="target" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="sikuli-slides" publisher="Sikuli Lab" publisherWeb="http://lab.sikuli.org" version="1.5.0" allPathsRelative="false" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -22,12 +22,14 @@
       <mountPoint id="27" root="" location="" mode="755" />
     </mountPoints>
     <entries>
-      <fileEntry mountPoint="27" file="../target/sikuli-slides-1.4.0.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="27" file="../target/sikuli-slides-1.5.0_macosx-x86_64.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="27" file="../target/sikuli-slides-1.5.0_windows-x86_64.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="27" file="../target/sikuli-slides-1.5.0_windows-x86.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
     </entries>
     <components />
   </files>
   <launchers>
-    <launcher name="slides" id="28" customizedId="" external="false" excludeFromMenu="false" unixMode="755" menuName="" icnsFile="sikuli-icon.icns" customMacBundleIdentifier="false" macBundleIdentifier="" swtApp="false" fileset="" macBundleBinary="JavaApplicationStub" addMacEntitlements="false" macEntitlementsFile="">
+    <launcher name="Mac" id="28" customizedId="Mac" external="false" excludeFromMenu="false" unixMode="755" menuName="Sikuli Slides ${compiler:sys.version}" icnsFile="sikuli-icon.icns" customMacBundleIdentifier="false" macBundleIdentifier="" swtApp="false" fileset="" macBundleBinary="JavaApplicationStub" addMacEntitlements="false" macEntitlementsFile="">
       <executable name="sikuli-slides" type="1" iconSet="true" iconFile="" executableDir="" redirectStderr="true" stderrFile="error.log" stderrMode="overwrite" redirectStdout="true" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="true" globalSingleInstance="false">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" />
       </executable>
@@ -39,7 +41,101 @@
       </splashScreen>
       <java mainClass="org.sikuli.slides.apps.FileOpenMain" vmParameters="" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath>
-          <archive location="sikuli-slides-1.4.0.jar" failOnError="false" />
+          <archive location="sikuli-slides-1.5.0_macosx-x86_64.jar" failOnError="false" />
+        </classPath>
+        <nativeLibraryDirectories />
+      </java>
+      <includedFiles />
+      <unextractableFiles />
+      <vmOptionsFile mode="template" overwriteMode="0" fileMode="644">
+        <content />
+      </vmOptionsFile>
+      <customScript mode="1" file="">
+        <content />
+      </customScript>
+      <infoPlist mode="3" file="">
+        <content>&lt;key&gt;CFBundleDocumentTypes&lt;/key&gt;
+	    &lt;array&gt;
+	        &lt;dict&gt;
+	            &lt;key&gt;CFBundleTypeExtensions&lt;/key&gt;
+	            &lt;array&gt;
+	                &lt;string&gt;pptx&lt;/string&gt;
+	            &lt;/array&gt;
+	            &lt;key&gt;CFBundleTypeIconFile&lt;/key&gt;
+	            &lt;string&gt;&lt;/string&gt;
+	            &lt;key&gt;CFBundleTypeName&lt;/key&gt;
+	            &lt;string&gt;Microsoft PowerPoint presentation&lt;/string&gt;
+	            &lt;key&gt;CFBundleTypeRole&lt;/key&gt;
+	            &lt;string&gt;Viewer&lt;/string&gt;
+	            &lt;key&gt;NSDocumentClass&lt;/key&gt;
+	            &lt;string&gt;MyAppDocument&lt;/string&gt;
+	        &lt;/dict&gt;
+	    &lt;/array&gt;</content>
+      </infoPlist>
+      <iconImageFiles>
+        <file path="sikuli-icon.png" />
+      </iconImageFiles>
+    </launcher>
+    <launcher name="Win64" id="184" customizedId="" external="false" excludeFromMenu="false" unixMode="755" menuName="Sikuli Slides ${compiler:sys.version}" icnsFile="sikuli-icon.icns" customMacBundleIdentifier="false" macBundleIdentifier="" swtApp="false" fileset="" macBundleBinary="JavaApplicationStub" addMacEntitlements="false" macEntitlementsFile="">
+      <executable name="sikuli-slides" type="1" iconSet="true" iconFile="" executableDir="" redirectStderr="true" stderrFile="error.log" stderrMode="overwrite" redirectStdout="true" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="true" globalSingleInstance="false">
+        <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" />
+      </executable>
+      <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="" java6SplashScreen="false">
+        <text>
+          <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+          <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+        </text>
+      </splashScreen>
+      <java mainClass="org.sikuli.slides.apps.FileOpenMain" vmParameters="" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+        <classPath>
+          <archive location="sikuli-slides-1.5.0_windows-x86_64.jar" failOnError="false" />
+        </classPath>
+        <nativeLibraryDirectories />
+      </java>
+      <includedFiles />
+      <unextractableFiles />
+      <vmOptionsFile mode="template" overwriteMode="0" fileMode="644">
+        <content />
+      </vmOptionsFile>
+      <customScript mode="1" file="">
+        <content />
+      </customScript>
+      <infoPlist mode="3" file="">
+        <content>&lt;key&gt;CFBundleDocumentTypes&lt;/key&gt;
+	    &lt;array&gt;
+	        &lt;dict&gt;
+	            &lt;key&gt;CFBundleTypeExtensions&lt;/key&gt;
+	            &lt;array&gt;
+	                &lt;string&gt;pptx&lt;/string&gt;
+	            &lt;/array&gt;
+	            &lt;key&gt;CFBundleTypeIconFile&lt;/key&gt;
+	            &lt;string&gt;&lt;/string&gt;
+	            &lt;key&gt;CFBundleTypeName&lt;/key&gt;
+	            &lt;string&gt;Microsoft PowerPoint presentation&lt;/string&gt;
+	            &lt;key&gt;CFBundleTypeRole&lt;/key&gt;
+	            &lt;string&gt;Viewer&lt;/string&gt;
+	            &lt;key&gt;NSDocumentClass&lt;/key&gt;
+	            &lt;string&gt;MyAppDocument&lt;/string&gt;
+	        &lt;/dict&gt;
+	    &lt;/array&gt;</content>
+      </infoPlist>
+      <iconImageFiles>
+        <file path="sikuli-icon.png" />
+      </iconImageFiles>
+    </launcher>
+    <launcher name="Win32" id="194" customizedId="" external="false" excludeFromMenu="false" unixMode="755" menuName="Sikuli Slides ${compiler:sys.version}" icnsFile="sikuli-icon.icns" customMacBundleIdentifier="false" macBundleIdentifier="" swtApp="false" fileset="" macBundleBinary="JavaApplicationStub" addMacEntitlements="false" macEntitlementsFile="">
+      <executable name="sikuli-slides" type="1" iconSet="true" iconFile="" executableDir="" redirectStderr="true" stderrFile="error.log" stderrMode="overwrite" redirectStdout="true" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="true" globalSingleInstance="false">
+        <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" />
+      </executable>
+      <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="" java6SplashScreen="false">
+        <text>
+          <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+          <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+        </text>
+      </splashScreen>
+      <java mainClass="org.sikuli.slides.apps.FileOpenMain" vmParameters="" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+        <classPath>
+          <archive location="sikuli-slides-1.5.0_windows-x86.jar" failOnError="false" />
         </classPath>
         <nativeLibraryDirectories />
       </java>
@@ -311,7 +407,7 @@
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.finish.ShowURLAction">
                       <void property="urlSpec">
-                        <string>http://slides.sikuli.org/docs/gui/</string>
+                        <string>http://slides.sikuli.org/docs/usage/</string>
                       </void>
                     </object>
                   </java>
@@ -430,11 +526,17 @@
     </applications>
   </installerGui>
   <mediaSets>
-    <windows name="Windows" id="31" customizedId="" mediaFileName="" installDir="Sikuli Slides" overridePrincipalLanguage="false" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
-      <excludedLaunchers />
+    <windows name="Windows 64bit" id="31" customizedId="" mediaFileName="" installDir="Sikuli Slides" overridePrincipalLanguage="false" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+      <excludedLaunchers>
+        <launcher id="28" />
+        <launcher id="194" />
+      </excludedLaunchers>
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
-      <exclude />
+      <exclude>
+        <entry location="sikuli-slides-1.5.0_macosx-x86_64.jar" fileType="regular" />
+        <entry location="sikuli-slides-1.5.0_windows-x86.jar" fileType="regular" />
+      </exclude>
       <variables />
       <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
         <commentFiles />
@@ -443,10 +545,13 @@
       <excludedComponents />
       <includedDownloadableComponents />
     </windows>
-    <macos name="Mac OS X Single Bundle" id="66" customizedId="" mediaFileName="" installDir="Sikuli Slides" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" appleJre="true" customInstallBaseDir="" contentFilesType="1" downloadURL="" signLaunchers="false" launcherId="28">
+    <macos name="Mac OS X Single Bundle" id="66" customizedId="" mediaFileName="" installDir="Sikuli Slides" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" appleJre="true" requiredVmIdPrefix="" customInstallBaseDir="" contentFilesType="1" downloadURL="" signLaunchers="false" launcherId="28">
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
-      <exclude />
+      <exclude>
+        <entry location="sikuli-slides-1.5.0_windows-x86_64.jar" fileType="regular" />
+        <entry location="sikuli-slides-1.5.0_windows-x86.jar" fileType="regular" />
+      </exclude>
       <variables />
       <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
         <commentFiles />
@@ -455,11 +560,27 @@
       <excludedComponents />
       <includedDownloadableComponents />
     </macos>
+    <windows name="Windows 32bit" id="172" customizedId="" mediaFileName="" installDir="Sikuli Slides" overridePrincipalLanguage="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+      <excludedLaunchers>
+        <launcher id="28" />
+        <launcher id="184" />
+      </excludedLaunchers>
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location="sikuli-slides-1.5.0_macosx-x86_64.jar" fileType="regular" />
+        <entry location="sikuli-slides-1.5.0_windows-x86_64.jar" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
+    </windows>
   </mediaSets>
-  <buildIds buildAll="false">
-    <mediaSet refId="31" />
-    <mediaSet refId="66" />
-  </buildIds>
+  <buildIds buildAll="false" />
   <buildOptions verbose="false" faster="false" disableSigning="false" debug="false" />
 </install4j>
 

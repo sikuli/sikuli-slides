@@ -10,9 +10,9 @@ import org.junit.Test;
 import org.sikuli.api.Target;
 import org.sikuli.slides.api.actions.Action;
 import org.sikuli.slides.api.actions.BrowserAction;
-import org.sikuli.slides.api.actions.ExistAction;
+import org.sikuli.slides.api.actions.AssertExistAction;
 import org.sikuli.slides.api.actions.LeftClickAction;
-import org.sikuli.slides.api.actions.NotExistAction;
+import org.sikuli.slides.api.actions.AssertNotExistAction;
 import org.sikuli.slides.api.actions.RightClickAction;
 import org.sikuli.slides.api.actions.TargetAction;
 import org.sikuli.slides.api.actions.TypeAction;
@@ -55,10 +55,10 @@ public class JavaCodeGeneratorTest {
 		actions.add(browser);		
 
 
-		ExistAction exist = new ExistAction(target);
+		AssertExistAction exist = new AssertExistAction(target);
 		actions.add(exist);
 
-		NotExistAction notexist = new NotExistAction(target);
+		AssertNotExistAction notexist = new AssertNotExistAction(target);
 		actions.add(notexist);
 		
 		type = new TypeAction();

@@ -10,7 +10,7 @@ import com.google.common.base.Objects;
 // the screen region given in the context. It can be used in conjunction
 // with a TargetAction to execute an action not directly on a target
 // but in another area relative to the target.
-public class RelativeAction extends AbstractAction {
+public class RelativeAction extends ChainedAction {
 	
 	private int x = 0;
 	private int y = 0;
@@ -30,7 +30,7 @@ public class RelativeAction extends AbstractAction {
 		this.width = width;
 		this.height = height;
 		this.isPixelUnit = true;
-		addChild(targetAction);
+		setChild(targetAction);
 	}
 	
 	public RelativeAction(double xmin, double ymin, double xmax, double ymax, Action targetAction){
@@ -39,11 +39,11 @@ public class RelativeAction extends AbstractAction {
 		this.ymin = ymin;
 		this.ymax = ymax;
 		this.isPixelUnit = false;
-		addChild(targetAction);
+		setChild(targetAction);
 	}
 	
 	@Override
-	public void doExecute(Context context) throws ActionExecutionException {
+	public void execute(Context context) throws ActionExecutionException {
 		ScreenRegion screenRegion = context.getScreenRegion();
 		
 		ScreenRegion targetRegion;
@@ -53,11 +53,12 @@ public class RelativeAction extends AbstractAction {
 			targetRegion = Relative.to(screenRegion).region(xmin, ymin, xmax, ymax).getScreenRegion();
 		}
 		
-		Context childConext = new Context(context, targetRegion);			
-//		childConext.setScreenRegion(targetRegion);
-		for (Action child : getChildren()){
+					
+		Action child = getChild();
+		if (child != null){
+			Context childConext = new Context(context, targetRegion);
 			child.execute(childConext);
-		}
+		}			
 	}
 	
 	public String toString(){
@@ -67,15 +68,27 @@ public class RelativeAction extends AbstractAction {
 				.add("y", y)
 				.add("width", width)
 				.add("height", height)
-				.add("children", getChildren())
+				.add("child", getChild())
 				.toString();
 		}else{
 			return Objects.toStringHelper(this)
 					.add("x", String.format("(%.2f,%.2f)", xmin, xmax))
 					.add("y", String.format("(%.2f,%.2f)", ymin, ymax))
-					.add("children", getChildren())
+					.add("child", getChild())
 					.toString();			
 		}
+	}
+
+	public double getMinX() {
+		return xmin;
+	}
+	
+	public double getMaxX() {
+		return xmax;
+	}
+
+	public void setMinX(double minX) {
+		this.xmin = minX;
 	}
 
 }

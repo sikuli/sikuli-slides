@@ -17,7 +17,6 @@ import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.recorder.detector.EventDetector;
 import org.sikuli.recorder.detector.MouseEventDetector;
 import org.sikuli.recorder.detector.ScreenshotEventDetector;
-import org.sikuli.recorder.pptx.PPTXGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +87,7 @@ public class Recorder {
 
 		ScreenRegion outsideBorder = Relative.to(regionOfInterest).taller(7).wider(7).getScreenRegion();
 		// draw bigger so the red lines won't be captured in screenshots
-		canvas.addBox(outsideBorder).withColor(Color.red).withLineWidth(3);
+		canvas.add().box().around(outsideBorder).styleWith().color(Color.red).lineWidth(3);
 		canvas.show();
 
 		try {
@@ -115,6 +114,11 @@ public class Recorder {
 		System.out.println("Recording is stopped.");
 
 	}
+	
+	boolean isWindows(){
+		String currentOs = System.getProperty("os.name");   
+		return currentOs.toLowerCase().contains("win");
+	}
 
 	class HotKeyListener implements NativeKeyListener {
 
@@ -127,32 +131,55 @@ public class Recorder {
 			boolean isShiftPressed = (e.getModifiers() & NativeKeyEvent.SHIFT_MASK) > 0;
 			boolean isCtrlPressed = (e.getModifiers() & NativeKeyEvent.CTRL_MASK) > 0;
 
+			if(isWindows()){		        
+		        
+				// ALT+SHIFT+2
+				if (e.getKeyCode() == NativeKeyEvent.VK_2 && isShiftPressed && isAltPressed){                	
+					logger.trace("ALT+SHIFT+2 is pressed");
+					startRecording();
+				}
 
-			// CTRL+SHIFT+2
-			if (e.getKeyCode() == NativeKeyEvent.VK_2 && isShiftPressed && isCtrlPressed){                	
-				logger.trace("CTRL+SHIFT+2 is pressed");
-				startRecording();
-			}
+				// ALTL+SHIFT+ESC
+				if (e.getKeyCode() == NativeKeyEvent.VK_ESCAPE && isShiftPressed && isAltPressed){
+					logger.trace("ALT+SHIFT+ESC is pressed");
+					GlobalScreen.unregisterNativeHook();
+					escapeSignal.countDown();
+				}
 
-			// CTRL+SHIFT+ESC
-			if (e.getKeyCode() == NativeKeyEvent.VK_ESCAPE && isShiftPressed && isCtrlPressed){
-				logger.trace("CTRL+SHIFT+ESC is pressed");
-				GlobalScreen.unregisterNativeHook();
-				escapeSignal.countDown();
+		    }
+			else{
+				// CTRL+SHIFT+2
+				if (e.getKeyCode() == NativeKeyEvent.VK_2 && isShiftPressed && isCtrlPressed){                	
+					logger.trace("CTRL+SHIFT+2 is pressed");
+					startRecording();
+				}
+
+				// CTRL+SHIFT+ESC
+				if (e.getKeyCode() == NativeKeyEvent.VK_ESCAPE && isShiftPressed && isCtrlPressed){
+					logger.trace("CTRL+SHIFT+ESC is pressed");
+					GlobalScreen.unregisterNativeHook();
+					escapeSignal.countDown();
+				}
 			}
 
 		}
 
 		public void nativeKeyReleased(NativeKeyEvent e) {
-			//	                System.out.println("Key Released: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
 		}
 
 		public void nativeKeyTyped(NativeKeyEvent e) {
-			//	                System.out.println("Key Typed: " + e.getKeyText(e.getKeyCode()));
 		}
 
 	}
 
-
-
+	public void printHelp() {
+		System.out.println("Platform: " + System.getProperty("os.name"));
+		if (isWindows()){			
+			System.out.println("Press [Alt-Shift-2] to start recording");
+			System.out.println("Press [Alt-Shift-ESC] to stop recording");
+		}else{
+			System.out.println("Press [Ctrl-Shift-2] to start recording");
+			System.out.println("Press [Ctrl-Shift-ESC] to stop recording");
+		}	    
+	}
 }

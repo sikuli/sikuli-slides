@@ -55,11 +55,12 @@ public class AutomationExecutorTest {
 		assertEquals("x", 330, ev.getX());
 	}
 	
+	
 	@Test
 	public void testExecuteFiveStepsPPTX() throws IOException, SlideExecutionException{
 		List<Slide> slides = readSlidesFromResource("fivesteps.pptx");		
 		executor.execute(slides);
-		assertEquals("mouse events", 4, detector.getNumMouseEvents());
+		assertEquals("mouse events", 6, detector.getNumMouseEvents());
 	}
 	
 	@Test

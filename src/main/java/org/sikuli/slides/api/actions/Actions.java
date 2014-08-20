@@ -19,8 +19,8 @@ public class Actions {
 			out.print("   ");
 		}
 		out.println(action);
-		if (action instanceof AbstractAction){
-			AbstractAction defaultAction = (AbstractAction) action;
+		if (action instanceof RobotAction){
+			CompoundAction defaultAction = (CompoundAction) action;
 			for (Action child : defaultAction.getChildren()){				
 				printHelper(out, child, level + 1);				
 			}
@@ -31,8 +31,8 @@ public class Actions {
 		List<Action> actions = Lists.newLinkedList();
 		actions.add(action);
 		
-		if (action instanceof AbstractAction){
-			AbstractAction defaultAction = (AbstractAction) action;
+		if (action instanceof CompoundAction){
+			CompoundAction defaultAction = (CompoundAction) action;
 			for (Action child : defaultAction.getChildren()){				
 				actions.addAll(collectAllActions(child));		
 			}
@@ -74,6 +74,12 @@ public class Actions {
 			}
 		}
 		
+		
+		public boolean exist(){
+			List<Action> all = all();
+			return !all.isEmpty();
+		}
+		
 		public ActionSelector isInstanceOf(final Class classz){
 			ps.add(new Predicate<Action>(){
 				@Override
@@ -88,8 +94,8 @@ public class Actions {
 			ps.add(new Predicate<Action>(){
 				@Override
 				public boolean apply(Action action) {
-					if (action instanceof AbstractAction){
-						return ((AbstractAction) action).getChildren().size() == 0;	
+					if (action instanceof CompoundAction){
+						return ((CompoundAction) action).getChildren().size() == 0;	
 					}
 					return false;
 				}				

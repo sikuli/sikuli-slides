@@ -34,7 +34,7 @@ public class PPTXSlidesReader implements SlidesReader {
 			if (slide != null){
 				slide.setNumber(i);
 				slides.add(slide);
-				logger.debug("Slide {} of {} parsed: {}", i, n, slide);
+//				logger.debug("Slide {} of {} parsed: {}", i, n, slide);
 			}
 		}		
 		return slides;
@@ -47,6 +47,9 @@ public class PPTXSlidesReader implements SlidesReader {
 		if (url.getProtocol().toLowerCase().startsWith("http")){
 			url = resolveDownloadURL(url);
 			pptxFile = downloadFile(url);
+			if (pptxFile == null){
+				throw new IOException("Unable to download from " + url);
+			}
 		}else if (url.getProtocol().compareToIgnoreCase("file") == 0){
 			pptxFile = new File(url.getFile());
 		}else{			

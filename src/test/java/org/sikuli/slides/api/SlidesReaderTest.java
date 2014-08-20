@@ -2,6 +2,7 @@ package org.sikuli.slides.api;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -30,7 +31,7 @@ public class SlidesReaderTest {
 	@Test
 	public void testCanReadSlidesRemotely() throws IOException{		
 		SlidesReader reader = new PPTXSlidesReader();
-		URL url = new URL("http://slides-dev.sikuli.org/helloworld.pptx");
+		URL url = new URL("http://slides.sikuli.org/pptx/helloworld.pptx");
 		List<Slide> slides = reader.read(url);
 		assertEquals("# of slides", 1, slides.size());
 	}

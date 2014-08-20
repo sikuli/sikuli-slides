@@ -14,14 +14,13 @@ import com.google.common.collect.Lists;
 
 // A Target that initially returns no match but after some delay (ms)
 // returns the whole screen region as the match 
-public class AppearLaterTarget extends DefaultTarget {
+class AppearLaterTarget extends DefaultTarget {
 
 	volatile boolean found = false;
 	private ScreenRegion targetRegion;	
 	
-	public AppearLaterTarget(int delay){
+	AppearLaterTarget(int delay){
 		Timer timer = new Timer(delay, new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				found = true;				
@@ -30,7 +29,7 @@ public class AppearLaterTarget extends DefaultTarget {
 		timer.start();
 	}
 	
-	public AppearLaterTarget(ScreenRegion targetRegion, int delay){
+	AppearLaterTarget(ScreenRegion targetRegion, int delay){
 		this.targetRegion = targetRegion;
 		Timer timer = new Timer(delay, new ActionListener(){
 

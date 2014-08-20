@@ -1,0 +1,9 @@
+[submodule "apps/src/main/java/org/sikuli/slides/driver/examples/googleplay"]
+	path = apps/src/main/java/org/sikuli/slides/driver/examples/googleplay
+	url = https://gist.github.com/df7b503bae855f838e85.git
+[submodule "apps/src/main/java/org/sikuli/slides/driver/examples/mailchimp"]
+	path = apps/src/main/java/org/sikuli/slides/driver/examples/mailchimp
+	url = https://gist.github.com/6f123046186d46be270f.git
+[submodule "apps/src/main/java/org/sikuli/slides/driver/examples/chase"]
+	path = apps/src/main/java/org/sikuli/slides/driver/examples/chase
+	url = https://gist.github.com/e1eb091346fa698ed5f8.git

@@ -35,7 +35,7 @@ public class CrossSearchStrategy implements SearchStrategy {
 	@Override
 	public ScreenRegion perform(ScreenRegion screenRegion){		
 		List<Hypothesis> hs = generateHypotheses(contextImage, targetRect);
-		logger.debug("generated {} hypotheses", hs.size());
+		logger.trace("generated {} hypotheses", hs.size());
 		ScreenRegion ret = testHypotheses(screenRegion, hs);		
 		return ret;		
 	}
@@ -80,9 +80,10 @@ public class CrossSearchStrategy implements SearchStrategy {
 		for(Hypothesis hypothesis : hypotheses){
 			
 			Target target = hypothesis.getTarget();
+			target.setMinScore(0.8f);
 			
 			List<ScreenRegion> lookupRegion = screenRegion.findAll(target);
-			logger.debug("test: {} ... found {} matches", hypothesis, lookupRegion.size());
+			logger.trace("test: {} ... found {} matches", hypothesis, lookupRegion.size());
 			
 			if(lookupRegion.size()>1){
 				continue;
