@@ -19,7 +19,7 @@ public class WaitActionTest {
 		context = new Context();
 	}
 
-	@Test(timeout = 3000)
+	@Test(timeout = 5000)
 	public void testCanFinishWhenTargetAppearsAfter2Seconds() throws ActionExecutionException {	
 		Target target = MockTargetFactory.canBeFoundAfter(2000);
 		Action action = new WaitAction(target);

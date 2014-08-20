@@ -24,13 +24,11 @@ public class SlideUIFactoryTest {
 	@Test
 	public void initElements() throws IOException{
 		
-		Header header = WidgetSlideFactory.create(Header.class);		
-
-		header.help.click();		
-		header.download.click();
-		header.doc.click();
-		header.overview.click();
-		header.logo.click();
-		
+//		Header header = WidgetSlideFactory.create(Header.class);
+//		header.help.click();		
+//		header.download.click();
+//		header.doc.click();
+//		header.overview.click();
+//		header.logo.click();
 	}
 }

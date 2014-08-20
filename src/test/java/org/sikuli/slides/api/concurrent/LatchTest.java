@@ -26,7 +26,7 @@ public class LatchTest {
 	private OrLatch orLatch;
 	private ScreenRegion region;
 
-	@Test(timeout = 2000)
+	@Test(timeout = 5000)
 	public void testScreenRegionHoverLatchCanRelease() {
 		final Context context = new Context();				
 		final ScreenRegion s = context.getScreenRegion();
@@ -53,7 +53,7 @@ public class LatchTest {
 		canvas.hide();
 	}
 	
-	@Test(timeout = 2000)
+	@Test(timeout = 5000)
 	public void testScreenRegionClickLatchCanRelease() {
 		final Context context = new Context();				
 		final ScreenRegion s = context.getScreenRegion();

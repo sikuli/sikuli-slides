@@ -33,7 +33,7 @@ public class DefaultSlideShowControllerTest {
 		}
 	}
 	
-	static class TestSlide extends Slide {
+	static public class TestSlide extends Slide {
 		private long duration;
 		private int number;
 		private boolean throwException = false;
