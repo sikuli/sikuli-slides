@@ -166,7 +166,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.5</version>
 				<configuration>
-					<arguments>-Dplatform.dependencies=true</arguments>
+					<!-- <arguments>-Dplatform.dependencies=true</arguments> -->
 				</configuration>
 			</plugin>			
 		</plugins>
