@@ -32,7 +32,7 @@
 	<artifactId>sikuli-slides-api</artifactId>
 	<name>Sikuli Slides API</name>
 	<url>http://lab.sikuli.org</url>
-	<version>1.5.0</version>
+	<version>1.5.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,7 +48,8 @@
 		<connection>scm:git:git@github.com:sikuli/sikuli-slides.git</connection>
 		<developerConnection>scm:git:git@github.com:sikuli/sikuli-slides.git</developerConnection>
 		<url>git@github.com:sikuli/sikuli-slides.git</url>
-	</scm>
+	  <tag>HEAD</tag>
+  </scm>
 
 	<dependencies>
 		<dependency>
@@ -180,6 +181,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5</version>
 				<configuration>
 					<arguments>-Dplatform.dependencies=true</arguments>
 				</configuration>
