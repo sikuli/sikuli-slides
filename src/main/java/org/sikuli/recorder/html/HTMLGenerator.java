@@ -85,8 +85,8 @@ public class HTMLGenerator {
 			} catch (IOException e1) {				
 
 			}
-
-			pageListST.addAggr("pages.{url,name}", pageUrl, pageName);
+			Object[] array = {pageUrl,pageName};
+			pageListST.addAggr("pages.{url,name}", array);
 
 			if (firstPageUrl == null){
 				firstPageUrl = pageUrl;

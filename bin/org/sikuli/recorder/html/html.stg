@@ -1,0 +1,105 @@
+hello(name) ::= "Hello, $name$"
+
+page_list(pages) ::= <<
+
+<html>
+<head>
+</head>
+<body>
+		
+$pages:{it| 
+
+<a href="$it.url$" target="page"> $it.name$ </a> 
+<br>
+
+}$
+
+	
+</body>
+</html>
+
+>>
+
+
+
+
+page(x,y,xc,yc,imgurl,command) ::= <<
+
+<html>
+<head>
+	
+<style>
+#screenshot{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: -1;
+}
+
+#box{
+	position: absolute;
+	border: 5px red solid;
+	opacity:0.8;
+	top: $y$px;
+	left: $x$px;
+	width: 40px;
+	height: 40px;
+	z-index: 2;
+	box-shadow: 2px 2px 5px #888888;
+}
+
+#target{
+	position: absolute;
+	background: red;
+	opacity:0.8;
+	top: $yc$px;
+	left: $xc$px;
+	width: 8px;
+	height: 8px;
+	z-index: 3;
+	box-shadow: 2px 2px 5px #888888;	
+}
+
+#action{
+	position: absolute;
+	opacity:0.8;
+	font-family: arial;
+	background: yellow;
+	left: 2px;
+	top: 2px;
+	font-weight: bolder;
+	font-size: 200%;
+	padding: 3px;
+	box-shadow: 2px 2px 5px #888888;
+}
+
+</style>	
+	
+</head>
+<body>
+<img id="screenshot" src="$imgurl$"/>
+<div id="action">$command$</div>
+<div id="box"></div>
+<div id="target"></div>
+</body>
+</html>
+
+
+>>
+
+
+index(firstPageUrl) ::= <<
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"
+   "http://www.w3.org/TR/html4/frameset.dtd">
+<HTML>
+<HEAD>
+<TITLE>Recorded Events</TITLE>
+</HEAD>
+<FRAMESET cols="100px , *">
+  <FRAME src="page-list.html" name="list">
+  <FRAME src="$firstPageUrl$" name="page">
+</FRAMESET>
+</HTML>
+
+>>

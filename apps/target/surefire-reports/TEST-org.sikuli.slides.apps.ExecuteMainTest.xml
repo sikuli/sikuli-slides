@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite failures="0" time="0.733" errors="0" skipped="0" tests="12" name="org.sikuli.slides.apps.ExecuteMainTest">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.7.0_55\jre\bin"/>
+    <property name="java.vm.version" value="24.55-b03"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="path.separator" value=";"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.script" value=""/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="Service Pack 1"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="C:\Users\jguglielmi\workspace\sikuli-slides\apps"/>
+    <property name="java.runtime.version" value="1.7.0_55-b13"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
+    <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.7.0_55\jre\lib\endorsed"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="C:\Users\JGUGLI~1\AppData\Local\Temp\"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.variant" value=""/>
+    <property name="os.name" value="Windows 7"/>
+    <property name="classworlds.conf" value="C:\Applications\Maven\apache-maven-3.2.1-bin\apache-maven-3.2.1\bin\..\bin\m2.conf"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk1.7.0_55\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\WIDCOMM\Bluetooth Software\;C:\Program Files\WIDCOMM\Bluetooth Software\syswow64;C:\Program Files\Dell\Dell Data Protection\Access\Advanced\Wave\Gemalto\Access Client\v5\;C:\Program Files (x86)\NTRU Cryptosystems\NTRU TCG Software Stack\bin\;C:\Program Files\NTRU Cryptosystems\NTRU TCG Software Stack\bin\;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\Common Files\Roxio Shared\DLLShared\;C:\Program Files (x86)\Common Files\Roxio Shared\OEM\DLLShared\;C:\Program Files (x86)\Common Files\Roxio Shared\OEM\DLLShared\;C:\Program Files (x86)\Common Files\Roxio Shared\OEM\12.0\DLLShared\;C:\Program Files (x86)\Roxio\OEM\AudioCore\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x86;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x64;C:\Program Files (x86)\Git\cmd;C:\Program Files\Java\jdk1.7.0_55\bin;C:\Applications\Maven\apache-maven-3.2.1-bin\apache-maven-3.2.1\bin;C:\Applications\Ant\apache-ant-1.9.4\bin;C:\Users\jguglielmi\workspace\OASIS-Maven\lib\wget-1.11.4-1-bin\bin;C:\Applications\Selenium\WebDrivers;C:\Applications\Ruby\bin;C:\Applications\JRuby\jruby-1.7.12\bin;C:\Applications\Sikuli\Script;C:\Applications\Ruby\mingw\bin;C:\Applications\Sikuli\Slides\javacv-0.9-bin\javacv-bin;C:\opencv\build\x64\vc10\bin;."/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="51.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="6.1"/>
+    <property name="user.home" value="C:\Users\jguglielmi"/>
+    <property name="user.timezone" value="America/New_York"/>
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
+    <property name="java.specification.version" value="1.7"/>
+    <property name="file.encoding" value="Cp1252"/>
+    <property name="user.name" value="JGuglielmi"/>
+    <property name="java.class.path" value="C:\Applications\Maven\apache-maven-3.2.1-bin\apache-maven-3.2.1\bin\..\boot\plexus-classworlds-2.5.1.jar"/>
+    <property name="org.slf4j.simpleLogger.defaultLogLevel" value="info"/>
+    <property name="java.vm.specification.version" value="1.7"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk1.7.0_55\jre"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.language" value="en"/>
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.7.0_55"/>
+    <property name="java.ext.dirs" value="C:\Program Files\Java\jdk1.7.0_55\jre\lib\ext;C:\Windows\Sun\Java\lib\ext"/>
+    <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.7.0_55\jre\lib\resources.jar;C:\Program Files\Java\jdk1.7.0_55\jre\lib\rt.jar;C:\Program Files\Java\jdk1.7.0_55\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.7.0_55\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.7.0_55\jre\lib\jce.jar;C:\Program Files\Java\jdk1.7.0_55\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.7.0_55\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.7.0_55\jre\classes"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="maven.home" value="C:\Applications\Maven\apache-maven-3.2.1-bin\apache-maven-3.2.1\bin\.."/>
+    <property name="file.separator" value="\"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.desktop" value="windows"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+  </properties>
+  <testcase time="0.718" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testRangeDefaultToAll"/>
+  <testcase time="0" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testRange2andLater"/>
+  <testcase time="0" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testMinScoreTooBig"/>
+  <testcase time="0" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testBadOptionName"/>
+  <testcase time="0" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testInputIsAFilePath"/>
+  <testcase time="0" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testInputIsAnURL"/>
+  <testcase time="0" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testRange2to3"/>
+  <testcase time="0.015" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testRange2"/>
+  <testcase time="0" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testScreenId"/>
+  <testcase time="0" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testWaitTime"/>
+  <testcase time="0" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testMinScore"/>
+  <testcase time="0" classname="org.sikuli.slides.apps.ExecuteMainTest" name="testNoInput"/>
+</testsuite>

@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=./target/sikuli-slides-api-1.5.1-SNAPSHOT-jar-with-dependencies.jar -DgroupId=org.sikuli -DartifactId=sikuli-slides-api -Dversion=1.5.1-jar-with-dependencies -Dpackaging=jar

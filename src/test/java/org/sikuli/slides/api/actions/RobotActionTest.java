@@ -25,6 +25,7 @@ public class RobotActionTest {
 	private DesktopCanvas canvas;
 	private DesktopScreenRegion screenRegion;
 
+	@SuppressWarnings("deprecation")
 	@Before
 	public void setUp() throws NativeHookException{
 		detector = new InputDetector();

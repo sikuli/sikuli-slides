@@ -1,18 +1,19 @@
 # Eclipse specific settings #
-.classpath
-.settings
-.project
+#.classpath
+#.settings
+#.project
 
 # Java Files #
-*.class
+#*.class
 
 # Binaries
-bin/
-target/
+#bin/
+#target/
 
 # Maven generated files
-dependency-reduced-pom.xml
+#dependency-reduced-pom.xml
 
 # Others
-.DS_Store
+#.DS_Store
 
+#/target
