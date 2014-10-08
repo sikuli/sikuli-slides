@@ -1,5 +1,6 @@
 package org.sikuli.recorder.detector;
 
+import org.jnativehook.keyboard.NativeKeyEvent;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ScreenRegion;
 import org.sikuli.recorder.DefaultEventWriter;

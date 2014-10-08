@@ -15,6 +15,7 @@ import org.sikuli.api.ScreenRegion;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.sikuli.recorder.detector.EventDetector;
+import org.sikuli.recorder.detector.KeyboardDetector;
 import org.sikuli.recorder.detector.MouseEventDetector;
 import org.sikuli.recorder.detector.ScreenshotEventDetector;
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ import com.google.common.collect.Lists;
 
 
 public class Recorder {
-	
+
 	static Logger logger = LoggerFactory.getLogger(Recorder.class);
 
 	// used to draw a red box to visualize the region of interest
@@ -50,9 +51,12 @@ public class Recorder {
 	}
 
 	private List<EventDetector> detectors = Lists.newArrayList();
-
+	private List<NativeKeyEvent> keyEvents = Lists.newArrayList();
 
 	DefaultEventWriter writer = new DefaultEventWriter();
+	KeyboardEventWriter keyWriter = new KeyboardEventWriter();
+	KeyboardDetector kd = new KeyboardDetector();
+
 	public void addEventDetector(EventDetector d) {
 		d.setWriter(writer);
 		detectors.add(d);
@@ -63,6 +67,7 @@ public class Recorder {
 		for (EventDetector d : detectors){
 			d.start();
 		}
+		kd.start();
 	}
 
 
@@ -80,7 +85,9 @@ public class Recorder {
 	public void stopRecording(){	
 		for (EventDetector d : detectors){
 			d.stop();
-		}		
+		}
+		keyWriter.write(keyEvents);
+		kd.stop();
 	}
 
 	public void start(){
@@ -114,7 +121,7 @@ public class Recorder {
 		System.out.println("Recording is stopped.");
 
 	}
-	
+
 	boolean isWindows(){
 		String currentOs = System.getProperty("os.name");   
 		return currentOs.toLowerCase().contains("win");
@@ -125,14 +132,13 @@ public class Recorder {
 		private Logger logger = LoggerFactory.getLogger(HotKeyListener.class); 
 
 		public void nativeKeyPressed(NativeKeyEvent e) {
-
 			boolean isMetaPressed = (e.getModifiers() & NativeKeyEvent.META_MASK) > 0;
 			boolean isAltPressed = (e.getModifiers() & NativeKeyEvent.ALT_MASK) > 0;
 			boolean isShiftPressed = (e.getModifiers() & NativeKeyEvent.SHIFT_MASK) > 0;
 			boolean isCtrlPressed = (e.getModifiers() & NativeKeyEvent.CTRL_MASK) > 0;
 
 			if(isWindows()){		        
-		        
+
 				// ALT+SHIFT+2
 				if (e.getKeyCode() == NativeKeyEvent.VK_2 && isShiftPressed && isAltPressed){                	
 					logger.trace("ALT+SHIFT+2 is pressed");
@@ -146,7 +152,7 @@ public class Recorder {
 					escapeSignal.countDown();
 				}
 
-		    }
+			}
 			else{
 				// CTRL+SHIFT+2
 				if (e.getKeyCode() == NativeKeyEvent.VK_2 && isShiftPressed && isCtrlPressed){                	
@@ -167,7 +173,10 @@ public class Recorder {
 		public void nativeKeyReleased(NativeKeyEvent e) {
 		}
 
+
 		public void nativeKeyTyped(NativeKeyEvent e) {
+			logger.trace("Key Typed: " + e.getKeyChar());
+			keyEvents.add(e);
 		}
 
 	}

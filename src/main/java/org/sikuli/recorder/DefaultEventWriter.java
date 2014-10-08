@@ -8,6 +8,7 @@ import java.util.Date;
 
 import javax.imageio.ImageIO;
 
+import org.jnativehook.keyboard.NativeKeyEvent;
 import org.json.simple.JSONObject;
 import org.sikuli.recorder.event.ClickEvent;
 import org.sikuli.recorder.event.Event;
@@ -19,7 +20,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 public class DefaultEventWriter implements EventWriter {
-	
+
 	static Logger logger = LoggerFactory.getLogger(DefaultEventWriter.class);
 
 	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");	
@@ -77,5 +78,6 @@ public class DefaultEventWriter implements EventWriter {
 
 	public void setEventDir(File outputDir) {
 		this.outputDir = outputDir;
-	}		
+	}
+
 }
