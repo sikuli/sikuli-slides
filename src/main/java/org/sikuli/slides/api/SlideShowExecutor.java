@@ -55,7 +55,7 @@ class SlideShowExecutor
 		logger.info("Executing {} slide(s)", slides.size());
 
 		this.slides = slides;
-		Interpreter interpreter = new DefaultInterpreter();		
+		Interpreter interpreter = new DefaultInterpreter(context);		
 		actions = Lists.newArrayList();
 		for (Slide slide : slides){
 			Action action = interpreter.interpret(slide);

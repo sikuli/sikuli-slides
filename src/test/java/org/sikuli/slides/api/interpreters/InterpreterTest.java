@@ -51,7 +51,7 @@ public class InterpreterTest {
 		Slide slide = new Slide();
 		on(slide).insert().element().text("browse http://slides.sikuli.org");
 		
-		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter();
+		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter(null);
 		Action action = interpreter.interpret(slide);
 		
 		assertThat(action, instanceOf(BrowserAction.class));
@@ -63,7 +63,7 @@ public class InterpreterTest {
 		Slide slide = new Slide();
 		on(slide).insert().element().text("open  http://slides.sikuli.org");
 		
-		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter();
+		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter(null);
 		Action action = interpreter.interpret(slide);
 		
 		assertThat(action, instanceOf(BrowserAction.class));
@@ -75,7 +75,7 @@ public class InterpreterTest {
 		Slide slide = new Slide();
 		on(slide).insert().element().text("browse");
 		
-		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter();
+		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter(null);
 		Action action = interpreter.interpret(slide);
 		
 		assertThat(action, nullValue());		
@@ -86,7 +86,7 @@ public class InterpreterTest {
 		Slide slide = new Slide();
 		on(slide).insert().element().text("browse  garbage");
 		
-		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter();
+		Interpreter interpreter = new DefaultInterpreter.BrowseActionInterpreter(null);
 		Action action = interpreter.interpret(slide);
 		
 		assertThat(action, nullValue());		

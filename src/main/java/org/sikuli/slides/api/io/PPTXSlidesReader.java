@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import java.net.URLDecoder;
+import org.sikuli.slides.api.Context;
 
 public class PPTXSlidesReader implements SlidesReader {
 
@@ -61,7 +62,7 @@ public class PPTXSlidesReader implements SlidesReader {
 
 		return read(pptxFile);
 	}
-
+        
 	public static File downloadFile(URL downloadURL){
 		logger.info("Download file from {} ... ", downloadURL);
 		File destination;

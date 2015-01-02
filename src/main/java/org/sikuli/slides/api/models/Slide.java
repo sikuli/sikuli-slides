@@ -168,7 +168,7 @@ public class Slide implements Action {
 		
 		List<Interpreter> interpreters = Lists.newArrayList(
 				new ConfigInterpreter(),
-				new DefaultInterpreter()
+				new DefaultInterpreter(context)
 		);
 		
 		for (Interpreter interpreter : interpreters){

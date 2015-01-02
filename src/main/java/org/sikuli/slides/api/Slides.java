@@ -105,7 +105,7 @@ public class Slides {
 	 */
 	public static List<Action> interpret(File file) throws IOException {
 		checkNotNull(file);
-		Interpreter interpreter = new DefaultInterpreter();
+		Interpreter interpreter = new DefaultInterpreter(null);
 		SlidesReader reader = new PPTXSlidesReader();		
 		List<Slide> slides;
 		slides = reader.read(file);
