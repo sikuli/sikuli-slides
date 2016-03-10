@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
+import java.net.URLDecoder;
+import org.sikuli.slides.api.Context;
 
 public class PPTXSlidesReader implements SlidesReader {
 
@@ -51,14 +53,16 @@ public class PPTXSlidesReader implements SlidesReader {
 				throw new IOException("Unable to download from " + url);
 			}
 		}else if (url.getProtocol().compareToIgnoreCase("file") == 0){
-			pptxFile = new File(url.getFile());
+			// Need to unencode the URL because otherwise spaces in the name will cause the file not to be found.
+                        String filename = URLDecoder.decode(url.getFile(), "UTF-8");
+                        pptxFile = new File(filename);
 		}else{			
 			throw new IOException("Unable to deal with " + url);
 		}
 
 		return read(pptxFile);
 	}
-
+        
 	public static File downloadFile(URL downloadURL){
 		logger.info("Download file from {} ... ", downloadURL);
 		File destination;

@@ -9,7 +9,7 @@ import org.sikuli.slides.api.models.Slide;
 import org.sikuli.slides.api.models.SlideElement;
 
 public interface Interpreter {
-	Action interpret(Slide slide);
+        Action interpret(Slide slide);
 }
 
 interface TargetInterpreter {

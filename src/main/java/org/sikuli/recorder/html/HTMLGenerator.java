@@ -87,7 +87,7 @@ public class HTMLGenerator {
 			}
 
 			pageListST.addAggr("pages.{url,name}", pageUrl, pageName);
-
+ 
 			if (firstPageUrl == null){
 				firstPageUrl = pageUrl;
 				indexST.add("firstPageUrl", firstPageUrl);

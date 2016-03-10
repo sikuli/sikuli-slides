@@ -48,7 +48,12 @@ import com.google.common.collect.Lists;
 public class DefaultInterpreter implements Interpreter {
 
 	static Logger logger = LoggerFactory.getLogger(DefaultInterpreter.class);
+        private final Context context; // The context created by the user for parsing / intepreting slides
 
+        public DefaultInterpreter(Context context){
+            this.context = context;
+        }
+        
 	static class RegexActionInterpreter implements Interpreter {
 
 		RegexActionInterpreter(String regex){
@@ -127,17 +132,26 @@ public class DefaultInterpreter implements Interpreter {
 
 	static class BrowseActionInterpreter extends RegexActionInterpreter {
 
-		BrowseActionInterpreter(){
+                private final Context context;
+                
+		BrowseActionInterpreter(Context context){
 			super("(?i)(browse|open)\\s+(.+)");
+                        this.context = context;
 		}
 
 		@Override
 		protected Action interpret(Slide slide, SlideElement element, String[] arguments){	
 			if (arguments.length != 2)
 				return null;
-
-			String urlString = arguments[1];
-			URL url = null;
+                        // If there is a context, check to see if the URL entered is a context parameter or is plain text
+			String urlString;
+			if (context != null){
+                            urlString = context.render(arguments[1]);
+                        } else {
+                            urlString = arguments[1];
+                        }
+                        
+                        URL url = null;
 			try {
 				url = new URL(urlString);
 			} catch (MalformedURLException e) {
@@ -734,7 +748,7 @@ public class DefaultInterpreter implements Interpreter {
 				new TargetActionInterpreter(),
 				new ExistActionInterpreter(),
 				new NotExistActionInterpreter(),
-				new BrowseActionInterpreter(),
+				new BrowseActionInterpreter(context),
 				new SleepActionInterpreter(),
 				new WaitActionInterpreter()
 				);
